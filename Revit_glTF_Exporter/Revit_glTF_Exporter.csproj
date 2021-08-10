@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C679028-B7ED-4CD7-9307-0E9760E7EA8F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Revit_glTF_Exporter</RootNamespace>
+    <AssemblyName>Revit_glTF_Exporter</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2019|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\R2019\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2018|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\R2018\</OutputPath>
+    <DefineConstants>REVIT2018</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2020|AnyCPU'">
+    <OutputPath>bin\R2020\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2020</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2017|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\R2017\</OutputPath>
+    <DefineConstants>REVIT2017</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Containers.cs" />
+    <Compile Include="ExternalApplication.cs" />
+    <Compile Include="ExternalCommand.cs" />
+    <Compile Include="glTF.cs" />
+    <Compile Include="GlTFExportContext.cs" />
+    <Compile Include="Model\FixedObject.cs" />
+    <Compile Include="Model\FixedObjects.cs" />
+    <Compile Include="Model\IObject.cs" />
+    <Compile Include="Model\IObjects.cs" />
+    <Compile Include="Model\MovableObject.cs" />
+    <Compile Include="Model\MovableObjects.cs" />
+    <Compile Include="Model\Room.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gltf.png" />
+    <Content Include="PostBuildEvent.txt" />
+    <Content Include="Revit_glTF_Exporter.addin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2017.0.2" Condition="'$(Configuration)' == 'R2017'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2018.0.2" Condition="'$(Configuration)' == 'R2018'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" Condition="'$(Configuration)' == 'R2019'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2020.0.1" Condition="'$(Configuration)' == 'R2020'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2021.0.0" Condition="'$(Configuration)' == 'R2021'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2022.0.0" Condition="'$(Configuration)' == 'R2022'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" Condition="'$(Configuration)' == 'Release'" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "R2017" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2017"
+if "$(ConfigurationName)" == "R2018" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2018"
+if "$(ConfigurationName)" == "R2019" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2019"
+if "$(ConfigurationName)" == "R2020" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2020"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage SchemaVersion="1.0" 
+                    AutodeskProduct="Revit" 
+                    ProductType="Application" 
+                    Name="Revit glTF Exporter" 
+                    AppVersion="1.0.1" 
+                    Description="Export Revit models to glTF format" 
+                    Author="Voyansi" 
+                    Icon="" 
+                    AppNameSpace="" 
+                    OnlineDocumentation="" 
+                    HelpFile="" 
+                    ProductCode="" 
+                    UpgradeCode="" 
+                    SupportedLocales="Enu" 
+                    FriendlyVersion="1.0.1">
+  <Components Description="2018">
+    <RuntimeRequirements OS="Win64" 
+                         Platform="Revit" 
+                         SeriesMin="R2018" 
+                         SeriesMax="R2018" />
+    <ComponentEntry AppName="Revit glTF Exporter for Revit 2018" 
+                    Version="2018" 
+                    ModuleName="./Contents/2018/Revit_glTF_Exporter.addin" 
+                    AppDescription="Export Revit models to glTF format" />
+  </Components>
+  <Components Description="2019">
+    <RuntimeRequirements OS="Win64" 
+                         Platform="Revit" 
+                         SeriesMin="R2019" 
+                         SeriesMax="R2019" />
+    <ComponentEntry AppName="Revit glTF Exporter for Revit 2019" 
+                    Version="2019" 
+                    ModuleName="./Contents/2019/Revit_glTF_Exporter.addin" 
+                    AppDescription="Export Revit models to glTF format" />
+  </Components>
+  <Components Description="2020">
+    <RuntimeRequirements OS="Win64"
+                         Platform="Revit"
+                         SeriesMin="R2020"
+                         SeriesMax="R2020" />
+    <ComponentEntry AppName="Revit glTF Exporter for Revit 2020"
+                    Version="2020"
+                    ModuleName="./Contents/2020/Revit_glTF_Exporter.addin"
+                    AppDescription="Export Revit models to glTF format" />
+  </Components>
+     <Components Description="2021">
+       <RuntimeRequirements OS="Win64"
+                            Platform="Revit"
+                            SeriesMin="R2021"
+                            SeriesMax="R2021" />
+       <ComponentEntry AppName="Revit glTF Exporter for Revit 2021"
+                       Version="2021"
+                       ModuleName="./Contents/2021/Revit_glTF_Exporter.addin"
+                       AppDescription="Export Revit models to glTF format" />
+  </Components>
+  <Components Description="2022">
+    <RuntimeRequirements OS="Win64"
+                         Platform="Revit"
+                         SeriesMin="R2022"
+                         SeriesMax="R2022" />
+    <ComponentEntry AppName="Revit glTF Exporter for Revit 2022"
+                    Version="2022"
+                    ModuleName="./Contents/2022/Revit_glTF_Exporter.addin"
+                    AppDescription="Export Revit models to glTF format" />
+  </Components>
+</ApplicationPackage>

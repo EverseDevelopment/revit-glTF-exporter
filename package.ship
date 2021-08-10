@@ -1,0 +1,21 @@
+{
+	"version": 1,
+	"processes": [
+        {
+		    "name": "Revit.exe"
+	    }
+    ],
+	"install": [
+        {
+            "action": "copy",
+            "source": "Revit-glTF-Exporter.bundle.zip",
+            "destination": "$APPDATA\\Autodesk\\ApplicationPlugins"
+        }
+    ],
+	"uninstall": [
+        {
+            "action": "delete",
+            "source": "$APPDATA\\Autodesk\\ApplicationPlugins\\Revit-glTF-Exporter.bundle"
+        }
+    ]
+}
