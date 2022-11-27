@@ -38,11 +38,8 @@ namespace Revit_glTF_Exporter
             this._doc = doc;
             this._view = view;
             this._fileName = _doc.Title;
-#if REVIT2019 || REVIT2020 || REVIT2021
             this._viewName = _view.Name;
-#else
-            this._viewName = _view.ViewName;
-#endif
+
         }
 
         private void OnExportView(object sender, RoutedEventArgs e)

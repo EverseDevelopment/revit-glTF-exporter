@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0aabf61a-0caa-4e92-b73e-580821532556</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Common_glTF_Exporter</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Containers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)glTF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlTFExportContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObjects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\IObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\IObjects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\MovableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\MovableObjects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Room.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ribbon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Resources\gltf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)PostBuildEvent.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)Revit_glTF_Exporter.addin">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>
