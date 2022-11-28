@@ -9,11 +9,11 @@
     <Import_RootNamespace>Common_glTF_Exporter</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Containers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Containers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)glTF.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GlTFExportContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\IObject.cs" />
@@ -21,25 +21,28 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\MovableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\MovableObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Room.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Ribbon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Settings.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Resources\gltf.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)PostBuildEvent.txt" />
     <Content Include="$(MSBuildThisFileDirectory)Revit_glTF_Exporter.addin">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)Settings.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Core\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Forms\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
   </ItemGroup>
 </Project>

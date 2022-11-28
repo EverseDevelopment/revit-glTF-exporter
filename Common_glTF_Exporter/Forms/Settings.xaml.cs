@@ -23,7 +23,6 @@ namespace Revit_glTF_Exporter
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-
     
     public partial class Settings : Window
     {
@@ -31,6 +30,7 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
+        public bool materialsExport = true;
         public Settings(Document doc, View3D view)
         {
             InitializeComponent();
@@ -39,11 +39,15 @@ namespace Revit_glTF_Exporter
             this._view = view;
             this._fileName = _doc.Title;
             this._viewName = _view.Name;
-
         }
 
         private void OnExportView(object sender, RoutedEventArgs e)
         {
+            if (MaterialsCheckbox.IsChecked == false)
+            {
+                materialsExport = false;
+            }
+
             if (_view == null)
             {
                 TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
