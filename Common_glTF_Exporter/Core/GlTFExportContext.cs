@@ -345,6 +345,7 @@ namespace Revit_glTF_Exporter
             ElementId id = node.MaterialId;
             glTFMaterial gl_mat = new glTFMaterial();
             float opacity = 1 - (float)node.Transparency;
+            glTFMaterial current_gl_mat = null;
 
             if (id != ElementId.InvalidElementId)
             {
@@ -378,11 +379,21 @@ namespace Revit_glTF_Exporter
                 pbr.roughnessFactor = 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
 
-                Materials.AddOrUpdateCurrent(uuid, gl_mat);
+                // prevent duplicated materials
+                try
+                {
+                    current_gl_mat = Materials.List
+                        .First(x => x.name == matName);
+                }
+                catch { }
+
+                if (current_gl_mat == null)
+                {
+                    Materials.AddOrUpdateCurrent(uuid, gl_mat);
+                }
             }
             Debug.WriteLine(string.Format("    OnMaterial: {0}", matName));
         }
-
         /// <summary>
         /// Runs for every polymesh being processed. Typically this is a single face
         /// of an element's mesh. Here we populate the data into our "_current" variables
@@ -474,7 +485,7 @@ namespace Revit_glTF_Exporter
             Nodes.CurrentItem.mesh = Meshes.CurrentIndex;
 
             // Add vertex data to _currentGeometry for each geometry/material pairing
-            foreach (KeyValuePair<string,VertexLookupInt> kvp in _currentVertices.Dict)
+            foreach (KeyValuePair<string, VertexLookupInt> kvp in _currentVertices.Dict)
             {
                 string vertex_key = kvp.Key;
                 foreach (KeyValuePair<PointInt, int> p in kvp.Value)

@@ -75,12 +75,12 @@ namespace Revit_glTF_Exporter
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\");
+
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
                 
             exporter.ShouldStopOnError = true;
-            exporter.Export(view3d);
-            
+            exporter.Export(view3d);            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
