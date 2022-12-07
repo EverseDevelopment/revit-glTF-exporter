@@ -7,6 +7,7 @@ namespace Revit_glTF_Exporter
 {
     class Util
     {
+
         public static float[] GetVec3MinMax(List<float> vec3)
         {
             

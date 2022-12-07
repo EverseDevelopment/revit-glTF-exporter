@@ -5,23 +5,39 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Revit_glTF_Exporter"
              mc:Ignorable="d" 
-             Width="331.45" 
+             Width="350" 
              Title="glTF Exporter Settings" 
-             Height="183">
+             Height="200">
 
     <Grid Background="#FFE8E8E8" Margin="0,0,0,-2">
         <Button Content="Export View to glTF" 
-                Margin="10,111,10,15" 
+                Margin="10,0,10,10" 
+                Height="40"
                 Foreground="White" 
                 BorderBrush="{x:Null}"  
                 Click="OnExportView" 
                 FontWeight="Bold" 
-                Background="#F94F46" />
-
+                Background="#F94F46" VerticalAlignment="Bottom"/>
         <CheckBox x:Name="MaterialsCheckbox"
                   IsChecked="True" 
-                  Margin="14,47,204,99">Export Materials</CheckBox>
-
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  Margin="14,61,204,84">Export Materials</CheckBox>
+        <CheckBox x:Name="NormalsCheckbox"
+                  IsChecked="False" 
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  Margin="14,37,204,108">Export Normals</CheckBox>
+        <CheckBox x:Name="FlipAxysCheckbox"
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  IsChecked="True" 
+                  Margin="14,13,204,132">Flip YZ-Axys</CheckBox>
+        <CheckBox x:Name="ElementIdCheckbox"
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  IsChecked="False" 
+                  Margin="14,85,192,60">Export ElementId</CheckBox>
     </Grid>
 
 </Window>
