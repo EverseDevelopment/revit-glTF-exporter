@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using Autodesk.Revit.UI;
 
 namespace Revit_glTF_Exporter
 {
@@ -105,7 +106,8 @@ namespace Revit_glTF_Exporter
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
         private bool _exportMaterials;
-        public glTFExportContext(Document doc, string filename, string directory, bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
+        public glTFExportContext(Document doc, string filename, string directory, bool singleBinary = true, 
+            bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
         {
             _doc = doc;
             _exportProperties = exportProperties;
@@ -210,12 +212,13 @@ namespace Revit_glTF_Exporter
                 }
 
                 glTFBuffer buffer = new glTFBuffer();
-                buffer.uri = "monobuffer.bin";
+                string bufferUri = Path.GetFileNameWithoutExtension(_filename) + ".bin"; 
+                buffer.uri = bufferUri;
                 buffer.byteLength = bytePosition;
                 Buffers.Clear();
                 Buffers.Add(buffer);
 
-                using (FileStream f = File.Create(_directory + "monobuffer.bin"))
+                using (FileStream f = File.Create(_directory + bufferUri))
                 {
                     using (BinaryWriter writer = new BinaryWriter(f))
                     {
@@ -248,7 +251,11 @@ namespace Revit_glTF_Exporter
             model.scenes = Scenes;
             model.nodes = Nodes.List;
             model.meshes = Meshes.List;
-            model.materials = Materials.List;
+            if (_exportMaterials)
+            {
+                model.materials = Materials.List;
+            }
+            
             model.buffers = Buffers;
             model.bufferViews = BufferViews;
             model.accessors = Accessors;
@@ -344,6 +351,11 @@ namespace Revit_glTF_Exporter
         /// <param name="node"></param>
         public void OnMaterial(MaterialNode node)
         {
+            if (!_exportMaterials)
+            {
+                return;
+            }
+
             string matName;
             ElementId id = node.MaterialId;
             glTFMaterial gl_mat = new glTFMaterial();
@@ -359,7 +371,7 @@ namespace Revit_glTF_Exporter
                 // construct the material
                 gl_mat.name = matName;
                 glTFPBR pbr = new glTFPBR();
-                pbr.baseColorFactor = new List<float>() { _exportMaterials ? node.Color.Red / 255f : 220 / 255f, _exportMaterials ? node.Color.Green / 255f : 220 / 255f, _exportMaterials ? node.Color.Blue / 255f : 220 / 255f, opacity };
+                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
                 pbr.metallicFactor = 0f;
                 pbr.roughnessFactor = 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
@@ -514,7 +526,12 @@ namespace Revit_glTF_Exporter
                 //primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
                 //primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 primitive.indices = elementBinary.indexAccessorIndex;
-                primitive.material = Materials.GetIndexFromUUID(material_key);
+                
+                if(_exportMaterials)
+                { 
+                  primitive.material = Materials.GetIndexFromUUID(material_key);
+                }
+
 
                 Meshes.CurrentItem.primitives.Add(primitive);
             }
