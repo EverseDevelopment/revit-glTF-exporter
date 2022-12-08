@@ -53,6 +53,7 @@ namespace Revit_glTF_Exporter
                 TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
                 this.Close();
             }
+
             SaveFileDialog fileDialog = new SaveFileDialog();
 
             fileDialog.FileName = _fileName + " - " + _viewName; // default file name
@@ -70,7 +71,6 @@ namespace Revit_glTF_Exporter
 
         public void ExportView3D(View3D view3d, string filename, string directory, bool mode)
         {
-
             Document doc = view3d.Document;
 
             // Use our custom implementation of IExportContext as the exporter context.

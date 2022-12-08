@@ -6,6 +6,7 @@ using Autodesk.Revit.DB;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Revit_glTF_Exporter
 {
@@ -231,10 +232,10 @@ namespace Revit_glTF_Exporter
                             {
                                 writer.Write((int)index);
                             }
-                            foreach (var batchId in bin.batchIdBuffer)
-                            {
-                                writer.Write((float)batchId);
-                            }
+                            //foreach (var batchId in bin.batchIdBuffer)
+                            //{
+                            //    writer.Write((float)batchId);
+                            //}
                         }
                     }
                 }
@@ -276,10 +277,10 @@ namespace Revit_glTF_Exporter
                             {
                                 writer.Write((int)index);
                             }
-                            foreach (var batchId in bin.batchIdBuffer)
-                            {
-                                writer.Write((float)batchId);
-                            }
+                            //foreach (var batchId in bin.batchIdBuffer)
+                            //{
+                            //    writer.Write((float)batchId);
+                            //}
                         }
                     }
                 }
@@ -316,12 +317,13 @@ namespace Revit_glTF_Exporter
                 glTFExtras extras = new glTFExtras();
                 extras.UniqueId = e.UniqueId;
                 extras.parameters = Util.GetElementParameters(e, true);
-                extras.elementId = e.Id.IntegerValue;
+                //extras.elementId = e.Id.IntegerValue;
                 extras.elementCategory = e.Category.Name;
-                extras.dependentElements = Util.GetDependentElements(e);
+                //extras.dependentElements = Util.GetDependentElements(e);
                 newNode.extras = extras;
 
                 Nodes.AddOrUpdateCurrent(e.UniqueId, newNode);
+
                 // add the index of this node to our root node children array
                 rootNode.children.Add(Nodes.CurrentIndex);
             }
@@ -394,6 +396,8 @@ namespace Revit_glTF_Exporter
             }
             Debug.WriteLine(string.Format("    OnMaterial: {0}", matName));
         }
+
+
         /// <summary>
         /// Runs for every polymesh being processed. Typically this is a single face
         /// of an element's mesh. Here we populate the data into our "_current" variables
@@ -507,7 +511,7 @@ namespace Revit_glTF_Exporter
                 glTFMeshPrimitive primitive = new glTFMeshPrimitive();
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
                 //primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
-                primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
+                //primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 primitive.indices = elementBinary.indexAccessorIndex;
                 primitive.material = Materials.GetIndexFromUUID(material_key);
 
@@ -578,10 +582,10 @@ namespace Revit_glTF_Exporter
             {
                 bufferData.indexBuffer.Add(index);
             }
-            foreach (var coord in geomData.vertices)
-            {
-                bufferData.batchIdBuffer.Add(elementId);
-            }
+            //foreach (var coord in geomData.vertices)
+            //{
+            //    bufferData.batchIdBuffer.Add(elementId);
+            //}
 
             // Get max and min for vertex data
             float[] vertexMinMax = Util.GetVec3MinMax(bufferData.vertexBuffer);
@@ -589,8 +593,8 @@ namespace Revit_glTF_Exporter
             //float[] normalMinMax = Util.GetVec3MinMax(bufferData.normalBuffer);
             // Get max and min for index data
             int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
-            // Get max and min for batchId data
-            float[] batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
+            //// Get max and min for batchId data
+            //float[] batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
 
             /**
              * BufferViews
@@ -638,17 +642,17 @@ namespace Revit_glTF_Exporter
             BufferViews.Add(facesView);
             int facesViewIdx = BufferViews.Count - 1;
 
-            // Add a batchId buffer view
-            glTFBufferView batchIdsView = new glTFBufferView();
-            batchIdsView.buffer = bufferIdx;
-            batchIdsView.byteOffset = facesView.byteOffset + facesView.byteLength;
-            batchIdsView.byteLength = sizeOfVec3View;
-            batchIdsView.target = Targets.ARRAY_BUFFER;
-            BufferViews.Add(batchIdsView);
-            int batchIdsViewIdx = BufferViews.Count - 1;
+            //// Add a batchId buffer view
+            //glTFBufferView batchIdsView = new glTFBufferView();
+            //batchIdsView.buffer = bufferIdx;
+            //batchIdsView.byteOffset = facesView.byteOffset + facesView.byteLength;
+            //batchIdsView.byteLength = sizeOfVec3View;
+            //batchIdsView.target = Targets.ARRAY_BUFFER;
+            //BufferViews.Add(batchIdsView);
+            //int batchIdsViewIdx = BufferViews.Count - 1;
 
             //Buffers[bufferIdx].byteLength = vec3View.byteLength + vec3ViewNormals.byteLength + facesView.byteLength + batchIdsView.byteLength;
-            Buffers[bufferIdx].byteLength = vec3View.byteLength + facesView.byteLength + batchIdsView.byteLength;
+            //Buffers[bufferIdx].byteLength = vec3View.byteLength + facesView.byteLength + batchIdsView.byteLength;
 
             /**
              * Accessors
@@ -662,7 +666,7 @@ namespace Revit_glTF_Exporter
             positionAccessor.type = "VEC3";
             positionAccessor.max = new List<float>() { vertexMinMax[1], vertexMinMax[3], vertexMinMax[5] };
             positionAccessor.min = new List<float>() { vertexMinMax[0], vertexMinMax[2], vertexMinMax[4] };
-            positionAccessor.name = "POSITION";
+            //positionAccessor.name = "POSITION";
             Accessors.Add(positionAccessor);
             bufferData.vertexAccessorIndex = Accessors.Count - 1;
 
@@ -693,21 +697,21 @@ namespace Revit_glTF_Exporter
             Accessors.Add(faceAccessor);
             bufferData.indexAccessorIndex = Accessors.Count - 1;
 
-            // add a batchId accessor
-            glTFAccessor batchIdAccessor = new glTFAccessor();
-            batchIdAccessor.bufferView = batchIdsViewIdx;
-            batchIdAccessor.byteOffset = 0;
-            batchIdAccessor.componentType = ComponentType.FLOAT;
-            //batchIdAccessor.count = numIndexes;
-            batchIdAccessor.count = geomData.vertices.Count / elementsPerVertex;
-            batchIdAccessor.type = "VEC3";
-            //batchIdAccessor.max = new List<float>() { batchIdMinMax[1] };
-            //batchIdAccessor.min = new List<float>() { batchIdMinMax[0] };
-            batchIdAccessor.max = new List<float>() { batchIdMinMax[1], batchIdMinMax[3], batchIdMinMax[5] };
-            batchIdAccessor.min = new List<float>() { batchIdMinMax[0], batchIdMinMax[2], batchIdMinMax[4] };
-            batchIdAccessor.name = "BATCH_ID";
-            Accessors.Add(batchIdAccessor);
-            bufferData.batchIdAccessorIndex = Accessors.Count - 1;
+            //// add a batchId accessor
+            //glTFAccessor batchIdAccessor = new glTFAccessor();
+            //batchIdAccessor.bufferView = batchIdsViewIdx;
+            //batchIdAccessor.byteOffset = 0;
+            //batchIdAccessor.componentType = ComponentType.FLOAT;
+            ////batchIdAccessor.count = numIndexes;
+            //batchIdAccessor.count = geomData.vertices.Count / elementsPerVertex;
+            //batchIdAccessor.type = "VEC3";
+            ////batchIdAccessor.max = new List<float>() { batchIdMinMax[1] };
+            ////batchIdAccessor.min = new List<float>() { batchIdMinMax[0] };
+            //batchIdAccessor.max = new List<float>() { batchIdMinMax[1], batchIdMinMax[3], batchIdMinMax[5] };
+            //batchIdAccessor.min = new List<float>() { batchIdMinMax[0], batchIdMinMax[2], batchIdMinMax[4] };
+            //batchIdAccessor.name = "BATCH_ID";
+            //Accessors.Add(batchIdAccessor);
+            //bufferData.batchIdAccessorIndex = Accessors.Count - 1;
 
             return bufferData;
         }

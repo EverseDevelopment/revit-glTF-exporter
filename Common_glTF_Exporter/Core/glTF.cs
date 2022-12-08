@@ -156,7 +156,7 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public int POSITION { get; set; }
         //public int NORMAL { get; set; }
-        public int _BATCHID { get; set; }
+        //public int _BATCHID { get; set; }
     }
 
     /// <summary>
@@ -254,7 +254,6 @@ namespace Revit_glTF_Exporter
         public int elementId { get; set; }
         public string elementCategory { get; set; }
         public List<string> dependentElements { get; set; }
-
     }
 
     public class GridParameters
