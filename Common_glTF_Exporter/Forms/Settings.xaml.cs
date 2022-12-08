@@ -74,7 +74,7 @@ namespace Revit_glTF_Exporter
             Document doc = view3d.Document;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\");
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", true, true, true, materialsExport);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
