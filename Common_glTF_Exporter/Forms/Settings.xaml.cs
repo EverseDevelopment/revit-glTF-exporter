@@ -30,7 +30,7 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
-        public bool materialsExport = true;
+        //public bool materialsExport = true;
         public Settings(Document doc, View3D view)
         {
             InitializeComponent();
@@ -43,11 +43,6 @@ namespace Revit_glTF_Exporter
 
         private void OnExportView(object sender, RoutedEventArgs e)
         {
-            if (MaterialsCheckbox.IsChecked == false)
-            {
-                materialsExport = false;
-            }
-
             if (_view == null)
             {
                 TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
@@ -74,7 +69,7 @@ namespace Revit_glTF_Exporter
             Document doc = view3d.Document;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\");
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", true, true, true, MaterialsCheckbox.IsChecked.Value);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);

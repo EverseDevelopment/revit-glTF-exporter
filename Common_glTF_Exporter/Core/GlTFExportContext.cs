@@ -104,8 +104,8 @@ namespace Revit_glTF_Exporter
 
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
-
-        public glTFExportContext(Document doc, string filename, string directory, bool singleBinary = true, bool exportProperties = true, bool flipCoords = true)
+        private bool _exportMaterials;
+        public glTFExportContext(Document doc, string filename, string directory, bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
         {
             _doc = doc;
             _exportProperties = exportProperties;
@@ -113,6 +113,7 @@ namespace Revit_glTF_Exporter
             _singleBinary = singleBinary;
             _filename = filename;
             _directory = directory;
+            _exportMaterials = exportMaterials;
         }
 
         /// <summary>
@@ -358,7 +359,7 @@ namespace Revit_glTF_Exporter
                 // construct the material
                 gl_mat.name = matName;
                 glTFPBR pbr = new glTFPBR();
-                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
+                pbr.baseColorFactor = new List<float>() { _exportMaterials ? node.Color.Red / 255f : 220 / 255f, _exportMaterials ? node.Color.Green / 255f : 220 / 255f, _exportMaterials ? node.Color.Blue / 255f : 220 / 255f, opacity };
                 pbr.metallicFactor = 0f;
                 pbr.roughnessFactor = 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
