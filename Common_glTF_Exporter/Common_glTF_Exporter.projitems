@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Core\Containers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
@@ -24,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\FilesHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +46,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Core\" />
     <Folder Include="$(MSBuildThisFileDirectory)Forms\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
   </ItemGroup>
 </Project>

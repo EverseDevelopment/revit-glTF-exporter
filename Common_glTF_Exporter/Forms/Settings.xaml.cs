@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Common_glTF_Exporter.Utils;
 using Microsoft.Win32;
-using Revit_glTF_Exporter.Model;
 
 namespace Revit_glTF_Exporter
 {
@@ -49,15 +36,12 @@ namespace Revit_glTF_Exporter
                 this.Close();
             }
 
-            SaveFileDialog fileDialog = new SaveFileDialog();
+            string fileName = string.Concat(_fileName, " - ", _viewName);
+            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
 
-            fileDialog.FileName = _fileName + " - " + _viewName; // default file name
-            fileDialog.DefaultExt = ".gltf"; // default file extension
-
-            bool? dialogResult = fileDialog.ShowDialog();
             if (dialogResult == true)
             {
-                string filename = fileDialog.FileName;
+                string filename = fileName;
                 string directory = System.IO.Path.GetDirectoryName(filename) + "\\";
 
                 ExportView3D(_view, filename, directory, false);
@@ -69,7 +53,8 @@ namespace Revit_glTF_Exporter
             Document doc = view3d.Document;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", true, true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", true, true, 
+                FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
