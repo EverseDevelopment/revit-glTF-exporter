@@ -8,7 +8,6 @@
              Width="350" 
              Title="glTF Exporter Settings" 
              Height="200">
-
     <Grid Background="#FFE8E8E8" Margin="0,0,0,-2">
         <Button Content="Export View to glTF" 
                 Margin="10,0,10,10" 

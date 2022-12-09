@@ -251,9 +251,9 @@ namespace Revit_glTF_Exporter
         public string UniqueId { get; set; }
         public GridParameters GridParameters { get; set; }
         public Dictionary<string, string> parameters { get; set; }
-        public int elementId { get; set; }
+        //public int elementId { get; set; }
         public string elementCategory { get; set; }
-        public List<string> dependentElements { get; set; }
+        //public List<string> dependentElements { get; set; }
     }
 
     public class GridParameters

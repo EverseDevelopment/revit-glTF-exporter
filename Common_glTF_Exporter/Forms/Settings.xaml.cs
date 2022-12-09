@@ -68,8 +68,11 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
 
+            // Get model units
+            ForgeTypeId forgeTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
+            
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", true, true, true, MaterialsCheckbox.IsChecked.Value);
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", forgeTypeId, true, true, true, MaterialsCheckbox.IsChecked.Value);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);

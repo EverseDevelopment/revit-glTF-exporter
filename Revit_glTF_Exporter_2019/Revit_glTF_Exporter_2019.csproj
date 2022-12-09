@@ -64,7 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autodesk.Revit.SDK">
-      <Version>2019.2.3.2001</Version>
+      <Version>2023.0.0.2001</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
@@ -74,7 +74,7 @@
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-	  <PostBuildEvent>
+    <PostBuildEvent>
 		  if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\"
 		  if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\Images"
 		  if $(ConfigurationName) == Debug copy "$(SolutionDir)Revit_glTF_Exporter_2019\Resources\*" "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\Images\"
