@@ -8,6 +8,9 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using Autodesk.Revit.UI;
+using System.IO.Ports;
+using System.Windows.Controls;
+using Grid = Autodesk.Revit.DB.Grid;
 
 namespace Revit_glTF_Exporter
 {
@@ -498,10 +501,10 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (_currentVertices.List.Count == 0)
-            {
-                return;
-            }
+            //if (_currentVertices.List.Count == 0)
+            //{
+            //    return;
+            //}
 
             Element e = _doc.GetElement(elementId);
 
@@ -806,17 +809,79 @@ namespace Revit_glTF_Exporter
         }
 
         public void OnRPC(RPCNode node)
-        {
-            //Options opt = new Options();
-            //opt.ComputeReferences = true;
-            //opt.View = _doc.ActiveView;
+        {           
+            glTFMaterial gl_mat = new glTFMaterial();
+            float opacity = 1 - (float)50;
 
-            //var geometry = _element.get_Geometry(opt);
+            // construct the material
+            gl_mat.name = "default";
+            glTFPBR pbr = new glTFPBR();
+            pbr.baseColorFactor = new List<float>() { 220 / 255f, 220 / 255f,  220 / 255f, opacity };
+            pbr.metallicFactor = 0f;
+            pbr.roughnessFactor = 1f;
+            gl_mat.pbrMetallicRoughness = pbr;
 
-            //foreach (var item in geometry)
-            //{
+            ElementCategoryFilter collectorFilter = new ElementCategoryFilter(BuiltInCategory.OST_Materials);
+            var material = new FilteredElementCollector(_doc)
+                .WherePasses(collectorFilter)
+                .WhereElementIsNotElementType()
+                .ToElements()
+                .Cast<Material>()
+                .First();
 
-            //}
+            Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+
+
+            // Add new "_current" entries if vertex_key is unique
+            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
+            Debug.WriteLine("    OnRPC: " + vertex_key);
+
+            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
+            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+
+            Options opt = new Options();
+            opt.ComputeReferences = true;
+            opt.View = _doc.ActiveView;
+
+            GeometryElement geoEle = _element.get_Geometry(opt);
+
+            foreach (GeometryObject geoObject in geoEle)
+            {
+                if (geoObject is GeometryInstance)
+                {
+                    GeometryInstance geoInst = geoObject as GeometryInstance;
+
+                    foreach (var geoObj in geoInst.GetInstanceGeometry())
+                    {
+                        if (geoObj is Mesh)
+                        {
+                            Mesh mesh = geoObj as Mesh;
+                            int triangles = mesh.NumTriangles;
+
+                            for (int i = 1; i < triangles - 1; i++)
+                            {
+                                try
+                                {
+                                    MeshTriangle triangle = mesh.get_Triangle(i);
+
+                                    if (triangle == null)
+                                        continue;
+
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+
+                                    _currentGeometry.CurrentItem.faces.Add(v1);
+                                    _currentGeometry.CurrentItem.faces.Add(v2);
+                                    _currentGeometry.CurrentItem.faces.Add(v3);
+
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void OnLight(LightNode node)
