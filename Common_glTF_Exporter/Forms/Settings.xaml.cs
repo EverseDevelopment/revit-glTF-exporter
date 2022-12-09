@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Common_glTF_Exporter.ViewModel;
 using Microsoft.Win32;
 using Revit_glTF_Exporter.Model;
 
@@ -30,17 +31,36 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
+        ForgeTypeId _internalProjectUnitTypeId;
+        ForgeTypeId _userDefinedUnitTypeId;
+        UnitsViewModel _unitsViewModel;
+
         //public bool materialsExport = true;
         public Settings(Document doc, View3D view)
         {
+            _unitsViewModel = new UnitsViewModel();
+            this.DataContext = _unitsViewModel;
+
             InitializeComponent();
+            InitializeCommands();            
+
+            _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
+            UnitTextBlock.Text = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
+
+            UnitsComboBox.SelectedIndex = 0;
 
             this._doc = doc;
             this._view = view;
             this._fileName = _doc.Title;
             this._viewName = _view.Name;
         }
-
+        private void InitializeCommands()
+        {
+            this.Topmost = true;
+            this.ShowInTaskbar = true;
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.ResizeMode = ResizeMode.NoResize;
+        }
         private void OnExportView(object sender, RoutedEventArgs e)
         {
             if (_view == null)
@@ -68,11 +88,18 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
 
-            // Get model units
-            ForgeTypeId forgeTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
-            
+            _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
+
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", forgeTypeId, true, true, true, MaterialsCheckbox.IsChecked.Value);
+            glTFExportContext ctx = new glTFExportContext(
+                doc, 
+                filename , 
+                directory + "\\",
+                _userDefinedUnitTypeId, 
+                true, 
+                true,
+                true,
+                MaterialsCheckbox.IsChecked.Value);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
@@ -84,11 +111,6 @@ namespace Revit_glTF_Exporter
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

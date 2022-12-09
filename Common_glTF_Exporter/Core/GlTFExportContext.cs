@@ -16,6 +16,7 @@ namespace Revit_glTF_Exporter
         private Document _doc;
         private bool _skipElementFlag = false;
         private string _elementName;
+        private Element _element;
         private ForgeTypeId _forgeTypeId;
         /// <summary>
         /// Flag to write coords as Z up instead of Y up (if true).
@@ -309,12 +310,10 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            Element e = _doc.GetElement(elementId);
-            _elementName = e.Name.ToString();
+            _element = _doc.GetElement(elementId);
+            _elementName = _element.Name.ToString();
 
-            //TaskDialog.Show("OnElementBegin", "OnElementBegin " + _elementName);
-
-            if (Nodes.Contains(e.UniqueId))
+            if (Nodes.Contains(_element.UniqueId))
             {
                 // Duplicate element, skip adding.
                 Debug.WriteLine("    Duplicate Element!");
@@ -324,7 +323,7 @@ namespace Revit_glTF_Exporter
 
             // create a new node for the element
             glTFNode newNode = new glTFNode();
-            newNode.name = Util.ElementDescription(e);
+            newNode.name = Util.ElementDescription(_element);
             //newNode.matrix = new List<float>() { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
             if (_exportProperties)
@@ -332,13 +331,13 @@ namespace Revit_glTF_Exporter
                 // get the extras for this element
                 glTFExtras extras = new glTFExtras();
 
-                extras.UniqueId = e.UniqueId;
-                extras.parameters = Util.GetElementParameters(e, true);
+                extras.UniqueId = _element.UniqueId;
+                extras.parameters = Util.GetElementParameters(_element, true);
                 //extras.elementId = e.Id.IntegerValue;
-                extras.elementCategory = e.Category.Name;
+                extras.elementCategory = _element.Category.Name;
                 //extras.dependentElements = Util.GetDependentElements(e);
                 newNode.extras = extras;
-                Nodes.AddOrUpdateCurrent(e.UniqueId, newNode);
+                Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
 
                 // add the index of this node to our root node children array
                 rootNode.children.Add(Nodes.CurrentIndex);
@@ -808,7 +807,16 @@ namespace Revit_glTF_Exporter
 
         public void OnRPC(RPCNode node)
         {
-            // do nothing
+            //Options opt = new Options();
+            //opt.ComputeReferences = true;
+            //opt.View = _doc.ActiveView;
+
+            //var geometry = _element.get_Geometry(opt);
+
+            //foreach (var item in geometry)
+            //{
+
+            //}
         }
 
         public void OnLight(LightNode node)
