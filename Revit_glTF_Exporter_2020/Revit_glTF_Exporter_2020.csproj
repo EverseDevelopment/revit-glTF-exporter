@@ -39,6 +39,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,7 +75,7 @@
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-	  <PostBuildEvent>
+    <PostBuildEvent>
 		  if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\"
 		  if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\Images"
 		  if $(ConfigurationName) == Debug copy "$(SolutionDir)Revit_glTF_Exporter_2020\Resources\*" "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\Images\"
