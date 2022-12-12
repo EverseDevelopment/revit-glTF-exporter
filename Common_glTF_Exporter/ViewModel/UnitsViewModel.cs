@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Common_glTF_Exporter.Model;
+using Revit_glTF_Exporter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,12 +36,21 @@ namespace Common_glTF_Exporter.ViewModel
 
         public UnitsViewModel()
         {
+#if REVIT2021 || REVIT2022 || REVIT2023
             Units = new ObservableCollection<UnitObject>();
             Units.Add( new UnitObject(UnitTypeId.Meters));
             Units.Add(new UnitObject(UnitTypeId.Inches));
             Units.Add(new UnitObject(UnitTypeId.Millimeters));
             Units.Add(new UnitObject(UnitTypeId.Feet));
             Units.Add(new UnitObject(UnitTypeId.Centimeters));
+#elif REVIT2019 || REVIT2020
+            Units = new ObservableCollection<UnitObject>();
+            Units.Add(new UnitObject(DisplayUnitType.DUT_METERS));
+            Units.Add(new UnitObject(DisplayUnitType.DUT_DECIMAL_INCHES));
+            Units.Add(new UnitObject(DisplayUnitType.DUT_MILLIMETERS));
+            Units.Add(new UnitObject(DisplayUnitType.DUT_DECIMAL_FEET));
+            Units.Add(new UnitObject(DisplayUnitType.DUT_CENTIMETERS));
+#endif
         }
     }
 }

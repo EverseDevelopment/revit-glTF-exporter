@@ -16,8 +16,19 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
+
+        #if REVIT2021 || REVIT2022 || REVIT2023
+
         ForgeTypeId _internalProjectUnitTypeId;
         ForgeTypeId _userDefinedUnitTypeId;
+
+        #elif REVIT2019 || REVIT2020
+
+        DisplayUnitType _internalProjectDisplayUnitType;
+        DisplayUnitType _userDefinedDisplayUnitType;
+
+        #endif
+
         UnitsViewModel _unitsViewModel;
 
         //public bool materialsExport = true;
@@ -26,10 +37,21 @@ namespace Revit_glTF_Exporter
             _unitsViewModel = new UnitsViewModel();
             this.DataContext = _unitsViewModel;
 
-            InitializeComponent();           
+            InitializeComponent();
+
+            #if REVIT2021 || REVIT2022 || REVIT2023
 
             _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
             UnitTextBlock.Text = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
+
+            #endif
+
+            #if REVIT2019 || REVIT2020
+
+            _internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
+            UnitTextBlock.Text = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
+
+            #endif
 
             UnitsComboBox.SelectedIndex = 0;
 
@@ -63,18 +85,31 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
 
+            #if REVIT2021 || REVIT2022 || REVIT2023
+
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", _userDefinedUnitTypeId, true, 
                 true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+            #endif
 
+            #if REVIT2019 || REVIT2020
+
+            _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
+
+            // Use our custom implementation of IExportContext as the exporter context.
+            glTFExportContext ctx = new glTFExportContext(doc, filename, directory + "\\", _userDefinedDisplayUnitType, true,
+                true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+
+            #endif
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
                 
             exporter.ShouldStopOnError = true;
-            exporter.Export(view3d);            
+
+            exporter.Export(view3d);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

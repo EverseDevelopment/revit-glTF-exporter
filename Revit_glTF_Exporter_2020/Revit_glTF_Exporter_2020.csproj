@@ -64,10 +64,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autodesk.Revit.SDK">
-      <Version>2023.0.0.2001</Version>
-    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64">
+      <Version>2020.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gltf.png" />

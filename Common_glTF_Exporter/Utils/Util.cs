@@ -1,21 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Media3D;
 using Autodesk.Revit.DB;
+using Material = Autodesk.Revit.DB.Material;
 
 namespace Revit_glTF_Exporter
 {
     class Util
     {
+        public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
+        {
+            try
+            {
+                // search for an already existing material
+                return glTFMaterials.First(x =>
+                x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
+                x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
+                x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
+            }
+            catch
+            {
+                // new GLTF material
+                return Util.CreateGLTFMaterial("defaul", 50, new Color(250, 250, 250));
+            }
+        }
+        public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color)
+        {
+            // construct the material
+            glTFMaterial gl_mat = new glTFMaterial();
+            float opacity = 1 - (float)materialOpacity;
+            gl_mat.name = materialName;
+            glTFPBR pbr = new glTFPBR();
+            pbr.baseColorFactor = new List<float>() { color.Red / 255f, color.Green / 255f, color.Blue / 255f, opacity };
+            pbr.metallicFactor = 0f;
+            pbr.roughnessFactor = 1f;
+            gl_mat.pbrMetallicRoughness = pbr;
+
+            return gl_mat;
+        }
+        public static Material GetMeshMaterial(Document doc, Mesh mesh)
+        {
+            ElementId materialId = null;
+
+            try { materialId = mesh.MaterialElementId; } catch { }
+
+            if (materialId != null)
+            {
+                return (doc.GetElement(materialId) as Material);
+            }
+            else { return null; }
+        }
         /// <summary>
         /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="forgeTypeId"></param>
         /// <returns></returns>
-        public static double ConvertFeetToUnitTypeId(double value, ForgeTypeId forgeTypeId)
+        public static double ConvertFeetToUnitTypeId(double value,
+
+            #if REVIT2021 || REVIT2022 || REVIT2023
+
+            ForgeTypeId forgeTypeId
+
+            #elif REVIT2019 || REVIT2020
+
+            DisplayUnitType displayUnitType
+
+            #endif
+            )
         {
+            #if REVIT2021 || REVIT2022 || REVIT2023
+
             return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
+
+            #elif REVIT2019 || REVIT2020
+
+            return UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType);
+
+            #endif
         }
         public static float[] GetVec3MinMax(List<float> vec3)
         {

@@ -6,6 +6,8 @@ using Autodesk.Revit.DB;
 using System.Diagnostics;
 using Grid = Autodesk.Revit.DB.Grid;
 using Common_glTF_Exporter.Export;
+using Common_glTF_Exporter.Utils;
+using Autodesk.Revit.UI;
 
 namespace Revit_glTF_Exporter
 {
@@ -13,9 +15,16 @@ namespace Revit_glTF_Exporter
     {
         private Document _doc;
         private bool _skipElementFlag = false;
-        private string _elementName;
         private Element _element;
+        private bool _isRPC = false;
+
+#if REVIT2021 || REVIT2022 || REVIT2023
         private ForgeTypeId _forgeTypeId;
+#endif
+
+#if REVIT2019 || REVIT2020
+        private DisplayUnitType _displayUnitType;
+#endif
         /// <summary>
         /// Flag to write coords as Z up instead of Y up (if true).
         /// </summary>
@@ -106,8 +115,18 @@ namespace Revit_glTF_Exporter
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
         private bool _exportMaterials;
+        public glTFExportContext(Document doc, string filename, string directory,
 
-        public glTFExportContext(Document doc, string filename, string directory, ForgeTypeId forgeTypeId,
+            #if REVIT2021 || REVIT2022 || REVIT2023
+
+            ForgeTypeId forgeTypeId,
+
+            #elif REVIT2019 || REVIT2020
+
+            DisplayUnitType displayUnitType,
+
+            #endif
+
             bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
 
         {
@@ -118,7 +137,16 @@ namespace Revit_glTF_Exporter
             _filename = filename;
             _directory = directory;
             _exportMaterials = exportMaterials;
+
+            #if REVIT2021 || REVIT2022 || REVIT2023
+
             _forgeTypeId = forgeTypeId;
+
+            #elif REVIT2019 || REVIT2020
+
+           _displayUnitType = displayUnitType;
+
+            #endif
         }
 
         /// <summary>
@@ -131,8 +159,10 @@ namespace Revit_glTF_Exporter
             _transformStack.Push(Transform.Identity);
 
             //float scale = 1f; // could play with this to match units in a different viewer.
+
             rootNode = new glTFNode();
             rootNode.name = "rootNode";
+
             //rootNode.matrix = new List<float>()
             //{
             //    scale, 0, 0, 0,
@@ -140,6 +170,7 @@ namespace Revit_glTF_Exporter
             //    0, 0, scale, 0,
             //    0, 0, 0, scale
             //};
+
             rootNode.children = new List<int>();
             Nodes.AddOrUpdateCurrent("rootNode", rootNode);
 
@@ -166,6 +197,7 @@ namespace Revit_glTF_Exporter
                 .OfClass(typeof(Grid));
 
             var grids = col.ToElements();
+
             foreach (Grid g in grids)
             {
                 Line l = g.Curve as Line;
@@ -176,6 +208,8 @@ namespace Revit_glTF_Exporter
 
                 var xtras = new glTFExtras();
                 var grid = new GridParameters();
+
+                #if REVIT2021 || REVIT2022 || REVIT2023
 
                 grid.origin = new List<double>() { 
                     Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
@@ -188,6 +222,23 @@ namespace Revit_glTF_Exporter
                     Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
 
                 grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
+
+                #elif REVIT2019 || REVIT2020
+
+
+                grid.origin = new List<double>() {
+                    Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, _displayUnitType),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, _displayUnitType) };
+
+                grid.direction = new List<double>() {
+                    Util.ConvertFeetToUnitTypeId(direction.X, _displayUnitType),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, _displayUnitType),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, _displayUnitType) };
+
+                grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
+
+                #endif
 
                 xtras.GridParameters = grid;
                 xtras.UniqueId = g.UniqueId;
@@ -264,8 +315,6 @@ namespace Revit_glTF_Exporter
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
             _element = _doc.GetElement(elementId);
-            _elementName = _element.Name.ToString();
-
 
             if (Nodes.Contains(_element.UniqueId))
             {
@@ -390,9 +439,19 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
+                #if REVIT2021 || REVIT2022 || REVIT2023
+
                 int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
                 int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
                 int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));
+
+                #elif REVIT2019 || REVIT2020
+
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _displayUnitType));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _displayUnitType));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _displayUnitType));
+
+                #endif
 
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
@@ -416,12 +475,10 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            // TODO: Validate if are ever gpoing to recieve an empty list 
-            // with elements that are not RCP
-            //if (_currentVertices.List.Count == 0)
-            //{
-            //    return;
-            //}
+            if (!_isRPC && _currentVertices.List.Count == 0)
+            {
+                return;
+            }
 
             Element e = _doc.GetElement(elementId);
 
@@ -448,7 +505,6 @@ namespace Revit_glTF_Exporter
             }
 
             // Convert _currentGeometry objects into glTFMeshPrimitives
-            //TaskDialog.Show("_currentGeometry Dictionary", _currentGeometry.Dict.Count.ToString());
 
             foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
             {
@@ -479,10 +535,6 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public RenderNodeAction OnInstanceBegin(InstanceNode node)
         {
-            //TaskDialog.Show("OnInstanceBegin", "OnInstanceBegin " + _elementName);
-
-            Debug.WriteLine("  OnInstanceBegin");
-
             var transform = node.GetTransform();
             var transformationMutiply = CurrentTransform.Multiply(transform);
             _transformStack.Push(transformationMutiply);
@@ -498,9 +550,6 @@ namespace Revit_glTF_Exporter
         /// <param name="node"></param>
         public void OnInstanceEnd(InstanceNode node)
         {
-            //TaskDialog.Show("OnInstanceEnd", "OnInstanceEnd " + _elementName);
-
-            Debug.WriteLine("  OnInstanceEnd");
             // Note: This method is invoked even for instances that were skipped.
             _transformStack.Pop();
         }
@@ -515,8 +564,6 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public glTFBinaryData AddGeometryMeta(GeometryData geomData, string name, int elementId)
         {
-            //TaskDialog.Show("AddGeometryMeta", "AddGeometryMeta " + _elementName);
-
             // add a buffer
             glTFBuffer buffer = new glTFBuffer();
             buffer.uri = String.Concat(name,".bin" );
@@ -528,7 +575,6 @@ namespace Revit_glTF_Exporter
              **/
             glTFBinaryData bufferData = new glTFBinaryData();
             bufferData.name = buffer.uri;
-            //TaskDialog.Show("vertices", geomData.vertices.Count.ToString());
 
             foreach (var coord in geomData.vertices)
             {
@@ -541,8 +587,6 @@ namespace Revit_glTF_Exporter
             //{
             //    bufferData.normalBuffer.Add((float)normal);
             //}
-
-            //TaskDialog.Show("faces", geomData.faces.Count.ToString());
 
             foreach (var index in geomData.faces)
             {
@@ -655,55 +699,30 @@ namespace Revit_glTF_Exporter
 
         public RenderNodeAction OnFaceBegin(FaceNode node)
         {
-            //TaskDialog.Show("OnFaceBegin", "OnFaceBegin " + _elementName);
-
             return RenderNodeAction.Proceed;
         }
 
         public void OnFaceEnd(FaceNode node)
         {
-            //TaskDialog.Show("OnFaceEnd", "OnFaceEnd " + _elementName);
-
             // This method is invoked only if the 
             // custom exporter was set to include faces.
         }
 
         public void OnRPC(RPCNode node)
-        {           
-            glTFMaterial gl_mat = new glTFMaterial();
-            float opacity = 1 - (float)50;
-
-            // construct the material
-            gl_mat.name = "default";
-            glTFPBR pbr = new glTFPBR();
-            pbr.baseColorFactor = new List<float>() { 220 / 255f, 220 / 255f,  220 / 255f, opacity };
-            pbr.metallicFactor = 0f;
-            pbr.roughnessFactor = 1f;
-            gl_mat.pbrMetallicRoughness = pbr;
-
-            ElementCategoryFilter collectorFilter = new ElementCategoryFilter(BuiltInCategory.OST_Materials);
-            var material = new FilteredElementCollector(_doc)
-                .WherePasses(collectorFilter)
-                .WhereElementIsNotElementType()
-                .ToElements()
-                .Cast<Material>()
-                .First();
-
-            Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
-
-
-            // Add new "_current" entries if vertex_key is unique
-            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
-            Debug.WriteLine("    OnRPC: " + vertex_key);
-
-            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
-            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+        {
+            _isRPC = true;
 
             Options opt = new Options();
             opt.ComputeReferences = true;
             opt.View = _doc.ActiveView;
 
             GeometryElement geoEle = _element.get_Geometry(opt);
+
+            // Add new "_current" entries if vertex_key is unique
+            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
+
+            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
+            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
             foreach (GeometryObject geoObject in geoEle)
             {
@@ -718,7 +737,36 @@ namespace Revit_glTF_Exporter
                             Mesh mesh = geoObj as Mesh;
                             int triangles = mesh.NumTriangles;
 
-                            for (int i = 1; i < triangles - 1; i++)
+                            if (triangles == 0)
+                                continue;
+
+                            glTFMaterial gl_mat = new glTFMaterial();
+                            Material material = Util.GetMeshMaterial(_doc, mesh);
+
+                            if (material == null && _exportMaterials)
+                            {
+                                material = Collectors.GetRandomMaterial(_doc);
+                                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+                            }
+                            else if (material == null && !_exportMaterials)
+                            {
+                                material = Collectors.GetRandomMaterial(_doc);
+                                //TODO: set gl_mat to the default material for all the elements
+                                //gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+                            }
+                            else if (material != null && _exportMaterials)
+                            {
+                                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+                            }
+                            else if (material != null && !_exportMaterials)
+                            {
+                                //TODO: set gl_mat to the default material for all the elements
+                                //gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+                            }
+
+                            Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+
+                            for (int i = 0; i < triangles - 1; i++)
                             {
                                 try
                                 {
@@ -727,14 +775,23 @@ namespace Revit_glTF_Exporter
                                     if (triangle == null)
                                         continue;
 
+                                    #if REVIT2021 || REVIT2022 || REVIT2023
+
                                     int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
                                     int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
                                     int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+                                    
+                                    #elif REVIT2019 || REVIT2020
+
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
+                                    
+                                    #endif
 
                                     _currentGeometry.CurrentItem.faces.Add(v1);
                                     _currentGeometry.CurrentItem.faces.Add(v2);
                                     _currentGeometry.CurrentItem.faces.Add(v3);
-
                                 }
                                 catch { }
                             }
