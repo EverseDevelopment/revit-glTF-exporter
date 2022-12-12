@@ -7,7 +7,11 @@
              mc:Ignorable="d" 
              Width="350" 
              Height="270"
-             Title="glTF Exporter Settings">
+             Title="glTF Exporter Settings"
+             ResizeMode="NoResize"
+             Topmost="True"
+             ShowInTaskbar="True">
+    
     <Grid Background="#FFE8E8E8" VerticalAlignment="Center" Height="260">
         <Button Content="Export View to glTF" 
                 Margin="10,206,10,18"
