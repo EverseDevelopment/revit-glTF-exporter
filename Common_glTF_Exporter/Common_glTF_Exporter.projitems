@@ -17,6 +17,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\UnitObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\Resources.xaml.cs">
+      <DependentUpon>Resources.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\ControlDoubleClickBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\ShowSystemMenuBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\SystemMenuManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\WindowDragBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\WindowResizeBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\IObject.cs" />
@@ -42,6 +50,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Forms\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -49,6 +61,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Core\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Forms\" />
   </ItemGroup>
 </Project>

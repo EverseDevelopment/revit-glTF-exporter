@@ -159,19 +159,8 @@ namespace Revit_glTF_Exporter
         {
             _transformStack.Push(Transform.Identity);
 
-            //float scale = 1f; // could play with this to match units in a different viewer.
-
             rootNode = new glTFNode();
             rootNode.name = "rootNode";
-
-            //rootNode.matrix = new List<float>()
-            //{
-            //    scale, 0, 0, 0,
-            //    0, scale, 0, 0,
-            //    0, 0, scale, 0,
-            //    0, 0, 0, scale
-            //};
-
             rootNode.children = new List<int>();
             Nodes.AddOrUpdateCurrent("rootNode", rootNode);
 
