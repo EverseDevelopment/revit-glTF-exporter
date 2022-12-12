@@ -225,7 +225,6 @@ namespace Revit_glTF_Exporter
 
                 #elif REVIT2019 || REVIT2020
 
-
                 grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
                     Util.ConvertFeetToUnitTypeId(origin.Y, _displayUnitType),
