@@ -11,7 +11,7 @@ namespace Revit_glTF_Exporter
     /// </summary>
     class GeometryData
     {
-        public List<long> vertices = new List<long>();
+        public List<double> vertices = new List<double>();
         public List<double> normals = new List<double>();
         public List<double> uvs = new List<double>();
         public List<int> faces = new List<int>();
@@ -171,9 +171,9 @@ namespace Revit_glTF_Exporter
     /// </summary>
     class PointInt : IComparable<PointInt>
     {
-        public long X { get; set; }
-        public long Y { get; set; }
-        public long Z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
         /// <summary>
         /// Consider a Revit length zero 
@@ -206,16 +206,16 @@ namespace Revit_glTF_Exporter
             }
         }
 
-        public PointInt(XYZ p, bool switch_coordinates)
+        public PointInt(XYZ p, bool switch_coordinates, ForgeTypeId forgeTypeId)
         {
-            X = ConvertFeetToMillimetres(p.X);
-            Y = ConvertFeetToMillimetres(p.Y);
-            Z = ConvertFeetToMillimetres(p.Z);
+            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
 
             if (switch_coordinates)
             {
                 X = -X;
-                long tmp = Y;
+                double tmp = Y;
                 Y = Z;
                 Z = tmp;
             }
@@ -223,7 +223,7 @@ namespace Revit_glTF_Exporter
 
         public int CompareTo(PointInt a)
         {
-            long d = X - a.X;
+            double d = X - a.X;
             if (0 == d)
             {
                 d = Y - a.Y;

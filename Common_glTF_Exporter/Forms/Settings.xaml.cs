@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
-using Microsoft.Win32;
 
 namespace Revit_glTF_Exporter
 {
@@ -17,10 +16,22 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
+        ForgeTypeId _internalProjectUnitTypeId;
+        ForgeTypeId _userDefinedUnitTypeId;
+        UnitsViewModel _unitsViewModel;
+
         //public bool materialsExport = true;
         public Settings(Document doc, View3D view)
         {
-            InitializeComponent();
+            _unitsViewModel = new UnitsViewModel();
+            this.DataContext = _unitsViewModel;
+
+            InitializeComponent();           
+
+            _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
+            UnitTextBlock.Text = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
+
+            UnitsComboBox.SelectedIndex = 0;
 
             this._doc = doc;
             this._view = view;
@@ -52,9 +63,12 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
 
+            _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
+
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", true, true, 
-                FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", _userDefinedUnitTypeId, true, 
+                true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
@@ -66,11 +80,6 @@ namespace Revit_glTF_Exporter
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

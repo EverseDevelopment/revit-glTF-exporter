@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\UnitObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\IObject.cs" />
@@ -28,6 +29,8 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FilesHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\UnitsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Resources\gltf.png" />

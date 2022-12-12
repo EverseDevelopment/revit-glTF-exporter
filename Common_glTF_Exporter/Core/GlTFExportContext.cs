@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using Autodesk.Revit.DB;
 using System.Diagnostics;
+using Grid = Autodesk.Revit.DB.Grid;
 using Common_glTF_Exporter.Export;
 
 namespace Revit_glTF_Exporter
@@ -12,7 +13,9 @@ namespace Revit_glTF_Exporter
     {
         private Document _doc;
         private bool _skipElementFlag = false;
-
+        private string _elementName;
+        private Element _element;
+        private ForgeTypeId _forgeTypeId;
         /// <summary>
         /// Flag to write coords as Z up instead of Y up (if true).
         /// </summary>
@@ -103,8 +106,10 @@ namespace Revit_glTF_Exporter
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
         private bool _exportMaterials;
-        public glTFExportContext(Document doc, string filename, string directory, bool singleBinary = true, 
-            bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
+
+        public glTFExportContext(Document doc, string filename, string directory, ForgeTypeId forgeTypeId,
+            bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
+
         {
             _doc = doc;
             _exportProperties = exportProperties;
@@ -113,6 +118,7 @@ namespace Revit_glTF_Exporter
             _filename = filename;
             _directory = directory;
             _exportMaterials = exportMaterials;
+            _forgeTypeId = forgeTypeId;
         }
 
         /// <summary>
@@ -170,9 +176,19 @@ namespace Revit_glTF_Exporter
 
                 var xtras = new glTFExtras();
                 var grid = new GridParameters();
-                grid.origin = new List<double>() { origin.X, origin.Y, origin.Z };
-                grid.direction = new List<double>() { direction.X, direction.Y, direction.Z };
-                grid.length = length;
+
+                grid.origin = new List<double>() { 
+                    Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId) };
+
+                grid.direction = new List<double>() { 
+                    Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
+
+                grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
+
                 xtras.GridParameters = grid;
                 xtras.UniqueId = g.UniqueId;
                 xtras.parameters = Util.GetElementParameters(g, true);
@@ -247,9 +263,11 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            Element e = _doc.GetElement(elementId);
+            _element = _doc.GetElement(elementId);
+            _elementName = _element.Name.ToString();
 
-            if (Nodes.Contains(e.UniqueId))
+
+            if (Nodes.Contains(_element.UniqueId))
             {
                 // Duplicate element, skip adding.
                 _skipElementFlag = true;
@@ -258,18 +276,23 @@ namespace Revit_glTF_Exporter
 
             // create a new node for the element
             glTFNode newNode = new glTFNode();
-            newNode.name = Util.ElementDescription(e);
+
+            newNode.name = Util.ElementDescription(_element);
 
             if (_exportProperties)
             {
                 // get the extras for this element
                 glTFExtras extras = new glTFExtras();
-                extras.UniqueId = e.UniqueId;
-                extras.parameters = Util.GetElementParameters(e, true);
-                extras.elementCategory = e.Category.Name;
-                newNode.extras = extras;
 
-                Nodes.AddOrUpdateCurrent(e.UniqueId, newNode);
+                extras.UniqueId = _element.UniqueId;
+                extras.parameters = Util.GetElementParameters(_element, true);
+
+                //extras.elementId = e.Id.IntegerValue;
+                extras.elementCategory = _element.Category.Name;
+                //extras.dependentElements = Util.GetDependentElements(e);
+
+                newNode.extras = extras;
+                Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
 
                 // add the index of this node to our root node children array
                 rootNode.children.Add(Nodes.CurrentIndex);
@@ -334,8 +357,8 @@ namespace Revit_glTF_Exporter
                 gl_mat.pbrMetallicRoughness = pbr;
 
                 // prevent duplicated materials
-                    current_gl_mat = Materials.List
-                        .FirstOrDefault(x => x.name == matName);
+                current_gl_mat = Materials.List
+                    .FirstOrDefault(x => x.name == matName);
 
                 if (current_gl_mat == null)
                 {
@@ -343,7 +366,6 @@ namespace Revit_glTF_Exporter
                 }
             }
         }
-
 
         /// <summary>
         /// Runs for every polymesh being processed. Typically this is a single face
@@ -365,11 +387,12 @@ namespace Revit_glTF_Exporter
             IList<XYZ> pts = polymesh.GetPoints();
             pts = pts.Select(p => t.OfPoint(p)).ToList();
             IList<PolymeshFacet> facets = polymesh.GetFacets();
+
             foreach (PolymeshFacet facet in facets)
             {
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));
 
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
@@ -393,10 +416,12 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (_currentVertices.List.Count == 0)
-            {
-                return;
-            }
+            // TODO: Validate if are ever gpoing to recieve an empty list 
+            // with elements that are not RCP
+            //if (_currentVertices.List.Count == 0)
+            //{
+            //    return;
+            //}
 
             Element e = _doc.GetElement(elementId);
 
@@ -404,6 +429,8 @@ namespace Revit_glTF_Exporter
             glTFMesh newMesh = new glTFMesh();
             newMesh.primitives = new List<glTFMeshPrimitive>();
             Meshes.AddOrUpdateCurrent(e.UniqueId, newMesh);
+
+            //TaskDialog.Show("debug", Meshes.List.Count.ToString());
 
             // add the index of this mesh to the current node.
             Nodes.CurrentItem.mesh = Meshes.CurrentIndex;
@@ -421,6 +448,8 @@ namespace Revit_glTF_Exporter
             }
 
             // Convert _currentGeometry objects into glTFMeshPrimitives
+            //TaskDialog.Show("_currentGeometry Dictionary", _currentGeometry.Dict.Count.ToString());
+
             foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
             {
                 glTFBinaryData elementBinary = AddGeometryMeta(kvp.Value, kvp.Key, elementId.IntegerValue);
@@ -450,10 +479,13 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public RenderNodeAction OnInstanceBegin(InstanceNode node)
         {
+            //TaskDialog.Show("OnInstanceBegin", "OnInstanceBegin " + _elementName);
+
             Debug.WriteLine("  OnInstanceBegin");
-            _transformStack.Push(
-                CurrentTransform.Multiply(node.GetTransform())
-            );
+
+            var transform = node.GetTransform();
+            var transformationMutiply = CurrentTransform.Multiply(transform);
+            _transformStack.Push(transformationMutiply);
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
@@ -466,6 +498,8 @@ namespace Revit_glTF_Exporter
         /// <param name="node"></param>
         public void OnInstanceEnd(InstanceNode node)
         {
+            //TaskDialog.Show("OnInstanceEnd", "OnInstanceEnd " + _elementName);
+
             Debug.WriteLine("  OnInstanceEnd");
             // Note: This method is invoked even for instances that were skipped.
             _transformStack.Pop();
@@ -481,6 +515,8 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public glTFBinaryData AddGeometryMeta(GeometryData geomData, string name, int elementId)
         {
+            //TaskDialog.Show("AddGeometryMeta", "AddGeometryMeta " + _elementName);
+
             // add a buffer
             glTFBuffer buffer = new glTFBuffer();
             buffer.uri = String.Concat(name,".bin" );
@@ -492,11 +528,21 @@ namespace Revit_glTF_Exporter
              **/
             glTFBinaryData bufferData = new glTFBinaryData();
             bufferData.name = buffer.uri;
+            //TaskDialog.Show("vertices", geomData.vertices.Count.ToString());
+
             foreach (var coord in geomData.vertices)
             {
                 float vFloat = Convert.ToSingle(coord);
                 bufferData.vertexBuffer.Add(vFloat);
             }
+
+            // TODO: Leaving this to export normals in the future
+            //foreach (var normal in geomData.normals)
+            //{
+            //    bufferData.normalBuffer.Add((float)normal);
+            //}
+
+            //TaskDialog.Show("faces", geomData.faces.Count.ToString());
 
             foreach (var index in geomData.faces)
             {
@@ -609,18 +655,93 @@ namespace Revit_glTF_Exporter
 
         public RenderNodeAction OnFaceBegin(FaceNode node)
         {
+            //TaskDialog.Show("OnFaceBegin", "OnFaceBegin " + _elementName);
+
             return RenderNodeAction.Proceed;
         }
 
         public void OnFaceEnd(FaceNode node)
         {
+            //TaskDialog.Show("OnFaceEnd", "OnFaceEnd " + _elementName);
+
             // This method is invoked only if the 
             // custom exporter was set to include faces.
         }
 
         public void OnRPC(RPCNode node)
-        {
-            // do nothing
+        {           
+            glTFMaterial gl_mat = new glTFMaterial();
+            float opacity = 1 - (float)50;
+
+            // construct the material
+            gl_mat.name = "default";
+            glTFPBR pbr = new glTFPBR();
+            pbr.baseColorFactor = new List<float>() { 220 / 255f, 220 / 255f,  220 / 255f, opacity };
+            pbr.metallicFactor = 0f;
+            pbr.roughnessFactor = 1f;
+            gl_mat.pbrMetallicRoughness = pbr;
+
+            ElementCategoryFilter collectorFilter = new ElementCategoryFilter(BuiltInCategory.OST_Materials);
+            var material = new FilteredElementCollector(_doc)
+                .WherePasses(collectorFilter)
+                .WhereElementIsNotElementType()
+                .ToElements()
+                .Cast<Material>()
+                .First();
+
+            Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+
+
+            // Add new "_current" entries if vertex_key is unique
+            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
+            Debug.WriteLine("    OnRPC: " + vertex_key);
+
+            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
+            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+
+            Options opt = new Options();
+            opt.ComputeReferences = true;
+            opt.View = _doc.ActiveView;
+
+            GeometryElement geoEle = _element.get_Geometry(opt);
+
+            foreach (GeometryObject geoObject in geoEle)
+            {
+                if (geoObject is GeometryInstance)
+                {
+                    GeometryInstance geoInst = geoObject as GeometryInstance;
+
+                    foreach (var geoObj in geoInst.GetInstanceGeometry())
+                    {
+                        if (geoObj is Mesh)
+                        {
+                            Mesh mesh = geoObj as Mesh;
+                            int triangles = mesh.NumTriangles;
+
+                            for (int i = 1; i < triangles - 1; i++)
+                            {
+                                try
+                                {
+                                    MeshTriangle triangle = mesh.get_Triangle(i);
+
+                                    if (triangle == null)
+                                        continue;
+
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+
+                                    _currentGeometry.CurrentItem.faces.Add(v1);
+                                    _currentGeometry.CurrentItem.faces.Add(v2);
+                                    _currentGeometry.CurrentItem.faces.Add(v3);
+
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void OnLight(LightNode node)

@@ -7,7 +7,16 @@ namespace Revit_glTF_Exporter
 {
     class Util
     {
-
+        /// <summary>
+        /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="forgeTypeId"></param>
+        /// <returns></returns>
+        public static double ConvertFeetToUnitTypeId(double value, ForgeTypeId forgeTypeId)
+        {
+            return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
+        }
         public static float[] GetVec3MinMax(List<float> vec3)
         {
             
