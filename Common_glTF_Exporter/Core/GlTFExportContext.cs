@@ -17,15 +17,13 @@ namespace Revit_glTF_Exporter
         private bool _skipElementFlag = false;
         private Element _element;
 
-        #if REVIT2021 || REVIT2022 || REVIT2023
-
-        private ForgeTypeId _forgeTypeId;
-
-        #endif
-
         #if REVIT2019 || REVIT2020
 
         private DisplayUnitType _displayUnitType;
+
+        #else
+
+        private ForgeTypeId _forgeTypeId;
 
         #endif
         /// <summary>
@@ -120,13 +118,13 @@ namespace Revit_glTF_Exporter
         private bool _exportMaterials;
         public glTFExportContext(Document doc, string filename, string directory,
 
-            #if REVIT2021 || REVIT2022 || REVIT2023
-
-            ForgeTypeId forgeTypeId,
-
-            #elif REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType,
+
+            #else 
+
+            ForgeTypeId forgeTypeId,
 
             #endif
 
@@ -141,13 +139,13 @@ namespace Revit_glTF_Exporter
             _directory = directory;
             _exportMaterials = exportMaterials;
 
-            #if REVIT2021 || REVIT2022 || REVIT2023
+            #if REVIT2019 || REVIT2020
 
-            _forgeTypeId = forgeTypeId;
+            _displayUnitType = displayUnitType;
 
-            #elif REVIT2019 || REVIT2020
+            #else
 
-           _displayUnitType = displayUnitType;
+            _forgeTypeId = forgeTypeId;        
 
             #endif
         }
@@ -212,21 +210,7 @@ namespace Revit_glTF_Exporter
                 var xtras = new glTFExtras();
                 var grid = new GridParameters();
 
-                #if REVIT2021 || REVIT2022 || REVIT2023
-
-                grid.origin = new List<double>() { 
-                    Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId) };
-
-                grid.direction = new List<double>() { 
-                    Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
-
-                grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
-
-                #elif REVIT2019 || REVIT2020
+                #if  REVIT2019 || REVIT2020
 
                 grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
@@ -240,6 +224,20 @@ namespace Revit_glTF_Exporter
 
                 grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
 
+                #else
+
+                grid.origin = new List<double>() {
+                    Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId) };
+
+                grid.direction = new List<double>() {
+                    Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
+
+                grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
+                
                 #endif
 
                 xtras.GridParameters = grid;
@@ -441,17 +439,18 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-                #if REVIT2021 || REVIT2022 || REVIT2023
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));
-
-                #elif REVIT2019 || REVIT2020
+                #if REVIT2019 || REVIT2020
 
                 int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _displayUnitType));
                 int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _displayUnitType));
                 int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _displayUnitType));
+
+                #else
+
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));
 
                 #endif
 
@@ -739,23 +738,15 @@ namespace Revit_glTF_Exporter
                                 material = Collectors.GetRandomMaterial(_doc);
                                 gl_mat = Util.GetGLTFMaterial(Materials.List, material);
                             }
-                            else if (material == null && !_exportMaterials)
-                            {
-                                material = Collectors.GetRandomMaterial(_doc);
-                                //TODO: set gl_mat to the default material for all the elements
-                                //gl_mat = Util.GetGLTFMaterial(Materials.List, material);
-                            }
                             else if (material != null && _exportMaterials)
                             {
                                 gl_mat = Util.GetGLTFMaterial(Materials.List, material);
                             }
-                            else if (material != null && !_exportMaterials)
-                            {
-                                //TODO: set gl_mat to the default material for all the elements
-                                //gl_mat = Util.GetGLTFMaterial(Materials.List, material);
-                            }
 
-                            Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+                            if (_exportMaterials)
+                            {
+                                Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+                            }
 
                             // Add new "_current" entries if vertex_key is unique
                             string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
@@ -771,17 +762,17 @@ namespace Revit_glTF_Exporter
                                     if (triangle == null)
                                         continue;
 
-                                    #if REVIT2021 || REVIT2022 || REVIT2023
-
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
-
-                                    #elif REVIT2019 || REVIT2020
+                                    #if REVIT2019 || REVIT2020
 
                                     int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
                                     int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
                                     int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
+
+                                    #else
+
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
 
                                     #endif
 

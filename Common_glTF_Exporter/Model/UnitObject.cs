@@ -7,37 +7,38 @@ namespace Common_glTF_Exporter.Model
 {
     public class UnitObject
     {
-        #if REVIT2021 || REVIT2022 || REVIT2023
+        #if REVIT2019 || REVIT2020
+        public DisplayUnitType DisplayUnitType { get; internal set; }
+
+        #else
 
         public ForgeTypeId ForgeTypeId { get; internal set; }
 
-        #elif REVIT2019 || REVIT2020
-        public DisplayUnitType DisplayUnitType { get; internal set; }
         #endif
         public string Label { get; internal set; }
 
         public UnitObject(
 
-        #if REVIT2021 || REVIT2022 || REVIT2023
+        #if REVIT2019 || REVIT2020
 
-        ForgeTypeId forgeTypeId
+        DisplayUnitType displayUnitType       
 
-        #elif REVIT2019 || REVIT2020
+        #else
 
-            DisplayUnitType displayUnitType
+        ForgeTypeId forgeTypeId           
 
         #endif
         )
         {
-            #if REVIT2021 || REVIT2022 || REVIT2023
-
-            ForgeTypeId = forgeTypeId;
-            Label = LabelUtils.GetLabelForUnit(forgeTypeId).ToString();
-
-            #elif REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             DisplayUnitType = displayUnitType;
             Label = LabelUtils.GetLabelFor(DisplayUnitType);
+
+            #else
+
+            ForgeTypeId = forgeTypeId;
+            Label = LabelUtils.GetLabelForUnit(forgeTypeId).ToString();
 
             #endif
         }

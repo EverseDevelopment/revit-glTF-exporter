@@ -208,29 +208,28 @@ namespace Revit_glTF_Exporter
 
         public PointInt(XYZ p, bool switch_coordinates,
 
-            #if REVIT2021 || REVIT2022 || REVIT2023
-
-            ForgeTypeId forgeTypeId
-
-            #elif REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType
+
+            #else
+
+            ForgeTypeId forgeTypeId
 
             #endif
             )
         {
-
-            #if REVIT2021 || REVIT2022 || REVIT2023
-
-            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
-
-            #elif REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType);
             Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType);
             Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType);
+
+            #else
+
+            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
 
             #endif
 

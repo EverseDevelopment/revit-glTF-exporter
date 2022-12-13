@@ -59,24 +59,25 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public static double ConvertFeetToUnitTypeId(double value,
 
-            #if REVIT2021 || REVIT2022 || REVIT2023
-
-            ForgeTypeId forgeTypeId
-
-            #elif REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType
 
+            #else
+
+            ForgeTypeId forgeTypeId
+
             #endif
+
             )
         {
-            #if REVIT2021 || REVIT2022 || REVIT2023
-
-            return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
-
-            #elif REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             return UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType);
+            
+            #else
+
+            return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
 
             #endif
         }
