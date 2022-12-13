@@ -12,10 +12,12 @@ namespace Revit_glTF_Exporter
         public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
         {
             // search for an already existing material
-            return glTFMaterials.FirstOrDefault(x =>
+            var m = glTFMaterials.FirstOrDefault(x =>
             x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
             x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
             x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
+
+            return m != null ? m : Util.CreateGLTFMaterial("defaul", 50, new Color(250, 250, 250));
         }
         public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color)
         {
