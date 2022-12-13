@@ -16,15 +16,18 @@ namespace Revit_glTF_Exporter
         private Document _doc;
         private bool _skipElementFlag = false;
         private Element _element;
-        private bool _isRPC = false;
 
-#if REVIT2021 || REVIT2022 || REVIT2023
+        #if REVIT2021 || REVIT2022 || REVIT2023
+
         private ForgeTypeId _forgeTypeId;
-#endif
 
-#if REVIT2019 || REVIT2020
+        #endif
+
+        #if REVIT2019 || REVIT2020
+
         private DisplayUnitType _displayUnitType;
-#endif
+
+        #endif
         /// <summary>
         /// Flag to write coords as Z up instead of Y up (if true).
         /// </summary>
@@ -474,19 +477,17 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (!_isRPC && _currentVertices.List.Count == 0)
+            if (_currentVertices.List.Count == 0)
             {
                 return;
             }
 
-            Element e = _doc.GetElement(elementId);
+            Element element = _doc.GetElement(elementId);
 
             // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primatives on mesh)
             glTFMesh newMesh = new glTFMesh();
             newMesh.primitives = new List<glTFMeshPrimitive>();
-            Meshes.AddOrUpdateCurrent(e.UniqueId, newMesh);
-
-            //TaskDialog.Show("debug", Meshes.List.Count.ToString());
+            Meshes.AddOrUpdateCurrent(element.UniqueId, newMesh);
 
             // add the index of this mesh to the current node.
             Nodes.CurrentItem.mesh = Meshes.CurrentIndex;
@@ -504,7 +505,6 @@ namespace Revit_glTF_Exporter
             }
 
             // Convert _currentGeometry objects into glTFMeshPrimitives
-
             foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
             {
                 glTFBinaryData elementBinary = AddGeometryMeta(kvp.Value, kvp.Key, elementId.IntegerValue);
@@ -516,10 +516,10 @@ namespace Revit_glTF_Exporter
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
 
                 primitive.indices = elementBinary.indexAccessorIndex;
-                
-                if(_exportMaterials)
-                { 
-                  primitive.material = Materials.GetIndexFromUUID(material_key);
+
+                if (_exportMaterials)
+                {
+                    primitive.material = Materials.GetIndexFromUUID(material_key);
                 }
 
                 Meshes.CurrentItem.primitives.Add(primitive);
@@ -709,19 +709,11 @@ namespace Revit_glTF_Exporter
 
         public void OnRPC(RPCNode node)
         {
-            _isRPC = true;
-
             Options opt = new Options();
             opt.ComputeReferences = true;
             opt.View = _doc.ActiveView;
 
             GeometryElement geoEle = _element.get_Geometry(opt);
-
-            // Add new "_current" entries if vertex_key is unique
-            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
-
-            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
-            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
             foreach (GeometryObject geoObject in geoEle)
             {
@@ -765,6 +757,11 @@ namespace Revit_glTF_Exporter
 
                             Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
 
+                            // Add new "_current" entries if vertex_key is unique
+                            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
+                            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
+                            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+
                             for (int i = 0; i < triangles - 1; i++)
                             {
                                 try
@@ -779,13 +776,13 @@ namespace Revit_glTF_Exporter
                                     int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
                                     int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
                                     int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
-                                    
+
                                     #elif REVIT2019 || REVIT2020
 
                                     int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
                                     int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
                                     int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
-                                    
+
                                     #endif
 
                                     _currentGeometry.CurrentItem.faces.Add(v1);
