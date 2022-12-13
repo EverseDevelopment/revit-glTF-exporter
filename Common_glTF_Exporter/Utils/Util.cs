@@ -11,19 +11,11 @@ namespace Revit_glTF_Exporter
     {
         public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
         {
-            try
-            {
-                // search for an already existing material
-                return glTFMaterials.First(x =>
-                x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
-                x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
-                x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
-            }
-            catch
-            {
-                // new GLTF material
-                return Util.CreateGLTFMaterial("defaul", 50, new Color(250, 250, 250));
-            }
+            // search for an already existing material
+            return glTFMaterials.FirstOrDefault(x =>
+            x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
+            x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
+            x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
         }
         public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color)
         {
@@ -41,14 +33,13 @@ namespace Revit_glTF_Exporter
         }
         public static Material GetMeshMaterial(Document doc, Mesh mesh)
         {
-            ElementId materialId = null;
-
-            try { materialId = mesh.MaterialElementId; } catch { }
+            ElementId materialId = mesh.MaterialElementId; 
 
             if (materialId != null)
             {
                 return (doc.GetElement(materialId) as Material);
             }
+
             else { return null; }
         }
         /// <summary>

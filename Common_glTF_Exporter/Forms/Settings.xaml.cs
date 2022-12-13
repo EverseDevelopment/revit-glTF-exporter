@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
+using System.IO;
 
 namespace Revit_glTF_Exporter
 {
@@ -82,13 +83,15 @@ namespace Revit_glTF_Exporter
         public void ExportView3D(View3D view3d, string filename, string directory, bool mode)
         {
             Document doc = view3d.Document;
+            string directoryPath = Path.Combine(directory + "\\");
 
             #if REVIT2019 || REVIT2020
 
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
 
+
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename, directory + "\\", _userDefinedDisplayUnitType, true,
+            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, true,
                 true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
 
             #else
@@ -96,7 +99,7 @@ namespace Revit_glTF_Exporter
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\", _userDefinedUnitTypeId, true, 
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, true, 
                 true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
             
             #endif

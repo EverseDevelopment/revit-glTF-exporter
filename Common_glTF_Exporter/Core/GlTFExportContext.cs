@@ -733,20 +733,15 @@ namespace Revit_glTF_Exporter
                             glTFMaterial gl_mat = new glTFMaterial();
                             Material material = Util.GetMeshMaterial(_doc, mesh);
 
-                            if (material == null && _exportMaterials)
-                            {
-                                material = Collectors.GetRandomMaterial(_doc);
-                                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
-                            }
-                            else if (material != null && _exportMaterials)
-                            {
-                                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
-                            }
-
                             if (_exportMaterials)
                             {
+                                if (material.Equals(null))
+                                {
+                                    material = Collectors.GetRandomMaterial(_doc);
+                                }
+                                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
                                 Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
-                            }
+                            }                           
 
                             // Add new "_current" entries if vertex_key is unique
                             string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
