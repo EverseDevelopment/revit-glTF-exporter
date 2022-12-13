@@ -206,11 +206,32 @@ namespace Revit_glTF_Exporter
             }
         }
 
-        public PointInt(XYZ p, bool switch_coordinates, ForgeTypeId forgeTypeId)
+        public PointInt(XYZ p, bool switch_coordinates,
+
+            #if REVIT2019 || REVIT2020
+
+            DisplayUnitType displayUnitType
+
+            #else
+
+            ForgeTypeId forgeTypeId
+
+            #endif
+            )
         {
+            #if REVIT2019 || REVIT2020
+
+            X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType);
+
+            #else
+
             X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
             Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
             Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
+
+            #endif
 
             if (switch_coordinates)
             {

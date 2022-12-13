@@ -44,7 +44,7 @@
         <GroupBox Header="Units" Margin="10,124,10,63">
             <Grid>
                 <TextBlock HorizontalAlignment="Left" Margin="4,4,0,0" TextWrapping="Wrap" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="Project internal unit:"/></TextBlock>
-                <TextBlock x:Name="UnitTextBlock" Margin="115,4,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="50" Foreground="Black" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="M"/><Run Text="eter"/><Run Text="s"/></TextBlock>
+                <TextBlock x:Name="UnitTextBlock" Margin="115,4,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="193" Foreground="Black" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="M"/><Run Text="eter"/><Run Text="s"/></TextBlock>
                 <ComboBox  x:Name="UnitsComboBox" HorizontalAlignment="Left" ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Label" Margin="88,25,0,0" VerticalAlignment="Top" Width="139"/>
                 <TextBlock HorizontalAlignment="Left" Margin="4,28,0,0" TextWrapping="Wrap" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="Export file "/><Run Text="unit:"/></TextBlock>
             </Grid>
