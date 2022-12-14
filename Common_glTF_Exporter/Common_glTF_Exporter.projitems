@@ -37,6 +37,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Room.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\SettingWindow.xaml.cs" />
+    <Page Include="$(MSBuildThisFileDirectory)Windows\SettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Collectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FilesHelper.cs" />
@@ -60,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Windows\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
