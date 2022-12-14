@@ -90,9 +90,9 @@ namespace Revit_glTF_Exporter
 
             ProgressBarWindow progressBar = new ProgressBarWindow();
             progressBar.ViewModel.ProgressBarValue = 0;
-            progressBar.ViewModel.Message = "Searching for duplicated parameters...";
+            progressBar.ViewModel.Message = "Converting elements...";
             progressBar.ViewModel.ProgressBarMax = Collectors.AllElementsByView(doc, doc.ActiveView).Count;
-            progressBar.ShowDialog();
+            progressBar.Show();
             ProgressBarWindow.MainView.Topmost = true;
 
             #if REVIT2019 || REVIT2020
@@ -121,7 +121,7 @@ namespace Revit_glTF_Exporter
             exporter.Export(view3d);
 
             progressBar.ViewModel.Message = "GLTF exportation completed!";
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             progressBar.Close();
         }
 

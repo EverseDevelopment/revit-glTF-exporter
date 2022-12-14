@@ -727,7 +727,7 @@ namespace Revit_glTF_Exporter
 
                             if (_exportMaterials)
                             {
-                                if (material.Equals(null))
+                                if (material == null)
                                 {
                                     material = Collectors.GetRandomMaterial(_doc);
                                 }
