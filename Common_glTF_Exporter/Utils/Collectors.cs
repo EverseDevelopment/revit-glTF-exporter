@@ -17,5 +17,12 @@ namespace Common_glTF_Exporter.Utils
                 .Cast<Material>()
                 .FirstOrDefault();
         }
+        public static List<Element> AllElementsByView(Document doc, View view)
+        {
+            return new FilteredElementCollector(doc, view.Id)
+               .WhereElementIsNotElementType()
+               .ToElements()
+               .ToList();
+        }
     }
 }
