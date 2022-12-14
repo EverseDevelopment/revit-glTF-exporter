@@ -3,51 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Media3D;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Common_glTF_Exporter.TransactionManager;
 using Material = Autodesk.Revit.DB.Material;
 
 namespace Revit_glTF_Exporter
 {
     class Util
     {
-        public static void SetAccuracy(Document doc, double decimalPlaces)
+        public static void SetAccuracy(Document doc, int decimalPlaces)
         {
             #if REVIT2019 || REVIT2020
 
-            var _units = doc.GetUnits();
-            var _length = _units.GetFormatOptions(UnitType.UT_Length);
-            FormatOptions fo = new FormatOptions(_length);
-            fo.UseDefault = false;
-            //fo.Set(UnitTypeId.Meters);
-            //fo.Accuracy = 1 * (10e-3);
-            //var isValid = fo.IsValidAccuracy(fo.Accuracy);
-
-            //if (isValid)
-            //{
-            //    _units.SetFormatOptions(SpecTypeId.Length, fo);
-            //    doc.SetUnits(_units);
-            //}
+            TransactionManager.CreateNewTransaction(doc, "SetAccuracy", () => {
+                
+                var _units = doc.GetUnits();
+                var _length = _units.GetFormatOptions(UnitType.UT_Length);
+                FormatOptions fo = new FormatOptions(_length);
+                fo.UseDefault = false;
+                fo.Accuracy = Math.Pow(10, -decimalPlaces);
+                var isValid = fo.IsValidAccuracy(fo.Accuracy);
+                if (isValid)
+                {
+                    _units.SetFormatOptions(UnitType.UT_Length, fo);
+                    doc.SetUnits(_units);
+                }
+            });
 
             #else
 
-            var _units = doc.GetUnits();
-            var _length = _units.GetFormatOptions(SpecTypeId.Length);
-            FormatOptions fo = new FormatOptions(_length);
-            fo.UseDefault = false;
-            fo.SetUnitTypeId(UnitTypeId.Meters);
-            fo.Accuracy = 1 * (10e-3);
-            var isValid = fo.IsValidAccuracy(fo.Accuracy);
+            TransactionManager.CreateNewTransaction(doc, "SetAccuracy", () => {       
+            
+                var _units = doc.GetUnits();
+                var _length = _units.GetFormatOptions(SpecTypeId.Length);
+                FormatOptions fo = new FormatOptions(_length);
+                fo.UseDefault = false;
+                fo.SetUnitTypeId(UnitTypeId.Meters);
+                fo.Accuracy = Math.Pow(10, -decimalPlaces);
+                var isValid = fo.IsValidAccuracy(fo.Accuracy);
 
-            if (isValid)
-            {
-                _units.SetFormatOptions(SpecTypeId.Length, fo);
-                doc.SetUnits(_units);
-            }
+                if (isValid)
+                {
+                    _units.SetFormatOptions(SpecTypeId.Length, fo);
+                    doc.SetUnits(_units);
+                }            
+            });
 
             #endif
-
         }
-
-
 
         public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
         {
@@ -92,27 +95,29 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public static double ConvertFeetToUnitTypeId(double value,
 
-#if REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType
 
-#else
+            #else
 
             ForgeTypeId forgeTypeId
 
-#endif
+            #endif
+
+            ,int decimalPlaces
 
             )
         {
-#if REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
-            return UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType);
+            return Math.Round(UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType), decimalPlaces);
             
-#else
+            #else
 
             return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
 
-#endif
+            #endif
         }
         public static float[] GetVec3MinMax(List<float> vec3)
         {

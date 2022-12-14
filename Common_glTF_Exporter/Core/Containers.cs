@@ -210,26 +210,27 @@ namespace Revit_glTF_Exporter
 
             #if REVIT2019 || REVIT2020
 
-            DisplayUnitType displayUnitType
+            DisplayUnitType displayUnitType,
 
             #else
 
-            ForgeTypeId forgeTypeId
+            ForgeTypeId forgeTypeId,
 
             #endif
+            int decimalPlaces
             )
         {
             #if REVIT2019 || REVIT2020
 
-            X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType);
+            X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType, decimalPlaces);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType, decimalPlaces);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType, decimalPlaces);
 
             #else
 
-            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
+            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId, decimalPlaces);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId, decimalPlaces);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId, decimalPlaces);
 
             #endif
 

@@ -17,7 +17,7 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
-        private double _decimalPlaces;
+        private int _decimalPlaces;
 
         #if REVIT2019 || REVIT2020
 
@@ -85,6 +85,7 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
             string directoryPath = Path.Combine(directory + "\\");
+            _decimalPlaces = 5;
 
             //TODO: get _decimalPlaces from SettingWindows
             Util.SetAccuracy(doc, _decimalPlaces);
@@ -93,9 +94,8 @@ namespace Revit_glTF_Exporter
 
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
 
-
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, true,
+            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, _decimalPlaces, true,
                 true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
 
             #else
