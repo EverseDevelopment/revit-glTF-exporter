@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="100"
+             Height="120"
              Width="300"
              ResizeMode="NoResize"
              Topmost="True"
