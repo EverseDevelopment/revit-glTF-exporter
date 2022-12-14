@@ -119,7 +119,7 @@
                     VerticalAlignment="Center" Content="Relocate Model to (0,0,0)"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Accuracy" Margin="10,239,10,0" Height="67" VerticalAlignment="Top" ToolTip="Reducing the accuracy can affect the quality of the exported geometry.">
+        <GroupBox Header="Number of Decimal Digits" Margin="10,239,10,0" Height="67" VerticalAlignment="Top" ToolTip="Reducing the accuracy can affect the quality of the exported geometry.">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
