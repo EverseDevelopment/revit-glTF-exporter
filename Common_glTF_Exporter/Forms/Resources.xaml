@@ -12,14 +12,14 @@
     <!-- Colors of the bar-->
     <SolidColorBrush x:Key="WindowColor" Color="Red"/>
     <!-- Colors of the Title Bar-->
-    <SolidColorBrush x:Key="WindowBackColor" Color="Gray"/>
+    <SolidColorBrush x:Key="WindowBackColor" Color="#404040"/>
     <!--Color of the tittle of the Main form-->
     <!--Color of the tittle of the Main form-->
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     <!--Color of the tittle of the Main form when hovered-->
     <SolidColorBrush x:Key="WindowForeHighlightColor" Color="White"/>
     <!--Color of the container of minimize, maximize and close buttons-->
-    <SolidColorBrush x:Key="WindowButtonColor" Color="#0B94D6"/>
+    <SolidColorBrush x:Key="WindowButtonColor" Color="#F94F46"/>
     <!--Color of the container of minimize, maximize and close buttons when hovered-->
     <SolidColorBrush x:Key="WindowButtonOverColor" Color="White" Opacity="0.5"/>
     <!--Color of the container of minimize, maximize and close buttons when pressed-->
@@ -221,13 +221,6 @@
         <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
         <Setter Property="Height"  Value="38"/>
-        <Setter Property="Button.Effect">
-            <Setter.Value>
-                <DropShadowEffect Color="Black" 
-                                  Direction="320" ShadowDepth="3.6" 
-                                  BlurRadius="3" Opacity="0.25" />
-            </Setter.Value>
-            </Setter>
     </Style>
 
     
@@ -813,6 +806,18 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="FontFamily" Value="Roboto"/>
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WindowBackColor}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Height" Value="20"/>
+    </Style>
+    
+    
+
 
 
 
