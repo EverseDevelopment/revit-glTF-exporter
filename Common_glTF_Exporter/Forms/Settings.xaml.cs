@@ -17,6 +17,7 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
+        private double _decimalPlaces;
 
         #if REVIT2019 || REVIT2020
 
@@ -84,6 +85,9 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
             string directoryPath = Path.Combine(directory + "\\");
+
+            //TODO: get _decimalPlaces from SettingWindows
+            Util.SetAccuracy(doc, _decimalPlaces);
 
             #if REVIT2019 || REVIT2020
 

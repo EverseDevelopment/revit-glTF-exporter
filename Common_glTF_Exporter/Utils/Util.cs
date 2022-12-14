@@ -9,6 +9,46 @@ namespace Revit_glTF_Exporter
 {
     class Util
     {
+        public static void SetAccuracy(Document doc, double decimalPlaces)
+        {
+            #if REVIT2019 || REVIT2020
+
+            var _units = doc.GetUnits();
+            var _length = _units.GetFormatOptions(UnitType.UT_Length);
+            FormatOptions fo = new FormatOptions(_length);
+            fo.UseDefault = false;
+            //fo.Set(UnitTypeId.Meters);
+            //fo.Accuracy = 1 * (10e-3);
+            //var isValid = fo.IsValidAccuracy(fo.Accuracy);
+
+            //if (isValid)
+            //{
+            //    _units.SetFormatOptions(SpecTypeId.Length, fo);
+            //    doc.SetUnits(_units);
+            //}
+
+            #else
+
+            var _units = doc.GetUnits();
+            var _length = _units.GetFormatOptions(SpecTypeId.Length);
+            FormatOptions fo = new FormatOptions(_length);
+            fo.UseDefault = false;
+            fo.SetUnitTypeId(UnitTypeId.Meters);
+            fo.Accuracy = 1 * (10e-3);
+            var isValid = fo.IsValidAccuracy(fo.Accuracy);
+
+            if (isValid)
+            {
+                _units.SetFormatOptions(SpecTypeId.Length, fo);
+                doc.SetUnits(_units);
+            }
+
+            #endif
+
+        }
+
+
+
         public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
         {
             // search for an already existing material
@@ -52,27 +92,27 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public static double ConvertFeetToUnitTypeId(double value,
 
-            #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType
 
-            #else
+#else
 
             ForgeTypeId forgeTypeId
 
-            #endif
+#endif
 
             )
         {
-            #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
             return UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType);
             
-            #else
+#else
 
             return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
 
-            #endif
+#endif
         }
         public static float[] GetVec3MinMax(List<float> vec3)
         {

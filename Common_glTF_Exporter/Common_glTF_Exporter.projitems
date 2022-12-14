@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransactionManager\TransactionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Collectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FilesHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Util.cs" />
