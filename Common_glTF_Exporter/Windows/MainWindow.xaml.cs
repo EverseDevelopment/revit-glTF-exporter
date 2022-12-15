@@ -14,7 +14,7 @@ namespace Revit_glTF_Exporter
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    
+
     public partial class MainWindow : Window
     {
         Document _doc;
@@ -34,13 +34,12 @@ namespace Revit_glTF_Exporter
 
         #endif
 
-        UnitsViewModel _unitsViewModel;
 
-        //public bool materialsExport = true;
         public MainWindow(Document doc, View3D view)
         {
             _unitsViewModel = new UnitsViewModel();
             this.DataContext = _unitsViewModel;
+            MainView = this;
 
             InitializeComponent();
 
