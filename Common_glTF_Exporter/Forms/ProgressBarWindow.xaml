@@ -7,38 +7,74 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="120"
-             Width="300"
+             Height="184"
+             Width="308"
              ResizeMode="NoResize"
              Topmost="True"
-             ShowInTaskbar="True">
-    <Border Margin="0" BorderThickness="2,2,2,2" Background="#FFE8E8E8">
-        <Grid Margin="0">
+             ShowInTaskbar="True"
+             Style="{DynamicResource CustomWindowStyle}">
+
+
+    <Border Background="White" 
+            BorderBrush="Transparent" 
+            BorderThickness="1,1,1,1" 
+            CornerRadius="8,8,8,8"
+            MouseDown="Border_MouseDown" Margin="5,5,5,6">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" Direction="0"></DropShadowEffect>
+        </Border.Effect>
+
+        <Grid Margin="0"
+              Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="187*"/>
+                <ColumnDefinition Width="109*"/>
+            </Grid.ColumnDefinitions>
             <TextBlock DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        TextWrapping="Wrap" 
                        Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" 
                        TextAlignment="Center"
                        Foreground="Black" 
-                       HorizontalAlignment="Center" Width="266" Margin="0,14,0,0" Height="26" VerticalAlignment="Top"/>
+                       HorizontalAlignment="Left" Width="266" Margin="15,33,0,0" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+            <Button  
+                   Style="{DynamicResource CloseButtonStyle}"
+                   Name="CloseButton" 
+                   Foreground="Black" 
+                   BorderThickness="0" 
+                   Click="Close_Click" 
+                   Background="Transparent" 
+                   VerticalAlignment="Top" 
+                   Height="21" 
+                   FontSize="16" 
+                   FontWeight="Light" 
+                   Margin="89,6,6,0" RenderTransformOrigin="0.012,0.623" Grid.Column="1">X</Button>
+
             <ProgressBar 
-                    Canvas.Bottom="10" 
-                    Canvas.Right="28" 
                     Name="ProgressBar"
                     Minimum="0"
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                        
                     Maximum="{Binding Path=ProgressBarMax}"
                     Value="{Binding Path=ProgressBarValue}"
-                    Margin="40,42,40,0" Height="25" VerticalAlignment="Top">
+                    Margin="40,74,40,0" Height="25" VerticalAlignment="Top" Grid.ColumnSpan="2">
                 <ProgressBar.Foreground>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="White"/>
-                        <GradientStop Color="#FF62FF7F" Offset="1"/>
-                        <GradientStop Color="#FF46F166" Offset="0.504"/>
-                        <GradientStop Color="#FFBEFFCA" Offset="0.134"/>
-                        <GradientStop Color="#FF86EF9A" Offset="0.304"/>
+                        <GradientStop Color="#F94F46" Offset="1"/>
+                        <GradientStop Color="#F94F46" Offset="0.504"/>
+                        <GradientStop Color="#FFFF736C" Offset="0.134"/>
+                        <GradientStop Color="#FFFBA5A0" Offset="0.304"/>
                     </LinearGradientBrush>
                 </ProgressBar.Foreground>
             </ProgressBar>
         </Grid>
     </Border>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
 </Window>
