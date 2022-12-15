@@ -85,6 +85,8 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
             string directoryPath = Path.Combine(directory + "\\");
+
+            // TODO: collect the amount of decimal places from UI
             _decimalPlaces = 5;
 
             #if REVIT2019 || REVIT2020
