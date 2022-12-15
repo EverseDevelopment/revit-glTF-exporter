@@ -87,9 +87,6 @@ namespace Revit_glTF_Exporter
             string directoryPath = Path.Combine(directory + "\\");
             _decimalPlaces = 5;
 
-            //TODO: get _decimalPlaces from SettingWindows
-            Util.SetAccuracy(doc, _decimalPlaces);
-
             #if REVIT2019 || REVIT2020
 
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;

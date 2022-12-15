@@ -225,7 +225,7 @@ namespace Revit_glTF_Exporter
 
                 grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType, _decimalPlaces);
 
-#else
+                #else
 
                 grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId, _decimalPlaces),
