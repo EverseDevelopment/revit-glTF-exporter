@@ -14,8 +14,9 @@ namespace Revit_glTF_Exporter
     /// Interaction logic for Settings.xaml
     /// </summary>
     
-    public partial class Settings : Window
+    public partial class MainWindow : Window
     {
+        private bool _flipAxys = true;
         Document _doc;
         View3D _view;
         string _fileName;
@@ -36,7 +37,7 @@ namespace Revit_glTF_Exporter
         UnitsViewModel _unitsViewModel;
 
         //public bool materialsExport = true;
-        public Settings(Document doc, View3D view)
+        public MainWindow(Document doc, View3D view)
         {
             _unitsViewModel = new UnitsViewModel();
             this.DataContext = _unitsViewModel;
@@ -101,7 +102,7 @@ namespace Revit_glTF_Exporter
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, progressBar, true,
-                true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+                true, _flipAxys, MaterialsCheckbox.IsChecked.Value);
 
             #else
 
@@ -109,7 +110,7 @@ namespace Revit_glTF_Exporter
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, progressBar,  true, 
-                true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
+                true, _flipAxys, MaterialsCheckbox.IsChecked.Value);
             
             #endif
 

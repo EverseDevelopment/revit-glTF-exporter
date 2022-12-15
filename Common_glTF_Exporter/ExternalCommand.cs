@@ -32,8 +32,8 @@ namespace Revit_glTF_Exporter
 
                 View3D view = doc.ActiveView as View3D;
 
-                Settings settings = new Settings(doc, view);
-                settings.ShowDialog();
+                MainWindow mainWindow = new MainWindow(doc, view);
+                mainWindow.ShowDialog();
 
                 return Result.Succeeded;
             }
