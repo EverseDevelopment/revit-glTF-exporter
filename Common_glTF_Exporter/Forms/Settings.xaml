@@ -4,51 +4,127 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Revit_glTF_Exporter"
+             WindowStartupLocation="CenterScreen"
              mc:Ignorable="d" 
              Width="350" 
-             Height="270"
+             Height="470"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
-             ShowInTaskbar="True">
-    
-    <Grid Background="#FFE8E8E8" VerticalAlignment="Center" Height="260">
-        <Button Content="Export View to glTF" 
-                Margin="10,206,10,18"
-                Foreground="White" 
-                BorderBrush="{x:Null}"  
-                Click="OnExportView" 
-                FontWeight="Bold" 
-                Background="#F94F46"/>
-        <CheckBox x:Name="MaterialsCheckbox"
-                  IsChecked="True" 
-                  Height="20"
-                  VerticalContentAlignment="Center"
-                  Margin="14,73,204,0" VerticalAlignment="Top">Export Materials</CheckBox>
-        <CheckBox x:Name="NormalsCheckbox"
-                  IsChecked="False" 
-                  Height="20"
-                  VerticalContentAlignment="Center"
-                  Margin="14,49,204,0" VerticalAlignment="Top">Export Normals</CheckBox>
-        <CheckBox x:Name="FlipAxysCheckbox"
-                  Height="20"
-                  VerticalContentAlignment="Center"
-                  IsChecked="True" 
-                  Margin="14,25,204,0" VerticalAlignment="Top">Flip YZ-Axys</CheckBox>
-        <CheckBox x:Name="ElementIdCheckbox"
-                  Height="20"
-                  VerticalContentAlignment="Center"
-                  IsChecked="False" 
-                  Margin="14,97,192,0" VerticalAlignment="Top">Export ElementId</CheckBox>
+             ShowInTaskbar="True"
+            Style="{DynamicResource CustomWindowStyle}">
 
-        <GroupBox Header="Units" Margin="10,124,10,63">
-            <Grid>
-                <TextBlock HorizontalAlignment="Left" Margin="4,4,0,0" TextWrapping="Wrap" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="Project internal unit:"/></TextBlock>
-                <TextBlock x:Name="UnitTextBlock" Margin="115,4,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="193" Foreground="Black" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="M"/><Run Text="eter"/><Run Text="s"/></TextBlock>
-                <ComboBox  x:Name="UnitsComboBox" HorizontalAlignment="Left" ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Label" Margin="88,25,0,0" VerticalAlignment="Top" Width="139"/>
-                <TextBlock HorizontalAlignment="Left" Margin="4,28,0,0" TextWrapping="Wrap" Height="16" VerticalAlignment="Top"><Run Language="pt-br" Text="Export file "/><Run Text="unit:"/></TextBlock>
-            </Grid>
-        </GroupBox>
-    </Grid>
+    <Border Background="White" 
+            BorderBrush="Transparent" 
+            BorderThickness="1,1,1,1" 
+            CornerRadius="8,8,8,8" 
+            Margin="15,10,10,16" 
+            MouseDown="Border_MouseDown">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" Direction="0"></DropShadowEffect>
+        </Border.Effect>
+
+        <Grid Background="Transparent" Margin="9,9,9,9" Height="420">
+
+            <Button 
+                    Style="{DynamicResource CloseButtonStyle}" 
+                    Name="TtitleButton" 
+                    Foreground="Black" 
+                    BorderThickness="0" 
+                    Click="Title_Link" 
+                    Background="Transparent" 
+                    VerticalAlignment="Top" 
+                    Height="39" 
+                    FontSize="20" 
+                    FontWeight="Light" 
+                    Margin="41,-1,139,0">glTF exporter</Button>
+            <Button  
+                   Style="{DynamicResource CloseButtonStyle}"
+                   Name="CloseButton" 
+                   Foreground="Black" 
+                   BorderThickness="0" 
+                   Click="Close_Click" 
+                   Background="Transparent" 
+                   VerticalAlignment="Top" 
+                   Height="21" 
+                   FontSize="16" 
+                   FontWeight="Light" 
+                   Margin="272,10,17,0" RenderTransformOrigin="0.012,0.623">X</Button>
+            <Button Content="Export" 
+                    Style="{DynamicResource MainButtonStyle}"
+                    Margin="10,349,10,0"
+                    Click="OnExportView" 
+                    Height="38" 
+                    VerticalAlignment="Top"/>
+            <CheckBox x:Name="MaterialsCheckbox"
+                    IsChecked="True" 
+                    Height="20"
+                    VerticalContentAlignment="Center"
+                    Margin="24,135,149,0" 
+                    VerticalAlignment="Top">Export Materials</CheckBox>
+            <CheckBox x:Name="NormalsCheckbox"
+                  IsChecked="False" 
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  Margin="24,111,139,0" VerticalAlignment="Top">Export Normals</CheckBox>
+            <CheckBox x:Name="FlipAxysCheckbox"
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  IsChecked="True" 
+                  Margin="24,87,142,0" VerticalAlignment="Top">Flip YZ-Axys</CheckBox>
+            <CheckBox x:Name="ElementIdCheckbox"
+                  Height="20"
+                  VerticalContentAlignment="Center"
+                  IsChecked="False" 
+                  Margin="24,159,142,0" VerticalAlignment="Top">Export ElementId</CheckBox>
+
+            <Rectangle  VerticalAlignment="Top" 
+                        Fill="Gray" Height="1" Margin="10,207,10,0" Opacity="0.2"/>
+
+            <Label         
+                           HorizontalAlignment="Left" 
+                           Margin="22,223,0,0" 
+                           Height="24" 
+                           VerticalAlignment="Top"
+                           Content="Project units:" Width="72">
+            </Label>
+            <Label x:Name="UnitTextBlock" 
+                               Content="Meters"
+                               HorizontalAlignment="Left" 
+                               Width="116"  
+                               Height="26"
+                               VerticalAlignment="Top" 
+                               Margin="101,223,0,0">
+            </Label>
+            <ComboBox  x:Name="UnitsComboBox" 
+                       ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
+                       SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                       DisplayMemberPath="Label" 
+                       Margin="112,257,31,0" 
+                       Height="30" 
+                       VerticalAlignment="Top"/>
+            <Label             
+                                
+                               HorizontalAlignment="Left" 
+                               Margin="19,257,0,0" 
+                                Content="Export unit:"
+                               Height="28" 
+                               VerticalAlignment="Top" 
+                               Width="71" 
+                               RenderTransformOrigin="0.595,0.511">
+
+            </Label>
+
+
+        </Grid>
+    </Border>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
 </Window>

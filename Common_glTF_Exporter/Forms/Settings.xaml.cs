@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Common_glTF_Exporter.ViewModel;
@@ -43,14 +45,14 @@ namespace Revit_glTF_Exporter
             #if REVIT2019 || REVIT2020
 
             _internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
-            UnitTextBlock.Text = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
+            UnitTextBlock.Content = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
 
-            #else
+#else
 
             _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
-            UnitTextBlock.Text = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
+            UnitTextBlock.Content = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
 
-            #endif
+#endif
 
             UnitsComboBox.SelectedIndex = 0;
 
@@ -115,6 +117,25 @@ namespace Revit_glTF_Exporter
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void Title_Link(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/");
         }
     }
 }
