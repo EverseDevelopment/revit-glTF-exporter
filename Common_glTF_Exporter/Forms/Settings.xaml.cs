@@ -45,14 +45,14 @@ namespace Revit_glTF_Exporter
             #if REVIT2019 || REVIT2020
 
             _internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
-            UnitTextBlock.Text = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
+            UnitTextBlock.Content = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
 
-            #else
+#else
 
             _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
-            UnitTextBlock.Text = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
+            UnitTextBlock.Content = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
 
-            #endif
+#endif
 
             UnitsComboBox.SelectedIndex = 0;
 

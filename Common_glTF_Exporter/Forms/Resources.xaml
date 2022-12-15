@@ -10,21 +10,16 @@
 
 
     <!-- Colors of the bar-->
-    <SolidColorBrush x:Key="WindowColor" Color="Red"/>
-    <!-- Colors of the Title Bar-->
-    <SolidColorBrush x:Key="WindowBackColor" Color="#404040"/>
-    <!--Color of the tittle of the Main form-->
+    <SolidColorBrush x:Key="MainGray" Color="#404040"/>
     <!--Color of the tittle of the Main form-->
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
-    <!--Color of the tittle of the Main form when hovered-->
-    <SolidColorBrush x:Key="WindowForeHighlightColor" Color="White"/>
     <!--Color of the container of minimize, maximize and close buttons-->
     <SolidColorBrush x:Key="WindowButtonColor" Color="#F94F46"/>
-    <!--Color of the container of minimize, maximize and close buttons when hovered-->
-    <SolidColorBrush x:Key="WindowButtonOverColor" Color="White" Opacity="0.5"/>
-    <!--Color of the container of minimize, maximize and close buttons when pressed-->
-    <SolidColorBrush x:Key="WindowButtonPressedColor" Color="White" Opacity="0.8"/>
-    
+    <!--Corner Radius of small Elements-->
+    <CornerRadius x:Key="borderRadius" BottomLeft="5" BottomRight="5" TopLeft="5" TopRight="5"/>
+    <!--Corner Radius of Large Elements-->
+    <CornerRadius x:Key="borderRadiusLarge" BottomLeft="20" BottomRight="20" TopLeft="20" TopRight="20"/>
+
 
     <!--Control template for Main forms-->
     <ControlTemplate x:Key="WindowTemplate" TargetType="{x:Type Window}">
@@ -68,7 +63,7 @@
     <ControlTemplate x:Key="WarningTemplate" TargetType="{x:Type Window}">
 
 
-        <Grid Background="{StaticResource WindowBackColor}">
+        <Grid Background="{StaticResource MainGray}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -182,7 +177,7 @@
     <!--MainButtons Custom template-->
     <ControlTemplate  x:Key="MainButtonStyleTemplate" TargetType="Button">
         <Border x:Name="border" 
-                    CornerRadius="20" 
+                    CornerRadius="{StaticResource borderRadiusLarge}" 
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}" 
                 Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
@@ -228,7 +223,7 @@
     <!--SecondaryButtons Custom template-->
     <ControlTemplate  x:Key="SecondaryButtonStyleTemplate" TargetType="Button">
         <Border x:Name="border" 
-                    CornerRadius="3" 
+                    CornerRadius="{StaticResource borderRadius}" 
                     BorderBrush="{TemplateBinding BorderBrush}" 
                     BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
@@ -277,45 +272,110 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!--Customization of labels template-->
-    <Style x:Key="Labels" TargetType="{x:Type Label}">
-        <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
-        <Setter Property="FontFamily" Value="Roboto"/>
-        <Setter Property="FontSize" Value="12px"/>
-        <Setter Property="Foreground" Value="Gray"/>
-    </Style>
-
-    
-    
-    
-    <!--TitleLabels Custom template-->
-    <ControlTemplate  x:Key="LabelsTitleTemplate" TargetType="Label">
-        <Border>
-            <ContentPresenter HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            RecognizesAccessKey="True" />
+    <!--MainButtons Custom template-->
+    <ControlTemplate  x:Key="CloseButtonStyleTemplate" TargetType="Button">
+        <Border x:Name="border" 
+                    CornerRadius="{StaticResource borderRadius}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsEnabled"
-                   Value="true">
+            <Trigger Property="IsDefaulted" Value="True">
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!--TitleLabels Custom template-->
-    <Style x:Key="LabelsTitle" TargetType="{x:Type Label}">
-        <Setter Property="Template" Value="{StaticResource LabelsTitleTemplate}"/>
+
+    <!--Customization of MainButtons template-->
+    <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource CloseButtonStyleTemplate}"/>
         <Setter Property="FontFamily" Value="Roboto"/>
-        <Setter Property="FontSize" Value="13px"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontSize" Value="12px"/>
+
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
+        <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+        <Setter Property="Height"  Value="38"/>
+    </Style>
+    
+    <!--Customization of labels template-->
+    <Style x:Key="{x:Type Label}" TargetType="{x:Type Label}">
+        <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
+        <Setter Property="FontFamily" Value="Roboto"/>
+        <Setter Property="FontSize" Value="12px"/>
+        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
     </Style>
 
+    <!--Customization of Checkbox template-->
+    <Style x:Key="{x:Type CheckBox}" TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{StaticResource MainGray}" />
+        <Setter Property="SnapsToDevicePixels" Value="False" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="BorderBrush" Value="{StaticResource MainGray}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Border x:Name="Border"
+                                    Width="20"
+                                    Height="20"
+                                    Background="White"
+                                    CornerRadius="{StaticResource borderRadius}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1"
+                                    ClipToBounds="True">
+                                <Path x:Name="CheckMark"
+                                      Width="12"
+                                      Height="12"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="M27.903015,0L32,4.0970465 12.369019,23.728029 11.685974,24.520998 0,14.441042 3.7819824,10.054994 11.330017,16.567019z"
+                                      Fill="{StaticResource MainGray}"
+                                      Stretch="Fill"
+                                      Stroke="{StaticResource MainGray}"
+                                      StrokeEndLineCap="Round"
+                                      StrokeStartLineCap="Round"
+                                      StrokeThickness="1" />
+                            </Border>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter Margin="4,0,0,0"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          RecognizesAccessKey="True" />
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource MainGray}"  />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="BorderBrush" Value="{StaticResource MainGray}"  />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="Gray" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" TargetName="Border" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-    
-    
-    
-    
-    <!--TitleLabels Custom template-->
+    <!--TextBox Custom template-->
     <ControlTemplate  x:Key="MainTextBoxTemplate" TargetType="TextBox">
         <Grid x:Name="root" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}">
             <!-- managing visual states to change controls styles on different states -->
@@ -371,7 +431,7 @@
                     Background="White"
                     BorderBrush="Gray"
                     BorderThickness="0.8 0.8 0.8 0.8"
-                    CornerRadius="3"/>
+                    CornerRadius="{StaticResource borderRadius}"/>
 
             <!-- styling border-brush and background-color for MouseOver state -->
             <!--<Border x:Name="hoverBorder" Opacity="0"
@@ -389,7 +449,7 @@
                     Background="White"
                     BorderBrush="Gray"
                     BorderThickness="0.8 0.8 0.8 0.8"
-                    CornerRadius="3"/>
+                    CornerRadius="{StaticResource borderRadius}"/>
             <!--<Border x:Name="focusBorder" Opacity="0"
                     BorderThickness="1">
                 <Border.BorderBrush>
@@ -424,7 +484,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!--TitleLabels Custom template-->
+    <!--TextBox Custom template-->
     <Style x:Key="MainTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Template" Value="{StaticResource MainTextBoxTemplate}"/>
         <Setter Property="FontFamily" Value="Roboto"/>
@@ -454,88 +514,7 @@
         </Setter>
     </Style>
 
-    <!--MainButtons Custom template-->
-    <ControlTemplate  x:Key="CloseButtonStyleTemplate" TargetType="Button">
-        <Border x:Name="border" 
-                    CornerRadius="3" 
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsDefaulted" Value="True">
-            </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-
-    <!--Customization of MainButtons template-->
-    <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Template" Value="{StaticResource CloseButtonStyleTemplate}"/>
-        <Setter Property="FontFamily" Value="Roboto"/>
-        <Setter Property="FontSize" Value="12px"/>
-
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
-        <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
-        <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
-        <Setter Property="Height"  Value="38"/>
-    </Style>
-
-
-    <!--MainButtons Custom template-->
-    <ControlTemplate  x:Key="SettingsButtonStyleTemplate" TargetType="Button">
-        <Border x:Name="border" 
-                    CornerRadius="6" 
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-            <Grid>
-                <Image
-                                            x:Name="buttonImage"
-                                            Source="Resources/Settings.png"
-                                            Stretch="UniformToFill" />
-                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-            </Grid>
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsDefaulted" Value="True">
-            </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                <Setter TargetName="buttonImage" Property="Source" Value="Resources/Settings.png" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-
-    <!--Customization of MainButtons template-->
-    <Style x:Key="SettingsButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Template" Value="{StaticResource SettingsButtonStyleTemplate}"/>
-        <Setter Property="FontFamily" Value="Roboto"/>
-        <Setter Property="FontSize" Value="12px"/>
-
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
-        <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
-        <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
-        <Setter Property="Height"  Value="38"/>
-    </Style>
-
-
-    <!--Apple Style side bars-->
+    <!--Definition of Apple Style side bars-->
     <Style x:Key="ScrollBarTrackThumb"
         TargetType="{x:Type Thumb}">
         <Setter Property="Template">
@@ -548,7 +527,7 @@
                                 Height="Auto"
                                 Fill="Transparent" />
                         <Border x:Name="CornerScrollBarRectangle"
-                            CornerRadius="5"
+                            CornerRadius="{StaticResource borderRadius}"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Width="Auto"
@@ -670,7 +649,8 @@
 
     <CollectionViewSource x:Key="FilterOptionsBridge" Source="{Binding Path=CategoryObjects}" />
 
-
+    
+    <!--Definition of Combobox-->
     <Style x:Key="ComboBoxTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="FontFamily" Value="Roboto"/>
         <Setter Property="Foreground" Value="LightGray"/>
@@ -707,7 +687,7 @@
                             <ColumnDefinition Width="20" />
                         </Grid.ColumnDefinitions>
                         <Border x:Name="Border" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Background="White" BorderBrush="Gray" BorderThickness="0,0.8,0.8,0.8" CornerRadius="0 5 5 0"/>
-                        <Border x:Name="Boredr1" SnapsToDevicePixels="True" Grid.Column="1"  Margin="1" Background="White" BorderBrush="White" BorderThickness="0,0.8,0.8,0.8" CornerRadius="5,5,5,5"/>
+                        <Border x:Name="Boredr1" SnapsToDevicePixels="True" Grid.Column="1"  Margin="1" Background="White" BorderBrush="White" BorderThickness="0,0.8,0.8,0.8" CornerRadius="{StaticResource borderRadius}"/>
                         <Path x:Name="Arrow" SnapsToDevicePixels="True" Grid.Column="1" Fill="#7A7A7A" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 6 6 L 12 0 Z" />
                         <ContentPresenter Grid.Column="0" TextElement.Foreground="Orange"></ContentPresenter>
                     </Grid>
@@ -771,7 +751,7 @@
                                 <Border 
                                     x:Name="DropDownBorder"
                                     BorderThickness="1"
-                                    CornerRadius="5"
+                                    CornerRadius="{StaticResource borderRadius}"
                                     Background="White"
                                     BorderBrush="White">
                                     <Border.Effect>
@@ -806,19 +786,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
-        <Setter Property="FontFamily" Value="Roboto"/>
-        <Setter Property="Foreground" Value="Gray"/>
-        <Setter Property="BorderBrush" Value="{StaticResource WindowBackColor}"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="Height" Value="20"/>
-    </Style>
-    
-    
-
-
-
 
 </ResourceDictionary> 
