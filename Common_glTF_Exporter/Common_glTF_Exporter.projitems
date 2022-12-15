@@ -16,16 +16,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\ProgressBarWindow.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml.cs">
+      <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Model\UnitObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\Resources.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Resources.xaml.cs">
       <DependentUpon>Resources.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\ControlDoubleClickBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\ShowSystemMenuBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\SystemMenuManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\WindowDragBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\StyleableWindow\WindowResizeBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\ControlDoubleClickBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\ShowSystemMenuBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\SystemMenuManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\WindowDragBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\WindowResizeBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\IObject.cs" />
@@ -33,8 +35,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\MovableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\MovableObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Room.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Collectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FilesHelper.cs" />
@@ -57,15 +59,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)Forms\Resources.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Forms\ProgressBarWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="$(MSBuildThisFileDirectory)Windows\Resources.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Forms\Settings.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Windows\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

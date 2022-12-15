@@ -18,7 +18,7 @@
     <!--Corner Radius of small Elements-->
     <CornerRadius x:Key="borderRadius" BottomLeft="5" BottomRight="5" TopLeft="5" TopRight="5"/>
     <!--Corner Radius of Large Elements-->
-    <CornerRadius x:Key="borderRadiusLarge" BottomLeft="20" BottomRight="20" TopLeft="20" TopRight="20"/>
+    <CornerRadius x:Key="borderRadiusLarge" BottomLeft="15" BottomRight="15" TopLeft="15" TopRight="15"/>
 
 
     <!--Control template for Main forms-->
