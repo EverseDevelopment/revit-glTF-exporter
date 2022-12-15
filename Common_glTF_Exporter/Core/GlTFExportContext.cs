@@ -16,7 +16,7 @@ namespace Revit_glTF_Exporter
         private Document _doc;
         private bool _skipElementFlag = false;
         private Element _element;
-
+        private ProgressBarWindow _progressBarWindow;
         #if REVIT2019 || REVIT2020
 
         private DisplayUnitType _displayUnitType;
@@ -128,7 +128,7 @@ namespace Revit_glTF_Exporter
 
             #endif
 
-            bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
+            ProgressBarWindow progressBarWindow, bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
 
         {
             _doc = doc;
@@ -138,6 +138,7 @@ namespace Revit_glTF_Exporter
             _filename = filename;
             _directory = directory;
             _exportMaterials = exportMaterials;
+            _progressBarWindow = progressBarWindow;
 
             #if REVIT2019 || REVIT2020
 
@@ -303,6 +304,8 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
+            _progressBarWindow.ViewModel.ProgressBarValue++;
+
             _element = _doc.GetElement(elementId);
 
             if (Nodes.Contains(_element.UniqueId))
@@ -724,7 +727,7 @@ namespace Revit_glTF_Exporter
 
                             if (_exportMaterials)
                             {
-                                if (material.Equals(null))
+                                if (material == null)
                                 {
                                     material = Collectors.GetRandomMaterial(_doc);
                                 }

@@ -6,6 +6,7 @@ using Autodesk.Revit.UI;
 using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
 using System.IO;
+using System.Threading;
 
 namespace Revit_glTF_Exporter
 {
@@ -87,13 +88,19 @@ namespace Revit_glTF_Exporter
             Document doc = view3d.Document;
             string directoryPath = Path.Combine(directory + "\\");
 
+            ProgressBarWindow progressBar = new ProgressBarWindow();
+            progressBar.ViewModel.ProgressBarValue = 0;
+            progressBar.ViewModel.Message = "Converting elements...";
+            progressBar.ViewModel.ProgressBarMax = Collectors.AllElementsByView(doc, doc.ActiveView).Count;
+            progressBar.Show();
+            ProgressBarWindow.MainView.Topmost = true;
+
             #if REVIT2019 || REVIT2020
 
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
 
-
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, true,
+            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, progressBar, true,
                 true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
 
             #else
@@ -101,7 +108,7 @@ namespace Revit_glTF_Exporter
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, true, 
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, progressBar,  true, 
                 true, FlipAxysCheckbox.IsChecked.Value, MaterialsCheckbox.IsChecked.Value);
             
             #endif
@@ -112,6 +119,10 @@ namespace Revit_glTF_Exporter
             exporter.ShouldStopOnError = true;
 
             exporter.Export(view3d);
+
+            progressBar.ViewModel.Message = "GLTF exportation completed!";
+            Thread.Sleep(1000);
+            progressBar.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
