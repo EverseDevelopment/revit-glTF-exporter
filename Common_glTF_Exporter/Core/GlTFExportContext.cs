@@ -297,7 +297,6 @@ namespace Revit_glTF_Exporter
                 }
 
                 extras.elementCategory = _element.Category.Name;
-                //extras.dependentElements = Util.GetDependentElements(e);
 
                 newNode.extras = extras;
                 Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
@@ -390,17 +389,17 @@ namespace Revit_glTF_Exporter
             _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
             _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
-            //// Populate current geometry normals data
-            //if (_exportNormals && polymesh.DistributionOfNormals == DistributionOfNormals.AtEachPoint)
-            //{
-            //    IList<XYZ> norms = polymesh.GetNormals();
-            //    foreach (XYZ norm in norms)
-            //    {
-            //        _currentGeometry.CurrentItem.normals.Add(norm.X);
-            //        _currentGeometry.CurrentItem.normals.Add(norm.Y);
-            //        _currentGeometry.CurrentItem.normals.Add(norm.Z);
-            //    }
-            //}
+            // Populate current geometry normals data
+            if (_exportNormals && polymesh.DistributionOfNormals == DistributionOfNormals.AtEachPoint)
+            {
+                IList<XYZ> norms = polymesh.GetNormals();
+                foreach (XYZ norm in norms)
+                {
+                    _currentGeometry.CurrentItem.normals.Add(norm.X);
+                    _currentGeometry.CurrentItem.normals.Add(norm.Y);
+                    _currentGeometry.CurrentItem.normals.Add(norm.Z);
+                }
+            }
 
             // populate current vertices vertex data and current geometry faces data
             Transform t = CurrentTransform;
@@ -498,10 +497,10 @@ namespace Revit_glTF_Exporter
                 glTFMeshPrimitive primitive = new glTFMeshPrimitive();
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
 
-                //if (_exportNormals)
-                //{
-                //    primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
-                //}
+                if (_exportNormals)
+                {
+                    primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
+                }
 
                 if (_exportBatchId)
                 {
@@ -587,13 +586,13 @@ namespace Revit_glTF_Exporter
                 }
             }
 
-            //if (_exportNormals)
-            //{
-            //    foreach (var normal in geomData.normals)
-            //    {
-            //        bufferData.normalBuffer.Add((float)normal);
-            //    }
-            //}
+            if (_exportNormals)
+            {
+                foreach (var normal in geomData.normals)
+                {
+                    bufferData.normalBuffer.Add((float)normal);
+                }
+            }
 
             // Get max and min for vertex data
             float[] vertexMinMax = Util.GetVec3MinMax(bufferData.vertexBuffer);
@@ -608,12 +607,12 @@ namespace Revit_glTF_Exporter
                 batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
             }
 
-            //// Get max and min for normal data
-            //float[] normalMinMax = default;
-            //if (_exportNormals)
-            //{
-            //    normalMinMax = Util.GetVec3MinMax(bufferData.normalBuffer);
-            //}
+            // Get max and min for normal data
+            float[] normalMinMax = default;
+            if (_exportNormals)
+            {
+                normalMinMax = Util.GetVec3MinMax(bufferData.normalBuffer);
+            }
 
             /**
              * BufferViews
@@ -633,25 +632,25 @@ namespace Revit_glTF_Exporter
             int vec3ViewIdx = BufferViews.Count - 1;
 
 
-            //// Add a normals (vec3) buffer view
-            //glTFBufferView vec3ViewNormals = new glTFBufferView();
-            //int elementsPerNormal = default;
-            //int vec3ViewNormalsIdx = default;
+            // Add a normals (vec3) buffer view
+            glTFBufferView vec3ViewNormals = new glTFBufferView();
+            int elementsPerNormal = default;
+            int vec3ViewNormalsIdx = default;
 
-            //if (_exportNormals)
-            //{
-            //    elementsPerNormal = 3;
-            //    int bytesPerNormalElement = 4;
-            //    int bytesPerNormal = elementsPerNormal * bytesPerNormalElement;
-            //    int numVec3Normals = (geomData.normals.Count) / elementsPerNormal;
-            //    int sizeOfVec3ViewNormals = numVec3Normals * bytesPerNormal;
-            //    vec3ViewNormals.buffer = bufferIdx;
-            //    vec3ViewNormals.byteOffset = vec3View.byteLength;
-            //    vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
-            //    vec3ViewNormals.target = Targets.ELEMENT_ARRAY_BUFFER;
-            //    BufferViews.Add(vec3ViewNormals);
-            //    vec3ViewNormalsIdx = BufferViews.Count - 1;
-            //}
+            if (_exportNormals)
+            {
+                elementsPerNormal = 3;
+                int bytesPerNormalElement = 4;
+                int bytesPerNormal = elementsPerNormal * bytesPerNormalElement;
+                int numVec3Normals = (geomData.normals.Count) / elementsPerNormal;
+                int sizeOfVec3ViewNormals = numVec3Normals * bytesPerNormal;
+                vec3ViewNormals.buffer = bufferIdx;
+                vec3ViewNormals.byteOffset = vec3View.byteLength;
+                vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
+                vec3ViewNormals.target = Targets.ELEMENT_ARRAY_BUFFER;
+                BufferViews.Add(vec3ViewNormals);
+                vec3ViewNormalsIdx = BufferViews.Count - 1;
+            }
 
             // Add a faces / indexes buffer view
             int elementsPerIndex = 1;
@@ -664,7 +663,7 @@ namespace Revit_glTF_Exporter
 
             if (_exportNormals)
             {
-                //facesView.byteOffset = vec3ViewNormals.byteOffset + vec3ViewNormals.byteLength;
+                facesView.byteOffset = vec3ViewNormals.byteOffset + vec3ViewNormals.byteLength;
             }
             else
             {
@@ -733,21 +732,21 @@ namespace Revit_glTF_Exporter
                 bufferData.batchIdAccessorIndex = Accessors.Count - 1;
             }
 
-            //if (_exportNormals)
-            //{
-            //    //add a normals accessor
-            //    glTFAccessor normalsAccessor = new glTFAccessor();
-            //    normalsAccessor.bufferView = vec3ViewNormalsIdx;
-            //    normalsAccessor.byteOffset = 0;
-            //    normalsAccessor.componentType = ComponentType.FLOAT;
-            //    normalsAccessor.count = geomData.normals.Count / elementsPerNormal;
-            //    normalsAccessor.type = "VEC3";
-            //    normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
-            //    normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
-            //    normalsAccessor.name = "NORMALS";
-            //    Accessors.Add(normalsAccessor);
-            //    bufferData.normalsAccessorIndex = Accessors.Count - 1;
-            //}
+            if (_exportNormals)
+            {
+                //add a normals accessor
+                glTFAccessor normalsAccessor = new glTFAccessor();
+                normalsAccessor.bufferView = vec3ViewNormalsIdx;
+                normalsAccessor.byteOffset = 0;
+                normalsAccessor.componentType = ComponentType.FLOAT;
+                normalsAccessor.count = geomData.normals.Count / elementsPerNormal;
+                normalsAccessor.type = "VEC3";
+                normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
+                normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
+                normalsAccessor.name = "NORMALS";
+                Accessors.Add(normalsAccessor);
+                bufferData.normalsAccessorIndex = Accessors.Count - 1;
+            }
 
             return bufferData;
         }

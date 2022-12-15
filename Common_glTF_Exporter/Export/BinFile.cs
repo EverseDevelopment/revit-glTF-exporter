@@ -35,13 +35,13 @@ namespace Common_glTF_Exporter.Export
                             }
                         }
 
-                        //if (exportNormals)
-                        //{
-                        //    foreach (var normal in bin.normalBuffer)
-                        //    {
-                        //        writer.Write((float)normal);
-                        //    }
-                        //}
+                        if (exportNormals)
+                        {
+                            foreach (var normal in bin.normalBuffer)
+                            {
+                                writer.Write((float)normal);
+                            }
+                        }
                     }
                 }
             }
