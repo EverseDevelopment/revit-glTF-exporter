@@ -7,6 +7,8 @@ using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
+using System;
 
 namespace Revit_glTF_Exporter
 {
@@ -43,18 +45,19 @@ namespace Revit_glTF_Exporter
             this.DataContext = _unitsViewModel;
 
             InitializeComponent();
+            SetDefaultSettings(); 
 
             #if REVIT2019 || REVIT2020
 
             _internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
             UnitTextBlock.Content = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
 
-#else
+            #else
 
             _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
             UnitTextBlock.Content = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
 
-#endif
+            #endif
 
             UnitsComboBox.SelectedIndex = 0;
 
@@ -125,6 +128,29 @@ namespace Revit_glTF_Exporter
             Thread.Sleep(1000);
             progressBar.Close();
         }
+        private void Advanced_Settings_Button(object sender, RoutedEventArgs e)
+        {
+            _ = this.Advanced_Settings_Grid.Visibility == System.Windows.Visibility.Visible ?
+                (this.Advanced_Settings_Grid.Visibility = System.Windows.Visibility.Collapsed) : (this.Advanced_Settings_Grid.Visibility = System.Windows.Visibility.Visible);
+
+            var template = this.AdvancedSettingsButton.Template;
+
+            var slideUpImage = (Image)template.FindName("SlideUp_Image", this.AdvancedSettingsButton);
+            var slideDownImage = (Image)template.FindName("SlideDown_Image", this.AdvancedSettingsButton);
+
+            if (slideUpImage.Visibility == System.Windows.Visibility.Visible)
+            {
+                slideUpImage.Visibility = System.Windows.Visibility.Hidden;
+                slideDownImage.Visibility = System.Windows.Visibility.Visible;
+            }
+            else if (slideDownImage.Visibility == System.Windows.Visibility.Visible)
+            {
+                slideUpImage.Visibility = System.Windows.Visibility.Visible;
+                slideDownImage.Visibility = System.Windows.Visibility.Hidden;
+            }
+
+            _ = this.MainWindow_Window.Height == 680 ? (this.MainWindow_Window.Height = 410) : (this.MainWindow_Window.Height = 680);
+        }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -143,6 +169,30 @@ namespace Revit_glTF_Exporter
         private void Title_Link(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://e-verse.com/");
+        }
+
+        public void SetDefaultSettings()
+        {
+            //Exporting
+            this.ExportLights_Checkbox.IsChecked = false;
+            this.ExportBatchId_CheckBox.IsChecked = false;
+            this.ExportNormals_CheckBox.IsChecked = false;
+            this.ExportGrids_CheckBox.IsChecked = true;
+            this.ExportLevels_CheckBox.IsChecked = true;
+            this.ExportBoundingBox_CheckBox.IsChecked = true;
+
+            //Position
+            this.RelocateModel_CheckBox.IsChecked = false;
+            this.FlipAxys_Checkbox.IsChecked = true;
+
+            //Compression
+            this.NoneCompression_RadioButton.IsChecked = true;
+            this.MeshoptCompression_RadioButton.IsChecked = false;
+            this.DRACOCompression_RadioButton.IsChecked = false;
+            this.ZIPCompression_RadioButton.IsChecked = false;
+
+            //Acc
+            this.Accuracy_Slider.Value = 3;
         }
     }
 }
