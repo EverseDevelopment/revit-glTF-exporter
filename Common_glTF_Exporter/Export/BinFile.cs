@@ -26,6 +26,7 @@ namespace Common_glTF_Exporter.Export
                         {
                             writer.Write((int)index);
                         }
+
                         if (exportBatchId)
                         {
                             foreach (var batchId in bin.batchIdBuffer)
@@ -33,6 +34,7 @@ namespace Common_glTF_Exporter.Export
                                 writer.Write((float)batchId);
                             }
                         }
+
                         //if (exportNormals)
                         //{
                         //    foreach (var normal in bin.normalBuffer)

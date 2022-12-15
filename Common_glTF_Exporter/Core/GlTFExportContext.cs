@@ -265,6 +265,11 @@ namespace Revit_glTF_Exporter
             _progressBarWindow.ViewModel.ProgressBarValue++;
 
             _element = _doc.GetElement(elementId);
+            
+            if (_element is Level && !_exportLevel)
+            {
+                return RenderNodeAction.Skip;
+            }
 
             if (Nodes.Contains(_element.UniqueId))
             {
@@ -455,7 +460,7 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (_currentVertices.List.Count == 0)
+            if (_currentVertices == null || _currentVertices.List.Count == 0)
             {
                 return;
             }
