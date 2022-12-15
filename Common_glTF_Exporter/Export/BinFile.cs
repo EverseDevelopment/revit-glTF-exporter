@@ -17,7 +17,6 @@ namespace Common_glTF_Exporter.Export
                 {
                     foreach (var bin in binaryFileData)
                     {
-
                         foreach (var coord in bin.vertexBuffer)
                         {
                             writer.Write((float)coord);
@@ -34,6 +33,13 @@ namespace Common_glTF_Exporter.Export
                                 writer.Write((float)batchId);
                             }
                         }
+                        //if (exportNormals)
+                        //{
+                        //    foreach (var normal in bin.normalBuffer)
+                        //    {
+                        //        writer.Write((float)normal);
+                        //    }
+                        //}
                     }
                 }
             }

@@ -40,7 +40,7 @@ namespace Common_glTF_Exporter.Export
                 serializedModel = serializedModel.Replace(",\"_BATCHID\":0", "");
             }
 
-            if (!exportBatchId)
+            if (!exportNormals)
             {
                 serializedModel = serializedModel.Replace(",\"NORMAL\":0", "");
             }

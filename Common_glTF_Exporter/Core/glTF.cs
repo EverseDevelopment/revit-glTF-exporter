@@ -155,7 +155,7 @@ namespace Revit_glTF_Exporter
         /// The index of the accessor for position data.
         /// </summary>
         public int POSITION { get; set; }
-        //public int NORMAL { get; set; }
+        public int NORMAL { get; set; }
         public int _BATCHID { get; set; }
     }
 
