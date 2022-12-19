@@ -115,6 +115,7 @@ namespace Revit_glTF_Exporter
     public class glTFMesh
     {
         public List<glTFMeshPrimitive> primitives { get; set; }
+        public string name { get; set; }
     }
 
     /// <summary>

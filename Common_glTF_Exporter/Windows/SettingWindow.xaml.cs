@@ -21,15 +21,15 @@ namespace Revit_glTF_Exporter
         {
             //Exporting
             MainView.ExportLights_Checkbox.IsChecked = false;
-            MainView.ExportBatchId_CheckBox.IsChecked = false;
+            MainView.ExportBatchId_CheckBox.IsChecked = true;
             MainView.ExportNormals_CheckBox.IsChecked = true;
             MainView.ExportGrids_CheckBox.IsChecked = false;
-            MainView.ExportLevels_CheckBox.IsChecked = true;
+            MainView.ExportLevels_CheckBox.IsChecked = false;
             MainView.ExportBoundingBox_CheckBox.IsChecked = true;
 
             //Position
             MainView.RelocateModel_CheckBox.IsChecked = false;
-            MainView.FlipAxys_Checkbox.IsChecked = false;
+            MainView.FlipAxys_Checkbox.IsChecked = true;
 
             //Compression
             MainView.NoneCompression_RadioButton.IsChecked = true;

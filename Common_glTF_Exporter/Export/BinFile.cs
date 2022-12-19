@@ -10,7 +10,7 @@ namespace Common_glTF_Exporter.Export
     public static class BinFile
     {
         public static void Create(bool exportNormals, bool exportBatchId, string directory, string filename, List<glTFBinaryData> binaryFileData)
-        {            
+        {
             using (FileStream f = File.Create(directory + filename))
             {
                 using (BinaryWriter writer = new BinaryWriter(f))
@@ -20,13 +20,15 @@ namespace Common_glTF_Exporter.Export
                         foreach (var coord in bin.vertexBuffer)
                         {
                             writer.Write((float)coord);
-                        }
+                        }                       
 
-                        foreach (var index in bin.indexBuffer)
+                        if (exportNormals)
                         {
-                            writer.Write((int)index);
+                            foreach (var normal in bin.normalBuffer)
+                            {
+                                writer.Write((float)normal);
+                            }
                         }
-
 
                         if (exportBatchId)
                         {
@@ -36,12 +38,9 @@ namespace Common_glTF_Exporter.Export
                             }
                         }
 
-                        if (exportNormals)
+                        foreach (var index in bin.indexBuffer)
                         {
-                            foreach (var normal in bin.normalBuffer)
-                            {
-                                writer.Write((float)normal);
-                            }
+                            writer.Write((int)index);
                         }
                     }
                 }

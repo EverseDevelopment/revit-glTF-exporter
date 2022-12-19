@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 
 namespace Revit_glTF_Exporter
@@ -9,7 +10,7 @@ namespace Revit_glTF_Exporter
     /// converting between Revit Polymesh
     /// and glTF buffers.
     /// </summary>
-    class GeometryData
+    public class GeometryData
     {
         public List<double> vertices = new List<double>();
         public List<double> normals = new List<double>();
@@ -286,6 +287,7 @@ namespace Revit_glTF_Exporter
 
         public VertexLookupInt() : base(new PointIntEqualityComparer())
         {
+
         }
 
         /// <summary>
