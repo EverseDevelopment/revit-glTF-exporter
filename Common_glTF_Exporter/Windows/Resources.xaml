@@ -299,7 +299,6 @@
         <Setter Property="Template" Value="{StaticResource CloseButtonStyleTemplate}"/>
         <Setter Property="FontFamily" Value="Roboto"/>
         <Setter Property="FontSize" Value="12px"/>
-
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
