@@ -34,7 +34,6 @@ namespace Revit_glTF_Exporter
 
         #endif
 
-
         public MainWindow(Document doc, View3D view)
         {
             _unitsViewModel = new UnitsViewModel();
@@ -116,7 +115,7 @@ namespace Revit_glTF_Exporter
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
                 
-            exporter.ShouldStopOnError = true;
+            exporter.ShouldStopOnError = false;
 
             exporter.Export(view3d);
 

@@ -27,6 +27,7 @@ namespace Common_glTF_Exporter.Export
                             writer.Write((int)index);
                         }
 
+
                         if (exportBatchId)
                         {
                             foreach (var batchId in bin.batchIdBuffer)

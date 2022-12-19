@@ -5,6 +5,9 @@ using Autodesk.Revit.DB;
 using Grid = Autodesk.Revit.DB.Grid;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
+using Autodesk.Revit.UI;
+using System.Numerics;
+using Autodesk.Revit.DB.DirectContext3D;
 using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Revit_glTF_Exporter
@@ -265,8 +268,9 @@ namespace Revit_glTF_Exporter
             _progressBarWindow.ViewModel.ProgressBarValue++;
 
             _element = _doc.GetElement(elementId);
-            
-            if (_element is Level && !_exportLevel)
+
+            if (_element.Category.Name == "Cameras" ||                 
+                (_element is Level && !_exportLevel))
             {
                 return RenderNodeAction.Skip;
             }
@@ -289,6 +293,7 @@ namespace Revit_glTF_Exporter
                 glTFExtras extras = new glTFExtras();
 
                 extras.UniqueId = _element.UniqueId;
+
                 extras.parameters = Util.GetElementParameters(_element, true);
 
                 if (_exportElementId)
@@ -389,8 +394,8 @@ namespace Revit_glTF_Exporter
             _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
             _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
-            // Populate current geometry normals data
-            if (_exportNormals && polymesh.DistributionOfNormals == DistributionOfNormals.AtEachPoint)
+            //Populate current geometry normals data
+            if (polymesh.DistributionOfNormals == DistributionOfNormals.AtEachPoint)
             {
                 IList<XYZ> norms = polymesh.GetNormals();
                 foreach (XYZ norm in norms)
@@ -409,7 +414,6 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-
                 #if REVIT2019 || REVIT2020
 
                 int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType));
@@ -428,18 +432,42 @@ namespace Revit_glTF_Exporter
                 _currentGeometry.CurrentItem.faces.Add(v2);
                 _currentGeometry.CurrentItem.faces.Add(v3);
 
-                //if (polymesh.DistributionOfNormals == DistributionOfNormals.OnePerFace)
+
+                if (polymesh.DistributionOfNormals == DistributionOfNormals.OnePerFace)
+                {
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
+                    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                }
+
+
+                //if (_exportNormals && polymesh.DistributionOfNormals == DistributionOfNormals.OnePerFace)
                 //{
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
-                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                //    var point1 = pts[facet.V1];
+                //    var point2 = pts[facet.V2];
+                //    var point3 = pts[facet.V3];
+
+                //    XYZ normal1 = (point2 - point1).CrossProduct(point3 - point1);
+                //    normal1 = normal1.Normalize();
+
+                //    _currentGeometry.CurrentItem.normals.Add(normal1.X);
+                //    _currentGeometry.CurrentItem.normals.Add(normal1.Y);
+                //    _currentGeometry.CurrentItem.normals.Add(normal1.Z);
                 //}
+
+#else
+
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));    
+                
+#endif
             }
         }
 
@@ -452,6 +480,13 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId"></param>
         public void OnElementEnd(ElementId elementId)
         {
+            if (_element.Category.Name == "Cameras" || 
+                _currentVertices == null || 
+                _currentVertices.List.Count == 0)
+            {
+                return;
+            }
+
             if (_skipElementFlag)
             {
                 // Duplicate element, skip.
@@ -459,17 +494,10 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (_currentVertices == null || _currentVertices.List.Count == 0)
-            {
-                return;
-            }
-
-            Element element = _doc.GetElement(elementId);
-
             // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primatives on mesh)
             glTFMesh newMesh = new glTFMesh();
             newMesh.primitives = new List<glTFMeshPrimitive>();
-            Meshes.AddOrUpdateCurrent(element.UniqueId, newMesh);
+            Meshes.AddOrUpdateCurrent(_element.UniqueId, newMesh);
 
             // add the index of this mesh to the current node.
             Nodes.CurrentItem.mesh = Meshes.CurrentIndex;
@@ -490,6 +518,7 @@ namespace Revit_glTF_Exporter
             foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
             {
                 glTFBinaryData elementBinary = AddGeometryMeta(kvp.Value, kvp.Key, elementId.IntegerValue);
+
                 binaryFileData.Add(elementBinary);
 
                 string material_key = kvp.Key.Split('_')[1];
@@ -607,7 +636,8 @@ namespace Revit_glTF_Exporter
                 batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
             }
 
-            // Get max and min for normal data
+            //Get max and min for normal data
+
             float[] normalMinMax = default;
             if (_exportNormals)
             {
@@ -631,12 +661,10 @@ namespace Revit_glTF_Exporter
             BufferViews.Add(vec3View);
             int vec3ViewIdx = BufferViews.Count - 1;
 
-
-            // Add a normals (vec3) buffer view
+            ////Add a normals(vec3) buffer view
             glTFBufferView vec3ViewNormals = new glTFBufferView();
             int elementsPerNormal = default;
             int vec3ViewNormalsIdx = default;
-
             if (_exportNormals)
             {
                 elementsPerNormal = 3;
@@ -644,6 +672,7 @@ namespace Revit_glTF_Exporter
                 int bytesPerNormal = elementsPerNormal * bytesPerNormalElement;
                 int numVec3Normals = (geomData.normals.Count) / elementsPerNormal;
                 int sizeOfVec3ViewNormals = numVec3Normals * bytesPerNormal;
+                vec3ViewNormals = new glTFBufferView();
                 vec3ViewNormals.buffer = bufferIdx;
                 vec3ViewNormals.byteOffset = vec3View.byteLength;
                 vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
@@ -660,16 +689,7 @@ namespace Revit_glTF_Exporter
             int sizeOfIndexView = numIndexes * bytesPerIndex;
             glTFBufferView facesView = new glTFBufferView();
             facesView.buffer = bufferIdx;
-
-            if (_exportNormals)
-            {
-                facesView.byteOffset = vec3ViewNormals.byteOffset + vec3ViewNormals.byteLength;
-            }
-            else
-            {
-                facesView.byteOffset = vec3View.byteLength;
-            }
-
+            facesView.byteOffset = vec3View.byteLength;
             facesView.byteLength = sizeOfIndexView;
             facesView.target = Targets.ELEMENT_ARRAY_BUFFER;
             BufferViews.Add(facesView);
@@ -734,18 +754,18 @@ namespace Revit_glTF_Exporter
 
             if (_exportNormals)
             {
-                //add a normals accessor
-                glTFAccessor normalsAccessor = new glTFAccessor();
-                normalsAccessor.bufferView = vec3ViewNormalsIdx;
-                normalsAccessor.byteOffset = 0;
-                normalsAccessor.componentType = ComponentType.FLOAT;
-                normalsAccessor.count = geomData.normals.Count / elementsPerNormal;
-                normalsAccessor.type = "VEC3";
-                normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
-                normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
-                normalsAccessor.name = "NORMALS";
-                Accessors.Add(normalsAccessor);
-                bufferData.normalsAccessorIndex = Accessors.Count - 1;
+                ////add a normals accessor
+                //glTFAccessor normalsAccessor = new glTFAccessor();
+                //normalsAccessor.bufferView = vec3ViewNormalsIdx;
+                //normalsAccessor.byteOffset = 0;
+                //normalsAccessor.componentType = ComponentType.FLOAT;
+                //normalsAccessor.count = geomData.normals.Count / elementsPerNormal;
+                //normalsAccessor.type = "VEC3";
+                //normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
+                //normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
+                //normalsAccessor.name = "NORMALS";
+                //Accessors.Add(normalsAccessor);
+                //bufferData.normalsAccessorIndex = Accessors.Count - 1;
             }
 
             return bufferData;
@@ -784,7 +804,9 @@ namespace Revit_glTF_Exporter
             _transformStack.Pop();
         }
 
-        public RenderNodeAction OnFaceBegin(FaceNode node)
+        public RenderNodeAction 
+            
+            Begin(FaceNode node)
         {
             return RenderNodeAction.Proceed;
         }
@@ -863,6 +885,15 @@ namespace Revit_glTF_Exporter
                                     _currentGeometry.CurrentItem.faces.Add(v1);
                                     _currentGeometry.CurrentItem.faces.Add(v2);
                                     _currentGeometry.CurrentItem.faces.Add(v3);
+
+                                    XYZ side1 = triangle.get_Vertex(1) - (triangle.get_Vertex(0));
+                                    XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
+                                    XYZ normal = side1.CrossProduct(side2);
+                                    normal = normal.Normalize();
+
+                                    _currentGeometry.CurrentItem.normals.Add(normal.X);
+                                    _currentGeometry.CurrentItem.normals.Add(normal.Y);
+                                    _currentGeometry.CurrentItem.normals.Add(normal.Z);
                                 }
                                 catch { }
                             }
@@ -871,10 +902,15 @@ namespace Revit_glTF_Exporter
                 }
             }
         }
-
         public void OnLight(LightNode node)
         {
             // do nothing
+        }
+
+        public RenderNodeAction OnFaceBegin(FaceNode node)
+        {
+            return RenderNodeAction.Proceed;
+            //nothing
         }
     }
 }
