@@ -15,6 +15,7 @@
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     <!--Color of the container of minimize, maximize and close buttons-->
     <SolidColorBrush x:Key="WindowButtonColor" Color="#F94F46"/>
+    <SolidColorBrush x:Key="WindowButtonColorDim" Color="#ff8b85"/>
     <!--Corner Radius of small Elements-->
     <CornerRadius x:Key="borderRadius" BottomLeft="5" BottomRight="5" TopLeft="5" TopRight="5"/>
     <!--Corner Radius of Large Elements-->
@@ -786,4 +787,166 @@
         </Setter>
     </Style>
 
+    
+    
+    <Style x:Key="SwitchTypeToggleButton"
+       TargetType="{x:Type ToggleButton}">
+
+        <Style.Resources>
+            <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
+
+            <Style x:Key="ToggleButtonContentTextbox"
+               TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+            </Style>
+            <SolidColorBrush x:Key="ToggleButtonFalseBackground"
+                         Color="{StaticResource Color.Additional.LightGrey}" />
+
+            <TextBlock x:Key="OffContent"
+                   Style="{StaticResource ToggleButtonContentTextbox}"
+                   Text="Off" />
+            <Style x:Key="OnContentControl"
+               TargetType="ContentControl">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="OffContentControl"
+               TargetType="ContentControl">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid x:Name="MainRow">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=TopRow,
+                        Path=ActualHeight}" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="{Binding ElementName=TopRow,
+                        Path=ActualHeight}" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="TopRow" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Ellipse x:Name="BackgroundEllipse1"
+                                 Grid.RowSpan="2"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 Width="{Binding ElementName=MainRow,
+                                                 Path=ActualHeight}"
+                                 Height="{Binding ElementName=MainRow,
+                                                  Path=ActualHeight}"
+                                 HorizontalAlignment="Left"
+                                 Fill="{StaticResource WindowButtonColorDim}" />
+                            <Ellipse x:Name="BackgroundEllipse2"
+                                 Grid.Row="0"
+                                 Grid.RowSpan="2"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 Width="{Binding ElementName=MainRow,
+                                                 Path=ActualHeight}"
+                                 Height="{Binding ElementName=MainRow,
+                                                  Path=ActualHeight}"
+                                 HorizontalAlignment="Right"
+                                 Fill="{StaticResource ToggleButtonFalseBackground}" />
+                            <Border x:Name="BackgroundBorder"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                    Width="{Binding ElementName=MainRow,
+                                                 Path=ActualHeight}"
+                                Background="{StaticResource WindowButtonColorDim}" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="AnimationWidth" />
+                                <ColumnDefinition Width="{Binding ElementName=MainRow,
+                        Path=ActualHeight}" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="AnimationSizeBorder"
+                                Grid.Column="0" />
+                            <ContentControl Grid.Column="0"
+                                        Style="{StaticResource OnContentControl}" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=MainRow,
+                Path=ActualHeight}" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentControl Grid.Column="1"
+                                        Style="{StaticResource OffContentControl}" />
+                        </Grid>
+                        <Grid Background="Transparent">
+                            <StackPanel HorizontalAlignment="Left"
+                                    Orientation="Horizontal">
+                                <Border Width="{Binding ElementName=AnimationSizeBorder,
+                Path=ActualWidth}" />
+                                <Ellipse x:Name="ForegroundEllipse"
+                                     Width="{Binding ElementName=MainRow,
+                                                     Path=ActualHeight}"
+                                     Height="{Binding ElementName=MainRow,
+                                                      Path=ActualHeight}"
+                                     HorizontalAlignment="Right"
+                                     Fill="{StaticResource WindowButtonColor}" >
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="10" 
+                                            Color="Gray" 
+                                            Opacity="0.3" 
+                                            ShadowDepth="0" 
+                                            Direction="0"
+                                        />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="BackgroundBorder" Property="Background"
+                Value="{StaticResource ToggleButtonFalseBackground}" />
+                            <Setter TargetName="ForegroundEllipse" Property="Fill"
+                Value="White" />
+                            <!--<Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName
+                        ="AnimationSizeBorder"
+                        Storyboard.TargetProperty="(Border.Width)"
+                        To="0" Duration="0:0:3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName=
+                        "AnimationSizeBorder"
+                        Storyboard.TargetProperty="(Border.Width)"
+                        From="0" Duration="0:0:3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>-->
+                            <Setter TargetName="AnimationSizeBorder" Property="Width" Value="0" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary> 

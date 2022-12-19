@@ -31,6 +31,12 @@
         </Border.Effect>
 
         <Grid Background="Transparent" Margin="9,9,9,9">
+            <ToggleButton
+              Margin="163,81,111,0"
+              Style="{DynamicResource SwitchTypeToggleButton}" 
+              Height="16" 
+              VerticalAlignment="Top"></ToggleButton>
+
             <Button 
                     Style="{DynamicResource CloseButtonStyle}" 
                     Name="AdvancedSettingsButton" 
@@ -61,7 +67,7 @@
                                 <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
-                    </ControlTemplate>                    
+                    </ControlTemplate>
                 </Button.Template>
             </Button>
             <Button 

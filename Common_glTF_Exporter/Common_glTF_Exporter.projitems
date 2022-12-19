@@ -16,6 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\UpdateSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
     </Compile>
@@ -73,5 +75,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Core\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
