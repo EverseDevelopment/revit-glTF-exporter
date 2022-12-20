@@ -337,116 +337,116 @@ namespace Revit_glTF_Exporter
             return RenderNodeAction.Proceed;
         }
 
-        //public void GetGeometryData()
-        //{
-        //    Autodesk.Revit.DB.Transform transform = CurrentTransform;
+//        public void GetGeometryData()
+//        {
+//            Autodesk.Revit.DB.Transform transform = CurrentTransform;
 
-        //    Options opt = new Options();
-        //    opt.ComputeReferences = true;
-        //    opt.View = _doc.ActiveView;
+//            Options opt = new Options();
+//            opt.ComputeReferences = true;
+//            opt.View = _doc.ActiveView;
 
-        //    GeometryElement geoEle = _element.get_Geometry(opt);
+//            GeometryElement geoEle = _element.get_Geometry(opt);
 
-        //    foreach (GeometryObject geoObject in geoEle)
-        //    {
-        //        if (geoObject is Solid)
-        //        {
-        //            Solid solid = geoObject as Solid;
+//            foreach (GeometryObject geoObject in geoEle)
+//            {
+//                if (geoObject is Solid)
+//                {
+//                    Solid solid = geoObject as Solid;
 
-        //            glTFMaterial gl_mat = new glTFMaterial();
+//                    glTFMaterial gl_mat = new glTFMaterial();
 
-        //            Material material = _doc.GetElement(solid.Faces.get_Item(0).MaterialElementId) as Material;
+//                    Material material = _doc.GetElement(solid.Faces.get_Item(0).MaterialElementId) as Material;
 
-        //            if (_exportMaterials)
-        //            {
-        //                if (material == null)
-        //                {
-        //                    material = Collectors.GetRandomMaterial(_doc);
-        //                }
-        //                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
-        //                Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
-        //            }
+//                    if (_exportMaterials)
+//                    {
+//                        if (material == null)
+//                        {
+//                            material = Collectors.GetRandomMaterial(_doc);
+//                        }
+//                        gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+//                        Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+//                    }
 
-        //            // Add new "_current" entries if vertex_key is unique
-        //            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
+//                    // Add new "_current" entries if vertex_key is unique
+//                    string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
 
-        //            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
-        //            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+//                    _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
+//                    _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
-        //            foreach (PlanarFace face in solid.Faces)
-        //            {
-        //                Mesh mesh = face.Triangulate();
+//                    foreach (PlanarFace face in solid.Faces)
+//                    {
+//                        Mesh mesh = face.Triangulate();
 
-        //                int triangles = mesh.NumTriangles;
+//                        int triangles = mesh.NumTriangles;
 
-        //                if (triangles == 0)
-        //                    continue;
+//                        if (triangles == 0)
+//                            continue;
 
-        //                for (int i = 0; i < triangles; i++)
-        //                {
-        //                    try
-        //                    {
-        //                        MeshTriangle triangle = mesh.get_Triangle(i);
+//                        for (int i = 0; i < triangles; i++)
+//                        {
+//                            try
+//                            {
+//                                MeshTriangle triangle = mesh.get_Triangle(i);
 
-        //                        if (triangle == null)
-        //                            continue;
+//                                if (triangle == null)
+//                                    continue;
 
-        //                        #if REVIT2019 || REVIT2020
+//#if REVIT2019 || REVIT2020
 
-        //                        int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
-        //                        int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
-        //                        int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
+//                                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
+//                                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
+//                                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
 
-        //                        #else
+//#else
 
-        //                        int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
-        //                        int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
-        //                        int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+//                                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
+//                                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
+//                                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
 
-        //                        #endif
+//#endif
 
-        //                        _currentGeometry.CurrentItem.faces.Add(v1);
-        //                        _currentGeometry.CurrentItem.faces.Add(v2);
-        //                        _currentGeometry.CurrentItem.faces.Add(v3);
+//                                _currentGeometry.CurrentItem.faces.Add(v1);
+//                                _currentGeometry.CurrentItem.faces.Add(v2);
+//                                _currentGeometry.CurrentItem.faces.Add(v3);
 
-        //                        //XYZ normal = face.FaceNormal.Normalize();
+//                                //XYZ normal = face.FaceNormal.Normalize();
 
-        //                        //normal = normal.FlipCoordinates();
+//                                //normal = normal.FlipCoordinates();
 
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.X);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Y);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Z);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.X);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Y);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Z);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.X);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Y);
-        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Z);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.X);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.Y);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.Z);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.X);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.Y);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.Z);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.X);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.Y);
+//                                //_currentGeometry.CurrentItem.normals.Add(normal.Z);
 
 
-        //                        XYZ side1 = triangle.get_Vertex(1) - (triangle.get_Vertex(0));
-        //                        XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
-        //                        XYZ normal = side1.CrossProduct(side2);
-        //                        normal = normal.Normalize();
+//                                //XYZ side1 = triangle.get_Vertex(1) - (triangle.get_Vertex(0));
+//                                //XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
+//                                //XYZ normal = side1.CrossProduct(side2);
+//                                //normal = normal.Normalize();
 
-        //                        var newNormal = normal;
+//                                //var newNormal = normal;
 
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.X);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Y);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Z);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.X);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Y);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Z);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.X);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Y);
-        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Z);
-        //                    }
-        //                    catch { }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.X);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.Y);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.Z);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.X);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.Y);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.Z);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.X);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.Y);
+//                                //_currentGeometry.CurrentItem.normals.Add(newNormal.Z);
+//                            }
+//                            catch { }
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
 
         /// <summary>

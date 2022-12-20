@@ -205,8 +205,8 @@ namespace Common_glTF_Exporter.Utils
             faceAccessor.bufferView = facesViewIdx;
             faceAccessor.byteOffset = 0;
             faceAccessor.componentType = ComponentType.UNSIGNED_INT;
-            faceAccessor.count = numIndexes;
-            //faceAccessor.count = geomData.faces.Count / elementsPerIndex;
+            //faceAccessor.count = numIndexes;
+            faceAccessor.count = geomData.faces.Count / elementsPerIndex;
             faceAccessor.type = "SCALAR";
             //faceAccessor.max = new List<float>() { faceMinMax[1] };
             //faceAccessor.min = new List<float>() { faceMinMax[0] };
@@ -256,7 +256,7 @@ namespace Common_glTF_Exporter.Utils
                     {
                         foreach (var normal in polymesh.GetNormals())
                         {
-                            for (int i = 0; i < polymesh.NumberOfFacets * 3 ; i++)
+                            for (int i = 0; i < polymesh.NumberOfFacets; i++)
                             {
                                 var newNormal = normal.FlipCoordinates().Normalize();
 
