@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Grid = Autodesk.Revit.DB.Grid;
+using Transform = Autodesk.Revit.DB.Transform;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
 using Autodesk.Revit.UI;
 using System.Numerics;
 using Autodesk.Revit.DB.DirectContext3D;
+using System.Windows.Media;
 using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Revit_glTF_Exporter
 {
     class glTFExportContext : IExportContext
     {
+        static public bool RetainCurvedSurfaceFacets = false;
+
+        // Unit conversion factors.
+
+        const double _mm_per_inch = 25.4;
+        const double _inch_per_foot = 12;
+        const double _foot_to_mm = _inch_per_foot * _mm_per_inch;
         private Document _doc;
         private bool _skipElementFlag = false;
         private Element _element;
@@ -299,27 +308,21 @@ namespace Revit_glTF_Exporter
             {
                 // get the extras for this element
                 glTFExtras extras = new glTFExtras();
-=======
-            //if (_exportProperties)
-            //{
-            //    // get the extras for this element
-            //    glTFExtras extras = new glTFExtras();
->>>>>>> normals - in progress
 
-            //    extras.UniqueId = _element.UniqueId;
+                extras.UniqueId = _element.UniqueId;
 
-            //    extras.parameters = Util.GetElementParameters(_element, true);
+                extras.parameters = Util.GetElementParameters(_element, true);
 
-            //    if (_exportElementId)
-            //    {
-            //        extras.elementId = _element.Id.IntegerValue;
-            //    }
+                if (_exportElementId)
+                {
+                    extras.elementId = _element.Id.IntegerValue;
+                }
 
-            //    extras.elementCategory = _element.Category.Name;
+                extras.elementCategory = _element.Category.Name;
 
-            //    newNode.extras = extras;
-            //}
-            
+                newNode.extras = extras;
+            }
+
             Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
 
             // add the index of this node to our root node children array
@@ -329,8 +332,122 @@ namespace Revit_glTF_Exporter
             _currentGeometry = new IndexedDictionary<GeometryData>();
             _currentVertices = new IndexedDictionary<VertexLookupInt>();
 
+            //GetGeometryData();
+
             return RenderNodeAction.Proceed;
         }
+
+        //public void GetGeometryData()
+        //{
+        //    Autodesk.Revit.DB.Transform transform = CurrentTransform;
+
+        //    Options opt = new Options();
+        //    opt.ComputeReferences = true;
+        //    opt.View = _doc.ActiveView;
+
+        //    GeometryElement geoEle = _element.get_Geometry(opt);
+
+        //    foreach (GeometryObject geoObject in geoEle)
+        //    {
+        //        if (geoObject is Solid)
+        //        {
+        //            Solid solid = geoObject as Solid;
+
+        //            glTFMaterial gl_mat = new glTFMaterial();
+
+        //            Material material = _doc.GetElement(solid.Faces.get_Item(0).MaterialElementId) as Material;
+
+        //            if (_exportMaterials)
+        //            {
+        //                if (material == null)
+        //                {
+        //                    material = Collectors.GetRandomMaterial(_doc);
+        //                }
+        //                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+        //                Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+        //            }
+
+        //            // Add new "_current" entries if vertex_key is unique
+        //            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
+
+        //            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
+        //            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+
+        //            foreach (PlanarFace face in solid.Faces)
+        //            {
+        //                Mesh mesh = face.Triangulate();
+
+        //                int triangles = mesh.NumTriangles;
+
+        //                if (triangles == 0)
+        //                    continue;
+
+        //                for (int i = 0; i < triangles; i++)
+        //                {
+        //                    try
+        //                    {
+        //                        MeshTriangle triangle = mesh.get_Triangle(i);
+
+        //                        if (triangle == null)
+        //                            continue;
+
+        //                        #if REVIT2019 || REVIT2020
+
+        //                        int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
+        //                        int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
+        //                        int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
+
+        //                        #else
+
+        //                        int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
+        //                        int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
+        //                        int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+
+        //                        #endif
+
+        //                        _currentGeometry.CurrentItem.faces.Add(v1);
+        //                        _currentGeometry.CurrentItem.faces.Add(v2);
+        //                        _currentGeometry.CurrentItem.faces.Add(v3);
+
+        //                        //XYZ normal = face.FaceNormal.Normalize();
+
+        //                        //normal = normal.FlipCoordinates();
+
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.X);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Y);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Z);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.X);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Y);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Z);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.X);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Y);
+        //                        //_currentGeometry.CurrentItem.normals.Add(normal.Z);
+
+
+        //                        XYZ side1 = triangle.get_Vertex(1) - (triangle.get_Vertex(0));
+        //                        XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
+        //                        XYZ normal = side1.CrossProduct(side2);
+        //                        normal = normal.Normalize();
+
+        //                        var newNormal = normal;
+
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.X);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Y);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Z);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.X);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Y);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Z);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.X);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Y);
+        //                        _currentGeometry.CurrentItem.normals.Add(newNormal.Z);
+        //                    }
+        //                    catch { }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
 
         /// <summary>
         /// Runs every time, and immediately prior to, a mesh being processed (OnPolymesh).
@@ -393,6 +510,7 @@ namespace Revit_glTF_Exporter
                 }
             }
         }
+
 
         /// <summary>
         /// Runs for every polymesh being processed. Typically this is a single face
@@ -640,14 +758,14 @@ namespace Revit_glTF_Exporter
                                 }
                                 gl_mat = Util.GetGLTFMaterial(Materials.List, material);
                                 Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
-                            }                           
+                            }
 
                             // Add new "_current" entries if vertex_key is unique
                             string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
                             _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
                             _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
-                            for (int i = 0; i < triangles - 1; i++)
+                            for (int i = 0; i < triangles; i++)
                             {
                                 try
                                 {

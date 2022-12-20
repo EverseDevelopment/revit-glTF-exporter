@@ -21,7 +21,7 @@ namespace Revit_glTF_Exporter
         {
             //Exporting
             MainView.ExportLights_Checkbox.IsChecked = false;
-            MainView.ExportBatchId_CheckBox.IsChecked = true;
+            MainView.ExportBatchId_CheckBox.IsChecked = false;
             MainView.ExportNormals_CheckBox.IsChecked = true;
             MainView.ExportGrids_CheckBox.IsChecked = false;
             MainView.ExportLevels_CheckBox.IsChecked = false;

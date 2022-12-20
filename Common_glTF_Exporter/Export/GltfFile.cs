@@ -37,15 +37,15 @@ namespace Common_glTF_Exporter.Export
                 string serializedModel = JsonConvert.SerializeObject(model,
                     new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                //if (!exportBatchId)
-                //{
-                //    serializedModel = serializedModel.Replace(",\"_BATCHID\":0", "");
-                //}
+                if (!exportBatchId)
+                {
+                    serializedModel = serializedModel.Replace(",\"_BATCHID\":0", "");
+                }
 
-                //if (!exportNormals)
-                //{
-                //    serializedModel = serializedModel.Replace(",\"NORMAL\":0", "");
-                //}
+                if (!exportNormals)
+                {
+                    serializedModel = serializedModel.Replace(",\"NORMAL\":0", "");
+                }
 
                 File.WriteAllText(filename, serializedModel);
             }
