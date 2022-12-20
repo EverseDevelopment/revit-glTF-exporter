@@ -37,7 +37,7 @@
                        Foreground="Black" 
                        HorizontalAlignment="Left" Width="266" Margin="15,33,0,0" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             <Button  
-                   Style="{DynamicResource CloseButtonStyle}"
+                   Style="{DynamicResource ActionButtonStyle}"
                    Name="CloseButton" 
                    Foreground="Black" 
                    BorderThickness="0" 

@@ -16,6 +16,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Preferences.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\UpdateSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
     </Compile>
@@ -23,11 +26,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Resources.xaml.cs">
       <DependentUpon>Resources.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\ControlDoubleClickBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\ShowSystemMenuBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\SystemMenuManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\WindowDragBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\StyleableWindow\WindowResizeBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\FixedObjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\IObject.cs" />
@@ -46,16 +44,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\gltf.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Resources\gltf.png">
+    <Content Include="$(MSBuildThisFileDirectory)Images\gltf.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\SlideDown.png" />
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\SlideUp.png" />
     <Content Include="$(MSBuildThisFileDirectory)Revit_glTF_Exporter.addin">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
@@ -73,5 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Core\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)App.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

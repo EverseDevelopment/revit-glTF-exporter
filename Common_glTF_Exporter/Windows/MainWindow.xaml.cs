@@ -7,8 +7,13 @@ using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
 using System.IO;
 using System.Threading;
-using System.Windows.Forms;
 using System;
+using Common_glTF_Exporter.Windows.MainWindow;
+using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
+using ToggleButton = System.Windows.Controls.Primitives.ToggleButton;
+using System.Windows.Media;
 
 namespace Revit_glTF_Exporter
 {
@@ -18,7 +23,6 @@ namespace Revit_glTF_Exporter
     
     public partial class MainWindow : Window
     {
-        private bool _flipAxys = true;
         Document _doc;
         View3D _view;
         string _fileName;
@@ -45,7 +49,6 @@ namespace Revit_glTF_Exporter
             this.DataContext = _unitsViewModel;
 
             InitializeComponent();
-            SetDefaultSettings(); 
 
             #if REVIT2019 || REVIT2020
 
@@ -65,6 +68,37 @@ namespace Revit_glTF_Exporter
             this._view = view;
             this._fileName = _doc.Title;
             this._viewName = _view.Name;
+
+            Preferences preferences = UpdateSelection.GetInfo();
+            PropertyInfo[] properties = typeof(Preferences).GetProperties();
+            var preferenceType = typeof(Preferences);
+
+            List<System.Windows.Controls.Control> children = AllChildren(MainWindow_Border);
+
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.PropertyType == typeof(bool))
+                {
+                    ToggleButton button = children.FirstOrDefault(t => t.Name.Equals(property.Name)) as ToggleButton;
+                    button.IsChecked = Convert.ToBoolean(preferenceType.
+                        GetProperty(property.Name).GetValue(preferences));
+                }
+            }
+        }
+
+        private List<System.Windows.Controls.Control> AllChildren(DependencyObject parent)
+        {
+            var list = new List<System.Windows.Controls.Control> { };
+            for (int count = 0; count < VisualTreeHelper.GetChildrenCount(parent); count++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, count);
+                if (child is System.Windows.Controls.Control)
+                {
+                    list.Add(child as System.Windows.Controls.Control);
+                }
+                list.AddRange(AllChildren(child));
+            }
+            return list;
         }
 
         private void OnExportView(object sender, RoutedEventArgs e)
@@ -105,7 +139,7 @@ namespace Revit_glTF_Exporter
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, progressBar, true,
-                true, _flipAxys, MaterialsCheckbox.IsChecked.Value);
+                true);
 
             #else
 
@@ -113,7 +147,7 @@ namespace Revit_glTF_Exporter
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, progressBar,  true, 
-                true, _flipAxys, MaterialsCheckbox.IsChecked.Value);
+                true);
             
             #endif
 
@@ -149,12 +183,7 @@ namespace Revit_glTF_Exporter
                 slideDownImage.Visibility = System.Windows.Visibility.Hidden;
             }
 
-            _ = this.MainWindow_Window.Height == 680 ? (this.MainWindow_Window.Height = 410) : (this.MainWindow_Window.Height = 680);
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            _ = this.MainWindow_Window.Height == 700 ? (this.MainWindow_Window.Height = 410) : (this.MainWindow_Window.Height = 700);
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -170,29 +199,11 @@ namespace Revit_glTF_Exporter
         {
             System.Diagnostics.Process.Start("https://e-verse.com/");
         }
-
-        public void SetDefaultSettings()
+        private void TrueFalseToggles(object sender, RoutedEventArgs e)
         {
-            //Exporting
-            this.ExportLights_Checkbox.IsChecked = false;
-            this.ExportBatchId_CheckBox.IsChecked = false;
-            this.ExportNormals_CheckBox.IsChecked = false;
-            this.ExportGrids_CheckBox.IsChecked = true;
-            this.ExportLevels_CheckBox.IsChecked = true;
-            this.ExportBoundingBox_CheckBox.IsChecked = true;
-
-            //Position
-            this.RelocateModel_CheckBox.IsChecked = false;
-            this.FlipAxys_Checkbox.IsChecked = true;
-
-            //Compression
-            this.NoneCompression_RadioButton.IsChecked = true;
-            this.MeshoptCompression_RadioButton.IsChecked = false;
-            this.DRACOCompression_RadioButton.IsChecked = false;
-            this.ZIPCompression_RadioButton.IsChecked = false;
-
-            //Acc
-            this.Accuracy_Slider.Value = 3;
+            System.Windows.Controls.Primitives.ToggleButton button = sender as System.Windows.Controls.Primitives.ToggleButton;
+            SettingsConfig.Set(button.Name, button.IsChecked.ToString());
+            button.IsChecked = button.IsChecked;
         }
     }
 }

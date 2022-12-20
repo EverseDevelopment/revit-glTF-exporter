@@ -14,7 +14,7 @@ namespace Revit_glTF_Exporter
         private static string PUSH_BUTTON_NAME = "glTF Exporter";
         private static string PUSH_BUTTON_TEXT = "glTF Exporter";
         private static string AddInPath = typeof(App).Assembly.Location;
-        private static string ButtonIconsFolder = Path.GetDirectoryName(AddInPath) + "\\Images\\";
+        private static string ButtonIconsFolder = Path.GetDirectoryName(AddInPath) + "\\Resources\\";
 
         public Result OnShutdown(UIControlledApplication application)
         {

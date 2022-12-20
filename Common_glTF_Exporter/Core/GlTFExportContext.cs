@@ -8,6 +8,7 @@ using Grid = Autodesk.Revit.DB.Grid;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
 using Autodesk.Revit.UI;
+using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Revit_glTF_Exporter
 {
@@ -128,16 +129,18 @@ namespace Revit_glTF_Exporter
 
             #endif
 
-            ProgressBarWindow progressBarWindow, bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
+            ProgressBarWindow progressBarWindow, bool singleBinary = true, bool exportProperties = true)
 
         {
+
+            Preferences preferences = UpdateSelection.GetInfo();
             _doc = doc;
             _exportProperties = exportProperties;
-            _flipCoords = flipCoords;
+            _flipCoords = preferences.flipAxis;
             _singleBinary = singleBinary;
             _filename = filename;
             _directory = directory;
-            _exportMaterials = exportMaterials;
+            _exportMaterials = preferences.materials;
             _progressBarWindow = progressBarWindow;
 
             #if REVIT2019 || REVIT2020
