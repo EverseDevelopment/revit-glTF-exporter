@@ -1,7 +1,5 @@
 ﻿using Autodesk.Internal.InfoCenter;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Configuration;
 using Configuration = System.Configuration.Configuration;
 using System.Reflection;
@@ -15,7 +13,8 @@ namespace Common_glTF_Exporter.Utils
     public static class SettingsConfig
     {
         private static readonly string binaryLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string appSettingsFile = System.IO.Path.Combine(binaryLocation, "Revit_glTF_Exporter.dll.config");
+        public static string appSettingsName = String.Concat(Assembly.GetExecutingAssembly().GetName().Name, ".dll.config");
+        public static string appSettingsFile = System.IO.Path.Combine(binaryLocation, appSettingsName);
 
         public static string GetValue(string key)
         {
