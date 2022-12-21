@@ -3,18 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Grid = Autodesk.Revit.DB.Grid;
+using Transform = Autodesk.Revit.DB.Transform;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
+using Autodesk.Revit.UI;
+using System.Numerics;
+using Autodesk.Revit.DB.DirectContext3D;
+using System.Windows.Media;
 using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Revit_glTF_Exporter
 {
     class glTFExportContext : IExportContext
     {
+        static public bool RetainCurvedSurfaceFacets = false;
+
+        // Unit conversion factors.
+
+        const double _mm_per_inch = 25.4;
+        const double _inch_per_foot = 12;
+        const double _foot_to_mm = _inch_per_foot * _mm_per_inch;
         private Document _doc;
         private bool _skipElementFlag = false;
         private Element _element;
         private ProgressBarWindow _progressBarWindow;
+
         #if REVIT2019 || REVIT2020
 
         private DisplayUnitType _displayUnitType;
@@ -146,6 +159,7 @@ namespace Revit_glTF_Exporter
             rootNode = new glTFNode();
             rootNode.name = "rootNode";
             rootNode.children = new List<int>();
+
             Nodes.AddOrUpdateCurrent("rootNode", rootNode);
 
             glTFScene defaultScene = new glTFScene();
@@ -167,69 +181,73 @@ namespace Revit_glTF_Exporter
 
             // Add gridlines as gltf nodes in the format:
             // Origin {Vec3<double>}, Direction {Vec3<double>}, Length {double}
-            FilteredElementCollector col = new FilteredElementCollector(_doc)
-                .OfClass(typeof(Grid));
 
-            var grids = col.ToElements();
-
-            foreach (Grid g in grids)
+            if (_preferences.grids)
             {
-                Line l = g.Curve as Line;
+                FilteredElementCollector col = new FilteredElementCollector(_doc)
+                    .OfClass(typeof(Grid));
 
-                var origin = l.Origin;
-                var direction = l.Direction;
-                var length = l.Length;
+                var grids = col.ToElements();
 
-                var xtras = new glTFExtras();
-                var grid = new GridParameters();
+                foreach (Grid g in grids)
+                {
+                    Line l = g.Curve as Line;
 
-                #if  REVIT2019 || REVIT2020
+                    var origin = l.Origin;
+                    var direction = l.Direction;
+                    var length = l.Length;
 
-                grid.origin = new List<double>() {
+                    var xtras = new glTFExtras();
+                    var grid = new GridParameters();
+
+                    #if REVIT2019 || REVIT2020
+
+                    grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
                     Util.ConvertFeetToUnitTypeId(origin.Y, _displayUnitType),
                     Util.ConvertFeetToUnitTypeId(origin.Z, _displayUnitType) };
 
-                grid.direction = new List<double>() {
+                    grid.direction = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(direction.X, _displayUnitType),
                     Util.ConvertFeetToUnitTypeId(direction.Y, _displayUnitType),
                     Util.ConvertFeetToUnitTypeId(direction.Z, _displayUnitType) };
 
-                grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
+                    grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
 
-                #else
+                    #else
 
-                grid.origin = new List<double>() {
+                    grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
                     Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId),
                     Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId) };
 
-                grid.direction = new List<double>() {
+                    grid.direction = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId),
                     Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId),
                     Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
 
-                grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
+                    grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
                 
-                #endif
+                    #endif
 
-                xtras.GridParameters = grid;
-                xtras.UniqueId = g.UniqueId;
-                xtras.parameters = Util.GetElementParameters(g, true);
+                    xtras.GridParameters = grid;
+                    xtras.UniqueId = g.UniqueId;
+                    xtras.parameters = Util.GetElementParameters(g, true);
 
-                var gridNode = new glTFNode();
-                gridNode.name = g.Name;
-                gridNode.extras = xtras;
+                    var gridNode = new glTFNode();
+                    gridNode.name = g.Name;
+                    gridNode.extras = xtras;
 
-                Nodes.AddOrUpdateCurrent(g.UniqueId, gridNode);
-                rootNode.children.Add(Nodes.CurrentIndex);
+                    Nodes.AddOrUpdateCurrent(g.UniqueId, gridNode);
+                    rootNode.children.Add(Nodes.CurrentIndex);
+                }
             }
 
             Binaries.Save(_preferences.singleBinary, BufferViews, _filename, Buffers, 
-                _directory, binaryFileData);
+                _directory, binaryFileData, _preferences.batchId, _preferences.normals);
 
             GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List, 
-                Buffers, BufferViews, Accessors, _filename);
+                Buffers, BufferViews, Accessors, _filename, _preferences.batchId, _preferences.normals);
 
             Compression.Run(_filename, _preferences.compression);
 
@@ -246,6 +264,12 @@ namespace Revit_glTF_Exporter
             _progressBarWindow.ViewModel.ProgressBarValue++;
 
             _element = _doc.GetElement(elementId);
+
+            if (_element.Category.Name == "Cameras" ||
+                (_element is Level && !_preferences.levels))
+            {
+                return RenderNodeAction.Skip;
+            }
 
             if (Nodes.Contains(_element.UniqueId))
             {
@@ -265,22 +289,29 @@ namespace Revit_glTF_Exporter
                 glTFExtras extras = new glTFExtras();
 
                 extras.UniqueId = _element.UniqueId;
+
                 extras.parameters = Util.GetElementParameters(_element, true);
 
-                //extras.elementId = e.Id.IntegerValue;
+                if (_preferences.elementId)
+                {
+                    extras.elementId = _element.Id.IntegerValue;
+                }
+
                 extras.elementCategory = _element.Category.Name;
-                //extras.dependentElements = Util.GetDependentElements(e);
 
                 newNode.extras = extras;
-                Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
-
-                // add the index of this node to our root node children array
-                rootNode.children.Add(Nodes.CurrentIndex);
             }
+
+            Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
+
+            // add the index of this node to our root node children array
+            rootNode.children.Add(Nodes.CurrentIndex);
 
             // Reset _currentGeometry for new element
             _currentGeometry = new IndexedDictionary<GeometryData>();
             _currentVertices = new IndexedDictionary<VertexLookupInt>();
+
+            //GetGeometryData();
 
             return RenderNodeAction.Proceed;
         }
@@ -347,6 +378,7 @@ namespace Revit_glTF_Exporter
             }
         }
 
+
         /// <summary>
         /// Runs for every polymesh being processed. Typically this is a single face
         /// of an element's mesh. Here we populate the data into our "_current" variables
@@ -356,21 +388,20 @@ namespace Revit_glTF_Exporter
         /// <param name="polymesh"></param>
         public void OnPolymesh(PolymeshTopology polymesh)
         {
-            string vertex_key = String.Concat(Nodes.CurrentKey, "_", Materials.CurrentKey);
+            string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
 
             // Add new "_current" entries if vertex_key is unique
             _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
             _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
             // populate current vertices vertex data and current geometry faces data
-            Transform t = CurrentTransform;
+            Transform transform = CurrentTransform;
             IList<XYZ> pts = polymesh.GetPoints();
-            pts = pts.Select(p => t.OfPoint(p)).ToList();
+            pts = pts.Select(p => transform.OfPoint(p)).ToList();
             IList<PolymeshFacet> facets = polymesh.GetFacets();
 
             foreach (PolymeshFacet facet in facets)
             {
-
                 #if REVIT2019 || REVIT2020
 
                 int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType));
@@ -400,6 +431,13 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId"></param>
         public void OnElementEnd(ElementId elementId)
         {
+            if (_element.Category.Name == "Cameras" ||
+            _currentVertices == null ||
+            _currentVertices.List.Count == 0)
+            {
+                return;
+            }
+
             if (_skipElementFlag)
             {
                 // Duplicate element, skip.
@@ -407,17 +445,11 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (_currentVertices.List.Count == 0)
-            {
-                return;
-            }
-
-            Element element = _doc.GetElement(elementId);
-
-            // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primatives on mesh)
+            // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives on mesh)
             glTFMesh newMesh = new glTFMesh();
+            newMesh.name = _element.Name;
             newMesh.primitives = new List<glTFMeshPrimitive>();
-            Meshes.AddOrUpdateCurrent(element.UniqueId, newMesh);
+            Meshes.AddOrUpdateCurrent(_element.UniqueId, newMesh);
 
             // add the index of this mesh to the current node.
             Nodes.CurrentItem.mesh = Meshes.CurrentIndex;
@@ -426,6 +458,7 @@ namespace Revit_glTF_Exporter
             foreach (KeyValuePair<string, VertexLookupInt> kvp in _currentVertices.Dict)
             {
                 string vertex_key = kvp.Key;
+
                 foreach (KeyValuePair<PointInt, int> p in kvp.Value)
                 {
                     _currentGeometry.GetElement(vertex_key).vertices.Add(p.Key.X);
@@ -437,13 +470,21 @@ namespace Revit_glTF_Exporter
             // Convert _currentGeometry objects into glTFMeshPrimitives
             foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
             {
-                glTFBinaryData elementBinary = AddGeometryMeta(kvp.Value, kvp.Key, elementId.IntegerValue);
+                glTFBinaryData elementBinary = glTFExportUtils.AddGeometryMeta(Buffers, Accessors, BufferViews, kvp.Value, kvp.Key,
+                    elementId.IntegerValue, _preferences.batchId, _preferences.normals);
+
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split('_')[1];
+                string material_key = kvp.Key.Split('_')[1];           
 
                 glTFMeshPrimitive primitive = new glTFMeshPrimitive();
+
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
+
+                if (_preferences.batchId)
+                {
+                    primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
+                }
 
                 primitive.indices = elementBinary.indexAccessorIndex;
 
@@ -453,6 +494,8 @@ namespace Revit_glTF_Exporter
                 }
 
                 Meshes.CurrentItem.primitives.Add(primitive);
+
+                Meshes.CurrentItem.name = _element.Name;
             }
         }
 
@@ -481,116 +524,6 @@ namespace Revit_glTF_Exporter
         {
             // Note: This method is invoked even for instances that were skipped.
             _transformStack.Pop();
-        }
-
-        /// <summary>
-        /// Takes the intermediate geometry data and performs the calculations
-        /// to convert that into glTF buffers, views, and accessors.
-        /// </summary>
-        /// <param name="geomData"></param>
-        /// <param name="name">Unique name for the .bin file that will be produced.</param>
-        /// <param name="elementId">Revit element's Element ID that will be used as the batchId value.</param>
-        /// <returns></returns>
-        public glTFBinaryData AddGeometryMeta(GeometryData geomData, string name, int elementId)
-        {
-            // add a buffer
-            glTFBuffer buffer = new glTFBuffer();
-            buffer.uri = String.Concat(name,".bin" );
-            Buffers.Add(buffer);
-            int bufferIdx = Buffers.Count - 1;
-
-            /**
-             * Buffer Data
-             **/
-            glTFBinaryData bufferData = new glTFBinaryData();
-            bufferData.name = buffer.uri;
-
-            foreach (var coord in geomData.vertices)
-            {
-                float vFloat = Convert.ToSingle(coord);
-                bufferData.vertexBuffer.Add(vFloat);
-            }
-
-            // TODO: Leaving this to export normals in the future
-            //foreach (var normal in geomData.normals)
-            //{
-            //    bufferData.normalBuffer.Add((float)normal);
-            //}
-
-            foreach (var index in geomData.faces)
-            {
-                bufferData.indexBuffer.Add(index);
-            }
-
-            // Get max and min for vertex data
-            float[] vertexMinMax = Util.GetVec3MinMax(bufferData.vertexBuffer);
-
-            // Get max and min for index data
-            int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
-
-            /**
-             * BufferViews
-             **/
-            // Add a vec3 buffer view
-            int elementsPerVertex = 3;
-            int bytesPerElement = 4;
-            int bytesPerVertex = elementsPerVertex * bytesPerElement;
-            int numVec3 = (geomData.vertices.Count) / elementsPerVertex;
-            int sizeOfVec3View = numVec3 * bytesPerVertex;
-            glTFBufferView vec3View = new glTFBufferView();
-            vec3View.buffer = bufferIdx;
-            vec3View.byteOffset = 0;
-            vec3View.byteLength = sizeOfVec3View;
-            vec3View.target = Targets.ARRAY_BUFFER;
-            BufferViews.Add(vec3View);
-            int vec3ViewIdx = BufferViews.Count - 1;
-
-            // Add a faces / indexes buffer view
-            int elementsPerIndex = 1;
-            int bytesPerIndexElement = 4;
-            int bytesPerIndex = elementsPerIndex * bytesPerIndexElement;
-            int numIndexes = geomData.faces.Count;
-            int sizeOfIndexView = numIndexes * bytesPerIndex;
-            glTFBufferView facesView = new glTFBufferView();
-            facesView.buffer = bufferIdx;
-            facesView.byteOffset = vec3View.byteLength;
-
-            facesView.byteLength = sizeOfIndexView;
-            facesView.target = Targets.ELEMENT_ARRAY_BUFFER;
-            BufferViews.Add(facesView);
-            int facesViewIdx = BufferViews.Count - 1;
-
-            /**
-             * Accessors
-             **/
-            // add a position accessor
-            glTFAccessor positionAccessor = new glTFAccessor();
-            positionAccessor.bufferView = vec3ViewIdx;
-            positionAccessor.byteOffset = 0;
-            positionAccessor.componentType = ComponentType.FLOAT;
-            positionAccessor.count = geomData.vertices.Count / elementsPerVertex;
-            positionAccessor.type = "VEC3";
-            positionAccessor.max = new List<float>() { vertexMinMax[1], vertexMinMax[3], vertexMinMax[5] };
-            positionAccessor.min = new List<float>() { vertexMinMax[0], vertexMinMax[2], vertexMinMax[4] };
-
-            Accessors.Add(positionAccessor);
-            bufferData.vertexAccessorIndex = Accessors.Count - 1;
-
-            // add a face accessor
-            glTFAccessor faceAccessor = new glTFAccessor();
-            faceAccessor.bufferView = facesViewIdx;
-            faceAccessor.byteOffset = 0;
-            faceAccessor.componentType = ComponentType.UNSIGNED_INT;
-
-            faceAccessor.count = geomData.faces.Count / elementsPerIndex;
-            faceAccessor.type = "SCALAR";
-            faceAccessor.max = new List<float>() { faceMinMax[1] };
-            faceAccessor.min = new List<float>() { faceMinMax[0] };
-            faceAccessor.name = "FACE";
-            Accessors.Add(faceAccessor);
-            bufferData.indexAccessorIndex = Accessors.Count - 1;
-
-            return bufferData;
         }
 
         public bool IsCanceled()
@@ -626,7 +559,9 @@ namespace Revit_glTF_Exporter
             _transformStack.Pop();
         }
 
-        public RenderNodeAction OnFaceBegin(FaceNode node)
+        public RenderNodeAction 
+            
+            Begin(FaceNode node)
         {
             return RenderNodeAction.Proceed;
         }
@@ -672,14 +607,14 @@ namespace Revit_glTF_Exporter
                                 }
                                 gl_mat = Util.GetGLTFMaterial(Materials.List, material);
                                 Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
-                            }                           
+                            }
 
                             // Add new "_current" entries if vertex_key is unique
                             string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
                             _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
                             _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
-                            for (int i = 0; i < triangles - 1; i++)
+                            for (int i = 0; i < triangles; i++)
                             {
                                 try
                                 {
@@ -713,10 +648,15 @@ namespace Revit_glTF_Exporter
                 }
             }
         }
-
         public void OnLight(LightNode node)
         {
             // do nothing
+        }
+
+        public RenderNodeAction OnFaceBegin(FaceNode node)
+        {
+            return RenderNodeAction.Proceed;
+            //nothing
         }
     }
 }

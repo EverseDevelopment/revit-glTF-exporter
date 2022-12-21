@@ -10,7 +10,7 @@ namespace Common_glTF_Exporter.Export
     public static class Binaries
     {
         public static void Save(bool singleBinary, List<glTFBufferView> bufferViews, string filename, List<glTFBuffer> buffers,
-            string directory, List<glTFBinaryData> binaryFileData) {
+            string directory, List<glTFBinaryData> binaryFileData, bool exportBatchId, bool exportNormals) {
 
             if (singleBinary)
             {
@@ -39,7 +39,7 @@ namespace Common_glTF_Exporter.Export
                 buffers.Clear();
                 buffers.Add(buffer);
 
-                BinFile.Create(directory, bufferUri, binaryFileData);
+                BinFile.Create(directory, bufferUri, binaryFileData, exportNormals, exportBatchId);
             }
             else
             {

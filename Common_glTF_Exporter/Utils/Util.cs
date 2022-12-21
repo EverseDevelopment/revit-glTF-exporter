@@ -297,4 +297,16 @@ namespace Revit_glTF_Exporter
             return a;
         }
     }
+
+    public static class Extensions
+    {
+        public static XYZ FlipCoordinates(this XYZ point)
+        {
+            double X = -point.X;
+            double Y = point.Z;
+            double Z = point.Y;
+
+            return new XYZ(X, Y, Z);
+        }
+    }
 }

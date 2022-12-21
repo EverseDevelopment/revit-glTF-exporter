@@ -14,15 +14,13 @@ namespace Revit_glTF_Exporter
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-
+    
     public partial class MainWindow : Window
     {
         Document _doc;
         View3D _view;
         string _fileName;
         string _viewName;
-        private UnitsViewModel _unitsViewModel;
-        public static MainWindow MainView { get; set; }
 
         #if REVIT2019 || REVIT2020
 
@@ -36,11 +34,13 @@ namespace Revit_glTF_Exporter
 
         #endif
 
+        UnitsViewModel _unitsViewModel;
+
+        //public bool materialsExport = true;
         public MainWindow(Document doc, View3D view)
         {
             _unitsViewModel = new UnitsViewModel();
             this.DataContext = _unitsViewModel;
-            MainView = this;
 
             InitializeComponent();
 
@@ -117,7 +117,7 @@ namespace Revit_glTF_Exporter
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
                 
-            exporter.ShouldStopOnError = false;
+            exporter.ShouldStopOnError = true;
 
             exporter.Export(view3d);
 
