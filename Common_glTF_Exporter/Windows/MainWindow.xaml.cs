@@ -21,6 +21,8 @@ namespace Revit_glTF_Exporter
         View3D _view;
         string _fileName;
         string _viewName;
+        private UnitsViewModel _unitsViewModel;
+        public static MainWindow MainView { get; set; }
 
         #if REVIT2019 || REVIT2020
 

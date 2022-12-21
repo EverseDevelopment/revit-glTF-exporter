@@ -27,11 +27,6 @@ namespace Revit_glTF_Exporter
         private bool _skipElementFlag = false;
         private Element _element;
         private ProgressBarWindow _progressBarWindow;
-        private bool _exportNormals;
-        private bool _exportElementId;
-        private bool _exportBatchId;
-        private bool _exportGrid;
-        private bool _exportLevel;
 
         #if REVIT2019 || REVIT2020
 
@@ -133,28 +128,13 @@ namespace Revit_glTF_Exporter
             #endif
 
             ProgressBarWindow progressBarWindow)
-            bool exportNormals, bool exportElementId, bool exportBatchId,
-            bool singleBinary = true, bool exportProperties = true, bool flipCoords = true, bool exportMaterials = true)
-
         {
 
             _preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             _doc = doc;
-<<<<<<< refs/remotes/origin/develop
-=======
-            _exportProperties = true;
-            _flipCoords = flipCoords;
-            _singleBinary = singleBinary;
->>>>>>> normals - in progress
             _filename = filename;
             _directory = directory;
             _progressBarWindow = progressBarWindow;
-            _exportMaterials = exportMaterials;
-            _exportNormals = exportNormals;
-            _exportElementId = exportElementId;
-            _exportBatchId = exportBatchId;
-            _exportGrid = exportGrid;
-            _exportLevel= exportLevel;
 
             #if REVIT2019 || REVIT2020
 
@@ -202,7 +182,7 @@ namespace Revit_glTF_Exporter
             // Add gridlines as gltf nodes in the format:
             // Origin {Vec3<double>}, Direction {Vec3<double>}, Length {double}
 
-            if (_exportGrid)
+            if (_preferences.grids)
             {
                 FilteredElementCollector col = new FilteredElementCollector(_doc)
                     .OfClass(typeof(Grid));
@@ -264,10 +244,10 @@ namespace Revit_glTF_Exporter
             }
 
             Binaries.Save(_preferences.singleBinary, BufferViews, _filename, Buffers, 
-                _directory, binaryFileData);
+                _directory, binaryFileData, _preferences.batchId, _preferences.normals);
 
             GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List, 
-                Buffers, BufferViews, Accessors, _filename);
+                Buffers, BufferViews, Accessors, _filename, _preferences.batchId, _preferences.normals);
 
             Compression.Run(_filename, _preferences.compression);
 
@@ -286,7 +266,7 @@ namespace Revit_glTF_Exporter
             _element = _doc.GetElement(elementId);
 
             if (_element.Category.Name == "Cameras" ||
-                (_element is Level && !_exportLevel))
+                (_element is Level && !_preferences.levels))
             {
                 return RenderNodeAction.Skip;
             }
@@ -303,7 +283,6 @@ namespace Revit_glTF_Exporter
 
             newNode.name = Util.ElementDescription(_element);
 
-<<<<<<< refs/remotes/origin/develop
             if (_preferences.exportProperties)
             {
                 // get the extras for this element
@@ -313,7 +292,7 @@ namespace Revit_glTF_Exporter
 
                 extras.parameters = Util.GetElementParameters(_element, true);
 
-                if (_exportElementId)
+                if (_preferences.elementId)
                 {
                     extras.elementId = _element.Id.IntegerValue;
                 }
@@ -437,14 +416,6 @@ namespace Revit_glTF_Exporter
 
 #endif
 
-                #else
-
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));    
-
-                #endif
-
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
                 _currentGeometry.CurrentItem.faces.Add(v3);
@@ -500,7 +471,7 @@ namespace Revit_glTF_Exporter
             foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
             {
                 glTFBinaryData elementBinary = glTFExportUtils.AddGeometryMeta(Buffers, Accessors, BufferViews, kvp.Value, kvp.Key,
-                    elementId.IntegerValue, _exportBatchId, _exportNormals);
+                    elementId.IntegerValue, _preferences.batchId, _preferences.normals);
 
                 binaryFileData.Add(elementBinary);
 
@@ -510,7 +481,7 @@ namespace Revit_glTF_Exporter
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
 
-                if (_exportBatchId)
+                if (_preferences.batchId)
                 {
                     primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 }
