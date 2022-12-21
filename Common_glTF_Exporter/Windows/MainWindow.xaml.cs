@@ -7,13 +7,7 @@ using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
 using System.IO;
 using System.Threading;
-using System;
 using Common_glTF_Exporter.Windows.MainWindow;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using ToggleButton = System.Windows.Controls.Primitives.ToggleButton;
-using System.Windows.Media;
 
 namespace Revit_glTF_Exporter
 {
@@ -69,36 +63,7 @@ namespace Revit_glTF_Exporter
             this._fileName = _doc.Title;
             this._viewName = _view.Name;
 
-            Preferences preferences = UpdateSelection.GetInfo();
-            PropertyInfo[] properties = typeof(Preferences).GetProperties();
-            var preferenceType = typeof(Preferences);
-
-            List<System.Windows.Controls.Control> children = AllChildren(MainWindow_Border);
-
-            foreach (PropertyInfo property in properties)
-            {
-                if (property.PropertyType == typeof(bool))
-                {
-                    ToggleButton button = children.FirstOrDefault(t => t.Name.Equals(property.Name)) as ToggleButton;
-                    button.IsChecked = Convert.ToBoolean(preferenceType.
-                        GetProperty(property.Name).GetValue(preferences));
-                }
-            }
-        }
-
-        private List<System.Windows.Controls.Control> AllChildren(DependencyObject parent)
-        {
-            var list = new List<System.Windows.Controls.Control> { };
-            for (int count = 0; count < VisualTreeHelper.GetChildrenCount(parent); count++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, count);
-                if (child is System.Windows.Controls.Control)
-                {
-                    list.Add(child as System.Windows.Controls.Control);
-                }
-                list.AddRange(AllChildren(child));
-            }
-            return list;
+            UpdateForm.Run(MainWindow_Border);
         }
 
         private void OnExportView(object sender, RoutedEventArgs e)
@@ -138,16 +103,14 @@ namespace Revit_glTF_Exporter
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, progressBar, true,
-                true);
+            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, progressBar);
 
             #else
 
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, progressBar,  true, 
-                true);
+            glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, progressBar);
             
             #endif
 
@@ -203,7 +166,13 @@ namespace Revit_glTF_Exporter
         {
             System.Windows.Controls.Primitives.ToggleButton button = sender as System.Windows.Controls.Primitives.ToggleButton;
             SettingsConfig.Set(button.Name, button.IsChecked.ToString());
-            button.IsChecked = button.IsChecked;
+        }
+        private void RadioButtonClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
+            string value = button.Name.Replace("compression", "");
+            string key = button.Name.Replace(value, "");
+            SettingsConfig.Set(key, value);
         }
     }
 }

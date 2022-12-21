@@ -17,8 +17,17 @@ namespace Common_glTF_Exporter.Windows.MainWindow
         public bool boundingBox { get; set; }
         public bool relocateTo0 { get; set; }
         public bool flipAxis { get; set; }
+        public bool exportProperties { get; set; }
+        public bool singleBinary { get; set; }
         public string units { get; set; }
-        public string compression { get; set; }
+        public CompressionEnum compression { get; set; }
         public string digits { get; set; }
+    }
+    public enum CompressionEnum
+    {
+        None,
+        Meshopt,
+        Draco,
+        ZIP
     }
 }

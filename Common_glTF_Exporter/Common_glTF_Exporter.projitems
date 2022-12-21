@@ -10,15 +10,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Core\Containers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\Binaries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\glTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Preferences.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\UpdateSelection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\UpdateForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
     </Compile>
