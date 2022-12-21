@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Autodesk.Revit.DB;
-using System.Diagnostics;
 using Grid = Autodesk.Revit.DB.Grid;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
-using Autodesk.Revit.UI;
 using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Revit_glTF_Exporter
@@ -28,19 +25,6 @@ namespace Revit_glTF_Exporter
 
         #endif
         /// <summary>
-        /// Flag to write coords as Z up instead of Y up (if true).
-        /// </summary>
-        private bool _flipCoords;
-        /// <summary>
-        /// Flag to export all the properties for each element.
-        /// </summary>
-        private bool _exportProperties;
-        /// <summary>
-        /// Flag to export all buffers into a single .bin file (if true).
-        /// </summary>
-        private bool _singleBinary;
-
-        /// <summary>
         /// The name for the .gltf file.
         /// </summary>
         private string _filename;
@@ -49,6 +33,7 @@ namespace Revit_glTF_Exporter
         /// </summary>
         private string _directory;
 
+        private Preferences _preferences;
         /**
          * The following properties are the root
          * elements of the glTF format spec. They
@@ -116,7 +101,7 @@ namespace Revit_glTF_Exporter
 
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
-        private bool _exportMaterials;
+
         public glTFExportContext(Document doc, string filename, string directory,
 
             #if REVIT2019 || REVIT2020
@@ -129,18 +114,13 @@ namespace Revit_glTF_Exporter
 
             #endif
 
-            ProgressBarWindow progressBarWindow, bool singleBinary = true, bool exportProperties = true)
-
+            ProgressBarWindow progressBarWindow)
         {
 
-            Preferences preferences = UpdateSelection.GetInfo();
+            _preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             _doc = doc;
-            _exportProperties = exportProperties;
-            _flipCoords = preferences.flipAxis;
-            _singleBinary = singleBinary;
             _filename = filename;
             _directory = directory;
-            _exportMaterials = preferences.materials;
             _progressBarWindow = progressBarWindow;
 
             #if REVIT2019 || REVIT2020
@@ -245,58 +225,14 @@ namespace Revit_glTF_Exporter
                 rootNode.children.Add(Nodes.CurrentIndex);
             }
 
-            if (_singleBinary)
-            {
-                int bytePosition = 0;
-                int currentBuffer = 0;
-                foreach (var view in BufferViews)
-                {
-                    if (view.buffer == 0)
-                    {
-                        bytePosition += view.byteLength;
-                        continue;
-                    }
-
-                    if (view.buffer != currentBuffer)
-                    {
-                        view.buffer = 0;
-                        view.byteOffset = bytePosition;
-                        bytePosition += view.byteLength;
-                    }
-                }
-
-                glTFBuffer buffer = new glTFBuffer();
-                string bufferUri = String.Concat(Path.GetFileNameWithoutExtension(_filename), ".bin");
-                buffer.uri = bufferUri;
-                buffer.byteLength = bytePosition;
-                Buffers.Clear();
-                Buffers.Add(buffer);
-
-                BinFile.Create(_directory, bufferUri, binaryFileData);
-            }
-            else        
-            {
-                foreach (var bin in binaryFileData)
-                {
-                    using (FileStream f = File.Create(_directory + bin.name))
-                    {
-                        using (BinaryWriter writer = new BinaryWriter(f))
-                        {
-                            foreach (var coord in bin.vertexBuffer)
-                            {
-                                writer.Write((float)coord);
-                            }
-                            foreach (var index in bin.indexBuffer)
-                            {
-                                writer.Write((int)index);
-                            }
-                        }
-                    }
-                }
-            }
+            Binaries.Save(_preferences.singleBinary, BufferViews, _filename, Buffers, 
+                _directory, binaryFileData);
 
             GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List, 
                 Buffers, BufferViews, Accessors, _filename);
+
+            Compression.Run(_filename, _preferences.compression);
+
         }
 
         /// <summary>
@@ -323,7 +259,7 @@ namespace Revit_glTF_Exporter
 
             newNode.name = Util.ElementDescription(_element);
 
-            if (_exportProperties)
+            if (_preferences.exportProperties)
             {
                 // get the extras for this element
                 glTFExtras extras = new glTFExtras();
@@ -357,7 +293,7 @@ namespace Revit_glTF_Exporter
         /// <param name="node"></param>
         public void OnMaterial(MaterialNode node)
         {
-            if (!_exportMaterials)
+            if (!_preferences.materials)
             {
                 return;
             }
@@ -437,17 +373,17 @@ namespace Revit_glTF_Exporter
 
                 #if REVIT2019 || REVIT2020
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _displayUnitType));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _displayUnitType));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _displayUnitType));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _displayUnitType));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _displayUnitType));
 
-                #else
+#else
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords, _forgeTypeId));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords, _forgeTypeId));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _flipCoords, _forgeTypeId));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _forgeTypeId));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _forgeTypeId));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _forgeTypeId));
 
-                #endif
+#endif
 
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
@@ -511,7 +447,7 @@ namespace Revit_glTF_Exporter
 
                 primitive.indices = elementBinary.indexAccessorIndex;
 
-                if (_exportMaterials)
+                if (_preferences.materials)
                 {
                     primitive.material = Materials.GetIndexFromUUID(material_key);
                 }
@@ -728,7 +664,7 @@ namespace Revit_glTF_Exporter
                             glTFMaterial gl_mat = new glTFMaterial();
                             Material material = Util.GetMeshMaterial(_doc, mesh);
 
-                            if (_exportMaterials)
+                            if (_preferences.materials)
                             {
                                 if (material == null)
                                 {
@@ -754,17 +690,17 @@ namespace Revit_glTF_Exporter
 
                                     #if REVIT2019 || REVIT2020
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _displayUnitType));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _displayUnitType));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _displayUnitType));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType));
 
-                                    #else
+#else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId));
 
-                                    #endif
+#endif
 
                                     _currentGeometry.CurrentItem.faces.Add(v1);
                                     _currentGeometry.CurrentItem.faces.Add(v2);

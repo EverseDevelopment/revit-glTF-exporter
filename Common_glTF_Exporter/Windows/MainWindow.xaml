@@ -355,10 +355,34 @@
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <RadioButton Name="NoneCompression_RadioButton" Grid.Column="0" Content="None" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <RadioButton Name="MeshoptCompression_RadioButton" Grid.Column="1" Content="Meshopt" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="66"/>
-                    <RadioButton Name="DRACOCompression_RadioButton" Grid.Column="2" Content="DRACO" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <RadioButton Name="ZIPCompression_RadioButton" Grid.Column="3" Content="ZIP" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton x:Name="compressionNone" 
+                                 Grid.Column="0" 
+                                 Content="None" 
+                                 HorizontalAlignment="Left" 
+                                 Margin="10,0,0,0" 
+                                 VerticalAlignment="Center"
+                                 Click="RadioButtonClick"/>
+                    <RadioButton x:Name="compressionMeshopt" 
+                                 Grid.Column="1" 
+                                 Content="Meshopt" 
+                                 HorizontalAlignment="Left" 
+                                 Margin="10,0,0,0" 
+                                 VerticalAlignment="Center" 
+                                 Width="66"
+                                 Click="RadioButtonClick"/>
+                    <RadioButton x:Name="compressionDraco" 
+                                 Grid.Column="2" 
+                                 Content="DRACO" 
+                                 HorizontalAlignment="Center" 
+                                 VerticalAlignment="Center"
+                                 Click="RadioButtonClick"/>
+                    <RadioButton x:Name="compressionZIP" 
+                                 Grid.Column="3" 
+                                 Content="ZIP" 
+                                 HorizontalAlignment="Left" 
+                                 Margin="10,0,0,0" 
+                                 VerticalAlignment="Center"
+                                 Click="RadioButtonClick"/>
                 </Grid>
                 <Slider Name="Accuracy_Slider" ToolTip="Reducing the accuracy can affect the quality of the exported geometry." Grid.Column="0" Margin="10,531,10,0" Maximum="10" Minimum="0" AutoToolTipPlacement="TopLeft" VerticalAlignment="Top"/>
                 <Rectangle  VerticalAlignment="Top" 
