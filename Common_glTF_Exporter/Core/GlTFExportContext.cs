@@ -420,6 +420,12 @@ namespace Revit_glTF_Exporter
                 _currentGeometry.CurrentItem.faces.Add(v2);
                 _currentGeometry.CurrentItem.faces.Add(v3);
             }
+
+            if (_preferences.normals)
+            {
+                glTFExportUtils.AddNormals(_preferences.flipAxis, transform, polymesh, _currentGeometry.CurrentItem.normals);
+            }
+
         }
 
         /// <summary>
@@ -480,6 +486,11 @@ namespace Revit_glTF_Exporter
                 glTFMeshPrimitive primitive = new glTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
+
+                if (_preferences.normals)
+                {
+                    primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
+                }
 
                 if (_preferences.batchId)
                 {
@@ -629,17 +640,38 @@ namespace Revit_glTF_Exporter
                                     int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType));
                                     int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType));
 
-#else
+                                    #else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
 
-#endif
+                                    #endif
 
                                     _currentGeometry.CurrentItem.faces.Add(v1);
                                     _currentGeometry.CurrentItem.faces.Add(v2);
                                     _currentGeometry.CurrentItem.faces.Add(v3);
+
+                                    if (_preferences.normals)
+                                    {
+                                        XYZ side1 = triangle.get_Vertex(1) - (triangle.get_Vertex(0));
+                                        XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
+                                        XYZ normal = side1.CrossProduct(side2);
+
+                                        normal = normal.Normalize();
+
+                                        if (_preferences.flipAxis)
+                                        {
+                                            normal = normal.FlipCoordinates();
+                                        }
+
+                                        for (int j = 0; j < 3; j++)
+                                        {
+                                            _currentGeometry.CurrentItem.normals.Add(normal.X);
+                                            _currentGeometry.CurrentItem.normals.Add(normal.Y);
+                                            _currentGeometry.CurrentItem.normals.Add(normal.Z);
+                                        }                                     
+                                    }
                                 }
                                 catch { }
                             }

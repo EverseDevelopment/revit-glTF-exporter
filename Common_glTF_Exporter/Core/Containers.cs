@@ -125,49 +125,6 @@ namespace Revit_glTF_Exporter
     /// <summary>
     /// From Jeremy Tammik's RvtVa3c exporter:
     /// https://github.com/va3c/RvtVa3c
-    /// A vertex lookup class to eliminate 
-    /// duplicate vertex definitions.
-    /// </summary>
-    class VertexLookupXyz : Dictionary<XYZ, int>
-    {
-        /// <summary>
-        /// Define equality for Revit XYZ points.
-        /// Very rough tolerance, as used by Revit itself.
-        /// </summary>
-        class XyzEqualityComparer : IEqualityComparer<XYZ>
-        {
-            const double _sixteenthInchInFeet = 1.0 / (16.0 * 12.0);
-
-            public bool Equals(XYZ p, XYZ q)
-            {
-                return p.IsAlmostEqualTo(q, _sixteenthInchInFeet);
-            }
-
-            public int GetHashCode(XYZ p)
-            {
-                return Util.PointString(p).GetHashCode();
-            }
-        }
-
-        public VertexLookupXyz() : base(new XyzEqualityComparer())
-        {
-        }
-
-        /// <summary>
-        /// Return the index of the given vertex,
-        /// adding a new entry if required.
-        /// </summary>
-        public int AddVertex(XYZ p)
-        {
-            return ContainsKey(p)
-              ? this[p]
-              : this[p] = Count;
-        }
-    }
-
-    /// <summary>
-    /// From Jeremy Tammik's RvtVa3c exporter:
-    /// https://github.com/va3c/RvtVa3c
     /// An integer-based 3D point class.
     /// </summary>
     class PointInt : IComparable<PointInt>
@@ -175,37 +132,6 @@ namespace Revit_glTF_Exporter
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
-
-        /// <summary>
-        /// Consider a Revit length zero 
-        /// if is smaller than this.
-        /// </summary>
-        const double _eps = 1.0e-9;
-
-        /// <summary>
-        /// Conversion factor from feet to millimetres.
-        /// </summary>
-        const double _feet_to_mm = 25.4 * 12;
-
-        /// <summary>
-        /// Conversion a given length value 
-        /// from feet to millimetre.
-        /// </summary>
-        static long ConvertFeetToMillimetres(double d)
-        {
-            if (0 < d)
-            {
-                return _eps > d
-                  ? 0
-                  : (long)(_feet_to_mm * d + 0.5);
-            }
-            else
-            {
-                return _eps > -d
-                  ? 0
-                  : (long)(_feet_to_mm * d - 0.5);
-            }
-        }
 
         public PointInt(XYZ p, bool switch_coordinates,
 
@@ -283,11 +209,6 @@ namespace Revit_glTF_Exporter
                   + "," + p.Z.ToString())
                   .GetHashCode();
             }
-        }
-
-        public VertexLookupInt() : base(new PointIntEqualityComparer())
-        {
-
         }
 
         /// <summary>

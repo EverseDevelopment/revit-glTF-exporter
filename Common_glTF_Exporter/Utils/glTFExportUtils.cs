@@ -49,6 +49,15 @@ namespace Common_glTF_Exporter.Utils
                 }
             }
 
+            if (exportNormals)
+            {
+                foreach (var normal in geomData.normals)
+                {
+                    float vFloat = Convert.ToSingle(normal);
+                    bufferData.normalBuffer.Add(vFloat);
+                }
+            }
+
             #endregion
 
             #region Max and Min
@@ -64,6 +73,13 @@ namespace Common_glTF_Exporter.Utils
             if (exportBatchId)
             {
                 batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
+            }
+
+            //Get max and min for normal data
+            float[] normalMinMax = default;
+            if (exportNormals)
+            {
+                normalMinMax = Util.GetVec3MinMax(bufferData.normalBuffer);
             }
 
             #endregion
@@ -103,6 +119,41 @@ namespace Common_glTF_Exporter.Utils
 
             #endregion
 
+            #region Normals 
+
+            if (exportNormals)
+            {
+                // Add a normals (vec3) buffer view
+                int elementsPerNormal = 3;
+                int bytesPerNormalElement = 4;
+                int bytesPerNormal = elementsPerNormal * bytesPerNormalElement;
+                int numVec3Normals = (geomData.normals.Count) / elementsPerNormal;
+                int sizeOfVec3ViewNormals = numVec3Normals * bytesPerNormal;
+                glTFBufferView vec3ViewNormals = new glTFBufferView();
+                vec3ViewNormals.buffer = bufferIdx;
+                vec3ViewNormals.byteOffset = byteOffset;
+                vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
+                vec3ViewNormals.target = Targets.ELEMENT_ARRAY_BUFFER;
+                bufferViews.Add(vec3ViewNormals);
+                int vec3ViewNormalsIdx = bufferViews.Count - 1;
+
+                //add a normals accessor
+                glTFAccessor normalsAccessor = new glTFAccessor();
+                normalsAccessor.bufferView = vec3ViewNormalsIdx;
+                normalsAccessor.byteOffset = 0;
+                normalsAccessor.componentType = ComponentType.FLOAT;
+                normalsAccessor.count = geomData.normals.Count / elementsPerNormal;
+                normalsAccessor.type = "VEC3";
+                normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
+                normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
+                normalsAccessor.name = "NORMALS";
+                accessors.Add(normalsAccessor);
+                bufferData.normalsAccessorIndex = accessors.Count - 1;
+                byteOffset += vec3ViewNormals.byteLength;
+            }
+
+            #endregion
+
             #region BatchId
 
             if (exportBatchId)
@@ -123,8 +174,8 @@ namespace Common_glTF_Exporter.Utils
                 batchIdAccessor.componentType = ComponentType.FLOAT;
                 batchIdAccessor.count = geomData.vertices.Count / elementsPerVertex;
                 batchIdAccessor.type = "VEC3";
-                //batchIdAccessor.max = new List<float>() { batchIdMinMax[1], batchIdMinMax[3], batchIdMinMax[5] };
-                //batchIdAccessor.min = new List<float>() { batchIdMinMax[0], batchIdMinMax[2], batchIdMinMax[4] };
+                batchIdAccessor.max = new List<float>() { batchIdMinMax[1], batchIdMinMax[3], batchIdMinMax[5] };
+                batchIdAccessor.min = new List<float>() { batchIdMinMax[0], batchIdMinMax[2], batchIdMinMax[4] };
                 batchIdAccessor.name = "BATCH_ID";
                 accessors.Add(batchIdAccessor);
                 bufferData.batchIdAccessorIndex = accessors.Count - 1;
@@ -154,11 +205,10 @@ namespace Common_glTF_Exporter.Utils
             faceAccessor.bufferView = facesViewIdx;
             faceAccessor.byteOffset = 0;
             faceAccessor.componentType = ComponentType.UNSIGNED_INT;
-            //faceAccessor.count = numIndexes;
             faceAccessor.count = geomData.faces.Count / elementsPerIndex;
             faceAccessor.type = "SCALAR";
-            //faceAccessor.max = new List<float>() { faceMinMax[1] };
-            //faceAccessor.min = new List<float>() { faceMinMax[0] };
+            faceAccessor.max = new List<float>() { faceMinMax[1] };
+            faceAccessor.min = new List<float>() { faceMinMax[0] };
             faceAccessor.name = "FACE";
             accessors.Add(faceAccessor);
             bufferData.indexAccessorIndex = accessors.Count - 1;
@@ -167,5 +217,75 @@ namespace Common_glTF_Exporter.Utils
 
             return bufferData;
         }
+        public static void AddNormals(bool flipCoordinates, Transform transform, PolymeshTopology polymesh, List<double> normals)
+        {
+            IList<XYZ> polymeshNormals = polymesh.GetNormals();
+
+            switch (polymesh.DistributionOfNormals)
+            {
+                case DistributionOfNormals.AtEachPoint:
+                {
+                    foreach (PolymeshFacet facet in polymesh.GetFacets())
+                    {
+                        XYZ normal1 = transform.OfVector(polymeshNormals[facet.V1]);
+                        XYZ normal2 = transform.OfVector(polymeshNormals[facet.V2]);
+                        XYZ normal3 = transform.OfVector(polymeshNormals[facet.V3]);
+
+                        var newNormal1 = normal1.FlipCoordinates();
+                        var newNormal2 = normal2.FlipCoordinates();
+                        var newNormal3 = normal3.FlipCoordinates();
+
+                        normals.Add(newNormal1.X);
+                        normals.Add(newNormal1.Y);
+                        normals.Add(newNormal1.Z);
+                        normals.Add(newNormal2.X);
+                        normals.Add(newNormal2.Y);
+                        normals.Add(newNormal2.Z);
+                        normals.Add(newNormal3.X);
+                        normals.Add(newNormal3.Y);
+                        normals.Add(newNormal3.Z);
+                    }
+
+                    break;
+                }
+                case DistributionOfNormals.OnePerFace:
+                {
+                    foreach (var facet in polymesh.GetFacets())
+                    {
+                        foreach (var normal in polymesh.GetNormals())
+                        {
+                            var newNormal = normal;
+
+                            if (flipCoordinates)
+                            {
+                                newNormal = normal.FlipCoordinates();
+                            }
+
+                            for (int j = 0; j < 3; j++)
+                            {
+                                normals.Add(newNormal.X);
+                                normals.Add(newNormal.Y);
+                                normals.Add(newNormal.Z);
+                            }
+                        }
+                    }
+                    break;
+                }
+                case DistributionOfNormals.OnEachFacet:
+                {
+                    foreach (XYZ normal in polymeshNormals)
+                    {
+                        var newNormal = transform.OfVector(normal);
+                        newNormal = newNormal.FlipCoordinates();
+
+                        normals.Add(newNormal.X);
+                        normals.Add(newNormal.Y);
+                        normals.Add(newNormal.Z);
+                    }
+                    break;
+                }
+            }
+        }
+
     }
 }

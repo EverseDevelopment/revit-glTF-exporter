@@ -20,7 +20,15 @@ namespace Common_glTF_Exporter.Export
                         foreach (var coord in bin.vertexBuffer)
                         {
                             writer.Write((float)coord);
-                        }                     
+                        }
+
+                        if (exportNormals)
+                        {
+                            foreach (var normal in bin.normalBuffer)
+                            {
+                                writer.Write((float)normal);
+                            }
+                        }
 
                         if (exportBatchId)
                         {
