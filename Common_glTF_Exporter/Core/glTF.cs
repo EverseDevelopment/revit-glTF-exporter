@@ -1,4 +1,4 @@
-﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB;
 using System.Collections.Generic;
 
 namespace Revit_glTF_Exporter
@@ -136,6 +136,9 @@ namespace Revit_glTF_Exporter
     /// </summary>
     public class glTFMaterial
     {
+        public string alphaMode { get; set; }
+
+        public float alphaCutoff { get; set; }
         public string name { get; set; }
         public glTFPBR pbrMetallicRoughness { get; set; }
     }

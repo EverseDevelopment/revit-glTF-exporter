@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
@@ -339,9 +339,10 @@ namespace Revit_glTF_Exporter
                 glTFPBR pbr = new glTFPBR();
                 pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
                 pbr.metallicFactor = 0f;
-                pbr.roughnessFactor = 1f;
+                pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
-
+                gl_mat.alphaMode = opacity != 1? "BLEND": "OPAQUE";
+                gl_mat.alphaCutoff = opacity;
                 Materials.AddOrUpdateCurrent(m.UniqueId, gl_mat);
             }
             else
@@ -356,8 +357,10 @@ namespace Revit_glTF_Exporter
                 gl_mat.name = matName;
                 glTFPBR pbr = new glTFPBR();
                 pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
-                pbr.metallicFactor = 0f;
-                pbr.roughnessFactor = 1f;
+                pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
+                gl_mat.pbrMetallicRoughness = pbr;
+                gl_mat.alphaMode = opacity != 1 ? "BLEND" : "OPAQUE";
+                gl_mat.alphaCutoff = opacity;
                 gl_mat.pbrMetallicRoughness = pbr;
 
                 // prevent duplicated materials
