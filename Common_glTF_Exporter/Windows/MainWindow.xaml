@@ -50,28 +50,50 @@
 
         <Grid Background="Transparent" Margin="9,9,9,9" RenderOptions.BitmapScalingMode="HighQuality">
 
-            <Image Source="/Revit_glTF_Exporter;component/Resources/gltf.png" 
-                   Stretch="Uniform"
-                   RenderOptions.EdgeMode="Aliased"
-                   RenderOptions.BitmapScalingMode="HighQuality"
-                   Margin="6,-1,266,0" Height="70" VerticalAlignment="Top" />
-
             <Button 
                     Style="{DynamicResource CloseButtonStyle}" 
-                    Name="TtitleButton" 
+                    Name="TitleButton" 
                     Foreground="Black" 
                     BorderThickness="0" 
                     Click="Title_Link" 
                     Background="Transparent" 
-                    VerticalAlignment="Top" 
-                    Height="39" 
+                    Height="50" 
                     FontSize="20" 
                     FontWeight="Light" 
-                    Margin="41,-1,139,0">
-                <StackPanel>
-                    <TextBlock>glTF exporter</TextBlock>
-                </StackPanel>
+                    Margin="7,-1,134,0" VerticalAlignment="Top">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" Width="290" Background="Transparent">
+                            <Grid>
+                                <TextBlock Text="glTF Exporter" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left" 
+                                           Margin="47,0,0,0" Height="30" Width="122"></TextBlock>
+                                <Image Name="SlideUp_Image" 
+                                       Visibility="Visible" 
+                                       Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
+                                       HorizontalAlignment="Left"
+                                       Width="47" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="0,-7,0,-2"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
+
             <Button  
                    Style="{DynamicResource CloseButtonStyle}"
                    Name="CloseButton" 
@@ -90,7 +112,8 @@
               Style="{DynamicResource SwitchTypeToggleButton}" 
               Height="16" 
               VerticalAlignment="Top"
-              Click="TrueFalseToggles"></ToggleButton>
+              Click="TrueFalseToggles"
+              ToolTip="Add or remove materiales from export"></ToggleButton>
             <Label
                 Style="{DynamicResource SecondaryLabel}"
                 HorizontalAlignment="Left" 
@@ -104,7 +127,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export ElementId of each Revit element"/>
             <Label
                 Style="{DynamicResource SecondaryLabel}"
                 HorizontalAlignment="Left" 
@@ -166,6 +190,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
                     Margin="10,0,10,10"
@@ -225,7 +250,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export mesh normals"/>
                 <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -239,7 +265,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit levels"/>
                 <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -253,7 +280,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit scene ligths"/>
                 <Label      
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -268,7 +296,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit grids"/>
                 <Label       
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -283,7 +312,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit batchId"/>
                 <Label   
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -298,7 +328,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Export the model bounding box"/>
                 <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -313,7 +344,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Move the center of the model to 0,0,0"/>
                 <Label        
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
@@ -328,7 +360,8 @@
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
-                Click="TrueFalseToggles"/>
+                Click="TrueFalseToggles"
+                ToolTip="Rotate axis of the model 90 degress"/>
                 <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
