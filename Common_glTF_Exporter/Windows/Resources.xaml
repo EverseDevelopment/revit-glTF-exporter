@@ -712,15 +712,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Grid x:Name="MainRow">
-                        <Grid>
+                    <Grid x:Name="MainRow" >
+                        <Grid ShowGridLines="True">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
-                        Path=ActualHeight}" />
-                                <ColumnDefinition />
+                                    Path=ActualHeight}" />
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
-                        Path=ActualHeight}" />
+                                    Path=ActualHeight}" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="{Binding ElementName=TopRow,
+                                    Path=ActualHeight}" />
+                                <ColumnDefinition Width="{Binding ElementName=TopRow,
+                                    Path=ActualHeight}" />
                             </Grid.ColumnDefinitions>
+
                             <Grid.RowDefinitions>
                                 <RowDefinition x:Name="TopRow" />
                                 <RowDefinition />
@@ -729,43 +734,39 @@
                             <Ellipse x:Name="BackgroundEllipse1"
                                  Grid.RowSpan="2"
                                  Grid.Column="0"
-                                 Grid.ColumnSpan="3"
+                                 Grid.ColumnSpan="2"
                                  Width="{Binding ElementName=MainRow,
                                                  Path=ActualHeight}"
                                  Height="{Binding ElementName=MainRow,
                                                   Path=ActualHeight}"
-                                 HorizontalAlignment="Left"
+                                 HorizontalAlignment="Center"
                                  Fill="{StaticResource WindowButtonColorDim}" />
                             <Ellipse x:Name="BackgroundEllipse2"
                                  Grid.Row="0"
                                  Grid.RowSpan="2"
-                                 Grid.Column="0"
-                                 Grid.ColumnSpan="3"
+                                 Grid.Column="3"
+                                 Grid.ColumnSpan="2"
                                  Width="{Binding ElementName=MainRow,
                                                  Path=ActualHeight}"
                                  Height="{Binding ElementName=MainRow,
                                                   Path=ActualHeight}"
-                                 HorizontalAlignment="Right"
-                                 Fill="{StaticResource ToggleButtonFalseBackground}" />
+                                 HorizontalAlignment="Center"
+                                 Fill="{StaticResource WindowButtonColorDim}" />
                             <Border x:Name="BackgroundBorder"
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Grid.Column="1"
+                                Grid.ColumnSpan="3"
                                     Width="{Binding ElementName=MainRow,
-                                                 Path=ActualHeight}"
+                                                 Path=ActualWidth}"
                                 Background="{StaticResource WindowButtonColorDim}" />
-                        </Grid>
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="AnimationWidth" />
-                                <ColumnDefinition Width="{Binding ElementName=MainRow,
-                        Path=ActualHeight}" />
-                            </Grid.ColumnDefinitions>
                             <Border x:Name="AnimationSizeBorder"
-                                Grid.Column="0" />
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"/>
                             <ContentControl Grid.Column="0"
                                         Style="{StaticResource OnContentControl}" />
                         </Grid>
+
                         <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=MainRow,
@@ -776,11 +777,12 @@
                             <ContentControl Grid.Column="1"
                                         Style="{StaticResource OffContentControl}" />
                         </Grid>
+                        
                         <Grid Background="Transparent">
                             <StackPanel HorizontalAlignment="Left"
                                     Orientation="Horizontal">
                                 <Border Width="{Binding ElementName=AnimationSizeBorder,
-                Path=ActualWidth}" />
+                                        Path=ActualWidth}" />
                                 <Ellipse x:Name="ForegroundEllipse"
                                      Width="{Binding ElementName=MainRow,
                                                      Path=ActualHeight}"
@@ -800,36 +802,26 @@
                                 </Ellipse>
                             </StackPanel>
                         </Grid>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="False">
-                            <Setter TargetName="BackgroundBorder" Property="Background"
-                Value="{StaticResource ToggleButtonFalseBackground}" />
-                            <Setter TargetName="ForegroundEllipse" Property="Fill"
-                Value="White" />
-                            <!--<Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName
-                        ="AnimationSizeBorder"
-                        Storyboard.TargetProperty="(Border.Width)"
-                        To="0" Duration="0:0:3"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
 
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName=
-                        "AnimationSizeBorder"
-                        Storyboard.TargetProperty="(Border.Width)"
-                        From="0" Duration="0:0:3"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>-->
-                            <Setter TargetName="AnimationSizeBorder" Property="Width" Value="0" />
+                    </Grid>
+                    
+                    <ControlTemplate.Triggers>
+                        
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="BackgroundBorder" 
+                                    Property="Background"
+                                    Value="{StaticResource ToggleButtonFalseBackground}" />
+                            <Setter TargetName="BackgroundEllipse2" 
+                                    Property="Fill"
+                                    Value="{StaticResource ToggleButtonFalseBackground}" />
+                            <Setter TargetName="ForegroundEllipse" 
+                                    Property="Fill"
+                                    Value="White" />
+                            <Setter TargetName="AnimationSizeBorder" 
+                                    Property="Width" 
+                                    Value="0" />
                         </Trigger>
+                        
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsChecked" Value="True"/>
@@ -839,6 +831,7 @@
                             <Setter TargetName="BackgroundEllipse1" Property="Fill" Value="#ffcfcc"/>
                             <Setter TargetName="BackgroundEllipse2" Property="Fill" Value="#ffcfcc"/>
                         </MultiTrigger>
+                        
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsChecked" Value="False"/>
