@@ -132,8 +132,8 @@ namespace Revit_glTF_Exporter
 
             var template = this.AdvancedSettingsButton.Template;
 
-            var slideUpImage = (Image)template.FindName("SlideUp_Image", this.AdvancedSettingsButton);
-            var slideDownImage = (Image)template.FindName("SlideDown_Image", this.AdvancedSettingsButton);
+            var slideUpImage = (System.Windows.Shapes.Path)template.FindName("SlideUp_Image", this.AdvancedSettingsButton);
+            var slideDownImage = (System.Windows.Shapes.Path)template.FindName("SlideDown_Image", this.AdvancedSettingsButton);
 
             if (slideUpImage.Visibility == System.Windows.Visibility.Visible)
             {

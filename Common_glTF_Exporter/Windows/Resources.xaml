@@ -6,6 +6,7 @@
 
     <!-- Colors of the bar-->
     <SolidColorBrush x:Key="MainGray" Color="#707070"/>
+    <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
     <!--Color of the tittle of the Main form-->
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     <!--Color of the container of minimize, maximize and close buttons-->
@@ -576,7 +577,13 @@
                         </Grid.ColumnDefinitions>
                         <Border x:Name="Border" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Background="White" BorderBrush="Gray" BorderThickness="0,0.8,0.8,0.8" CornerRadius="0 5 5 0"/>
                         <Border x:Name="Boredr1" SnapsToDevicePixels="True" Grid.Column="1"  Margin="1" Background="White" BorderBrush="White" BorderThickness="0,0.8,0.8,0.8" CornerRadius="{StaticResource borderRadius}"/>
-                        <Path x:Name="Arrow" SnapsToDevicePixels="True" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 6 6 L 12 0" Stroke="Gray"/>
+                        <Path x:Name="Arrow" SnapsToDevicePixels="True" 
+                              Grid.Column="1" 
+                              HorizontalAlignment="Center" 
+                              VerticalAlignment="Center" 
+                              Data="M 0 0 L 6 6 L 12 0" 
+                              Stroke="Gray"
+                              StrokeThickness="2"/>
                         <ContentPresenter Grid.Column="0" TextElement.Foreground="Orange"></ContentPresenter>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -584,7 +591,9 @@
                             <Setter TargetName="Arrow" Property="Opacity" Value="0.5"/>
                         </Trigger>
                         <Trigger Property="ToggleButton.IsChecked" Value="True">
-                            <Setter TargetName="Arrow" Property="Data" Value="M 0 6 L 6 0 L 12 6 "/>
+                            <Setter TargetName="Arrow" 
+                                    Property="Data" 
+                                    Value="M 0 6 L 6 0 L 12 6"/>
                             <Setter TargetName="Arrow" Property="Stroke" Value="Gray"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
@@ -643,7 +652,11 @@
                                     Background="White"
                                     BorderBrush="White">
                                     <Border.Effect>
-                                        <DropShadowEffect BlurRadius="5" Color="Gray" Opacity="0.8" ShadowDepth="0" Direction="0"/>
+                                        <DropShadowEffect BlurRadius="5" 
+                                                          Color="Gray" 
+                                                          Opacity="0.8" 
+                                                          ShadowDepth="0" 
+                                                          Direction="0"/>
                                     </Border.Effect>
                                 </Border>
                                 <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
@@ -853,6 +866,48 @@
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
         <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Grid Width="13"
+                                  Height="13">
+                                <Ellipse x:Name="Border"
+                                        StrokeThickness="1"
+                                        Stroke="{StaticResource MainGray}"
+                                        Fill="White"/>
+                                <Ellipse x:Name="CheckMark"
+                                        Fill="White"
+                                         Width="6"
+                                         Height="6">
+                                </Ellipse>
+                            </Grid>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            RecognizesAccessKey="True" />
+                    </BulletDecorator>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Fill" TargetName="Border" Value="{StaticResource SecondaryGray}"/>
+                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource SecondaryGray}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource MainGray}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
     </Style>
-  
+
+
+
+    
 </ResourceDictionary> 

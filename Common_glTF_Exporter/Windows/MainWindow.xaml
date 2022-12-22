@@ -73,11 +73,11 @@
                                        Visibility="Visible" 
                                        Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
-                                       Width="47" 
+                                       Width="37" 
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="0,-7,0,-2"/>
+                                       Margin="0,2,0,8"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers >
@@ -155,26 +155,30 @@
                                 <TextBlock Text="Advanced Settings" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" Margin="2,0,0,0"></TextBlock>
-                                <Image Name="SlideUp_Image" 
-                                       Visibility="Visible" 
-                                       Source="/Revit_glTF_Exporter;component/Resources/SlideDown.png" 
-                                       HorizontalAlignment="Left" 
-                                       Height="10"
-                                       Width="20" 
-                                       SnapsToDevicePixels="True" 
-                                       RenderOptions.BitmapScalingMode="HighQuality" 
-                                       RenderOptions.EdgeMode="Aliased" 
-                                       Margin="260,14,0,15"/>
-                                <Image Name="SlideDown_Image" 
-                                       Visibility="Hidden" 
-                                       Source="/Revit_glTF_Exporter;component/Resources/SlideUp.png" 
-                                       HorizontalAlignment="Left" 
-                                       Height="10" 
-                                       Width="20" 
-                                       SnapsToDevicePixels="True" 
-                                       RenderOptions.BitmapScalingMode="HighQuality" 
-                                       RenderOptions.EdgeMode="Aliased" 
-                                       Margin="260,14,0,15"/>
+                                <Path x:Name="SlideUp_Image"
+                                      Visibility="Visible" 
+                                      SnapsToDevicePixels="True"  
+                                      HorizontalAlignment="Left" 
+                                      VerticalAlignment="Center" 
+                                      Data="M 0 0 L 6 6 L 12 0" 
+                                      Stroke="#F94F46" 
+                                      Margin="265,0,0,0" 
+                                      Height="10" 
+                                      Stretch="Fill" 
+                                      Width="13"
+                                      StrokeThickness="2"/>
+                                <Path x:Name="SlideDown_Image"
+                                      Visibility="Hidden" 
+                                      SnapsToDevicePixels="True"  
+                                      HorizontalAlignment="Left" 
+                                      VerticalAlignment="Center" 
+                                      Data="M 0 6 L 6 0 L 12 6 " 
+                                      Stroke="#F94F46" 
+                                      Margin="265,0,0,0" 
+                                      Height="10" 
+                                      Stretch="Fill" 
+                                      Width="13"
+                                      StrokeThickness="2"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers >
@@ -219,7 +223,7 @@
                        ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
                        SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                        DisplayMemberPath="Label" 
-                       Margin="84,202,17,0" 
+                       Margin="84,202,18,0" 
                        Height="30" 
                        VerticalAlignment="Top"/>
             <Label         

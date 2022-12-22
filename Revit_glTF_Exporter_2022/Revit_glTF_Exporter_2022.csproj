@@ -80,8 +80,6 @@
     <Resource Include="Resources\gltf.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\SlideDown.png" />
-    <Resource Include="Resources\SlideUp.png" />
   </ItemGroup>
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
