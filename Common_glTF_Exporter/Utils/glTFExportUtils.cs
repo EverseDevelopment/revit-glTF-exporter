@@ -133,7 +133,7 @@ namespace Common_glTF_Exporter.Utils
                 vec3ViewNormals.buffer = bufferIdx;
                 vec3ViewNormals.byteOffset = byteOffset;
                 vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
-                vec3ViewNormals.target = Targets.ELEMENT_ARRAY_BUFFER;
+                vec3ViewNormals.target = Targets.ARRAY_BUFFER;
                 bufferViews.Add(vec3ViewNormals);
                 int vec3ViewNormalsIdx = bufferViews.Count - 1;
 
