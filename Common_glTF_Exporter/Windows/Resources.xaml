@@ -713,7 +713,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid x:Name="MainRow" >
-                        <Grid ShowGridLines="True">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
                                     Path=ActualHeight}" />
