@@ -28,15 +28,15 @@ namespace Revit_glTF_Exporter
         private Element _element;
         private ProgressBarWindow _progressBarWindow;
 
-        #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
         private DisplayUnitType _displayUnitType;
 
-        #else
+#else
 
         private ForgeTypeId _forgeTypeId;
 
-        #endif
+#endif
         /// <summary>
         /// The name for the .gltf file.
         /// </summary>
@@ -83,9 +83,8 @@ namespace Revit_glTF_Exporter
         public List<glTFAccessor> Accessors { get; } = new List<glTFAccessor>();
 
         /// <summary>
-        /// Container for the vertex/face/normal information
-        /// that will be serialized into a binary format
-        /// for the final *.bin files.
+        /// Container for the vertex/face/normal information that will be serialized into a binary
+        /// format for the final *.bin files.
         /// </summary>
         public List<glTFBinaryData> binaryFileData { get; } = new List<glTFBinaryData>();
 
@@ -100,15 +99,13 @@ namespace Revit_glTF_Exporter
         private glTFNode rootNode;
 
         /// <summary>
-        /// Stateful, uuid indexable list of intermediate geometries for
-        /// the element currently being processed, keyed by material. This
-        /// is re-initialized on each new element.
+        /// Stateful, uuid indexable list of intermediate geometries for the element currently being
+        /// processed, keyed by material. This is re-initialized on each new element.
         /// </summary>
         private IndexedDictionary<GeometryData> _currentGeometry;
         /// <summary>
-        /// Stateful, uuid indexable list of intermediate vertex data for
-        /// the element currently being processed, keyed by material. This
-        /// is re-initialized on each new element.
+        /// Stateful, uuid indexable list of intermediate vertex data for the element currently
+        /// being processed, keyed by material. This is re-initialized on each new element.
         /// </summary>
         private IndexedDictionary<VertexLookupInt> _currentVertices;
 
@@ -117,39 +114,37 @@ namespace Revit_glTF_Exporter
 
         public glTFExportContext(Document doc, string filename, string directory,
 
-            #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType,
 
-            #else 
+#else
 
             ForgeTypeId forgeTypeId,
 
-            #endif
+#endif
 
             ProgressBarWindow progressBarWindow)
         {
-
             _preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             _doc = doc;
             _filename = filename;
             _directory = directory;
             _progressBarWindow = progressBarWindow;
 
-            #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
             _displayUnitType = displayUnitType;
 
-            #else
+#else
 
-            _forgeTypeId = forgeTypeId;        
+            _forgeTypeId = forgeTypeId;
 
-            #endif
+#endif
         }
 
         /// <summary>
-        /// Runs once at beginning of export. Sets up the root node
-        /// and scene.
+        /// Runs once at beginning of export. Sets up the root node and scene.
         /// </summary>
         /// <returns></returns>
         public bool Start()
@@ -170,17 +165,16 @@ namespace Revit_glTF_Exporter
         }
 
         /// <summary>
-        /// Runs once at end of export. Serializes the gltf
-        /// properties and wites out the *.gltf and *.bin files.
+        /// Runs once at end of export. Serializes the gltf properties and wites out the *.gltf and
+        /// *.bin files.
         /// </summary>
         public void Finish()
         {
-            // TODO: [RM] Standardize what non glTF spec elements will go into
-            // this "BIM glTF superset" and write a spec for it. Gridlines below
-            // are an example.
+            // TODO: [RM] Standardize what non glTF spec elements will go into this "BIM glTF
+            // superset" and write a spec for it. Gridlines below are an example.
 
-            // Add gridlines as gltf nodes in the format:
-            // Origin {Vec3<double>}, Direction {Vec3<double>}, Length {double}
+            // Add gridlines as gltf nodes in the format: Origin {Vec3<double>}, Direction
+            // {Vec3<double>}, Length {double}
 
             if (_preferences.grids)
             {
@@ -200,7 +194,7 @@ namespace Revit_glTF_Exporter
                     var xtras = new glTFExtras();
                     var grid = new GridParameters();
 
-                    #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
                     grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
@@ -214,7 +208,7 @@ namespace Revit_glTF_Exporter
 
                     grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
 
-                    #else
+#else
 
                     grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
@@ -227,8 +221,8 @@ namespace Revit_glTF_Exporter
                     Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
 
                     grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
-                
-                    #endif
+
+#endif
 
                     xtras.GridParameters = grid;
                     xtras.UniqueId = g.UniqueId;
@@ -243,19 +237,18 @@ namespace Revit_glTF_Exporter
                 }
             }
 
-            Binaries.Save(_preferences.singleBinary, BufferViews, _filename, Buffers, 
+            Binaries.Save(_preferences.singleBinary, BufferViews, _filename, Buffers,
                 _directory, binaryFileData, _preferences.batchId, _preferences.normals);
 
-            GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List, 
+            GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List,
                 Buffers, BufferViews, Accessors, _filename, _preferences.batchId, _preferences.normals);
 
             Compression.Run(_filename, _preferences.compression);
-
         }
 
         /// <summary>
-        /// Runs once for each element, we create a new glTFNode and glTF Mesh
-        /// keyed to the elements uuid, and reset the "_current" variables.
+        /// Runs once for each element, we create a new glTFNode and glTF Mesh keyed to the elements
+        /// uuid, and reset the "_current" variables.
         /// </summary>
         /// <param name="elementId">ElementId of Element being processed</param>
         /// <returns></returns>
@@ -317,9 +310,9 @@ namespace Revit_glTF_Exporter
         }
 
         /// <summary>
-        /// Runs every time, and immediately prior to, a mesh being processed (OnPolymesh).
-        /// It supplies the material for the mesh, and we use this to create a new material
-        /// in our material container, or switch the current material if it already exists.
+        /// Runs every time, and immediately prior to, a mesh being processed (OnPolymesh). It
+        /// supplies the material for the mesh, and we use this to create a new material in our
+        /// material container, or switch the current material if it already exists.
         /// </summary>
         /// <param name="node"></param>
         public void OnMaterial(MaterialNode node)
@@ -353,9 +346,9 @@ namespace Revit_glTF_Exporter
             }
             else
             {
-                // I'm really not sure what situation this gets triggered in?
-                // make your own damn material!
-                // (currently this is equivalent to above until I understand BlinnPhong/PBR conversion better)
+                // I'm really not sure what situation this gets triggered in? make your own damn
+                // material! (currently this is equivalent to above until I understand
+                // BlinnPhong/PBR conversion better)
                 string uuid = Guid.NewGuid().ToString();
 
                 // construct the material
@@ -378,12 +371,11 @@ namespace Revit_glTF_Exporter
             }
         }
 
-
         /// <summary>
-        /// Runs for every polymesh being processed. Typically this is a single face
-        /// of an element's mesh. Here we populate the data into our "_current" variables
-        /// (geometry and vertices) keyed on the element/material combination (this is important
-        /// because within a single element, materials can be changed and repeated in unknown order).
+        /// Runs for every polymesh being processed. Typically this is a single face of an element's
+        /// mesh. Here we populate the data into our "_current" variables (geometry and vertices)
+        /// keyed on the element/material combination (this is important because within a single
+        /// element, materials can be changed and repeated in unknown order).
         /// </summary>
         /// <param name="polymesh"></param>
         public void OnPolymesh(PolymeshTopology polymesh)
@@ -402,7 +394,7 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-                #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
                 int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType));
                 int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _displayUnitType));
@@ -425,14 +417,13 @@ namespace Revit_glTF_Exporter
             {
                 glTFExportUtils.AddNormals(_preferences.flipAxis, transform, polymesh, _currentGeometry.CurrentItem.normals);
             }
-
         }
 
         /// <summary>
         /// Runs at the end of an element being processed, after all other calls for that element.
         /// Here we compile all the "_current" variables (geometry and vertices) onto glTF buffers.
-        /// We do this at OnElementEnd because it signals no more meshes or materials are
-        /// coming for this element.
+        /// We do this at OnElementEnd because it signals no more meshes or materials are coming for
+        /// this element.
         /// </summary>
         /// <param name="elementId"></param>
         public void OnElementEnd(ElementId elementId)
@@ -451,7 +442,8 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives on mesh)
+            // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives
+            // on mesh)
             glTFMesh newMesh = new glTFMesh();
             newMesh.name = _element.Name;
             newMesh.primitives = new List<glTFMeshPrimitive>();
@@ -481,7 +473,7 @@ namespace Revit_glTF_Exporter
 
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split('_')[1];           
+                string material_key = kvp.Key.Split('_')[1];
 
                 glTFMeshPrimitive primitive = new glTFMeshPrimitive();
 
@@ -570,8 +562,8 @@ namespace Revit_glTF_Exporter
             _transformStack.Pop();
         }
 
-        public RenderNodeAction 
-            
+        public RenderNodeAction
+
             Begin(FaceNode node)
         {
             return RenderNodeAction.Proceed;
@@ -579,8 +571,7 @@ namespace Revit_glTF_Exporter
 
         public void OnFaceEnd(FaceNode node)
         {
-            // This method is invoked only if the 
-            // custom exporter was set to include faces.
+            // This method is invoked only if the custom exporter was set to include faces.
         }
 
         public void OnRPC(RPCNode node)
@@ -634,19 +625,19 @@ namespace Revit_glTF_Exporter
                                     if (triangle == null)
                                         continue;
 
-                                    #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
                                     int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType));
                                     int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType));
                                     int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType));
 
-                                    #else
+#else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _flipCoords, _forgeTypeId));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _flipCoords, _forgeTypeId));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _flipCoords, _forgeTypeId));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId));
 
-                                    #endif
+#endif
 
                                     _currentGeometry.CurrentItem.faces.Add(v1);
                                     _currentGeometry.CurrentItem.faces.Add(v2);
@@ -670,7 +661,7 @@ namespace Revit_glTF_Exporter
                                             _currentGeometry.CurrentItem.normals.Add(normal.X);
                                             _currentGeometry.CurrentItem.normals.Add(normal.Y);
                                             _currentGeometry.CurrentItem.normals.Add(normal.Z);
-                                        }                                     
+                                        }
                                     }
                                 }
                                 catch { }
