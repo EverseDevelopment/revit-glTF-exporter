@@ -45,7 +45,8 @@ namespace Common_glTF_Exporter.Export
                 serializedModel = serializedModel.Replace(",\"NORMAL\":0", "");
             }
 
-            File.WriteAllText(filename, serializedModel);
+            string gltfName = String.Concat(filename, ".gltf");
+            File.WriteAllText(gltfName, serializedModel);
         }
     }
 }

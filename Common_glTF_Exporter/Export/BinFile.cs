@@ -9,9 +9,9 @@ namespace Common_glTF_Exporter.Export
 {
     public static class BinFile
     {
-        public static void Create(string directory, string filename, List<glTFBinaryData> binaryFileData, bool exportNormals, bool exportBatchId)
+        public static void Create(string filename, List<glTFBinaryData> binaryFileData, bool exportNormals, bool exportBatchId)
         {
-            using (FileStream f = File.Create(directory + filename))
+            using (FileStream f = File.Create(filename))
             {
                 using (BinaryWriter writer = new BinaryWriter(f))
                 {
