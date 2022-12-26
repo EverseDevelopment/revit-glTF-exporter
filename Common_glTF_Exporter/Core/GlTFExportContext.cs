@@ -56,7 +56,7 @@ namespace Revit_glTF_Exporter
         /// <summary>
         /// Stateful, uuid indexable list for all materials in the export.
         /// </summary>
-        public IndexedDictionary<glTFMaterial> Materials { get; } = new IndexedDictionary<glTFMaterial>();
+        public IndexedDictionary<glTFMaterial> Materials = new IndexedDictionary<glTFMaterial>();
         /// <summary>
         /// List of all buffers referencing the binary file data.
         /// </summary>
@@ -303,61 +303,10 @@ namespace Revit_glTF_Exporter
         /// <param name="node"></param>
         public void OnMaterial(MaterialNode node)
         {
-            if (!_preferences.materials)
+            if (_preferences.materials)
             {
-                return;
-            }
-
-            string matName;
-            ElementId id = node.MaterialId;
-            glTFMaterial gl_mat = new glTFMaterial();
-            float opacity = 1 - (float)node.Transparency;
-            glTFMaterial current_gl_mat = null;
-
-            if (id != ElementId.InvalidElementId)
-            {
-                // construct a material from the node
-                Element m = _doc.GetElement(node.MaterialId);
-                matName = m.Name;
-
-                // construct the material
-                gl_mat.name = matName;
-                glTFPBR pbr = new glTFPBR();
-                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
-                pbr.metallicFactor = 0f;
-                pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
-                gl_mat.pbrMetallicRoughness = pbr;
-                gl_mat.alphaMode = opacity != 1? "BLEND": "OPAQUE";
-                gl_mat.alphaCutoff = opacity;
-                Materials.AddOrUpdateCurrent(m.UniqueId, gl_mat);
-            }
-            else
-            {
-                // I'm really not sure what situation this gets triggered in? make your own damn
-                // material! (currently this is equivalent to above until I understand
-                // BlinnPhong/PBR conversion better)
-                string uuid = Guid.NewGuid().ToString();
-
-                // construct the material
-                matName = string.Format("MaterialNode_{0}_{1}", Util.ColorToInt(node.Color), Util.RealString(opacity * 100));
-                gl_mat.name = matName;
-                glTFPBR pbr = new glTFPBR();
-                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
-                pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
-                gl_mat.pbrMetallicRoughness = pbr;
-                gl_mat.alphaMode = opacity != 1 ? "BLEND" : "OPAQUE";
-                gl_mat.alphaCutoff = opacity;
-                gl_mat.pbrMetallicRoughness = pbr;
-
-                // prevent duplicated materials
-                current_gl_mat = Materials.List
-                    .FirstOrDefault(x => x.name == matName);
-
-                if (current_gl_mat == null)
-                {
-                    Materials.AddOrUpdateCurrent(uuid, gl_mat);
-                }
-            }
+                RevitMaterials.Export(node, _doc, ref Materials);
+            }            
         }
 
         /// <summary>
