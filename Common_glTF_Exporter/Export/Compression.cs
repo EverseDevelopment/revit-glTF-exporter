@@ -6,17 +6,17 @@ namespace Common_glTF_Exporter.Export
 {
     public class Compression
     {
-        public static void Run(string filename, CompressionEnum compression)
+        public static void Run(string filepath, CompressionEnum compression)
         {
             if (compression.Equals(CompressionEnum.ZIP))
             {
-                string bufferUri = filename.Replace("gltf", "bin");
-                string zipName = filename.Replace("gltf", "zip");
-                List<string> files = new List<string> { filename, bufferUri };
+                string gltfFile = string.Concat(filepath, "gltf");
+                string binFile = string.Concat(filepath, "bin");
+                string zipFile = string.Concat(filepath, "zip");
+                List<string> files = new List<string> { gltfFile, binFile };
 
-                ZIP.compress(zipName, files);
-                File.Delete(filename);
-                File.Delete(filename.Replace("gltf", "bin"));
+                ZIP.compress(zipFile, files);
+                files.ForEach(x => File.Delete(x));
             }
         }
     }

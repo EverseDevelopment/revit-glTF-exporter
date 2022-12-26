@@ -22,6 +22,8 @@ namespace Common_glTF_Exporter.Windows.MainWindow
         public string units { get; set; }
         public CompressionEnum compression { get; set; }
         public string digits { get; set; }
+        public string path { get; set; }
+        public string fileName { get; set; }
     }
     public enum CompressionEnum
     {

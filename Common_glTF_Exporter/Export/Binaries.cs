@@ -33,13 +33,14 @@ namespace Common_glTF_Exporter.Export
                 }
 
                 glTFBuffer buffer = new glTFBuffer();
-                string bufferUri = String.Concat(Path.GetFileNameWithoutExtension(filename), ".bin");
+                string bufferUri = String.Concat(filename, ".bin");
                 buffer.uri = bufferUri;
                 buffer.byteLength = bytePosition;
                 buffers.Clear();
                 buffers.Add(buffer);
 
-                BinFile.Create(directory, bufferUri, binaryFileData, exportNormals, exportBatchId);
+                string fileDirectory = String.Concat(directory, ".bin");
+                BinFile.Create(fileDirectory, binaryFileData, exportNormals, exportBatchId);
             }
             else
             {

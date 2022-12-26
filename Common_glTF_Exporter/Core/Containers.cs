@@ -23,7 +23,7 @@ namespace Revit_glTF_Exporter
     /// that is also addressable by a unique ID.
     /// </summary>
     /// <typeparam name="T">The type of item contained.</typeparam>
-    class IndexedDictionary<T>
+    public class IndexedDictionary<T>
     {
         private Dictionary<string, int> _dict = new Dictionary<string, int>();
         public List<T> List { get; } = new List<T>();

@@ -30,7 +30,7 @@ namespace Revit_glTF_Exporter
                 Application app = uiApp.Application;
                 Document doc = uiDoc.Document;
 
-                View3D view = doc.ActiveView as View3D;
+                View view = doc.ActiveView;
 
                 MainWindow mainWindow = new MainWindow(doc, view);
                 mainWindow.ShowDialog();

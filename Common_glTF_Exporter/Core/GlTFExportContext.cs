@@ -6,10 +6,6 @@ using Grid = Autodesk.Revit.DB.Grid;
 using Transform = Autodesk.Revit.DB.Transform;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
-using Autodesk.Revit.UI;
-using System.Numerics;
-using Autodesk.Revit.DB.DirectContext3D;
-using System.Windows.Media;
 using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Revit_glTF_Exporter
@@ -28,23 +24,15 @@ namespace Revit_glTF_Exporter
         private Element _element;
         private ProgressBarWindow _progressBarWindow;
 
-#if REVIT2019 || REVIT2020
+        #if REVIT2019 || REVIT2020
 
         private DisplayUnitType _displayUnitType;
 
-#else
+        #else
 
         private ForgeTypeId _forgeTypeId;
 
-#endif
-        /// <summary>
-        /// The name for the .gltf file.
-        /// </summary>
-        private string _filename;
-        /// <summary>
-        /// The directory for the .bin files.
-        /// </summary>
-        private string _directory;
+        #endif
 
         private Preferences _preferences;
         /**
@@ -112,24 +100,22 @@ namespace Revit_glTF_Exporter
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
 
-        public glTFExportContext(Document doc, string filename, string directory,
+        public glTFExportContext(Document doc,
 
-#if REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             DisplayUnitType displayUnitType,
 
-#else
+            #else
 
             ForgeTypeId forgeTypeId,
 
-#endif
+            #endif
 
             ProgressBarWindow progressBarWindow)
         {
             _preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             _doc = doc;
-            _filename = filename;
-            _directory = directory;
             _progressBarWindow = progressBarWindow;
 
 #if REVIT2019 || REVIT2020
@@ -194,7 +180,7 @@ namespace Revit_glTF_Exporter
                     var xtras = new glTFExtras();
                     var grid = new GridParameters();
 
-#if REVIT2019 || REVIT2020
+                    #if REVIT2019 || REVIT2020
 
                     grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
@@ -208,7 +194,7 @@ namespace Revit_glTF_Exporter
 
                     grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
 
-#else
+                    #else
 
                     grid.origin = new List<double>() {
                     Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
@@ -222,7 +208,7 @@ namespace Revit_glTF_Exporter
 
                     grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
 
-#endif
+                    #endif
 
                     xtras.GridParameters = grid;
                     xtras.UniqueId = g.UniqueId;
@@ -237,13 +223,13 @@ namespace Revit_glTF_Exporter
                 }
             }
 
-            Binaries.Save(_preferences.singleBinary, BufferViews, _filename, Buffers,
-                _directory, binaryFileData, _preferences.batchId, _preferences.normals);
+            Binaries.Save(_preferences.singleBinary, BufferViews, _preferences.fileName, Buffers,
+                _preferences.path, binaryFileData, _preferences.batchId, _preferences.normals);
 
             GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List,
-                Buffers, BufferViews, Accessors, _filename, _preferences.batchId, _preferences.normals);
+                Buffers, BufferViews, Accessors, _preferences.path, _preferences.batchId, _preferences.normals);
 
-            Compression.Run(_filename, _preferences.compression);
+            Compression.Run(_preferences.path, _preferences.compression);
         }
 
         /// <summary>

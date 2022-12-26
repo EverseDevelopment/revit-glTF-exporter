@@ -8,6 +8,7 @@ using Common_glTF_Exporter.Utils;
 using System.IO;
 using System.Threading;
 using Common_glTF_Exporter.Windows.MainWindow;
+using Settings = Common_glTF_Exporter.Windows.MainWindow.Settings;
 
 namespace Revit_glTF_Exporter
 {
@@ -18,7 +19,7 @@ namespace Revit_glTF_Exporter
     public partial class MainWindow : Window
     {
         Document _doc;
-        View3D _view;
+        View _view;
         string _fileName;
         string _viewName;
         private UnitsViewModel _unitsViewModel;
@@ -36,7 +37,7 @@ namespace Revit_glTF_Exporter
 
         #endif
 
-        public MainWindow(Document doc, View3D view)
+        public MainWindow(Document doc, View view)
         {
             _unitsViewModel = new UnitsViewModel();
             this.DataContext = _unitsViewModel;
@@ -61,35 +62,42 @@ namespace Revit_glTF_Exporter
             this._doc = doc;
             this._view = view;
             this._fileName = _doc.Title;
-            this._viewName = _view.Name;
+            this._viewName = view.Name;
 
             UpdateForm.Run(MainWindow_Border);
         }
 
         private void OnExportView(object sender, RoutedEventArgs e)
         {
-            if (_view == null)
+            if (_view.GetType().Name != "View3D")
             {
+                this.Hide();
                 TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
                 this.Close();
+                return;
             }
+            this.Show();
+            View3D exportView = _view as View3D;
 
-            string fileName = string.Concat(_fileName, " - ", _viewName);
+            string fileName = SettingsConfig.GetValue("fileName");                                                                                         
             bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
 
             if (dialogResult == true)
             {
                 string filename = fileName;
-                string directory = System.IO.Path.GetDirectoryName(filename) + "\\";
+                string directory = filename.Replace(".gltf", "");
+                string nameOnly = System.IO.Path.GetFileNameWithoutExtension(filename);
 
-                ExportView3D(_view, filename, directory, false);
+                SettingsConfig.Set("path", directory);
+                SettingsConfig.Set("fileName", nameOnly);
+
+                ExportView3D(exportView, false);
             }
         }
 
-        public void ExportView3D(View3D view3d, string filename, string directory, bool mode)
+        public void ExportView3D(View3D view3d, bool mode)
         {
             Document doc = view3d.Document;
-            string directoryPath = Path.Combine(directory + "\\");
 
             ProgressBarWindow progressBar = new ProgressBarWindow();
             progressBar.ViewModel.ProgressBarValue = 0;
@@ -103,14 +111,14 @@ namespace Revit_glTF_Exporter
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename, directoryPath, _userDefinedDisplayUnitType, progressBar);
+            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedDisplayUnitType, progressBar);
 
             #else
 
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, filename , directoryPath, _userDefinedUnitTypeId, progressBar);
+            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedUnitTypeId, progressBar);
             
             #endif
 
