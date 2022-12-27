@@ -132,19 +132,22 @@ namespace Revit_glTF_Exporter
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
+        private double _boundingBoxMidPointX { get; set; }
+        private double _boundingBoxMidPointY { get; set; }
+        private double _boundingBoxMidPointZ { get; set; }
 
         public PointInt(XYZ p, bool switch_coordinates,
 
             #if REVIT2019 || REVIT2020
 
-            DisplayUnitType displayUnitType
+            DisplayUnitType displayUnitType,
 
             #else
 
-            ForgeTypeId forgeTypeId
+            ForgeTypeId forgeTypeId,
 
             #endif
-            )
+            bool relocateTo0, XYZ pointToRelocate)
         {
             #if REVIT2019 || REVIT2020
 
@@ -152,13 +155,36 @@ namespace Revit_glTF_Exporter
             Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType);
             Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType);
 
+            if (relocateTo0)
+            {
+                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, displayUnitType);
+                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, displayUnitType);
+                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, displayUnitType);
+            }
+
             #else
 
             X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
             Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
             Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
 
+            if (relocateTo0)
+	        {
+                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
+                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
+                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
+	        }
+
             #endif
+
+            if (relocateTo0)
+            {
+                pointToRelocate = new XYZ(_boundingBoxMidPointX, _boundingBoxMidPointY, _boundingBoxMidPointZ);
+
+                X -= pointToRelocate.X;
+                Y -= pointToRelocate.Y;
+                Z -= pointToRelocate.Z;
+            }
 
             if (switch_coordinates)
             {

@@ -9,6 +9,35 @@ namespace Revit_glTF_Exporter
 {
     class Util
     {
+        public static BoundingBoxXYZ GetElementsBoundingBox(View view, List<Element> elements)
+        {
+            // Get the bounding box of the visible elements
+            List<XYZ> maxPoints = new List<XYZ>();
+            List<XYZ> minPoints = new List<XYZ>();
+
+            foreach (Element element in elements)
+            {
+                BoundingBoxXYZ elementBoundingBox = element.get_BoundingBox(view);
+
+                if (elementBoundingBox == null)
+                    continue;
+
+                if (element.CanBeHidden(view) && element.CanBeLocked())
+                {
+                    maxPoints.Add(elementBoundingBox.Max);
+                    minPoints.Add(elementBoundingBox.Min);
+                }
+            }
+
+            XYZ maxPoint = new XYZ(maxPoints.Max(x => x.X), maxPoints.Max(x => x.Y), maxPoints.Max(x => x.Z));
+            XYZ minPoint = new XYZ(minPoints.Min(x => x.X), minPoints.Min(x => x.Y), minPoints.Min(x => x.Z));
+            BoundingBoxXYZ newBB = new BoundingBoxXYZ();
+            newBB.Max = maxPoint;
+            newBB.Min = minPoint;
+
+            return newBB;
+        }
+
         public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
         {
             // search for an already existing material

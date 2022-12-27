@@ -9,6 +9,8 @@ using System.IO;
 using System.Threading;
 using Common_glTF_Exporter.Windows.MainWindow;
 using Settings = Common_glTF_Exporter.Windows.MainWindow.Settings;
+using System.Windows.Markup;
+using System.Linq;
 
 namespace Revit_glTF_Exporter
 {
@@ -23,6 +25,8 @@ namespace Revit_glTF_Exporter
         string _fileName;
         string _viewName;
         private UnitsViewModel _unitsViewModel;
+        XYZ _pointToRelocate = new XYZ(0, 0, 0);
+
         public static MainWindow MainView { get; set; }
 
         #if REVIT2019 || REVIT2020
@@ -99,32 +103,44 @@ namespace Revit_glTF_Exporter
         {
             Document doc = view3d.Document;
 
+            var elementsOnActiveView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
+
+            int elementsOnActiveViewCount = elementsOnActiveView.Count;
+
+            Preferences preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
+
+            if (preferences.relocateTo0)
+            {
+                var bb = Util.GetElementsBoundingBox(view3d, elementsOnActiveView);
+                _pointToRelocate = new XYZ((bb.Min.X / 2) + (bb.Max.X / 2), (bb.Min.Y / 2) + (bb.Max.Y / 2), (bb.Min.Z / 2) + (bb.Max.Z / 2));
+            }
+
             ProgressBarWindow progressBar = new ProgressBarWindow();
             progressBar.ViewModel.ProgressBarValue = 0;
             progressBar.ViewModel.Message = "Converting elements...";
-            progressBar.ViewModel.ProgressBarMax = Collectors.AllElementsByView(doc, doc.ActiveView).Count;
+            progressBar.ViewModel.ProgressBarMax = elementsOnActiveViewCount;
             progressBar.Show();
             ProgressBarWindow.MainView.Topmost = true;
 
-            #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedDisplayUnitType, progressBar);
+            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedDisplayUnitType, progressBar, _pointToRelocate, _view);
 
-            #else
+#else
 
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
 
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedUnitTypeId, progressBar);
-            
-            #endif
+            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedUnitTypeId, progressBar, _pointToRelocate, _view);
+
+#endif
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
-                
+
             exporter.ShouldStopOnError = false;
 
             exporter.Export(view3d);

@@ -17,11 +17,13 @@ namespace Common_glTF_Exporter.Utils
                 .Cast<Material>()
                 .FirstOrDefault();
         }
-        public static List<Element> AllElementsByView(Document doc, View view)
+        public static List<Element> AllVisibleElementsByView(Document doc, View view)
         {
             return new FilteredElementCollector(doc, view.Id)
                .WhereElementIsNotElementType()
                .ToElements()
+               .Cast<Element>()
+               .Where(e => e.CanBeHidden(doc.ActiveView) && e.CanBeLocked())
                .ToList();
         }
     }

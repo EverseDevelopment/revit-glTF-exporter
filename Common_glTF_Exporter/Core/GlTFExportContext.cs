@@ -7,6 +7,7 @@ using Transform = Autodesk.Revit.DB.Transform;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
+using Autodesk.Revit.UI;
 
 namespace Revit_glTF_Exporter
 {
@@ -23,8 +24,11 @@ namespace Revit_glTF_Exporter
         private bool _skipElementFlag = false;
         private Element _element;
         private ProgressBarWindow _progressBarWindow;
+        private XYZ _pointToRelocate = new XYZ(0, 0, 0);
+        private View _view;
 
-        #if REVIT2019 || REVIT2020
+
+#if REVIT2019 || REVIT2020
 
         private DisplayUnitType _displayUnitType;
 
@@ -112,21 +116,24 @@ namespace Revit_glTF_Exporter
 
             #endif
 
-            ProgressBarWindow progressBarWindow)
+            ProgressBarWindow progressBarWindow, XYZ pointToRelocate, View view)
         {
             _preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             _doc = doc;
             _progressBarWindow = progressBarWindow;
+            _pointToRelocate = pointToRelocate;
+            _view = view;
 
-#if REVIT2019 || REVIT2020
+
+            #if REVIT2019 || REVIT2020
 
             _displayUnitType = displayUnitType;
 
-#else
+            #else
 
             _forgeTypeId = forgeTypeId;
 
-#endif
+            #endif
         }
 
         /// <summary>
@@ -244,7 +251,7 @@ namespace Revit_glTF_Exporter
 
             _element = _doc.GetElement(elementId);
 
-            if (_element.Category.Name == "Cameras" ||
+            if (!_element.CanBeLocked() || !_element.CanBeHidden(_view) ||
                 (_element is Level && !_preferences.levels))
             {
                 return RenderNodeAction.Skip;
@@ -334,15 +341,15 @@ namespace Revit_glTF_Exporter
             {
 #if REVIT2019 || REVIT2020
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _displayUnitType));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _displayUnitType));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
 
 #else
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _forgeTypeId));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _forgeTypeId));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _forgeTypeId));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
 
 #endif
 
@@ -366,7 +373,7 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId"></param>
         public void OnElementEnd(ElementId elementId)
         {
-            if (_element.Category.Name == "Cameras" ||
+            if (!_element.CanBeLocked() || !_element.CanBeHidden(_view) ||
             _currentVertices == null ||
             _currentVertices.List.Count == 0)
             {
@@ -565,15 +572,15 @@ namespace Revit_glTF_Exporter
 
 #if REVIT2019 || REVIT2020
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
 
 #else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
 
 #endif
 
