@@ -41,7 +41,7 @@ namespace Common_glTF_Exporter.Export
 
             //TODO: Implement MASK alphamode for elements like leaves or wire fences
             gl_mat.alphaMode = opacity != 1 ? "BLEND" : "OPAQUE";
-            gl_mat.alphaCutoff = opacity;
+            gl_mat.alphaCutoff = null;
         }
     }
 }
