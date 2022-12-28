@@ -1,4 +1,5 @@
-﻿using Common_glTF_Exporter.Utils;
+﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Utils;
 using System;
 using System.Reflection;
 
@@ -26,7 +27,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 if (property.PropertyType == typeof(CompressionEnum))
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();
-                    var tempvalue = Enum.TryParse(result, out CompressionEnum myStatus);
+                    Enum.TryParse(result, out CompressionEnum myStatus);
                     preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
                 }
 
@@ -34,6 +35,24 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 {
                     var tempvalue = SettingsConfig.GetValue(propertyName).ToString();
                     preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
+                }
+
+                if (
+                #if REVIT2019 || REVIT2020
+                property.PropertyType == typeof(DisplayUnitType)
+                #else
+                property.PropertyType == typeof(ForgeTypeId)
+                #endif
+                 )
+                {
+                    string result = SettingsConfig.GetValue(propertyName).ToString();
+
+                    #if REVIT2019 || REVIT2020
+                    Enum.TryParse(result, out DisplayUnitType myStatus);
+                    #else
+                    ForgeTypeId myStatus = new ForgeTypeId(result);
+                    #endif
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
                 }
             }
 

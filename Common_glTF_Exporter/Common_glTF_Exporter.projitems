@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\Grids.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Materials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />

@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Grid = Autodesk.Revit.DB.Grid;
 using Transform = Autodesk.Revit.DB.Transform;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
@@ -53,7 +51,7 @@ namespace Revit_glTF_Exporter
         /// <summary>
         /// Stateful, uuid indexable list for all nodes in the export.
         /// </summary>
-        public IndexedDictionary<glTFNode> Nodes { get; } = new IndexedDictionary<glTFNode>();
+        public IndexedDictionary<glTFNode> Nodes = new IndexedDictionary<glTFNode>();
         /// <summary>
         /// Stateful, uuid indexable list for all meshes in the export.
         /// </summary>
@@ -171,63 +169,15 @@ namespace Revit_glTF_Exporter
 
             if (_preferences.grids)
             {
-                FilteredElementCollector col = new FilteredElementCollector(_doc)
-                    .OfClass(typeof(Grid));
+                #if REVIT2019 || REVIT2020
 
-                var grids = col.ToElements();
+                RevitGrids.Export(_doc,ref Nodes, ref rootNode, _displayUnitType);
 
-                foreach (Grid g in grids)
-                {
-                    Line l = g.Curve as Line;
+                #else
 
-                    var origin = l.Origin;
-                    var direction = l.Direction;
-                    var length = l.Length;
+                RevitGrids.Export(_doc,ref Nodes,ref rootNode, _forgeTypeId);
 
-                    var xtras = new glTFExtras();
-                    var grid = new GridParameters();
-
-                    #if REVIT2019 || REVIT2020
-
-                    grid.origin = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, _displayUnitType) };
-
-                    grid.direction = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(direction.X, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, _displayUnitType) };
-
-                    grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
-
-                    #else
-
-                    grid.origin = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId) };
-
-                    grid.direction = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
-
-                    grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
-
-                    #endif
-
-                    xtras.GridParameters = grid;
-                    xtras.UniqueId = g.UniqueId;
-                    xtras.parameters = Util.GetElementParameters(g, true);
-
-                    var gridNode = new glTFNode();
-                    gridNode.name = g.Name;
-                    gridNode.extras = xtras;
-
-                    Nodes.AddOrUpdateCurrent(g.UniqueId, gridNode);
-                    rootNode.children.Add(Nodes.CurrentIndex);
-                }
+                #endif
             }
 
             Binaries.Save(_preferences.singleBinary, BufferViews, _preferences.fileName, Buffers,

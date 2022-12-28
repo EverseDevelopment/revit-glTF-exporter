@@ -42,7 +42,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     }
                 }
 
-                if (property.PropertyType == typeof(CompressionEnum))
+                if (property.PropertyType == typeof(CompressionEnum) )
                 {
                     List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
                     List<System.Windows.Controls.RadioButton> listOfCheckboxes = controls.Cast<System.Windows.Controls.RadioButton>().ToList();

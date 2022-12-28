@@ -112,13 +112,15 @@ namespace Revit_glTF_Exporter
             #if REVIT2019 || REVIT2020
 
             _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
-
+            SettingsConfig.Set("units", _userDefinedDisplayUnitType.ToString());
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, _userDefinedDisplayUnitType, progressBar);
 
-            #else
 
+            #else
+            
             _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
+            SettingsConfig.Set("units", _userDefinedUnitTypeId.TypeId.ToString());
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, _userDefinedUnitTypeId, progressBar);
