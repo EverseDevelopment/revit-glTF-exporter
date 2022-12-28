@@ -9,6 +9,8 @@ using System.IO;
 using System.Threading;
 using Common_glTF_Exporter.Windows.MainWindow;
 using Settings = Common_glTF_Exporter.Windows.MainWindow.Settings;
+using System.Windows.Markup;
+using System.Linq;
 
 namespace Revit_glTF_Exporter
 {
@@ -23,6 +25,7 @@ namespace Revit_glTF_Exporter
         string _fileName;
         string _viewName;
         private UnitsViewModel _unitsViewModel;
+
         public static MainWindow MainView { get; set; }
 
         #if REVIT2019 || REVIT2020
@@ -102,7 +105,7 @@ namespace Revit_glTF_Exporter
             ProgressBarWindow progressBar = new ProgressBarWindow();
             progressBar.ViewModel.ProgressBarValue = 0;
             progressBar.ViewModel.Message = "Converting elements...";
-            progressBar.ViewModel.ProgressBarMax = Collectors.AllElementsByView(doc, doc.ActiveView).Count;
+            progressBar.ViewModel.ProgressBarMax = Collectors.AllVisibleElementsByView(doc, doc.ActiveView).Count;
             progressBar.Show();
             ProgressBarWindow.MainView.Topmost = true;
 
@@ -119,12 +122,12 @@ namespace Revit_glTF_Exporter
 
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, _userDefinedUnitTypeId, progressBar);
-            
+
             #endif
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
-                
+
             exporter.ShouldStopOnError = false;
 
             exporter.Export(view3d);
