@@ -1,21 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Common_glTF_Exporter.ViewModel;
-using Common_glTF_Exporter.Utils;
-using System.IO;
-using System.Threading;
 using System;
-using Common_glTF_Exporter.Windows.MainWindow;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using ToggleButton = System.Windows.Controls.Primitives.ToggleButton;
 using System.Windows.Media;
-using System.Windows.Forms;
 using Control = System.Windows.Controls.Control;
+using  Common_glTF_Exporter.Model;
+using System.Collections.ObjectModel;
 
 namespace Common_glTF_Exporter.Windows.MainWindow
 {
@@ -50,7 +44,41 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     System.Windows.Controls.RadioButton currentCheckbox = listOfCheckboxes.FirstOrDefault(t => t.Name.Contains(value));
                     currentCheckbox.IsChecked = true;
                 }
+                
+                #if REVIT2019 || REVIT2020
+                if (property.PropertyType == typeof(DisplayUnitType))
+                {
+
+                    
+
+                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
+                    System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
+                    
+
+                    string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
+                    Enum.TryParse(value, out DisplayUnitType myUnitType);
+
+                    var itemSource = comboBox.ItemsSource as ObservableCollection<UnitObject>;
+                    UnitObject elementSel = itemSource.First(x => x.DisplayUnitType == myUnitType);
+                    comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
+                }
+#else
+                if (property.PropertyType == typeof(ForgeTypeId))
+                {
+                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
+                    System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
+                    ForgeTypeId forgeTypeId = preferenceType.GetProperty(property.Name).GetValue(preferences) as ForgeTypeId;
+                    UnitObject newObjt = new UnitObject(forgeTypeId);
+                   
+                    var itemSource = comboBox.ItemsSource as ObservableCollection<UnitObject>;
+                    UnitObject elementSel = itemSource.First(x => x.ForgeTypeId == forgeTypeId);
+                    comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
+                }
+
+#endif
             }
+
+
         }
 
         private static List<System.Windows.Controls.Control> AllChildren(DependencyObject parent)

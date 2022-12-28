@@ -1,16 +1,11 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
-using System.IO;
 using System.Threading;
 using Common_glTF_Exporter.Windows.MainWindow;
-using Settings = Common_glTF_Exporter.Windows.MainWindow.Settings;
-using System.Windows.Markup;
-using System.Linq;
 
 namespace Revit_glTF_Exporter
 {
@@ -20,10 +15,7 @@ namespace Revit_glTF_Exporter
 
     public partial class MainWindow : Window
     {
-        Document _doc;
         View _view;
-        string _fileName;
-        string _viewName;
         private UnitsViewModel _unitsViewModel;
 
         public static MainWindow MainView { get; set; }
@@ -31,12 +23,10 @@ namespace Revit_glTF_Exporter
         #if REVIT2019 || REVIT2020
 
         DisplayUnitType _internalProjectDisplayUnitType;
-        DisplayUnitType _userDefinedDisplayUnitType;
 
         #else
         
         ForgeTypeId _internalProjectUnitTypeId;
-        ForgeTypeId _userDefinedUnitTypeId;
 
         #endif
 
@@ -48,24 +38,8 @@ namespace Revit_glTF_Exporter
 
             InitializeComponent();
 
-            #if REVIT2019 || REVIT2020
-
-            _internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
-            UnitTextBlock.Content = LabelUtils.GetLabelFor(_internalProjectDisplayUnitType);
-
-            #else
-
-            _internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
-            UnitTextBlock.Content = LabelUtils.GetLabelForUnit(_internalProjectUnitTypeId).ToString();
-
-            #endif
-
-            UnitsComboBox.SelectedIndex = 0;
-
-            this._doc = doc;
+            ComboUnits.Set(doc, UnitTextBlock);
             this._view = view;
-            this._fileName = _doc.Title;
-            this._viewName = view.Name;
 
             UpdateForm.Run(MainWindow_Border);
         }
@@ -109,23 +83,8 @@ namespace Revit_glTF_Exporter
             progressBar.Show();
             ProgressBarWindow.MainView.Topmost = true;
 
-            #if REVIT2019 || REVIT2020
-
-            _userDefinedDisplayUnitType = _unitsViewModel.SelectedUnit.DisplayUnitType;
-            SettingsConfig.Set("units", _userDefinedDisplayUnitType.ToString());
             // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedDisplayUnitType, progressBar);
-
-
-            #else
-            
-            _userDefinedUnitTypeId = _unitsViewModel.SelectedUnit.ForgeTypeId;
-            SettingsConfig.Set("units", _userDefinedUnitTypeId.TypeId.ToString());
-
-            // Use our custom implementation of IExportContext as the exporter context.
-            glTFExportContext ctx = new glTFExportContext(doc, _userDefinedUnitTypeId, progressBar);
-
-            #endif
+            glTFExportContext ctx = new glTFExportContext(doc, progressBar);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);

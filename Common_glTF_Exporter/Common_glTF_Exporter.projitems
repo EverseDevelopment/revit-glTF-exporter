@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ComboUnits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ExportToZero.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Preferences.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Settings.cs" />

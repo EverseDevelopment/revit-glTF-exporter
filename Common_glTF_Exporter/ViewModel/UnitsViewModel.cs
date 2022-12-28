@@ -1,9 +1,11 @@
 ﻿using Autodesk.Revit.DB;
 using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Utils;
 using Revit_glTF_Exporter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
@@ -18,7 +20,7 @@ namespace Common_glTF_Exporter.ViewModel
             set
             {
                 _selectedUnit = value;
-                OnPropertyChanged();
+                OnPropertyChanged(SelectedUnit);
             }
         }
 
@@ -31,6 +33,7 @@ namespace Common_glTF_Exporter.ViewModel
             {
                 _units = value;
                 OnPropertyChanged();
+
             }
         }
 
@@ -48,7 +51,7 @@ namespace Common_glTF_Exporter.ViewModel
             #else
 
             Units = new ObservableCollection<UnitObject>();
-            Units.Add( new UnitObject(UnitTypeId.Meters));
+            Units.Add(new UnitObject(UnitTypeId.Meters));
             Units.Add(new UnitObject(UnitTypeId.Inches));
             Units.Add(new UnitObject(UnitTypeId.Millimeters));
             Units.Add(new UnitObject(UnitTypeId.Feet));
