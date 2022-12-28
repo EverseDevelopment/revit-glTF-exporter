@@ -11,6 +11,10 @@ using Common_glTF_Exporter.Windows.MainWindow;
 using Settings = Common_glTF_Exporter.Windows.MainWindow.Settings;
 using System.Windows.Markup;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using System.Windows.Forms;
+using System.Collections.ObjectModel;
+using Common_glTF_Exporter.Model;
 
 namespace Revit_glTF_Exporter
 {
@@ -21,7 +25,7 @@ namespace Revit_glTF_Exporter
     public partial class MainWindow : Window
     {
         Document _doc;
-        View _view;
+        Autodesk.Revit.DB.View _view;
         string _fileName;
         string _viewName;
         private UnitsViewModel _unitsViewModel;
@@ -40,7 +44,7 @@ namespace Revit_glTF_Exporter
 
         #endif
 
-        public MainWindow(Document doc, View view)
+        public MainWindow(Document doc, Autodesk.Revit.DB.View view)
         {
             _unitsViewModel = new UnitsViewModel();
             this.DataContext = _unitsViewModel;
@@ -183,6 +187,13 @@ namespace Revit_glTF_Exporter
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name.Replace("compression", "");
             string key = button.Name.Replace(value, "");
+            SettingsConfig.Set(key, value);
+        }
+        private void DigitsSliderValueChanged(object sender, RoutedEventArgs e)
+        {
+            Slider slider = sender as Slider;
+            string value = slider.Value.ToString();
+            string key = "digits";
             SettingsConfig.Set(key, value);
         }
     }

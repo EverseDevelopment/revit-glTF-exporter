@@ -426,7 +426,7 @@
                                  VerticalAlignment="Center"
                                  Click="RadioButtonClick"/>
                 </Grid>
-                <Slider Name="Accuracy_Slider" ToolTip="Reducing the accuracy can affect the quality of the exported geometry." Grid.Column="0" Margin="10,531,10,0" Maximum="10" Minimum="0" AutoToolTipPlacement="TopLeft" VerticalAlignment="Top"/>
+                <Slider Name="Digits_Slider" IsSnapToTickEnabled="True" TickFrequency="1" ToolTip="Reducing the accuracy can affect the quality of the exported geometry." Grid.Column="0" Margin="10,531,10,0" Maximum="6" Minimum="0" AutoToolTipPlacement="TopLeft" VerticalAlignment="Top" ValueChanged="DigitsSliderValueChanged"/>
                 <Rectangle  VerticalAlignment="Top" 
                 Fill="Gray" Height="1" Margin="103,438,10,0" Opacity="0.2"/>
                 <Rectangle  VerticalAlignment="Top" 

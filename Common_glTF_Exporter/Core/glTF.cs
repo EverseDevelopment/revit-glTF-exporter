@@ -137,10 +137,10 @@ namespace Revit_glTF_Exporter
     public class glTFMaterial
     {
         public string alphaMode { get; set; }
-
         public float? alphaCutoff { get; set; }
         public string name { get; set; }
         public glTFPBR pbrMetallicRoughness { get; set; }
+        public bool doubleSided { get; set; }
     }
     public class glTFPBR
     {

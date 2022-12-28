@@ -27,6 +27,7 @@ namespace Revit_glTF_Exporter
         private ProgressBarWindow _progressBarWindow;
         private XYZ _pointToRelocate = new XYZ(0, 0, 0);
         private View _view;
+        private int _decimalDigits;
 
 
 #if REVIT2019 || REVIT2020
@@ -124,6 +125,7 @@ namespace Revit_glTF_Exporter
             _view = doc.ActiveView;
             _progressBarWindow = progressBarWindow;
             _pointToRelocate = Common_glTF_Exporter.Windows.MainWindow.ExportToZero.GetPointToRelocate(_doc);
+            _decimalDigits = int.Parse(_preferences.digits);
 
             #if REVIT2019 || REVIT2020
 
@@ -190,32 +192,32 @@ namespace Revit_glTF_Exporter
                     #if REVIT2019 || REVIT2020
 
                     grid.origin = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, _displayUnitType) };
+                    Util.ConvertFeetToUnitTypeId(origin.X, _displayUnitType, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, _displayUnitType, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, _displayUnitType, _decimalDigits) };
 
                     grid.direction = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(direction.X, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, _displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, _displayUnitType) };
+                    Util.ConvertFeetToUnitTypeId(direction.X, _displayUnitType, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, _displayUnitType, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, _displayUnitType, _decimalDigits) };
 
-                    grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType);
+                    grid.length = Util.ConvertFeetToUnitTypeId(length, _displayUnitType, _decimalDigits);
 
-                    #else
+#else
 
                     grid.origin = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId) };
+                    Util.ConvertFeetToUnitTypeId(origin.X, _forgeTypeId, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, _forgeTypeId, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, _forgeTypeId, _decimalDigits) };
 
                     grid.direction = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId) };
+                    Util.ConvertFeetToUnitTypeId(direction.X, _forgeTypeId, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, _forgeTypeId, _decimalDigits),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, _forgeTypeId, _decimalDigits) };
 
-                    grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId);
+                    grid.length = Util.ConvertFeetToUnitTypeId(length, _forgeTypeId, _decimalDigits);
 
-                    #endif
+#endif
 
                     xtras.GridParameters = grid;
                     xtras.UniqueId = g.UniqueId;
@@ -339,19 +341,19 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-#if REVIT2019 || REVIT2020
+                #if REVIT2019 || REVIT2020
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
 
-#else
+                #else
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
 
-#endif
+                #endif
 
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
@@ -552,8 +554,10 @@ namespace Revit_glTF_Exporter
                                 {
                                     material = Collectors.GetRandomMaterial(_doc);
                                 }
-                                gl_mat = glTFExportUtils.GetGLTFMaterial(Materials.List, material);
-                                Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+
+                                gl_mat = glTFExportUtils.GetGLTFMaterial(Materials.List, material, true);
+
+                                Materials.AddOrUpdateCurrentMaterial(material.UniqueId, gl_mat, true);
                             }
 
                             // Add new "_current" entries if vertex_key is unique
@@ -570,19 +574,19 @@ namespace Revit_glTF_Exporter
                                     if (triangle == null)
                                         continue;
 
-#if REVIT2019 || REVIT2020
+                                    #if REVIT2019 || REVIT2020
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
 
-#else
+                                    #else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate, _decimalDigits));
 
-#endif
+                                    #endif
 
                                     _currentGeometry.CurrentItem.faces.Add(v1);
                                     _currentGeometry.CurrentItem.faces.Add(v2);

@@ -79,15 +79,17 @@ namespace Revit_glTF_Exporter
 
             #endif
 
+            ,int decimalPlaces
+
             )
         {
             #if REVIT2019 || REVIT2020
 
-            return UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType);
-            
+            return Math.Round(UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType), decimalPlaces);
+
             #else
 
-            return UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId);
+            return Math.Round(UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId), decimalPlaces);
 
             #endif
         }

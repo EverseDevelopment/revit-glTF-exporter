@@ -12,20 +12,21 @@ namespace Common_glTF_Exporter.Utils
 
     public class glTFExportUtils
     {
-        public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
+        public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material, bool doubleSided)
         {
             // search for an already existing material
             var m = glTFMaterials.FirstOrDefault(x =>
             x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
             x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
-            x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
+            x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue && x.doubleSided == doubleSided);
 
-            return m != null ? m : glTFExportUtils.CreateGLTFMaterial("defaul", 50, new Color(250, 250, 250));
+            return m != null ? m : glTFExportUtils.CreateGLTFMaterial("default", 0, new Color(250, 250, 250), doubleSided);
         }
-        public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color)
+        public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color, bool doubleSided)
         {
             // construct the material
             glTFMaterial gl_mat = new glTFMaterial();
+            gl_mat.doubleSided = doubleSided;
             float opacity = 1 - (float)materialOpacity;
             gl_mat.name = materialName;
             glTFPBR pbr = new glTFPBR();

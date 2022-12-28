@@ -50,6 +50,16 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     System.Windows.Controls.RadioButton currentCheckbox = listOfCheckboxes.FirstOrDefault(t => t.Name.Contains(value));
                     currentCheckbox.IsChecked = true;
                 }
+
+                if (property.PropertyType == typeof(string))
+                {
+                    Slider slider = children.FirstOrDefault(t => t.Name.ToLower().Contains(property.Name)) as Slider;
+                    if (slider == null)
+                        continue;
+                    string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();                    
+                    double doubleValue = Convert.ToDouble(value);
+                    slider.Value = doubleValue;
+                }
             }
         }
 
