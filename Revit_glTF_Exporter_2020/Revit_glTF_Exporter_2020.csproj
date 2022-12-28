@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bimangle.ForgeEngine.Extension.Gltf">
+      <HintPath>..\..\Bimangle.ForgeEngine.Extension.Gltf.dll</HintPath>
+    </Reference>
+    <Reference Include="Bimangle.Libs.Draco">
+      <HintPath>..\..\Bimangle.Libs.Draco.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />

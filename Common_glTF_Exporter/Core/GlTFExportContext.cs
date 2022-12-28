@@ -8,6 +8,7 @@ using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
 using Autodesk.Revit.UI;
+using Common_glTF_Exporter.Model;
 
 namespace Revit_glTF_Exporter
 {
@@ -94,12 +95,12 @@ namespace Revit_glTF_Exporter
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
         /// processed, keyed by material. This is re-initialized on each new element.
         /// </summary>
-        private IndexedDictionary<GeometryData> _currentGeometry;
+        private IndexedDictionary<GeometryDataObject> _currentGeometry;
         /// <summary>
         /// Stateful, uuid indexable list of intermediate vertex data for the element currently
         /// being processed, keyed by material. This is re-initialized on each new element.
         /// </summary>
-        private IndexedDictionary<VertexLookupInt> _currentVertices;
+        private IndexedDictionary<VertexLookupIntObject> _currentVertices;
 
         private Stack<Transform> _transformStack = new Stack<Transform>();
         private Transform CurrentTransform { get { return _transformStack.Peek(); } }
@@ -116,14 +117,13 @@ namespace Revit_glTF_Exporter
 
             #endif
 
-            ProgressBarWindow progressBarWindow, XYZ pointToRelocate, View view)
+            ProgressBarWindow progressBarWindow)
         {
             _preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             _doc = doc;
+            _view = doc.ActiveView;
             _progressBarWindow = progressBarWindow;
-            _pointToRelocate = pointToRelocate;
-            _view = view;
-
+            _pointToRelocate = Common_glTF_Exporter.Windows.MainWindow.ExportToZero.GetPointToRelocate(_doc);
 
             #if REVIT2019 || REVIT2020
 
@@ -251,7 +251,7 @@ namespace Revit_glTF_Exporter
 
             _element = _doc.GetElement(elementId);
 
-            if (!_element.CanBeLocked() || !_element.CanBeHidden(_view) ||
+            if (!Util.CanBeLockOrHidden(_element, _view) ||
                 (_element is Level && !_preferences.levels))
             {
                 return RenderNodeAction.Skip;
@@ -294,8 +294,8 @@ namespace Revit_glTF_Exporter
             rootNode.children.Add(Nodes.CurrentIndex);
 
             // Reset _currentGeometry for new element
-            _currentGeometry = new IndexedDictionary<GeometryData>();
-            _currentVertices = new IndexedDictionary<VertexLookupInt>();
+            _currentGeometry = new IndexedDictionary<GeometryDataObject>();
+            _currentVertices = new IndexedDictionary<VertexLookupIntObject>();
 
             //GetGeometryData();
 
@@ -328,8 +328,8 @@ namespace Revit_glTF_Exporter
             string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
 
             // Add new "_current" entries if vertex_key is unique
-            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
-            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
+            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
 
             // populate current vertices vertex data and current geometry faces data
             Transform transform = CurrentTransform;
@@ -341,15 +341,15 @@ namespace Revit_glTF_Exporter
             {
 #if REVIT2019 || REVIT2020
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
 
 #else
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V3], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
 
 #endif
 
@@ -373,7 +373,7 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId"></param>
         public void OnElementEnd(ElementId elementId)
         {
-            if (!_element.CanBeLocked() || !_element.CanBeHidden(_view) ||
+            if (!Util.CanBeLockOrHidden(_element, _view) ||
             _currentVertices == null ||
             _currentVertices.List.Count == 0)
             {
@@ -398,11 +398,11 @@ namespace Revit_glTF_Exporter
             Nodes.CurrentItem.mesh = Meshes.CurrentIndex;
 
             // Add vertex data to _currentGeometry for each geometry/material pairing
-            foreach (KeyValuePair<string, VertexLookupInt> kvp in _currentVertices.Dict)
+            foreach (KeyValuePair<string, VertexLookupIntObject> kvp in _currentVertices.Dict)
             {
                 string vertex_key = kvp.Key;
 
-                foreach (KeyValuePair<PointInt, int> p in kvp.Value)
+                foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
                 {
                     _currentGeometry.GetElement(vertex_key).vertices.Add(p.Key.X);
                     _currentGeometry.GetElement(vertex_key).vertices.Add(p.Key.Y);
@@ -411,7 +411,7 @@ namespace Revit_glTF_Exporter
             }
 
             // Convert _currentGeometry objects into glTFMeshPrimitives
-            foreach (KeyValuePair<string, GeometryData> kvp in _currentGeometry.Dict)
+            foreach (KeyValuePair<string, GeometryDataObject> kvp in _currentGeometry.Dict)
             {
                 glTFBinaryData elementBinary = glTFExportUtils.AddGeometryMeta(Buffers, Accessors, BufferViews, kvp.Value, kvp.Key,
                     elementId.IntegerValue, _preferences.batchId, _preferences.normals);
@@ -552,14 +552,14 @@ namespace Revit_glTF_Exporter
                                 {
                                     material = Collectors.GetRandomMaterial(_doc);
                                 }
-                                gl_mat = Util.GetGLTFMaterial(Materials.List, material);
+                                gl_mat = glTFExportUtils.GetGLTFMaterial(Materials.List, material);
                                 Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
                             }
 
                             // Add new "_current" entries if vertex_key is unique
                             string vertex_key = Nodes.CurrentKey + "_" + Materials.CurrentKey;
-                            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryData());
-                            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
+                            _currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
+                            _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
 
                             for (int i = 0; i < triangles; i++)
                             {
@@ -572,15 +572,15 @@ namespace Revit_glTF_Exporter
 
 #if REVIT2019 || REVIT2020
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _displayUnitType, _preferences.relocateTo0, _pointToRelocate));
 
 #else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointInt(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _forgeTypeId, _preferences.relocateTo0, _pointToRelocate));
 
 #endif
 

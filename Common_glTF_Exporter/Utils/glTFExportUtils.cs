@@ -1,14 +1,42 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Common_glTF_Exporter.Model;
 using Revit_glTF_Exporter;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Common_glTF_Exporter.Utils
 {
+
     public class glTFExportUtils
     {
+        public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
+        {
+            // search for an already existing material
+            var m = glTFMaterials.FirstOrDefault(x =>
+            x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
+            x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
+            x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
+
+            return m != null ? m : glTFExportUtils.CreateGLTFMaterial("defaul", 50, new Color(250, 250, 250));
+        }
+        public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color)
+        {
+            // construct the material
+            glTFMaterial gl_mat = new glTFMaterial();
+            float opacity = 1 - (float)materialOpacity;
+            gl_mat.name = materialName;
+            glTFPBR pbr = new glTFPBR();
+            pbr.baseColorFactor = new List<float>() { color.Red / 255f, color.Green / 255f, color.Blue / 255f, opacity };
+            pbr.metallicFactor = 0f;
+            pbr.roughnessFactor = 1f;
+            gl_mat.pbrMetallicRoughness = pbr;
+
+            return gl_mat;
+        }
+
         /// <summary>
         /// Takes the intermediate geometry data and performs the calculations
         /// to convert that into glTF buffers, views, and accessors.
@@ -17,7 +45,7 @@ namespace Common_glTF_Exporter.Utils
         /// <param name="name">Unique name for the .bin file that will be produced.</param>
         /// <param name="elementId">Revit element's Element ID that will be used as the batchId value.</param>
         /// <returns></returns>
-        public static glTFBinaryData AddGeometryMeta(List<glTFBuffer> buffers, List<glTFAccessor> accessors, List<glTFBufferView> bufferViews, GeometryData geomData, string name, int elementId, bool exportBatchId, bool exportNormals)
+        public static glTFBinaryData AddGeometryMeta(List<glTFBuffer> buffers, List<glTFAccessor> accessors, List<glTFBufferView> bufferViews, GeometryDataObject geomData, string name, int elementId, bool exportBatchId, bool exportNormals)
         {
             // add a buffer
             glTFBuffer buffer = new glTFBuffer();
@@ -217,6 +245,7 @@ namespace Common_glTF_Exporter.Utils
 
             return bufferData;
         }
+
         public static void AddNormals(bool flipCoordinates, Transform transform, PolymeshTopology polymesh, List<double> normals)
         {
             IList<XYZ> polymeshNormals = polymesh.GetNormals();

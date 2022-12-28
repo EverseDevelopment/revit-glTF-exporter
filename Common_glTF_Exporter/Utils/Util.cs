@@ -6,9 +6,21 @@ using Autodesk.Revit.DB;
 using Material = Autodesk.Revit.DB.Material;
 
 namespace Revit_glTF_Exporter
-{
+{   
     class Util
     {
+        /// <summary>
+        /// Analyze if the given <paramref name="element"/> can be locked OR hidden.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="view"></param>
+        /// <returns>If the given element can't be locked OR can't be hidden, it will returns FALSE. Otherwise, will returns TRUE.</returns>
+        public static bool CanBeLockOrHidden(Element element, View view)
+        {
+            if (!element.CanBeLocked() || !element.CanBeHidden(view))
+                return false;          
+            return true;
+        }
         public static BoundingBoxXYZ GetElementsBoundingBox(View view, List<Element> elements)
         {
             // Get the bounding box of the visible elements
@@ -38,30 +50,6 @@ namespace Revit_glTF_Exporter
             return newBB;
         }
 
-        public static glTFMaterial GetGLTFMaterial(List<glTFMaterial> glTFMaterials, Material material)
-        {
-            // search for an already existing material
-            var m = glTFMaterials.FirstOrDefault(x =>
-            x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
-            x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
-            x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue);
-
-            return m != null ? m : Util.CreateGLTFMaterial("defaul", 50, new Color(250, 250, 250));
-        }
-        public static glTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color)
-        {
-            // construct the material
-            glTFMaterial gl_mat = new glTFMaterial();
-            float opacity = 1 - (float)materialOpacity;
-            gl_mat.name = materialName;
-            glTFPBR pbr = new glTFPBR();
-            pbr.baseColorFactor = new List<float>() { color.Red / 255f, color.Green / 255f, color.Blue / 255f, opacity };
-            pbr.metallicFactor = 0f;
-            pbr.roughnessFactor = 1f;
-            gl_mat.pbrMetallicRoughness = pbr;
-
-            return gl_mat;
-        }
         public static Material GetMeshMaterial(Document doc, Mesh mesh)
         {
             ElementId materialId = mesh.MaterialElementId; 
