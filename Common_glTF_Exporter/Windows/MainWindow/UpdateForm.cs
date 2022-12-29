@@ -67,10 +67,10 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     UnitObject elementSel = itemSource.First(x => x.DisplayUnitType == myUnitType);
                     comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
                 }
-                #else
+#else
                 if (property.PropertyType == typeof(ForgeTypeId))
                 {
-                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
+                    List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
                     System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
                     ForgeTypeId forgeTypeId = preferenceType.GetProperty(property.Name).GetValue(preferences) as ForgeTypeId;
                     UnitObject newObjt = new UnitObject(forgeTypeId);
@@ -79,7 +79,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     UnitObject elementSel = itemSource.First(x => x.ForgeTypeId == forgeTypeId);
                     comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
                 }
-                #endif
+#endif
             }
         }
 
