@@ -62,8 +62,37 @@ namespace Revit_glTF_Exporter
             }
 
             CurrentKey = uuid;
+
             return false;
         }
+
+        /// <summary>
+        /// Add a new gltfMaterial to the list, if it already exists then the 
+        /// current item will be set to this item.
+        /// </summary>
+        /// <param name="uuid">Unique identifier for the item.</param>
+        /// <param name="elem">The item to add.</param>
+        /// <returns>true if item did not already exist.</returns>
+        public bool AddOrUpdateCurrentMaterial(string uuid, T elem, bool doubleSided)
+        {
+            if (!_dict.ContainsKey(uuid))
+            {
+                List.Add(elem);
+                _dict.Add(uuid, (List.Count - 1));
+                CurrentKey = uuid;
+                return true;
+            }
+
+            CurrentKey = uuid;
+
+            if (elem is glTFMaterial)
+            {
+                var mat = this.GetElement(uuid) as glTFMaterial;
+                mat.doubleSided = doubleSided;
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// Check if the container already has an item with this key.

@@ -38,22 +38,27 @@ namespace Common_glTF_Exporter.Windows.MainWindow
 
                 if (property.PropertyType == typeof(CompressionEnum) )
                 {
-                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
+                    List<Control> controls = children.Where(t => t is System.Windows.Controls.RadioButton).ToList();
                     List<System.Windows.Controls.RadioButton> listOfCheckboxes = controls.Cast<System.Windows.Controls.RadioButton>().ToList();
                     string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
-                    System.Windows.Controls.RadioButton currentCheckbox = listOfCheckboxes.FirstOrDefault(t => t.Name.Contains(value));
+                    System.Windows.Controls.RadioButton currentCheckbox = listOfCheckboxes.FirstOrDefault(t => t.Name.Equals(value));
                     currentCheckbox.IsChecked = true;
                 }
-                
+
+                if (property.PropertyType == typeof(int))
+                {
+                    Slider slider = children.FirstOrDefault(t => t.Name.Equals(property.Name)) as Slider;
+                    if (slider == null)
+                        continue;
+                    string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
+                    slider.Value = Convert.ToDouble(preferenceType.GetProperty(property.Name).GetValue(preferences));
+                }
+
                 #if REVIT2019 || REVIT2020
                 if (property.PropertyType == typeof(DisplayUnitType))
-                {
-
-                    
-
-                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
-                    System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
-                    
+                {                   
+                    List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
+                    System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();                    
 
                     string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
                     Enum.TryParse(value, out DisplayUnitType myUnitType);
@@ -65,7 +70,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
 #else
                 if (property.PropertyType == typeof(ForgeTypeId))
                 {
-                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
+                    List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
                     System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
                     ForgeTypeId forgeTypeId = preferenceType.GetProperty(property.Name).GetValue(preferences) as ForgeTypeId;
                     UnitObject newObjt = new UnitObject(forgeTypeId);
@@ -74,11 +79,8 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     UnitObject elementSel = itemSource.First(x => x.ForgeTypeId == forgeTypeId);
                     comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
                 }
-
 #endif
             }
-
-
         }
 
         private static List<System.Windows.Controls.Control> AllChildren(DependencyObject parent)

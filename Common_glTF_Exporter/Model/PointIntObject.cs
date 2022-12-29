@@ -32,32 +32,32 @@ namespace Common_glTF_Exporter.Model
 
             #endif
 
-            bool relocateTo0, XYZ pointToRelocate)
+            bool relocateTo0, XYZ pointToRelocate, int decimalPlaces)
         {
             #if REVIT2019 || REVIT2020
 
-            X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType);
+            X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType, decimalPlaces);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType, decimalPlaces);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType, decimalPlaces);
 
             if (relocateTo0)
             {
-                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, displayUnitType);
-                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, displayUnitType);
-                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, displayUnitType);
+                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, displayUnitType, decimalPlaces);
+                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, displayUnitType, decimalPlaces);
+                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, displayUnitType, decimalPlaces);
             }
 
             #else
 
-            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
+            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId, decimalPlaces);
+            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId, decimalPlaces);
+            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId, decimalPlaces);
 
             if (relocateTo0)
 	        {
-                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId);
-                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId);
-                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId);
+                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId, decimalPlaces);
+                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId, decimalPlaces);
+                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId, decimalPlaces);
 	        }
 
             #endif

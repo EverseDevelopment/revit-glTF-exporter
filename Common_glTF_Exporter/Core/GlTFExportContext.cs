@@ -20,7 +20,6 @@ namespace Revit_glTF_Exporter
         private ProgressBarWindow _progressBarWindow;
         private XYZ _pointToRelocate = new XYZ(0, 0, 0);
         private View _view;
-
         private Preferences _preferences;
         /**
          * The following properties are the root
@@ -133,13 +132,13 @@ namespace Revit_glTF_Exporter
             {
                 #if REVIT2019 || REVIT2020
 
-                RevitGrids.Export(_doc,ref Nodes, ref rootNode, _preferences.units);
+                Common_glTF_Exporter.Export.RevitGrids.Export(_doc,ref Nodes, ref rootNode, _preferences);
 
-#else
+                #else
 
-                RevitGrids.Export(_doc,ref Nodes,ref rootNode, _preferences.units);
+                RevitGrids.Export(_doc,ref Nodes,ref rootNode, _preferences);
 
-#endif
+                #endif
             }
 
             Binaries.Save(_preferences.singleBinary, BufferViews, _preferences.fileName, Buffers,
@@ -251,19 +250,19 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-#if REVIT2019 || REVIT2020
+                #if REVIT2019 || REVIT2020
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate, _preferences.digits));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate, _preferences.digits));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
 
-#else
+                #else
 
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
+                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
+                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
+                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
 
-#endif
+                #endif
 
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
@@ -464,8 +463,10 @@ namespace Revit_glTF_Exporter
                                 {
                                     material = Collectors.GetRandomMaterial(_doc);
                                 }
-                                gl_mat = glTFExportUtils.GetGLTFMaterial(Materials.List, material);
-                                Materials.AddOrUpdateCurrent(material.UniqueId, gl_mat);
+
+                                gl_mat = glTFExportUtils.GetGLTFMaterial(Materials.List, material, true);
+
+                                Materials.AddOrUpdateCurrentMaterial(material.UniqueId, gl_mat, true);
                             }
 
                             // Add new "_current" entries if vertex_key is unique
@@ -484,15 +485,15 @@ namespace Revit_glTF_Exporter
 
 #if REVIT2019 || REVIT2020
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
 
 #else
 
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate));
+                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
+                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
+                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), _preferences.flipAxis, _preferences.units, _preferences.relocateTo0, _pointToRelocate,  _preferences.digits));
 
 #endif
 

@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Windows.MainWindow;
 using Revit_glTF_Exporter;
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,17 @@ namespace Common_glTF_Exporter.Export
 {
     public static class RevitGrids
     {
-        public static void Export(Document doc, ref IndexedDictionary<glTFNode> Nodes, ref glTFNode rootNode,
+        public static void Export(Document doc, ref IndexedDictionary<glTFNode> Nodes, ref glTFNode rootNode, Preferences preferences)        
+        {
+
             #if REVIT2019 || REVIT2020
-            DisplayUnitType displayUnitType
+            DisplayUnitType displayUnitType = preferences.units;
             #else
-            ForgeTypeId forgeTypeId
+            ForgeTypeId forgeTypeId  = preferences.units;
             #endif
-            )
-            {
 
             FilteredElementCollector col = new FilteredElementCollector(doc)
-    .OfClass(typeof(Grid));
+                .OfClass(typeof(Grid));
 
             var grids = col.ToElements();
 
@@ -37,30 +38,30 @@ namespace Common_glTF_Exporter.Export
                 #if REVIT2019 || REVIT2020
 
                 grid.origin = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(origin.X, displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, displayUnitType) };
+                    Util.ConvertFeetToUnitTypeId(origin.X, displayUnitType, preferences.digits),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, displayUnitType, preferences.digits),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, displayUnitType, preferences.digits) };
 
                 grid.direction = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(direction.X, displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, displayUnitType),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, displayUnitType) };
+                    Util.ConvertFeetToUnitTypeId(direction.X, displayUnitType, preferences.digits),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, displayUnitType, preferences.digits),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, displayUnitType, preferences.digits) };
 
-                grid.length = Util.ConvertFeetToUnitTypeId(length, displayUnitType);
+                grid.length = Util.ConvertFeetToUnitTypeId(length, displayUnitType, preferences.digits);
 
                 #else
 
-                    grid.origin = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(origin.X, forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, forgeTypeId) };
+                grid.origin = new List<double>() {
+                Util.ConvertFeetToUnitTypeId(origin.X, forgeTypeId, preferences.digits),
+                Util.ConvertFeetToUnitTypeId(origin.Y, forgeTypeId, preferences.digits),
+                Util.ConvertFeetToUnitTypeId(origin.Z, forgeTypeId, preferences.digits)};
 
-                    grid.direction = new List<double>() {
-                    Util.ConvertFeetToUnitTypeId(direction.X, forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, forgeTypeId),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, forgeTypeId) };
+                grid.direction = new List<double>() {
+                Util.ConvertFeetToUnitTypeId(direction.X, forgeTypeId, preferences.digits),
+                Util.ConvertFeetToUnitTypeId(direction.Y, forgeTypeId, preferences.digits),
+                Util.ConvertFeetToUnitTypeId(direction.Z, forgeTypeId, preferences.digits)};
 
-                    grid.length = Util.ConvertFeetToUnitTypeId(length, forgeTypeId);
+                grid.length = Util.ConvertFeetToUnitTypeId(length, forgeTypeId, preferences.digits);
 
                 #endif
 

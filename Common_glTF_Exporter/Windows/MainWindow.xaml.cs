@@ -6,6 +6,8 @@ using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
 using System.Threading;
 using Common_glTF_Exporter.Windows.MainWindow;
+using System.Windows.Controls;
+using System;
 
 namespace Revit_glTF_Exporter
 {
@@ -132,9 +134,16 @@ namespace Revit_glTF_Exporter
         private void RadioButtonClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
-            string value = button.Name.Replace("compression", "");
-            string key = button.Name.Replace(value, "");
+            string value = button.Name;
+            string key = "compression";
             SettingsConfig.Set(key, value);
+        }
+        private void DigitsSliderValueChanged(object sender, RoutedEventArgs e)
+        {
+            Slider slider = sender as Slider;
+            int value = Convert.ToInt32(slider.Value.ToString());
+            string key = "digits";
+            SettingsConfig.Set(key, value.ToString());
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Common_glTF_Exporter.Export
 
                 SetMaterialsProperties(node, opacity, ref pbr, ref gl_mat);
 
-                Materials.AddOrUpdateCurrent(m.UniqueId, gl_mat);
+                Materials.AddOrUpdateCurrentMaterial(m.UniqueId, gl_mat, false);
             }
         }
 
