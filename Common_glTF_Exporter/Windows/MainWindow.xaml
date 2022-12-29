@@ -332,20 +332,20 @@
                     Content="Export BatchId" 
                     Width="96"/>
                 <ToggleButton
-                x:Name="boundingBox"
+                x:Name="properties"
                 Margin="166,362,108,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
-                ToolTip="Export the model bounding box"/>
+                ToolTip="Export all the properties from each element"/>
                 <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
                     Margin="210,358,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
-                    Content="Export BBox" 
+                    Content="Export Prop" 
                     Width="68"/>
                 <ToggleButton
                 x:Name="relocateTo0"

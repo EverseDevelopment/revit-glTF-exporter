@@ -141,13 +141,11 @@ namespace Revit_glTF_Exporter
                 #endif
             }
 
-            Binaries.Save(_preferences.singleBinary, BufferViews, _preferences.fileName, Buffers,
-                _preferences.path, binaryFileData, _preferences.batchId, _preferences.normals);
+            Binaries.Save(BufferViews, Buffers, binaryFileData, _preferences);
 
-            GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List,
-                Buffers, BufferViews, Accessors, _preferences.path, _preferences.batchId, _preferences.normals);
+            GltfFile.Create(Scenes, Nodes.List, Meshes.List, Materials.List, Buffers, BufferViews, Accessors, _preferences);
 
-            Compression.Run(_preferences.path, _preferences.compression);
+            Compression.Run(_preferences);
         }
 
         /// <summary>
@@ -180,24 +178,24 @@ namespace Revit_glTF_Exporter
 
             newNode.name = Util.ElementDescription(_element);
 
-            if (_preferences.exportProperties)
-            {
-                // get the extras for this element
-                glTFExtras extras = new glTFExtras();
+            // get the extras for this element
+            glTFExtras extras = new glTFExtras();
 
-                extras.UniqueId = _element.UniqueId;
+            extras.UniqueId = _element.UniqueId;
 
-                extras.parameters = Util.GetElementParameters(_element, true);
-
-                if (_preferences.elementId)
-                {
-                    extras.elementId = _element.Id.IntegerValue;
-                }
-
-                extras.elementCategory = _element.Category.Name;
-
-                newNode.extras = extras;
+            if (_preferences.properties)
+            {                
+                extras.parameters = Util.GetElementParameters(_element, true);              
             }
+
+            if (_preferences.elementId)
+            {
+                extras.elementId = _element.Id.IntegerValue;
+            }
+
+            extras.elementCategory = _element.Category.Name;
+
+            newNode.extras = extras;
 
             Nodes.AddOrUpdateCurrent(_element.UniqueId, newNode);
 

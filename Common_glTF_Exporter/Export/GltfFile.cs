@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Windows.MainWindow;
 using Newtonsoft.Json;
 using Revit_glTF_Exporter;
 using System;
@@ -13,7 +14,7 @@ namespace Common_glTF_Exporter.Export
     public static class GltfFile
     {
         public static void Create(List<glTFScene> scenes, List<glTFNode> nodes, List<glTFMesh> meshes, List<glTFMaterial> materials,
-            List<glTFBuffer> buffers, List<glTFBufferView> bufferViews, List<glTFAccessor> accessors, string filename, bool exportBatchId, bool exportNormals) 
+            List<glTFBuffer> buffers, List<glTFBufferView> bufferViews, List<glTFAccessor> accessors, Preferences preferences) 
         {
             // Package the properties into a serializable container
             glTF model = new glTF();
@@ -35,17 +36,17 @@ namespace Common_glTF_Exporter.Export
             string serializedModel = JsonConvert.SerializeObject(model,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            if (!exportBatchId)
+            if (!preferences.batchId)
             {
                 serializedModel = serializedModel.Replace(",\"_BATCHID\":0", "");
             }
 
-            if (!exportNormals)
+            if (!preferences.normals)
             {
                 serializedModel = serializedModel.Replace(",\"NORMAL\":0", "");
             }
 
-            string gltfName = String.Concat(filename, ".gltf");
+            string gltfName = String.Concat(preferences.path, ".gltf");
             File.WriteAllText(gltfName, serializedModel);
         }
     }
