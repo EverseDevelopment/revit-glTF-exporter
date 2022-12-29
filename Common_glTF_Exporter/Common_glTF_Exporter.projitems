@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\Grids.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Materials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
@@ -24,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ComboUnits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ExportToZero.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Preferences.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Settings.cs" />
