@@ -20,16 +20,6 @@ namespace Revit_glTF_Exporter
 
         public static MainWindow MainView { get; set; }
 
-        #if REVIT2019 || REVIT2020
-
-        DisplayUnitType _internalProjectDisplayUnitType;
-
-        #else
-        
-        ForgeTypeId _internalProjectUnitTypeId;
-
-        #endif
-
         public MainWindow(Document doc, View view)
         {
             _unitsViewModel = new UnitsViewModel();
