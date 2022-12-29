@@ -130,7 +130,7 @@ namespace Revit_glTF_Exporter
 
             if (_preferences.grids)
             {
-#if REVIT2019 || REVIT2020
+                #if REVIT2019 || REVIT2020
 
                 Common_glTF_Exporter.Export.RevitGrids.Export(_doc,ref Nodes, ref rootNode, _preferences);
 
