@@ -6,6 +6,7 @@ using Common_glTF_Exporter.ViewModel;
 using Common_glTF_Exporter.Utils;
 using System.Threading;
 using Common_glTF_Exporter.Windows.MainWindow;
+using System.Windows.Controls;
 
 namespace Revit_glTF_Exporter
 {
