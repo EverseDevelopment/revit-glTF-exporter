@@ -54,6 +54,12 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                     #endif
                     preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
                 }
+
+                if (property.PropertyType == typeof(int))
+                {
+                    var tempvalue = Convert.ToInt32(SettingsConfig.GetValue(propertyName).ToString());
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
+                }
             }
 
             return preferences;

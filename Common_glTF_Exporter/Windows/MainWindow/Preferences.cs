@@ -32,7 +32,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
     
         #endif
 
-        public string digits { get; set; }
+        public int digits { get; set; }
         public string path { get; set; }
         public string fileName { get; set; }
     }
