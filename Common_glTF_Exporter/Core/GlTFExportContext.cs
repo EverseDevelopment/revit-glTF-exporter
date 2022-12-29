@@ -136,7 +136,7 @@ namespace Revit_glTF_Exporter
 
                 #else
 
-                RevitGrids.Export(_doc,ref Nodes,ref rootNode, _preferences.units,  _preferences.digits);
+                RevitGrids.Export(_doc,ref Nodes,ref rootNode, _preferences);
 
                 #endif
             }
