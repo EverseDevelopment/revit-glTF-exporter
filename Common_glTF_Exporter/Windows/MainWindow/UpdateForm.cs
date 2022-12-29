@@ -57,8 +57,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 #if REVIT2019 || REVIT2020
                 if (property.PropertyType == typeof(DisplayUnitType))
                 {                   
-
-                    List<Control> controls = children.Where(t => t.Name.Contains(property.Name)).ToList();
+                    List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
                     System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();                    
 
                     string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
