@@ -224,7 +224,7 @@
                                HorizontalContentAlignment="Left"
                                Margin="82,172,0,0" VerticalAlignment="Top">
             </Label>
-            <ComboBox  x:Name="UnitsComboBox" 
+            <ComboBox  x:Name="units" 
                        ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
                        SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                        DisplayMemberPath="Label" 
@@ -238,7 +238,7 @@
                     VerticalAlignment="Top"
                     Content="Units"
                     FontSize="15"
-                    FontWeight="Light"
+                    FontWeight="Light"  
                     Width="46"/>
             <Label      
                         Style="{DynamicResource SecondaryLabel}"

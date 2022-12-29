@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Revit_glTF_Exporter;
+using System;
 using System.Collections.Generic;
 using System.Security.RightsManagement;
 using System.Text;
+using System.Windows.Controls;
 
 namespace Common_glTF_Exporter.Windows.MainWindow
 {
@@ -19,8 +22,16 @@ namespace Common_glTF_Exporter.Windows.MainWindow
         public bool flipAxis { get; set; }
         public bool exportProperties { get; set; }
         public bool singleBinary { get; set; }
-        public string units { get; set; }
         public CompressionEnum compression { get; set; }
+        #if REVIT2019 || REVIT2020
+
+        public DisplayUnitType units { get; set; }
+        #else
+
+        public ForgeTypeId units { get; set; }
+    
+        #endif
+
         public string digits { get; set; }
         public string path { get; set; }
         public string fileName { get; set; }
