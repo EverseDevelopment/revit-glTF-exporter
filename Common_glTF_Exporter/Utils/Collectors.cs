@@ -1,12 +1,12 @@
-﻿using Autodesk.Revit.DB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autodesk.Revit.DB;
 
 namespace Common_glTF_Exporter.Utils
 {
-    class Collectors
+    internal class Collectors
     {
         public static Material GetRandomMaterial(Document doc)
         {
@@ -17,6 +17,7 @@ namespace Common_glTF_Exporter.Utils
                 .Cast<Material>()
                 .FirstOrDefault();
         }
+
         public static List<Element> AllVisibleElementsByView(Document doc, View view)
         {
             return new FilteredElementCollector(doc, view.Id)

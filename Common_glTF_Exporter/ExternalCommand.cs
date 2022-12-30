@@ -1,9 +1,8 @@
 ﻿using System;
+using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.ApplicationServices;
-
 
 namespace Revit_glTF_Exporter
 {
@@ -12,14 +11,6 @@ namespace Revit_glTF_Exporter
 
     public class ExternalCommand : IExternalCommand
     {
-        /// <summary>
-        ///     External Command
-        /// </summary>
-        /// <param name ="commandData"></param>
-        /// <param name="message"></param>
-        /// <param name="elements"></param>
-        /// <returns></returns>
-
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
@@ -43,6 +34,5 @@ namespace Revit_glTF_Exporter
                 return Result.Failed;
             }
         }
-        
     }
 }

@@ -7,7 +7,7 @@ namespace Common_glTF_Exporter.Export
 {
     public static class ZIP
     {
-        public static void compress(string zipName, List<string> files)
+        public static void Compress(string zipName, List<string> files)
         {
             var zip = ZipFile.Open(zipName, ZipArchiveMode.Create);
             foreach (var file in files)

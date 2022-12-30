@@ -9,16 +9,17 @@ namespace Revit_glTF_Exporter.Model
 {
     public class FixedObjects
     {
-        public List<FixedObject> ObjectsList { get; set; }
-
         public FixedObjects()
         {
             ObjectsList = new List<FixedObject>();
         }
 
+        public List<FixedObject> ObjectsList { get; set; }
+
         public int Count
         {
             get { return Count; }
+
             set
             {
                 this.Count = ObjectsList.Count();
@@ -28,6 +29,7 @@ namespace Revit_glTF_Exporter.Model
         public Category Category
         {
             get { return Category; }
+
             set
             {
                 this.Category = ObjectsList.FirstOrDefault().Category;

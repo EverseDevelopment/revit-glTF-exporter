@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Policy;
 using System.Text;
+using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -54,6 +55,7 @@ namespace Common_glTF_Exporter.Export
                             {
                                 writer.Write((float)coord);
                             }
+
                             foreach (var index in bin.indexBuffer)
                             {
                                 writer.Write((int)index);

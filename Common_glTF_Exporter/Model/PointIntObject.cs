@@ -1,8 +1,8 @@
-﻿using Autodesk.Revit.DB;
-using Revit_glTF_Exporter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Autodesk.Revit.DB;
+using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.Model
 {
@@ -14,10 +14,15 @@ namespace Common_glTF_Exporter.Model
     class PointIntObject : IComparable<PointIntObject>
     {
         public double X { get; set; }
+
         public double Y { get; set; }
+
         public double Z { get; set; }
+
         private double _boundingBoxMidPointX { get; set; }
+
         private double _boundingBoxMidPointY { get; set; }
+
         private double _boundingBoxMidPointZ { get; set; }
 
         public PointIntObject(XYZ p, bool switch_coordinates,

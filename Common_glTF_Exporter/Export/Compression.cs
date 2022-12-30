@@ -1,6 +1,6 @@
-﻿using Common_glTF_Exporter.Windows.MainWindow;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -15,7 +15,7 @@ namespace Common_glTF_Exporter.Export
                 string zipFile = string.Concat(preferences.path, "zip");
                 List<string> files = new List<string> { gltfFile, binFile };
 
-                ZIP.compress(zipFile, files);
+                ZIP.Compress(zipFile, files);
                 files.ForEach(x => File.Delete(x));
             }
         }

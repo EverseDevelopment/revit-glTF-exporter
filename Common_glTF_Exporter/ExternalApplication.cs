@@ -9,8 +9,8 @@ namespace Revit_glTF_Exporter
 {
     class App : IExternalApplication
     {
-        private static string RIBBON_TAB = "e-verse";
-        private static string RIBBON_PANEL = "glTF";
+        private static readonly string RIBBONTAB = "e-verse";
+        private static readonly string RIBBONPANEL = "glTF";
         private static string PUSH_BUTTON_NAME = "glTF Exporter";
         private static string PUSH_BUTTON_TEXT = "glTF Exporter";
         private static string AddInPath = typeof(App).Assembly.Location;
@@ -25,24 +25,24 @@ namespace Revit_glTF_Exporter
         {
             try
             {
-                CreateRibbonTab(application, RIBBON_TAB);
+                CreateRibbonTab(application, RIBBONTAB);
             }
             catch
             {
             }
 
             RibbonPanel panel = null;
-            //look for XXXXXX RibbonPanel, or create it if not already created
+            // look for XXXXXX RibbonPanel, or create it if not already created
             foreach (RibbonPanel existingPanel in application.GetRibbonPanels())
             {
-                if (existingPanel.Name.Equals(RIBBON_PANEL))
+                if (existingPanel.Name.Equals(RIBBONPANEL))
                 {
-                    //existingPanel.AddSeparator();
+                    // existingPanel.AddSeparator();
                     panel = existingPanel;
                     break;
                 }
             }
-            if (panel == null) panel = application.CreateRibbonPanel(RIBBON_TAB, RIBBON_PANEL);
+            if (panel == null) panel = application.CreateRibbonPanel(RIBBONTAB, RIBBONPANEL);
 
             PushButtonData pushDataButton = new PushButtonData(PUSH_BUTTON_NAME, PUSH_BUTTON_TEXT, AddInPath, "Revit_glTF_Exporter.ExternalCommand");
             pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "gltf.png"), UriKind.Absolute));

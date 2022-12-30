@@ -1,7 +1,7 @@
-﻿using Autodesk.Revit.DB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Autodesk.Revit.DB;
 
 namespace Common_glTF_Exporter.Model
 {
@@ -18,15 +18,10 @@ namespace Common_glTF_Exporter.Model
         public string Label { get; internal set; }
 
         public UnitObject(
-
         #if REVIT2019 || REVIT2020
-
         DisplayUnitType displayUnitType       
-
         #else
-
-        ForgeTypeId forgeTypeId           
-
+        ForgeTypeId forgeTypeId
         #endif
         )
         {

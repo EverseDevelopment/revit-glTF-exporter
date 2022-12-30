@@ -1,9 +1,9 @@
-﻿using Revit_glTF_Exporter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.Export
 {

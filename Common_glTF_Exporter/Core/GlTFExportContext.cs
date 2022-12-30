@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Transform = Autodesk.Revit.DB.Transform;
 using Common_glTF_Exporter.Export;
+using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
-using Common_glTF_Exporter.Model;
+using Transform = Autodesk.Revit.DB.Transform;
 
 namespace Revit_glTF_Exporter
 {

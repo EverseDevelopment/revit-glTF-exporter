@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Documents;
+using Autodesk.Revit.DB;
+using Newtonsoft.Json;
+using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.Export
 {
