@@ -17,12 +17,12 @@ namespace Common_glTF_Exporter.Windows.MainWindow
         public bool lights { get; set; }
         public bool grids { get; set; }
         public bool batchId { get; set; }
-        public bool boundingBox { get; set; }
+        public bool properties { get; set; }
         public bool relocateTo0 { get; set; }
         public bool flipAxis { get; set; }
-        public bool exportProperties { get; set; }
         public bool singleBinary { get; set; }
         public CompressionEnum compression { get; set; }
+
         #if REVIT2019 || REVIT2020
 
         public DisplayUnitType units { get; set; }

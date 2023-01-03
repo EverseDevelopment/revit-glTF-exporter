@@ -67,7 +67,11 @@ namespace Common_glTF_Exporter.Export
 
                 xtras.GridParameters = grid;
                 xtras.UniqueId = g.UniqueId;
-                xtras.parameters = Util.GetElementParameters(g, true);
+
+                if (preferences.properties)
+                {
+                    xtras.parameters = Util.GetElementParameters(g, true);
+                }
 
                 var gridNode = new glTFNode();
                 gridNode.name = g.Name;

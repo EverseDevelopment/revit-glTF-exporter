@@ -1,4 +1,5 @@
-﻿using Revit_glTF_Exporter;
+﻿using Common_glTF_Exporter.Windows.MainWindow;
+using Revit_glTF_Exporter;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,10 +10,9 @@ namespace Common_glTF_Exporter.Export
 {
     public static class Binaries
     {
-        public static void Save(bool singleBinary, List<glTFBufferView> bufferViews, string filename, List<glTFBuffer> buffers,
-            string directory, List<glTFBinaryData> binaryFileData, bool exportBatchId, bool exportNormals) {
-
-            if (singleBinary)
+        public static void Save(List<glTFBufferView> bufferViews, List<glTFBuffer> buffers, List<glTFBinaryData> binaryFileData, Preferences preferences) 
+        {
+            if (preferences.singleBinary)
             {
                 int bytePosition = 0;
                 int currentBuffer = 0;
@@ -33,20 +33,20 @@ namespace Common_glTF_Exporter.Export
                 }
 
                 glTFBuffer buffer = new glTFBuffer();
-                string bufferUri = String.Concat(filename, ".bin");
+                string bufferUri = String.Concat(preferences.fileName, ".bin");
                 buffer.uri = bufferUri;
                 buffer.byteLength = bytePosition;
                 buffers.Clear();
                 buffers.Add(buffer);
 
-                string fileDirectory = String.Concat(directory, ".bin");
-                BinFile.Create(fileDirectory, binaryFileData, exportNormals, exportBatchId);
+                string fileDirectory = String.Concat(preferences.path, ".bin");
+                BinFile.Create(fileDirectory, binaryFileData, preferences.normals, preferences.batchId);
             }
             else
             {
                 foreach (var bin in binaryFileData)
                 {
-                    using (FileStream f = File.Create(directory + bin.name))
+                    using (FileStream f = File.Create(preferences.path + bin.name))
                     {
                         using (BinaryWriter writer = new BinaryWriter(f))
                         {
