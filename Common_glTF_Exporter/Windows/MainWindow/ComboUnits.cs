@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Controls;
-using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Utils;
-
-namespace Common_glTF_Exporter.Windows.MainWindow
+﻿namespace Common_glTF_Exporter.Windows.MainWindow
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Windows.Controls;
+    using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Utils;
+
     public static class ComboUnits
     {
         public static void Set(Document doc, System.Windows.Controls.Label unitTextBlock)

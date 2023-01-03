@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Autodesk.Revit.DB;
-
-namespace Revit_glTF_Exporter
+﻿namespace Revit_glTF_Exporter
 {
+    using Common_glTF_Exporter.Core;
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Container for holding a strict set of items
     /// that is also addressable by a unique ID.
@@ -12,36 +11,51 @@ namespace Revit_glTF_Exporter
     /// <typeparam name="T">The type of item contained.</typeparam>
     public class IndexedDictionary<T>
     {
-        private Dictionary<string, int> _dict = new Dictionary<string, int>();
+        private Dictionary<string, int> dict = new Dictionary<string, int>();
+        /// <summary>
+        /// Gets all the generic elements inside the IndexedDictionary.
+        /// </summary>
         public List<T> List { get; } = new List<T>();
+
+        /// <summary>
+        /// Gets the current key from actual element.
+        /// </summary>
         public string CurrentKey { get; private set; }
+
+        /// <summary>
+        /// Gets 
+        /// </summary>
         public Dictionary<string,T> Dict
         {
             get
             {
                 var output = new Dictionary<string, T>();
-                foreach (var kvp in _dict)
+                foreach (var kvp in this.dict)
                 {
-                    output.Add(kvp.Key, List[kvp.Value]);
+                    output.Add(kvp.Key, this.List[kvp.Value]);
                 }
+
                 return output;
             }
         }
 
         /// <summary>
-        /// The most recently accessed item (not effected by GetElement()).
+        /// Gets the most recently accessed item (not effected by GetElement()).
         /// </summary>
         public T CurrentItem
         {
-            get { return List[_dict[CurrentKey]]; }
+            get { return this.List[this.dict[this.CurrentKey]]; }
         }
 
         /// <summary>
-        /// The index of the most recently accessed item (not effected by GetElement()).
+        /// Gets the index of the most recently accessed item (not effected by GetElement()).
         /// </summary>
+        /// <value>
+        /// The index of the most recently accessed item (not effected by GetElement()).
+        /// </value>
         public int CurrentIndex
         {
-            get { return _dict[CurrentKey]; }
+            get { return this.dict[this.CurrentKey]; }
         }
 
         /// <summary>
@@ -53,15 +67,15 @@ namespace Revit_glTF_Exporter
         /// <returns>true if item did not already exist.</returns>
         public bool AddOrUpdateCurrent(string uuid, T elem)
         {
-            if (!_dict.ContainsKey(uuid))
+            if (!this.dict.ContainsKey(uuid))
             {
-                List.Add(elem);
-                _dict.Add(uuid, (List.Count - 1));
-                CurrentKey = uuid;
+                this.List.Add(elem);
+                this.dict.Add(uuid, this.List.Count - 1);
+                this.CurrentKey = uuid;
                 return true;
             }
 
-            CurrentKey = uuid;
+            this.CurrentKey = uuid;
 
             return false;
         }
@@ -72,24 +86,26 @@ namespace Revit_glTF_Exporter
         /// </summary>
         /// <param name="uuid">Unique identifier for the item.</param>
         /// <param name="elem">The item to add.</param>
+        /// <param name="doubleSided">Identify if the material is double sided.</param>
         /// <returns>true if item did not already exist.</returns>
         public bool AddOrUpdateCurrentMaterial(string uuid, T elem, bool doubleSided)
         {
-            if (!_dict.ContainsKey(uuid))
+            if (!this.dict.ContainsKey(uuid))
             {
-                List.Add(elem);
-                _dict.Add(uuid, (List.Count - 1));
-                CurrentKey = uuid;
+                this.List.Add(elem);
+                this.dict.Add(uuid, this.List.Count - 1);
+                this.CurrentKey = uuid;
                 return true;
             }
 
-            CurrentKey = uuid;
+            this.CurrentKey = uuid;
 
-            if (elem is glTFMaterial)
+            if (elem is GLTFMaterial)
             {
-                var mat = this.GetElement(uuid) as glTFMaterial;
+                var mat = this.GetElement(uuid) as GLTFMaterial;
                 mat.doubleSided = doubleSided;
             }
+
             return false;
         }
 
@@ -98,10 +114,10 @@ namespace Revit_glTF_Exporter
         /// Check if the container already has an item with this key.
         /// </summary>
         /// <param name="uuid">Unique identifier for the item.</param>
-        /// <returns></returns>
+        /// <returns>Returns TRUE if the dictionary contains the given element, otherwise, returns FALSE.</returns>
         public bool Contains(string uuid)
         {
-            return _dict.ContainsKey(uuid);
+            return this.dict.ContainsKey(uuid);
         }
 
         /// <summary>
@@ -111,8 +127,12 @@ namespace Revit_glTF_Exporter
         /// <returns>index of item or -1</returns>
         public int GetIndexFromUUID(string uuid)
         {
-            if (!Contains(uuid)) throw new Exception("Specified item could not be found.");
-            return _dict[uuid];
+            if (!this.Contains(uuid))
+            {
+                throw new Exception("Specified item could not be found.");
+            }
+
+            return this.dict[uuid];
         }
 
         /// <summary>
@@ -122,8 +142,8 @@ namespace Revit_glTF_Exporter
         /// <returns>the item</returns>
         public T GetElement(string uuid)
         {
-            int index = GetIndexFromUUID(uuid);
-            return List[index];
+            int index = this.GetIndexFromUUID(uuid);
+            return this.List[index];
         }
 
         /// <summary>
@@ -133,8 +153,12 @@ namespace Revit_glTF_Exporter
         /// <returns>the item</returns>
         public T GetElement(int index)
         {
-            if (index < 0 || index > List.Count - 1) throw new Exception("Specified item could not be found.");
-            return List[index];
+            if (index < 0 || index > this.List.Count - 1)
+            {
+                throw new Exception("Specified item could not be found.");
+            }
+
+            return this.List[index];
         }
     }
 }

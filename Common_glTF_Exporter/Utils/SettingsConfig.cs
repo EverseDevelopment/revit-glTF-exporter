@@ -1,14 +1,14 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
-using System.Reflection;
-using Autodesk.Internal.InfoCenter;
-using Configuration = System.Configuration.Configuration;
-
-namespace Common_glTF_Exporter.Utils
+﻿namespace Common_glTF_Exporter.Utils
 {
+    using System;
+    using System.Configuration;
+    using System.IO;
+    using System.Reflection;
+    using Autodesk.Internal.InfoCenter;
+    using Configuration = System.Configuration.Configuration;
+
     /// <summary>
-    /// SettingsConfig
+    /// SettingsConfig.
     /// </summary>
     public static class SettingsConfig
     {

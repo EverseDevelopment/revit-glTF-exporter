@@ -1,11 +1,18 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Common_glTF_Exporter.Windows.MainWindow;
-
-namespace Common_glTF_Exporter.Export
+﻿namespace Common_glTF_Exporter.Export
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using Common_glTF_Exporter.Windows.MainWindow;
+
+    /// <summary>
+    /// Compression.
+    /// </summary>
     public class Compression
     {
+        /// <summary>
+        /// Run compression.
+        /// </summary>
+        /// <param name="preferences">preferences.</param>
         public static void Run(Preferences preferences)
         {
             if (preferences.compression.Equals(CompressionEnum.ZIP))

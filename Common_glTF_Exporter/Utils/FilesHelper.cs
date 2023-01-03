@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Windows.Forms;
-using Autodesk.Revit.UI;
-
-namespace Common_glTF_Exporter.Utils
+﻿namespace Common_glTF_Exporter.Utils
 {
+    using System;
+    using System.IO;
+    using System.Windows.Forms;
+    using Autodesk.Revit.UI;
+
     internal class FilesHelper
     {
         public static bool AskToSave(ref string filename, string filter, string defaultExt, string initialDirectory = null)

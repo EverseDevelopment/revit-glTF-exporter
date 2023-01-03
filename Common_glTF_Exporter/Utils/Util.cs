@@ -1,26 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media.Media3D;
-using Autodesk.Revit.DB;
-using Material = Autodesk.Revit.DB.Material;
+﻿namespace Revit_glTF_Exporter
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows.Media.Media3D;
+    using Autodesk.Revit.DB;
+    using Material = Autodesk.Revit.DB.Material;
 
-namespace Revit_glTF_Exporter
-{   
-    class Util
+    public class Util
     {
         /// <summary>
         /// Analyze if the given <paramref name="element"/> can be locked OR hidden.
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="view"></param>
+        /// <param name="element">Revit element.</param>
+        /// <param name="view">Revit view.</param>
         /// <returns>If the given element can't be locked OR can't be hidden, it will returns FALSE. Otherwise, will returns TRUE.</returns>
         public static bool CanBeLockOrHidden(Element element, View view)
         {
             if (!element.CanBeLocked() || !element.CanBeHidden(view))
-                return false;          
+            {
+                return false;
+            }
+
             return true;
         }
+
         public static BoundingBoxXYZ GetElementsBoundingBox(View view, List<Element> elements)
         {
             // Get the bounding box of the visible elements
@@ -32,7 +36,9 @@ namespace Revit_glTF_Exporter
                 BoundingBoxXYZ elementBoundingBox = element.get_BoundingBox(view);
 
                 if (elementBoundingBox == null)
+                {
                     continue;
+                }
 
                 if (element.CanBeHidden(view) && element.CanBeLocked())
                 {
@@ -52,36 +58,33 @@ namespace Revit_glTF_Exporter
 
         public static Material GetMeshMaterial(Document doc, Mesh mesh)
         {
-            ElementId materialId = mesh.MaterialElementId; 
+            ElementId materialId = mesh.MaterialElementId;
 
             if (materialId != null)
             {
-                return (doc.GetElement(materialId) as Material);
+                return doc.GetElement(materialId) as Material;
             }
-
-            else { return null; }
+            else
+            {
+                return null;
+            }
         }
+
         /// <summary>
         /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="forgeTypeId"></param>
-        /// <returns></returns>
-        public static double ConvertFeetToUnitTypeId(double value,
-
+        /// <param name="value">Value to convert.</param>
+        /// <param name="displayUnitType">Display Unit Type.</param>
+        /// <param name="decimalPlaces">Number of decimal places.</param>
+        /// <returns>Converted value.</returns>
+        public static double ConvertFeetToUnitTypeId(
+            double value,
             #if REVIT2019 || REVIT2020
-
-            DisplayUnitType displayUnitType
-
+            DisplayUnitType displayUnitType,
             #else
-
-            ForgeTypeId forgeTypeId
-
+            ForgeTypeId forgeTypeId,
             #endif
-
-            ,int decimalPlaces
-
-            )
+            int decimalPlaces)
         {
             #if REVIT2019 || REVIT2020
 
@@ -93,25 +96,36 @@ namespace Revit_glTF_Exporter
 
             #endif
         }
+
         public static float[] GetVec3MinMax(List<float> vec3)
         {
-            
-            List<float> xValues = new List<float>();
-            List<float> yValues = new List<float>();
-            List<float> zValues = new List<float>();
+            List<float> xvalues = new List<float>();
+            List<float> yvalues = new List<float>();
+            List<float> zvalues = new List<float>();
             for (int i = 0; i < vec3.Count; i++)
             {
-                if ((i % 3) == 0) xValues.Add(vec3[i]);
-                if ((i % 3) == 1) yValues.Add(vec3[i]);
-                if ((i % 3) == 2) zValues.Add(vec3[i]);
+                if ((i % 3) == 0)
+                {
+                    xvalues.Add(vec3[i]);
+                }
+
+                if ((i % 3) == 1)
+                {
+                    yvalues.Add(vec3[i]);
+                }
+
+                if ((i % 3) == 2)
+                {
+                    zvalues.Add(vec3[i]);
+                }
             }
 
-            float maxX = xValues.Max();
-            float minX = xValues.Min();
-            float maxY = yValues.Max();
-            float minY = yValues.Min();
-            float maxZ = zValues.Max();
-            float minZ = zValues.Min();
+            float maxX = xvalues.Max();
+            float minX = xvalues.Min();
+            float maxY = yvalues.Max();
+            float minY = yvalues.Min();
+            float maxZ = zvalues.Max();
+            float minZ = zvalues.Min();
 
             return new float[] { minX, maxX, minY, maxY, minZ, maxZ };
         }
@@ -123,11 +137,18 @@ namespace Revit_glTF_Exporter
             for (int i = 0; i < scalars.Count; i++)
             {
                 int currentMin = Math.Min(minFaceIndex, scalars[i]);
-                if (currentMin < minFaceIndex) minFaceIndex = currentMin;
+                if (currentMin < minFaceIndex)
+                {
+                    minFaceIndex = currentMin;
+                }
 
                 int currentMax = Math.Max(maxFaceIndex, scalars[i]);
-                if (currentMax > maxFaceIndex) maxFaceIndex = currentMax;
+                if (currentMax > maxFaceIndex)
+                {
+                    maxFaceIndex = currentMax;
+                }
             }
+
             return new int[] { minFaceIndex, maxFaceIndex };
         }
 
@@ -212,14 +233,13 @@ namespace Revit_glTF_Exporter
         }
 
         /// <summary>
-        /// Gets a list of "Project UUID" values corresponding to 
+        /// Gets a list of "Project UUID" values corresponding to
         /// an element's dependent (hosted) elements
         /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <param name="e">Revit element.</param>
+        /// <returns>List of dependent element Project UUID values.</returns>
         public static List<string> GetDependentElements(Element e)
         {
-
             IList<ElementId> dependentElements = e.GetDependentElements(null);
 
             List<string> dependentElementUuids = new List<string>();
@@ -248,15 +268,15 @@ namespace Revit_glTF_Exporter
         /// Return a dictionary of all the given 
         /// element parameter names and values.
         /// </summary>
+        /// <param name="e">Revit element.</param>
+        /// <param name="includeType">Include element information.</param>
+        /// <returns>Element parameters dictionary.</returns>
         public static Dictionary<string, string> GetElementParameters(Element e, bool includeType)
         {
             IList<Parameter> parameters
               = e.GetOrderedParameters();
 
             Dictionary<string, string> a = new Dictionary<string, string>(parameters.Count);
-
-            // Add element category
-            //a.Add("Element Category", e.Category.Name);
 
             string key;
             string val;
@@ -267,7 +287,7 @@ namespace Revit_glTF_Exporter
 
                 if (!a.ContainsKey(key))
                 {
-                    if (StorageType.String == p.StorageType)
+                    if (p.StorageType == StorageType.String)
                     {
                         val = p.AsString();
                     }
@@ -275,6 +295,7 @@ namespace Revit_glTF_Exporter
                     {
                         val = p.AsValueString();
                     }
+
                     if (!string.IsNullOrEmpty(val))
                     {
                         a.Add(key, val);
@@ -284,12 +305,12 @@ namespace Revit_glTF_Exporter
 
             if (includeType)
             {
-                ElementId idType = e.GetTypeId();
+                ElementId elementId = e.GetTypeId();
 
-                if (ElementId.InvalidElementId != idType)
+                if (ElementId.InvalidElementId != elementId)
                 {
                     Document doc = e.Document;
-                    Element typ = doc.GetElement(idType);
+                    Element typ = doc.GetElement(elementId);
                     parameters = typ.GetOrderedParameters();
                     foreach (Parameter p in parameters)
                     {
@@ -297,7 +318,7 @@ namespace Revit_glTF_Exporter
 
                         if (!a.ContainsKey(key))
                         {
-                            if (StorageType.String == p.StorageType)
+                            if (p.StorageType == StorageType.String)
                             {
                                 val = p.AsString();
                             }
@@ -305,6 +326,7 @@ namespace Revit_glTF_Exporter
                             {
                                 val = p.AsValueString();
                             }
+
                             if (!string.IsNullOrEmpty(val))
                             {
                                 a.Add(key, val);
@@ -313,6 +335,7 @@ namespace Revit_glTF_Exporter
                     }
                 }
             }
+
             return a;
         }
     }

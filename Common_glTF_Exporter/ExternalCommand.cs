@@ -1,11 +1,11 @@
-﻿using System;
-using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-
-namespace Revit_glTF_Exporter
+﻿namespace Revit_glTF_Exporter
 {
+    using System;
+    using Autodesk.Revit.ApplicationServices;
+    using Autodesk.Revit.Attributes;
+    using Autodesk.Revit.DB;
+    using Autodesk.Revit.UI;
+
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
 
@@ -15,11 +15,10 @@ namespace Revit_glTF_Exporter
         {
             try
             {
-
-                UIApplication uiApp = commandData.Application;
-                UIDocument uiDoc = uiApp.ActiveUIDocument;
-                Application app = uiApp.Application;
-                Document doc = uiDoc.Document;
+                UIApplication uiapp = commandData.Application;
+                UIDocument uidoc = uiapp.ActiveUIDocument;
+                Application app = uiapp.Application;
+                Document doc = uidoc.Document;
 
                 View view = doc.ActiveView;
 

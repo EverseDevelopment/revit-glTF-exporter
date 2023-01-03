@@ -1,39 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autodesk.Revit.DB;
-
-namespace Revit_glTF_Exporter.Model
+﻿namespace Revit_glTF_Exporter.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Autodesk.Revit.DB;
+
     public class FixedObjects
     {
         public FixedObjects()
         {
-            ObjectsList = new List<FixedObject>();
+            this.ObjectsList = new List<FixedObject>();
         }
 
         public List<FixedObject> ObjectsList { get; set; }
 
         public int Count
         {
-            get { return Count; }
-
-            set
-            {
-                this.Count = ObjectsList.Count();
-            }
+            get { return this.Count; }
+            set { this.Count = this.ObjectsList.Count(); }
         }
 
         public Category Category
         {
-            get { return Category; }
-
-            set
-            {
-                this.Category = ObjectsList.FirstOrDefault().Category;
-            }
+            get { return this.Category; }
+            set { this.Category = this.ObjectsList.FirstOrDefault().Category; }
         }
     }
 }

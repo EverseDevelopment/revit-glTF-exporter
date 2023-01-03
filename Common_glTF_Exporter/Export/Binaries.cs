@@ -1,17 +1,27 @@
-﻿using Common_glTF_Exporter.Windows.MainWindow;
-using Revit_glTF_Exporter;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Policy;
-using System.Text;
-using Revit_glTF_Exporter;
-
-namespace Common_glTF_Exporter.Export
+﻿namespace Common_glTF_Exporter.Export
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Security.Policy;
+    using System.Text;
+    using Common_glTF_Exporter.Core;
+    using Common_glTF_Exporter.Windows.MainWindow;
+    using Revit_glTF_Exporter;
+
+    /// <summary>
+    /// Binaries.
+    /// </summary>
     public static class Binaries
     {
-        public static void Save(List<glTFBufferView> bufferViews, List<glTFBuffer> buffers, List<glTFBinaryData> binaryFileData, Preferences preferences) 
+        /// <summary>
+        /// Save the binaries.
+        /// </summary>
+        /// <param name="bufferViews">bufferViews.</param>
+        /// <param name="buffers">buffers.</param>
+        /// <param name="binaryFileData">binaryFileData.</param>
+        /// <param name="preferences">preferences.</param>
+        public static void Save(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers, List<GLTFBinaryData> binaryFileData, Preferences preferences) 
         {
             if (preferences.singleBinary)
             {
@@ -33,7 +43,7 @@ namespace Common_glTF_Exporter.Export
                     }
                 }
 
-                glTFBuffer buffer = new glTFBuffer();
+                GLTFBuffer buffer = new GLTFBuffer();
                 string bufferUri = String.Concat(preferences.fileName, ".bin");
                 buffer.uri = bufferUri;
                 buffer.byteLength = bytePosition;
@@ -65,6 +75,5 @@ namespace Common_glTF_Exporter.Export
                 }
             }
         }
-
     }
 }

@@ -1,11 +1,10 @@
-﻿using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Utils;
-using System;
-using System.Reflection;
-
-
-namespace Common_glTF_Exporter.Windows.MainWindow
+﻿namespace Common_glTF_Exporter.Windows.MainWindow
 {
+    using System;
+    using System.Reflection;
+    using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Utils;
+
     public static class Settings
     {
         public static Preferences GetInfo()
@@ -19,7 +18,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 string propertyName = property.Name;
 
                 if (property.PropertyType == typeof(bool))
-                {    
+                {
                     var tempvalue = Convert.ToBoolean(SettingsConfig.GetValue(propertyName));
                     preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
                 }
@@ -43,7 +42,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 #else
                 property.PropertyType == typeof(ForgeTypeId)
                 #endif
-                 )
+                )
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();
 
