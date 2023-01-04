@@ -2,9 +2,12 @@ namespace Revit_glTF_Exporter
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Media.Media3D;
     using Autodesk.Revit.DB;
+    using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Export;
+    using Common_glTF_Exporter.Extensions;
     using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.Windows.MainWindow;
@@ -100,7 +103,7 @@ namespace Revit_glTF_Exporter
         public List<GLTFAccessor> accessors { get; } = new List<GLTFAccessor>();
 
         /// <summary>
-        /// Container for the vertex/face/normal information that will be serialized into a binary
+        /// Gets the container for the vertex/face/normal information that will be serialized into a binary
         /// format for the final *.bin files.
         /// </summary>
         public List<GLTFBinaryData> binaryFileData { get; } = new List<GLTFBinaryData>();
@@ -147,15 +150,7 @@ namespace Revit_glTF_Exporter
             // {Vec3<double>}, Length {double}
             if (preferences.grids)
             {
-                #if REVIT2019 || REVIT2020
-
-                Common_glTF_Exporter.Export.RevitGrids.Export(doc,ref nodes, ref rootNode, preferences);
-
-                #else
-
-                RevitGrids.Export(doc,ref Nodes,ref rootNode, preferences);
-
-                #endif
+                RevitGrids.Export(doc, ref nodes, ref rootNode, preferences);
             }
 
             Binaries.Save(bufferViews, buffers, binaryFileData, preferences);
@@ -192,17 +187,15 @@ namespace Revit_glTF_Exporter
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
-
             newNode.name = Util.ElementDescription(element);
 
             // get the extras for this element
             GLTFExtras extras = new GLTFExtras();
-
             extras.uniqueId = element.UniqueId;
 
             if (preferences.properties)
             {
-                extras.parameters = Util.GetElementParameters(element, true);              
+                extras.parameters = Util.GetElementParameters(element, true);
             }
 
             if (preferences.elementId)
@@ -249,11 +242,7 @@ namespace Revit_glTF_Exporter
         /// <param name="polymesh">PolymeshTopology.</param>
         public void OnPolymesh(PolymeshTopology polymesh)
         {
-            string vertex_key = nodes.CurrentKey + "_" + materials.CurrentKey;
-
-            // Add new "_current" entries if vertex_key is unique
-            currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
-            currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
+            GLTFExportUtils.AddOrUpdateCurrentItem(nodes, currentGeometry, currentVertices, materials);
 
             // populate current vertices vertex data and current geometry faces data
             Transform transform = CurrentTransform;
@@ -263,28 +252,19 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-                #if REVIT2019 || REVIT2020
+                List<PointIntObject> points = new List<PointIntObject>
+                {
+                    new PointIntObject(preferences, pts[facet.V1], pointToRelocate),
+                    new PointIntObject(preferences, pts[facet.V2], pointToRelocate),
+                    new PointIntObject(preferences, pts[facet.V3], pointToRelocate),
+                };
 
-                int v1 = currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate, preferences.digits));
-                int v2 = currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate, preferences.digits));
-                int v3 = currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-
-                #else
-
-                int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V1], preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-                int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V2], preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-                int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[facet.V3], preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-
-                #endif
-
-                currentGeometry.CurrentItem.Faces.Add(v1);
-                currentGeometry.CurrentItem.Faces.Add(v2);
-                currentGeometry.CurrentItem.Faces.Add(v3);
+                GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
             }
 
             if (preferences.normals)
             {
-                GLTFExportUtils.AddNormals(preferences.flipAxis, transform, polymesh, currentGeometry.CurrentItem.Normals);
+                GLTFExportUtils.AddNormals(preferences, transform, polymesh, currentGeometry.CurrentItem.Normals);
             }
         }
 
@@ -437,9 +417,7 @@ namespace Revit_glTF_Exporter
             transformStack.Pop();
         }
 
-        public RenderNodeAction
-
-            Begin(FaceNode node)
+        public RenderNodeAction Begin(FaceNode node)
         {
             return RenderNodeAction.Proceed;
         }
@@ -451,105 +429,54 @@ namespace Revit_glTF_Exporter
 
         public void OnRPC(RPCNode node)
         {
-            Options opt = new Options();
-            opt.ComputeReferences = true;
-            opt.View = doc.ActiveView;
+            var meshes = GeometryUtils.GetMeshes(doc, element);
 
-            GeometryElement geoEle = element.get_Geometry(opt);
-
-            foreach (GeometryObject geoObject in geoEle)
+            if (!meshes.Any())
             {
-                if (geoObject is GeometryInstance)
+                return;
+            }
+
+            foreach (var mesh in meshes)
+            {
+                int triangles = mesh.NumTriangles;
+
+                if (triangles.Equals(0))
                 {
-                    GeometryInstance geoInst = geoObject as GeometryInstance;
+                    continue;
+                }
 
-                    foreach (var geoObj in geoInst.GetInstanceGeometry())
+                MaterialUtils.SetMaterial(doc, preferences, mesh, materials, true);
+
+                GLTFExportUtils.AddOrUpdateCurrentItem(nodes, currentGeometry, currentVertices, materials);
+
+                for (int i = 0; i < triangles; i++)
+                {
+                    try
                     {
-                        if (geoObj is Mesh)
+                        MeshTriangle triangle = mesh.get_Triangle(i);
+
+                        if (triangle.Equals(null))
                         {
-                            Mesh mesh = geoObj as Mesh;
-                            int triangles = mesh.NumTriangles;
-
-                            if (triangles == 0)
-                            {
-                                continue;
-                            }
-
-                            GLTFMaterial gl_mat = new GLTFMaterial();
-                            Material material = Util.GetMeshMaterial(doc, mesh);
-
-                            if (preferences.materials)
-                            {
-                                if (material == null)
-                                {
-                                    material = Collectors.GetRandomMaterial(doc);
-                                }
-
-                                gl_mat = GLTFExportUtils.GetGLTFMaterial(materials.List, material, true);
-
-                                materials.AddOrUpdateCurrentMaterial(material.UniqueId, gl_mat, true);
-                            }
-
-                            // Add new "_current" entries if vertex_key is unique
-                            string vertex_key = nodes.CurrentKey + "_" + materials.CurrentKey;
-                            currentGeometry.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
-                            currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
-
-                            for (int i = 0; i < triangles; i++)
-                            {
-                                try
-                                {
-                                    MeshTriangle triangle = mesh.get_Triangle(i);
-
-                                    if (triangle == null)
-                                    {
-                                        continue;
-                                    }
-
-                                    #if REVIT2019 || REVIT2020
-
-                                    int v1 = currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-                                    int v2 = currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-                                    int v3 = currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-
-                                    #else
-
-                                    int v1 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(0), preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-                                    int v2 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(1), preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-                                    int v3 = _currentVertices.CurrentItem.AddVertex(new PointIntObject(triangle.get_Vertex(2), preferences.flipAxis, preferences.units, preferences.relocateTo0, pointToRelocate,  preferences.digits));
-
-                                    #endif
-
-                                    currentGeometry.CurrentItem.Faces.Add(v1);
-                                    currentGeometry.CurrentItem.Faces.Add(v2);
-                                    currentGeometry.CurrentItem.Faces.Add(v3);
-
-                                    if (preferences.normals)
-                                    {
-                                        XYZ side1 = triangle.get_Vertex(1) - triangle.get_Vertex(0);
-                                        XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
-                                        XYZ normal = side1.CrossProduct(side2);
-
-                                        normal = normal.Normalize();
-
-                                        if (preferences.flipAxis)
-                                        {
-                                            normal = normal.FlipCoordinates();
-                                        }
-
-                                        for (int j = 0; j < 3; j++)
-                                        {
-                                            currentGeometry.CurrentItem.Normals.Add(normal.X);
-                                            currentGeometry.CurrentItem.Normals.Add(normal.Y);
-                                            currentGeometry.CurrentItem.Normals.Add(normal.Z);
-                                        }
-                                    }
-                                }
-                                catch
-                                {
-                                }
-                            }
+                            continue;
                         }
+
+                        List<PointIntObject> points = new List<PointIntObject>
+                        {
+                            new PointIntObject(preferences, triangle.get_Vertex(0), pointToRelocate),
+                            new PointIntObject(preferences, triangle.get_Vertex(1), pointToRelocate),
+                            new PointIntObject(preferences, triangle.get_Vertex(2), pointToRelocate),
+                        };
+
+                        GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
+
+                        if (preferences.normals)
+                        {
+                            GLTFExportUtils.AddRPCNormals(preferences, triangle, currentGeometry.CurrentItem);
+                        }
+                    }
+                    catch
+                    {
+                        continue;
                     }
                 }
             }

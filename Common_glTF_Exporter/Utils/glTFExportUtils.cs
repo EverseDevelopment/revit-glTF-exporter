@@ -1,21 +1,20 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Core;
+    using Common_glTF_Exporter.Extensions;
     using Common_glTF_Exporter.Model;
+    using Common_glTF_Exporter.Windows.MainWindow;
     using Revit_glTF_Exporter;
 
     public class GLTFExportUtils
     {
-        public static GLTFMaterial GetGLTFMaterial(List<GLTFMaterial> glTFMaterials, Material material, bool doubleSided)
+        public static GLTFMaterial GetGLTFMaterial(List<GLTFMaterial> gltfMaterials, Material material, bool doubleSided)
         {
             // search for an already existing material
-            var m = glTFMaterials.FirstOrDefault(x =>
+            var m = gltfMaterials.FirstOrDefault(x =>
             x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
             x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
             x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue && x.doubleSided == doubleSided);
@@ -37,6 +36,44 @@
             gl_mat.pbrMetallicRoughness = pbr;
 
             return gl_mat;
+        }
+
+        public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, List<PointIntObject> points)
+        {
+            foreach (var point in points)
+            {
+                int vertexIndex = vertex.AddVertex(point);
+                geometryDataObject.Faces.Add(vertexIndex);
+            }
+        }
+
+        public static void AddOrUpdateCurrentItem(
+            IndexedDictionary<GLTFNode> nodes,
+            IndexedDictionary<GeometryDataObject> geomDataObj,
+            IndexedDictionary<VertexLookupIntObject> vertexIntObj,
+            IndexedDictionary<GLTFMaterial> materials)
+        {
+            // Add new "_current" entries if vertex_key is unique
+            string vertex_key = string.Concat(nodes.CurrentKey, "_", materials.CurrentKey);
+            geomDataObj.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
+            vertexIntObj.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
+        }
+
+        public static void AddRPCNormals(Preferences preferences, MeshTriangle triangle, GeometryDataObject geomDataObj)
+        {
+            XYZ normal = GeometryUtils.GetNormal(triangle);
+
+            if (preferences.flipAxis)
+            {
+                normal = normal.FlipCoordinates();
+            }
+
+            for (int j = 0; j < 3; j++)
+            {
+                geomDataObj.Normals.Add(normal.X);
+                geomDataObj.Normals.Add(normal.Y);
+                geomDataObj.Normals.Add(normal.Z);
+            }
         }
 
         /// <summary>
@@ -81,7 +118,7 @@
             return bufferData;
         }
 
-        public static void AddNormals(bool flipCoordinates, Transform transform, PolymeshTopology polymesh, List<double> normals)
+        public static void AddNormals(Preferences preferences, Transform transform, PolymeshTopology polymesh, List<double> normals)
         {
             IList<XYZ> polymeshNormals = polymesh.GetNormals();
 
@@ -121,7 +158,7 @@
                         {
                             var newNormal = normal;
 
-                            if (flipCoordinates)
+                            if (preferences.flipAxis)
                             {
                                 newNormal = normal.FlipCoordinates();
                             }

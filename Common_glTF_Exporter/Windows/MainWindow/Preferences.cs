@@ -1,12 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Windows.MainWindow
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Security.RightsManagement;
-    using System.Text;
-    using System.Windows.Controls;
     using Autodesk.Revit.DB;
-    using Revit_glTF_Exporter;
 
     public enum CompressionEnum
     {

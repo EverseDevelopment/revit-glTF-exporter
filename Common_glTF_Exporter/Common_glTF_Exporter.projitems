@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitGrids.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitMaterials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTF.cs" />
@@ -38,6 +39,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ComboUnits.cs" />

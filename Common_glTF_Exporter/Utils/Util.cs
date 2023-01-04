@@ -56,20 +56,6 @@
             return newBB;
         }
 
-        public static Material GetMeshMaterial(Document doc, Mesh mesh)
-        {
-            ElementId materialId = mesh.MaterialElementId;
-
-            if (materialId != null)
-            {
-                return doc.GetElement(materialId) as Material;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         /// <summary>
         /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
         /// </summary>
@@ -201,7 +187,7 @@
         /// </summary>
         public static string ElementDescription(Element e)
         {
-            if (null == e)
+            if (e == null)
             {
                 return "<null>";
             }
@@ -214,22 +200,27 @@
 
             string typeName = e.GetType().Name;
 
-            string categoryName = (null == e.Category)
+            string categoryName = (e.Category == null)
               ? string.Empty
               : e.Category.Name + " ";
 
-            string familyName = (null == fi)
+            string familyName = (fi == null)
               ? string.Empty
               : fi.Symbol.Family.Name + " ";
 
-            string symbolName = (null == fi
+            string symbolName = (fi == null
               || e.Name.Equals(fi.Symbol.Name))
                 ? string.Empty
                 : fi.Symbol.Name + " ";
 
-            return string.Format("{0} {1}{2}{3}<{4} {5}>",
-              typeName, categoryName, familyName,
-              symbolName, e.Id.IntegerValue, e.Name);
+            return string.Format(
+              "{0} {1}{2}{3}<{4} {5}>",
+              typeName,
+              categoryName,
+              familyName,
+              symbolName,
+              e.Id.IntegerValue,
+              e.Name);
         }
 
         /// <summary>
@@ -246,11 +237,11 @@
 
             Document doc = e.Document;
 
-            foreach (ElementId elId in dependentElements)
+            foreach (ElementId elementId in dependentElements)
             {
-                if (elId != e.Id)
+                if (elementId != e.Id)
                 {
-                    Element dependentElement = doc.GetElement(elId);
+                    Element dependentElement = doc.GetElement(elementId);
                     string uuid = dependentElement.LookupParameter("ProjectUUID")?.AsString();
                     if (uuid != null)
                     {
@@ -265,7 +256,7 @@
         /// <summary>
         /// From Jeremy Tammik's RvtVa3c exporter:
         /// https://github.com/va3c/RvtVa3c
-        /// Return a dictionary of all the given 
+        /// Return a dictionary of all the given
         /// element parameter names and values.
         /// </summary>
         /// <param name="e">Revit element.</param>
@@ -337,18 +328,6 @@
             }
 
             return a;
-        }
-    }
-
-    public static class Extensions
-    {
-        public static XYZ FlipCoordinates(this XYZ point)
-        {
-            double X = -point.X;
-            double Y = point.Z;
-            double Z = point.Y;
-
-            return new XYZ(X, Y, Z);
         }
     }
 }
