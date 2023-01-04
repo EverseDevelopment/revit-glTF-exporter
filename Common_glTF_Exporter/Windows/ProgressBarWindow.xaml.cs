@@ -1,9 +1,8 @@
 ﻿namespace Revit_glTF_Exporter
 {
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
 
@@ -21,7 +20,18 @@
 
         public static ProgressBarWindow MainView { get; set; }
 
-        public ProgressBarWindowViewModel ViewModel { get; set; } = new ProgressBarWindowViewModel();
+        public static ProgressBarWindowViewModel ViewModel { get; set; } = new ProgressBarWindowViewModel();
+
+        public static ProgressBarWindow Create(double maxValue, double currentValue, string message)
+        {
+            var progressBar = new ProgressBarWindow();
+            ProgressBarWindow.ViewModel.ProgressBarValue = currentValue;
+            ProgressBarWindow.ViewModel.Message = message;
+            ProgressBarWindow.ViewModel.ProgressBarMax = maxValue;
+            progressBar.Show();
+            ProgressBarWindow.MainView.Topmost = true;
+            return progressBar;
+        }
 
         private void CloseWindow(object sender, RoutedEventArgs e)
         {

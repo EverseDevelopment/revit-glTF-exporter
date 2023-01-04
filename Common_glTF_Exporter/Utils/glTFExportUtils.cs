@@ -128,23 +128,26 @@
                 {
                     foreach (PolymeshFacet facet in polymesh.GetFacets())
                     {
-                        XYZ normal1 = transform.OfVector(polymeshNormals[facet.V1]);
-                        XYZ normal2 = transform.OfVector(polymeshNormals[facet.V2]);
-                        XYZ normal3 = transform.OfVector(polymeshNormals[facet.V3]);
+                        List<XYZ> normalPoints = new List<XYZ>
+                        {
+                            transform.OfVector(polymeshNormals[facet.V1]),
+                            transform.OfVector(polymeshNormals[facet.V2]),
+                            transform.OfVector(polymeshNormals[facet.V3]),
+                        };
 
-                        var newNormal1 = normal1.FlipCoordinates();
-                        var newNormal2 = normal2.FlipCoordinates();
-                        var newNormal3 = normal3.FlipCoordinates();
+                        foreach (var normalPoint in normalPoints)
+                        {
+                            XYZ newNormalPoint = normalPoint;
 
-                        normals.Add(newNormal1.X);
-                        normals.Add(newNormal1.Y);
-                        normals.Add(newNormal1.Z);
-                        normals.Add(newNormal2.X);
-                        normals.Add(newNormal2.Y);
-                        normals.Add(newNormal2.Z);
-                        normals.Add(newNormal3.X);
-                        normals.Add(newNormal3.Y);
-                        normals.Add(newNormal3.Z);
+                            if (preferences.flipAxis)
+                            {
+                                newNormalPoint = normalPoint.FlipCoordinates();
+                            }
+
+                            normals.Add(newNormalPoint.X);
+                            normals.Add(newNormalPoint.Y);
+                            normals.Add(newNormalPoint.Z);
+                        }
                     }
 
                     break;
@@ -180,7 +183,11 @@
                     foreach (XYZ normal in polymeshNormals)
                     {
                         var newNormal = transform.OfVector(normal);
-                        newNormal = newNormal.FlipCoordinates();
+
+                        if (preferences.flipAxis)
+                        {
+                            newNormal = newNormal.FlipCoordinates();
+                        }
 
                         normals.Add(newNormal.X);
                         normals.Add(newNormal.Y);

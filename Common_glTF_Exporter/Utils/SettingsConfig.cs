@@ -7,9 +7,6 @@
     using Autodesk.Internal.InfoCenter;
     using Configuration = System.Configuration.Configuration;
 
-    /// <summary>
-    /// SettingsConfig.
-    /// </summary>
     public static class SettingsConfig
     {
         private static readonly string BinaryLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

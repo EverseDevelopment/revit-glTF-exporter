@@ -1,13 +1,9 @@
 ﻿namespace Common_glTF_Exporter.Export
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.IO.Compression;
 
-    /// <summary>
-    /// Zip class.
-    /// </summary>
     public static class ZIP
     {
         /// <summary>

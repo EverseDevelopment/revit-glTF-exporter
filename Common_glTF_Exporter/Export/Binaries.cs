@@ -1,17 +1,10 @@
 ﻿namespace Common_glTF_Exporter.Export
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Security.Policy;
-    using System.Text;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Windows.MainWindow;
-    using Revit_glTF_Exporter;
 
-    /// <summary>
-    /// Binaries.
-    /// </summary>
     public static class Binaries
     {
         /// <summary>
@@ -27,9 +20,10 @@
             {
                 int bytePosition = 0;
                 int currentBuffer = 0;
+
                 foreach (var view in bufferViews)
                 {
-                    if (view.buffer == 0)
+                    if (view.buffer.Equals(0))
                     {
                         bytePosition += view.byteLength;
                         continue;

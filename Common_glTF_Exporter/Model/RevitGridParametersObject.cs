@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class RevitGridParameters
+    public class RevitGridParametersObject
     {
         public List<double> origin { get; set; }
 

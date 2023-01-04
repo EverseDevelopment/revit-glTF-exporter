@@ -1,9 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Model
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
-    using Revit_glTF_Exporter;
 
     /// <summary>
     /// From Jeremy Tammik's RvtVa3c exporter:
@@ -37,10 +34,7 @@
 
             public int GetHashCode(PointIntObject p)
             {
-                return (p.X.ToString()
-                  + "," + p.Y.ToString()
-                  + "," + p.Z.ToString())
-                  .GetHashCode();
+                return string.Concat(p.X.ToString(), ",", p.Y.ToString(), ",", p.Z.ToString()).GetHashCode();
             }
         }
     }

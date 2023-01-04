@@ -5,9 +5,6 @@
     using Common_glTF_Exporter.Core;
     using Revit_glTF_Exporter;
 
-    /// <summary>
-    /// Revit materials.
-    /// </summary>
     public static class RevitMaterials
     {
         /// <summary>

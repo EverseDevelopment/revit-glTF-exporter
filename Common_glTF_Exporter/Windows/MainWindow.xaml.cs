@@ -40,15 +40,11 @@
         {
             Document doc = view3d.Document;
 
-            ProgressBarWindow progressBar = new ProgressBarWindow();
-            progressBar.ViewModel.ProgressBarValue = 0;
-            progressBar.ViewModel.Message = "Converting elements...";
-            progressBar.ViewModel.ProgressBarMax = Collectors.AllVisibleElementsByView(doc, doc.ActiveView).Count;
-            progressBar.Show();
-            ProgressBarWindow.MainView.Topmost = true;
+            ProgressBarWindow progressBar =
+                ProgressBarWindow.Create(Collectors.AllVisibleElementsByView(doc, doc.ActiveView).Count, 0, "Converting elements...");
 
             // Use our custom implementation of IExportContext as the exporter context.
-            GLTFExportContext ctx = new GLTFExportContext(doc, progressBar);
+            GLTFExportContext ctx = new GLTFExportContext(doc);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
@@ -61,7 +57,7 @@
             exporter.Export(view3d as View);
             #endif
 
-            progressBar.ViewModel.Message = "GLTF exportation completed!";
+            ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
             Thread.Sleep(1000);
             progressBar.Close();
         }

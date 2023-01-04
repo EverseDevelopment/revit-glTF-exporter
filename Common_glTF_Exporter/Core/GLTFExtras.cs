@@ -11,7 +11,7 @@
         /// </summary>
         public string uniqueId { get; set; }
 
-        public RevitGridParameters gridParameters { get; set; }
+        public RevitGridParametersObject gridParameters { get; set; }
 
         public Dictionary<string, string> parameters { get; set; }
 

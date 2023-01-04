@@ -1,8 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Model
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
 
     /// <summary>
     /// Intermediate data format for converting between Revit Polymesh and glTF buffers.

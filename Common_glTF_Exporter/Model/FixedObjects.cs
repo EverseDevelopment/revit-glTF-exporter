@@ -1,6 +1,5 @@
 ﻿namespace Revit_glTF_Exporter.Model
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.Revit.DB;

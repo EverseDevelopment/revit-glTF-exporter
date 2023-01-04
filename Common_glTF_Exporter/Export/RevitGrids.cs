@@ -20,12 +20,6 @@
         /// <param name="preferences">preferences. </param>
         public static void Export(Document doc, ref IndexedDictionary<GLTFNode> nodes, ref GLTFNode rootNode, Preferences preferences)
         {
-            #if REVIT2019 || REVIT2020
-            DisplayUnitType displayUnitType = preferences.units;
-            #else
-            ForgeTypeId forgeTypeId = preferences.units;
-            #endif
-
             FilteredElementCollector col = new FilteredElementCollector(doc)
                 .OfClass(typeof(Grid));
 
@@ -40,45 +34,23 @@
                 var length = l.Length;
 
                 var xtras = new GLTFExtras();
-                var grid = new RevitGridParameters();
-
-                #if REVIT2019 || REVIT2020
+                var grid = new RevitGridParametersObject();
 
                 grid.origin = new List<double>()
                 {
-                    Util.ConvertFeetToUnitTypeId(origin.X, displayUnitType, preferences.digits),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, displayUnitType, preferences.digits),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, displayUnitType, preferences.digits),
+                    Util.ConvertFeetToUnitTypeId(origin.X, preferences),
+                    Util.ConvertFeetToUnitTypeId(origin.Y, preferences),
+                    Util.ConvertFeetToUnitTypeId(origin.Z, preferences),
                 };
 
                 grid.direction = new List<double>()
                 {
-                    Util.ConvertFeetToUnitTypeId(direction.X, displayUnitType, preferences.digits),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, displayUnitType, preferences.digits),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, displayUnitType, preferences.digits),
+                    Util.ConvertFeetToUnitTypeId(direction.X, preferences),
+                    Util.ConvertFeetToUnitTypeId(direction.Y, preferences),
+                    Util.ConvertFeetToUnitTypeId(direction.Z, preferences),
                 };
 
-                grid.length = Util.ConvertFeetToUnitTypeId(length, displayUnitType, preferences.digits);
-
-                #else
-
-                grid.origin = new List<double>()
-                {
-                Util.ConvertFeetToUnitTypeId(origin.X, forgeTypeId, preferences.digits),
-                Util.ConvertFeetToUnitTypeId(origin.Y, forgeTypeId, preferences.digits),
-                Util.ConvertFeetToUnitTypeId(origin.Z, forgeTypeId, preferences.digits),
-                };
-
-                grid.direction = new List<double>()
-                {
-                Util.ConvertFeetToUnitTypeId(direction.X, forgeTypeId, preferences.digits),
-                Util.ConvertFeetToUnitTypeId(direction.Y, forgeTypeId, preferences.digits),
-                Util.ConvertFeetToUnitTypeId(direction.Z, forgeTypeId, preferences.digits),
-                };
-
-                grid.length = Util.ConvertFeetToUnitTypeId(length, forgeTypeId, preferences.digits);
-
-                #endif
+                grid.length = Util.ConvertFeetToUnitTypeId(length, preferences);
 
                 xtras.gridParameters = grid;
                 xtras.uniqueId = g.UniqueId;

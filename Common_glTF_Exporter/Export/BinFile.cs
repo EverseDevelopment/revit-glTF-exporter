@@ -1,16 +1,9 @@
 ﻿namespace Common_glTF_Exporter.Export
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
-    using System.Text;
     using Common_glTF_Exporter.Core;
-    using Revit_glTF_Exporter;
 
-    /// <summary>
-    /// Bin file.
-    /// </summary>
     public static class BinFile
     {
         /// <summary>

@@ -1,12 +1,8 @@
 ﻿namespace Common_glTF_Exporter.Export
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
-    using System.Windows.Documents;
-    using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Windows.MainWindow;
     using Newtonsoft.Json;

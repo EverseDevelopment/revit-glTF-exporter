@@ -1,6 +1,5 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
-    using System;
     using System.IO;
     using System.Windows.Forms;
     using Autodesk.Revit.UI;

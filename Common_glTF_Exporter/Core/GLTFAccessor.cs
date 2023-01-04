@@ -32,7 +32,7 @@
         public int byteOffset { get; set; }
 
         /// <summary>
-        /// Gets or sets the datatype of the components in the attribute
+        /// Gets or sets the datatype of the components in the attribute.
         /// </summary>
         public ComponentType componentType { get; set; }
 
@@ -42,7 +42,7 @@
         public int count { get; set; }
 
         /// <summary>
-        /// Gets or sets the specifies if the attribute is a scala, vector, or matrix
+        /// Gets or sets the specifies if the attribute is a scala, vector, or matrix.
         /// </summary>
         public string type { get; set; }
 

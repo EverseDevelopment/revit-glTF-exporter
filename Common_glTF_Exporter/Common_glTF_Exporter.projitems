@@ -25,7 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Binaries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Export\RevitGridParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\RevitGridParametersObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitGrids.cs" />

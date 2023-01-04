@@ -1,8 +1,5 @@
 ﻿namespace Common_glTF_Exporter.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using Autodesk.Revit.DB;
 
     public class UnitObject

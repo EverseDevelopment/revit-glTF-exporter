@@ -3,9 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Media.Media3D;
     using Autodesk.Revit.DB;
-    using Material = Autodesk.Revit.DB.Material;
+    using Common_glTF_Exporter.Windows.MainWindow;
 
     public class Util
     {
@@ -60,25 +59,19 @@
         /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
         /// </summary>
         /// <param name="value">Value to convert.</param>
-        /// <param name="displayUnitType">Display Unit Type.</param>
-        /// <param name="decimalPlaces">Number of decimal places.</param>
+        /// <param name="preferences">User preferences.</param>
         /// <returns>Converted value.</returns>
         public static double ConvertFeetToUnitTypeId(
             double value,
-            #if REVIT2019 || REVIT2020
-            DisplayUnitType displayUnitType,
-            #else
-            ForgeTypeId forgeTypeId,
-            #endif
-            int decimalPlaces)
+            Preferences preferences)
         {
             #if REVIT2019 || REVIT2020
 
-            return Math.Round(UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, displayUnitType), decimalPlaces);
+            return Math.Round(UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units), preferences.digits);
 
             #else
 
-            return Math.Round(UnitUtils.Convert(value, UnitTypeId.Feet, forgeTypeId), decimalPlaces);
+            return Math.Round(UnitUtils.Convert(value, UnitTypeId.Feet, preferences.units), preferences.digits);
 
             #endif
         }
@@ -208,16 +201,16 @@
 
             string categoryName = (e.Category == null)
               ? string.Empty
-              : e.Category.Name + " ";
+              : string.Concat(e.Category.Name, " ");
 
             string familyName = (fi == null)
               ? string.Empty
-              : fi.Symbol.Family.Name + " ";
+              : string.Concat(fi.Symbol.Family.Name, " ");
 
             string symbolName = (fi == null
               || e.Name.Equals(fi.Symbol.Name))
                 ? string.Empty
-                : fi.Symbol.Name + " ";
+                : string.Concat(fi.Symbol.Name, " ");
 
             return string.Format(
               "{0} {1}{2}{3}<{4} {5}>",
@@ -233,19 +226,19 @@
         /// Gets a list of "Project UUID" values corresponding to
         /// an element's dependent (hosted) elements.
         /// </summary>
-        /// <param name="e">Revit element.</param>
+        /// <param name="element">Revit element.</param>
         /// <returns>List of dependent element Project UUID values.</returns>
-        public static List<string> GetDependentElements(Element e)
+        public static List<string> GetDependentElements(Element element)
         {
-            IList<ElementId> dependentElements = e.GetDependentElements(null);
+            IList<ElementId> dependentElements = element.GetDependentElements(null);
 
             List<string> dependentElementUuids = new List<string>();
 
-            Document doc = e.Document;
+            Document doc = element.Document;
 
             foreach (ElementId elementId in dependentElements)
             {
-                if (elementId != e.Id)
+                if (elementId != element.Id)
                 {
                     Element dependentElement = doc.GetElement(elementId);
                     string uuid = dependentElement.LookupParameter("ProjectUUID")?.AsString();
@@ -265,75 +258,74 @@
         /// Return a dictionary of all the given
         /// element parameter names and values.
         /// </summary>
-        /// <param name="e">Revit element.</param>
+        /// <param name="element">Revit element.</param>
         /// <param name="includeType">Include element information.</param>
         /// <returns>Element parameters dictionary.</returns>
-        public static Dictionary<string, string> GetElementParameters(Element e, bool includeType)
+        public static Dictionary<string, string> GetElementParameters(Element element, bool includeType)
         {
-            IList<Parameter> parameters
-              = e.GetOrderedParameters();
+            IList<Parameter> parameters = element.GetOrderedParameters();
 
-            Dictionary<string, string> a = new Dictionary<string, string>(parameters.Count);
+            Dictionary<string, string> parametersDictionary = new Dictionary<string, string>(parameters.Count);
 
             string key;
             string val;
 
-            foreach (Parameter p in parameters)
+            foreach (Parameter parameter in parameters)
             {
-                key = p.Definition.Name;
+                key = parameter.Definition.Name;
 
-                if (!a.ContainsKey(key))
+                if (!parametersDictionary.ContainsKey(key))
                 {
-                    if (p.StorageType == StorageType.String)
+                    if (parameter.StorageType == StorageType.String)
                     {
-                        val = p.AsString();
+                        val = parameter.AsString();
                     }
                     else
                     {
-                        val = p.AsValueString();
+                        val = parameter.AsValueString();
                     }
 
                     if (!string.IsNullOrEmpty(val))
                     {
-                        a.Add(key, val);
+                        parametersDictionary.Add(key, val);
                     }
                 }
             }
 
             if (includeType)
             {
-                ElementId elementId = e.GetTypeId();
+                ElementId elementId = element.GetTypeId();
 
                 if (ElementId.InvalidElementId != elementId)
                 {
-                    Document doc = e.Document;
+                    Document doc = element.Document;
                     Element typ = doc.GetElement(elementId);
                     parameters = typ.GetOrderedParameters();
-                    foreach (Parameter p in parameters)
+                    foreach (Parameter parameter in parameters)
                     {
-                        key = "Type " + p.Definition.Name;
+                        key = string.Concat("Type ", parameter.Definition.Name);
 
-                        if (!a.ContainsKey(key))
+                        if (!parametersDictionary.ContainsKey(key))
                         {
-                            if (p.StorageType == StorageType.String)
+                            if (parameter.StorageType == StorageType.String)
                             {
-                                val = p.AsString();
+                                val = parameter.AsString();
                             }
                             else
                             {
-                                val = p.AsValueString();
+                                val = parameter.AsValueString();
                             }
 
                             if (!string.IsNullOrEmpty(val))
                             {
-                                a.Add(key, val);
+                                parametersDictionary.Add(key, val);
                             }
                         }
                     }
                 }
             }
 
-            return a;
+            return parametersDictionary;
         }
     }
 }

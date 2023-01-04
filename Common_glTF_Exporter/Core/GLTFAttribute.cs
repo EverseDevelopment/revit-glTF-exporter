@@ -13,25 +13,16 @@
         /// <summary>
         /// Gets or sets the index of the accessor for position data.
         /// </summary>
-        /// <value>
-        /// The index of the accessor for position data.
-        /// </value>
         public int POSITION { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the accessor for normal data.
         /// </summary>
-        /// <value>
-        /// The index of the accessor for normal data.
-        /// </value>
         public int NORMAL { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the accessor for batchId data.
         /// </summary>
-        /// <value>
-        /// The index of the accessor for batchId data.
-        /// </value>
         public int _BATCHID { get; set; }
     }
 }

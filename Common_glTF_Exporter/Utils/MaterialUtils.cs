@@ -1,9 +1,5 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Windows.Controls;
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Windows.MainWindow;

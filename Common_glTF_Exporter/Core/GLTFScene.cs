@@ -1,8 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Core
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
 
     /// <summary>
     /// The scenes available to render

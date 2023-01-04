@@ -4,9 +4,6 @@
     using System.IO;
     using Common_glTF_Exporter.Windows.MainWindow;
 
-    /// <summary>
-    /// Compression.
-    /// </summary>
     public class Compression
     {
         /// <summary>

@@ -13,21 +13,25 @@
         {
             #if REVIT2019 || REVIT2020
 
-            this.Units = new ObservableCollection<UnitObject>();
-            this.Units.Add(new UnitObject(DisplayUnitType.DUT_METERS));
-            this.Units.Add(new UnitObject(DisplayUnitType.DUT_DECIMAL_INCHES));
-            this.Units.Add(new UnitObject(DisplayUnitType.DUT_MILLIMETERS));
-            this.Units.Add(new UnitObject(DisplayUnitType.DUT_DECIMAL_FEET));
-            this.Units.Add(new UnitObject(DisplayUnitType.DUT_CENTIMETERS));
+            this.Units = new ObservableCollection<UnitObject>
+            {
+                new UnitObject(DisplayUnitType.DUT_METERS),
+                new UnitObject(DisplayUnitType.DUT_DECIMAL_INCHES),
+                new UnitObject(DisplayUnitType.DUT_MILLIMETERS),
+                new UnitObject(DisplayUnitType.DUT_DECIMAL_FEET),
+                new UnitObject(DisplayUnitType.DUT_CENTIMETERS),
+            };
 
             #else
 
-            this.Units = new ObservableCollection<UnitObject>();
-            this.Units.Add(new UnitObject(UnitTypeId.Meters));
-            this.Units.Add(new UnitObject(UnitTypeId.Inches));
-            this.Units.Add(new UnitObject(UnitTypeId.Millimeters));
-            this.Units.Add(new UnitObject(UnitTypeId.Feet));
-            this.Units.Add(new UnitObject(UnitTypeId.Centimeters));
+            this.Units = new ObservableCollection<UnitObject>
+            {
+                new UnitObject(UnitTypeId.Meters),
+                new UnitObject(UnitTypeId.Inches),
+                new UnitObject(UnitTypeId.Millimeters),
+                new UnitObject(UnitTypeId.Feet),
+                new UnitObject(UnitTypeId.Centimeters),
+            };
 
             #endif
         }

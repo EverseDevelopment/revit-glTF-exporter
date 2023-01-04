@@ -1,8 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Model
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Windows.MainWindow;
     using Revit_glTF_Exporter;
@@ -16,36 +14,16 @@
     {
         public PointIntObject(Preferences preferences, XYZ p, XYZ pointToRelocate)
         {
-            #if REVIT2019 || REVIT2020
-
-            this.X = Util.ConvertFeetToUnitTypeId(p.X, preferences.units, preferences.digits);
-            this.Y = Util.ConvertFeetToUnitTypeId(p.Y, preferences.units, preferences.digits);
-            this.Z = Util.ConvertFeetToUnitTypeId(p.Z, preferences.units, preferences.digits);
+            this.X = Util.ConvertFeetToUnitTypeId(p.X, preferences);
+            this.Y = Util.ConvertFeetToUnitTypeId(p.Y, preferences);
+            this.Z = Util.ConvertFeetToUnitTypeId(p.Z, preferences);
 
             if (preferences.relocateTo0)
             {
-                this.BoundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, preferences.units, preferences.digits);
-                this.BoundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, preferences.units, preferences.digits);
-                this.BoundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, preferences.units, preferences.digits);
-            }
+                this.BoundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, preferences);
+                this.BoundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, preferences);
+                this.BoundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, preferences);
 
-            #else
-
-            this.X = Util.ConvertFeetToUnitTypeId(p.X, preferences.units, preferences.digits);
-            this.Y = Util.ConvertFeetToUnitTypeId(p.Y, preferences.units, preferences.digits);
-            this.Z = Util.ConvertFeetToUnitTypeId(p.Z, preferences.units, preferences.digits);
-
-            if (preferences.relocateTo0)
-            {
-                this.BoundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(p.X, preferences.units, preferences.digits);
-                this.BoundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(p.Y, preferences.units, preferences.digits);
-                this.BoundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(p.Z, preferences.units, preferences.digits);
-            }
-
-            #endif
-
-            if (preferences.relocateTo0)
-            {
                 pointToRelocate = new XYZ(this.BoundingBoxMidPointX, this.BoundingBoxMidPointY, this.BoundingBoxMidPointZ);
 
                 this.X -= pointToRelocate.X;

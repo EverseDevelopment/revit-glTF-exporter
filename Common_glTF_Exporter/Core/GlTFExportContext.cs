@@ -28,13 +28,10 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
 
-        private static readonly bool RetainCurvedSurfaceFacets = false;
-
         // Unit conversion factors.
         private Document doc;
         private bool skipElementFlag = false;
         private Element element;
-        private ProgressBarWindow progressBarWindow;
         private XYZ pointToRelocate = new XYZ(0, 0, 0);
         private View view;
         private Preferences preferences;
@@ -60,12 +57,11 @@ namespace Revit_glTF_Exporter
 
         private Stack<Transform> transformStack = new Stack<Transform>();
 
-        public GLTFExportContext(Document doc, ProgressBarWindow progressBarWindow)
+        public GLTFExportContext(Document doc)
         {
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             this.doc = doc;
             view = doc.ActiveView;
-            this.progressBarWindow = progressBarWindow;
             pointToRelocate = Common_glTF_Exporter.Windows.MainWindow.ExportToZero.GetPointToRelocate(this.doc);
         }
 
@@ -168,7 +164,7 @@ namespace Revit_glTF_Exporter
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            progressBarWindow.ViewModel.ProgressBarValue++;
+            ProgressBarWindow.ViewModel.ProgressBarValue++;
 
             element = doc.GetElement(elementId);
 
@@ -429,6 +425,8 @@ namespace Revit_glTF_Exporter
 
         public void OnRPC(RPCNode node)
         {
+            ProgressBarWindow.ViewModel.ProgressBarValue++;
+
             var meshes = GeometryUtils.GetMeshes(doc, element);
 
             if (!meshes.Any())
