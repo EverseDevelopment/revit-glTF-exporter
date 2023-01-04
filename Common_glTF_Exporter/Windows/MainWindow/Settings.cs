@@ -48,7 +48,7 @@
                     #if REVIT2019 || REVIT2020
                     Enum.TryParse(result, out DisplayUnitType unitStatus);
                     #else
-                    ForgeTypeId myStatus = new ForgeTypeId(result);
+                    ForgeTypeId unitStatus = new ForgeTypeId(result);
                     #endif
                     preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
