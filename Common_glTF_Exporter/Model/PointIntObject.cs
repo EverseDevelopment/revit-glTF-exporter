@@ -1,97 +1,70 @@
-﻿using Autodesk.Revit.DB;
-using Revit_glTF_Exporter;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common_glTF_Exporter.Model
+﻿namespace Common_glTF_Exporter.Model
 {
+    using System;
+    using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Windows.MainWindow;
+    using Revit_glTF_Exporter;
+
     /// <summary>
     /// From Jeremy Tammik's RvtVa3c exporter:
     /// https://github.com/va3c/RvtVa3c
     /// An integer-based 3D point class.
     /// </summary>
-    class PointIntObject : IComparable<PointIntObject>
+    public class PointIntObject : IComparable<PointIntObject>
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
-        private double _boundingBoxMidPointX { get; set; }
-        private double _boundingBoxMidPointY { get; set; }
-        private double _boundingBoxMidPointZ { get; set; }
-
-        public PointIntObject(XYZ p, bool switch_coordinates,
-
-            #if REVIT2019 || REVIT2020
-
-            DisplayUnitType displayUnitType,
-
-            #else
-
-            ForgeTypeId forgeTypeId,
-
-            #endif
-
-            bool relocateTo0, XYZ pointToRelocate, int decimalPlaces)
+        public PointIntObject(Preferences preferences, XYZ p, XYZ pointToRelocate)
         {
-            #if REVIT2019 || REVIT2020
+            this.X = Util.ConvertFeetToUnitTypeId(p.X, preferences);
+            this.Y = Util.ConvertFeetToUnitTypeId(p.Y, preferences);
+            this.Z = Util.ConvertFeetToUnitTypeId(p.Z, preferences);
 
-            X = Util.ConvertFeetToUnitTypeId(p.X, displayUnitType, decimalPlaces);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, displayUnitType, decimalPlaces);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, displayUnitType, decimalPlaces);
-
-            if (relocateTo0)
+            if (preferences.relocateTo0)
             {
-                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, displayUnitType, decimalPlaces);
-                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, displayUnitType, decimalPlaces);
-                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, displayUnitType, decimalPlaces);
+                this.BoundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, preferences);
+                this.BoundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, preferences);
+                this.BoundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, preferences);
+
+                pointToRelocate = new XYZ(this.BoundingBoxMidPointX, this.BoundingBoxMidPointY, this.BoundingBoxMidPointZ);
+
+                this.X -= pointToRelocate.X;
+                this.Y -= pointToRelocate.Y;
+                this.Z -= pointToRelocate.Z;
             }
 
-            #else
-
-            X = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId, decimalPlaces);
-            Y = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId, decimalPlaces);
-            Z = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId, decimalPlaces);
-
-            if (relocateTo0)
-	        {
-                _boundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(p.X, forgeTypeId, decimalPlaces);
-                _boundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(p.Y, forgeTypeId, decimalPlaces);
-                _boundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(p.Z, forgeTypeId, decimalPlaces);
-	        }
-
-            #endif
-
-            if (relocateTo0)
+            if (preferences.flipAxis)
             {
-                pointToRelocate = new XYZ(_boundingBoxMidPointX, _boundingBoxMidPointY, _boundingBoxMidPointZ);
-
-                X -= pointToRelocate.X;
-                Y -= pointToRelocate.Y;
-                Z -= pointToRelocate.Z;
-            }
-
-            if (switch_coordinates)
-            {
-                X = -X;
-                double tmp = Y;
-                Y = Z;
-                Z = tmp;
+                this.X = -this.X;
+                double tmp = this.Y;
+                this.Y = this.Z;
+                this.Z = tmp;
             }
         }
 
+        public double X { get; set; }
+
+        public double Y { get; set; }
+
+        public double Z { get; set; }
+
+        private double BoundingBoxMidPointX { get; set; }
+
+        private double BoundingBoxMidPointY { get; set; }
+
+        private double BoundingBoxMidPointZ { get; set; }
+
         public int CompareTo(PointIntObject a)
         {
-            double d = X - a.X;
-            if (0 == d)
+            double d = this.X - a.X;
+            if (d == 0)
             {
-                d = Y - a.Y;
-                if (0 == d)
+                d = this.Y - a.Y;
+                if (d == 0)
                 {
-                    d = Z - a.Z;
+                    d = this.Z - a.Z;
                 }
             }
-            return (0 == d) ? 0 : ((0 < d) ? 1 : -1);
+
+            return (d == 0) ? 0 : ((d > 0) ? 1 : -1);
         }
     }
 }

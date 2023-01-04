@@ -1,57 +1,29 @@
-﻿using System;
-using System.IO;
-using System.Windows.Media.Imaging;
-using Autodesk.Revit.UI;
-using Autodesk.Windows;
-using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
-
-namespace Revit_glTF_Exporter
+﻿namespace Revit_glTF_Exporter
 {
-    class App : IExternalApplication
+    using System;
+    using System.IO;
+    using System.Windows.Media.Imaging;
+    using Autodesk.Revit.UI;
+    using Autodesk.Windows;
+    using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
+
+    /// <summary>
+    /// External Application.
+    /// </summary>
+    public class ExternalApplication : IExternalApplication
     {
-        private static string RIBBON_TAB = "e-verse";
-        private static string RIBBON_PANEL = "glTF";
-        private static string PUSH_BUTTON_NAME = "glTF Exporter";
-        private static string PUSH_BUTTON_TEXT = "glTF Exporter";
-        private static string AddInPath = typeof(App).Assembly.Location;
-        private static string ButtonIconsFolder = Path.GetDirectoryName(AddInPath) + "\\Images\\";
+        private static readonly string RIBBONTAB = "e-verse";
+        private static readonly string RIBBONPANEL = "glTF";
+        private static string pushButtonName = "glTF Exporter";
+        private static string pushButtonText = "glTF Exporter";
+        private static string addInPath = typeof(ExternalApplication).Assembly.Location;
+        private static string buttonIconsFolder = Path.GetDirectoryName(addInPath) + "\\Images\\";
 
-        public Result OnShutdown(UIControlledApplication application)
-        {
-            return Result.Succeeded;
-        }
-
-        public Result OnStartup(UIControlledApplication application)
-        {
-            try
-            {
-                CreateRibbonTab(application, RIBBON_TAB);
-            }
-            catch
-            {
-            }
-
-            RibbonPanel panel = null;
-            //look for XXXXXX RibbonPanel, or create it if not already created
-            foreach (RibbonPanel existingPanel in application.GetRibbonPanels())
-            {
-                if (existingPanel.Name.Equals(RIBBON_PANEL))
-                {
-                    //existingPanel.AddSeparator();
-                    panel = existingPanel;
-                    break;
-                }
-            }
-            if (panel == null) panel = application.CreateRibbonPanel(RIBBON_TAB, RIBBON_PANEL);
-
-            PushButtonData pushDataButton = new PushButtonData(PUSH_BUTTON_NAME, PUSH_BUTTON_TEXT, AddInPath, "Revit_glTF_Exporter.ExternalCommand");
-            pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "gltf.png"), UriKind.Absolute));
-
-            panel.AddItem(pushDataButton);
-
-            return Result.Succeeded;
-        }
-
+        /// <summary>
+        /// Creates a new Ribbon tab in the Revit UI.
+        /// </summary>
+        /// <param name="application">Revit Application.</param>
+        /// <param name="ribbonTabName">Ribbon tab name.</param>
         public static void CreateRibbonTab(UIControlledApplication application, string ribbonTabName)
         {
             RibbonControl ribbon = ComponentManager.Ribbon;
@@ -61,6 +33,57 @@ namespace Revit_glTF_Exporter
             {
                 application.CreateRibbonTab(ribbonTabName);
             }
+        }
+
+        /// <summary>
+        /// On Revit Application shutdown.
+        /// </summary>
+        /// <param name="application">Revit application.</param>
+        /// <returns>Result.</returns>
+        public Result OnShutdown(UIControlledApplication application)
+        {
+            return Result.Succeeded;
+        }
+
+        /// <summary>
+        /// On Revit Application startup.
+        /// </summary>
+        /// <param name="application">Revit application.</param>
+        /// <returns>Result.</returns>
+        public Result OnStartup(UIControlledApplication application)
+        {
+            try
+            {
+                CreateRibbonTab(application, RIBBONTAB);
+            }
+            catch
+            {
+            }
+
+            RibbonPanel panel = null;
+
+            // look for XXXXXX RibbonPanel, or create it if not already created
+            foreach (RibbonPanel existingPanel in application.GetRibbonPanels())
+            {
+                if (existingPanel.Name.Equals(RIBBONPANEL))
+                {
+                    // existingPanel.AddSeparator();
+                    panel = existingPanel;
+                    break;
+                }
+            }
+
+            if (panel == null)
+            {
+                panel = application.CreateRibbonPanel(RIBBONTAB, RIBBONPANEL);
+            }
+
+            PushButtonData pushDataButton = new PushButtonData(pushButtonName, pushButtonText, addInPath, "Revit_glTF_Exporter.ExternalCommand");
+            pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "gltf.png"), UriKind.Absolute));
+
+            panel.AddItem(pushDataButton);
+
+            return Result.Succeeded;
         }
     }
 }

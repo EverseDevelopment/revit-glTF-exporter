@@ -3,7 +3,7 @@
   <AddIn Type="Application">
     <Name>Revit_glTF_Exporter</Name>
 	<Assembly>eversegltfExporter/Revit_glTF_Exporter.dll</Assembly>
-    <FullClassName>Revit_glTF_Exporter.App</FullClassName>
+    <FullClassName>Revit_glTF_Exporter.ExternalApplication</FullClassName>
     <Text>Revit_glTF_Exporter</Text>
     <Description>Revit_glTF_Exporter</Description>
     <VisibilityMode>AlwaysVisible</VisibilityMode> 

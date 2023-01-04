@@ -1,11 +1,10 @@
-﻿using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Utils;
-using System;
-using System.Reflection;
-
-
-namespace Common_glTF_Exporter.Windows.MainWindow
+﻿namespace Common_glTF_Exporter.Windows.MainWindow
 {
+    using System;
+    using System.Reflection;
+    using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Utils;
+
     public static class Settings
     {
         public static Preferences GetInfo()
@@ -19,7 +18,7 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 string propertyName = property.Name;
 
                 if (property.PropertyType == typeof(bool))
-                {    
+                {
                     var tempvalue = Convert.ToBoolean(SettingsConfig.GetValue(propertyName));
                     preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
                 }
@@ -27,8 +26,8 @@ namespace Common_glTF_Exporter.Windows.MainWindow
                 if (property.PropertyType == typeof(CompressionEnum))
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();
-                    Enum.TryParse(result, out CompressionEnum myStatus);
-                    preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
+                    Enum.TryParse(result, out CompressionEnum unitStatus);
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
                 if (property.PropertyType == typeof(string))
@@ -39,20 +38,19 @@ namespace Common_glTF_Exporter.Windows.MainWindow
 
                 if (
                 #if REVIT2019 || REVIT2020
-                property.PropertyType == typeof(DisplayUnitType)
+                property.PropertyType == typeof(DisplayUnitType))
                 #else
-                property.PropertyType == typeof(ForgeTypeId)
+                property.PropertyType == typeof(ForgeTypeId))
                 #endif
-                 )
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();
 
                     #if REVIT2019 || REVIT2020
-                    Enum.TryParse(result, out DisplayUnitType myStatus);
+                    Enum.TryParse(result, out DisplayUnitType unitStatus);
                     #else
-                    ForgeTypeId myStatus = new ForgeTypeId(result);
+                    ForgeTypeId unitStatus = new ForgeTypeId(result);
                     #endif
-                    preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
                 if (property.PropertyType == typeof(int))

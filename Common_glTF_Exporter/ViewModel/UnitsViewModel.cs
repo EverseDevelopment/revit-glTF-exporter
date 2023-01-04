@@ -1,63 +1,67 @@
-﻿using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Model;
-using Common_glTF_Exporter.Utils;
-using Revit_glTF_Exporter;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
-
-namespace Common_glTF_Exporter.ViewModel
+﻿namespace Common_glTF_Exporter.ViewModel
 {
+    using System.Collections.ObjectModel;
+    using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Model;
+
     public class UnitsViewModel : ViewModelBase
     {
-        private UnitObject _selectedUnit;
-        public UnitObject SelectedUnit
-        {
-            get { return _selectedUnit; }
-            set
-            {
-                _selectedUnit = value;
-                OnPropertyChanged(SelectedUnit);
-            }
-        }
-
-        private ObservableCollection<UnitObject> _units;
-
-        public ObservableCollection<UnitObject> Units
-        {
-            get { return _units; }
-            set
-            {
-                _units = value;
-                OnPropertyChanged();
-
-            }
-        }
+        private UnitObject selectedUnit;
+        private ObservableCollection<UnitObject> units;
 
         public UnitsViewModel()
         {
             #if REVIT2019 || REVIT2020
 
-            Units = new ObservableCollection<UnitObject>();
-            Units.Add(new UnitObject(DisplayUnitType.DUT_METERS));
-            Units.Add(new UnitObject(DisplayUnitType.DUT_DECIMAL_INCHES));
-            Units.Add(new UnitObject(DisplayUnitType.DUT_MILLIMETERS));
-            Units.Add(new UnitObject(DisplayUnitType.DUT_DECIMAL_FEET));
-            Units.Add(new UnitObject(DisplayUnitType.DUT_CENTIMETERS));
+            this.Units = new ObservableCollection<UnitObject>
+            {
+                new UnitObject(DisplayUnitType.DUT_METERS),
+                new UnitObject(DisplayUnitType.DUT_DECIMAL_INCHES),
+                new UnitObject(DisplayUnitType.DUT_MILLIMETERS),
+                new UnitObject(DisplayUnitType.DUT_DECIMAL_FEET),
+                new UnitObject(DisplayUnitType.DUT_CENTIMETERS),
+            };
 
             #else
 
-            Units = new ObservableCollection<UnitObject>();
-            Units.Add(new UnitObject(UnitTypeId.Meters));
-            Units.Add(new UnitObject(UnitTypeId.Inches));
-            Units.Add(new UnitObject(UnitTypeId.Millimeters));
-            Units.Add(new UnitObject(UnitTypeId.Feet));
-            Units.Add(new UnitObject(UnitTypeId.Centimeters));
+            this.Units = new ObservableCollection<UnitObject>
+            {
+                new UnitObject(UnitTypeId.Meters),
+                new UnitObject(UnitTypeId.Inches),
+                new UnitObject(UnitTypeId.Millimeters),
+                new UnitObject(UnitTypeId.Feet),
+                new UnitObject(UnitTypeId.Centimeters),
+            };
 
             #endif
+        }
+
+        public UnitObject SelectedUnit
+        {
+            get
+            {
+                return this.selectedUnit;
+            }
+
+            set
+            {
+                this.selectedUnit = value;
+                this.OnPropertyChanged(this.SelectedUnit);
+            }
+        }
+
+        public ObservableCollection<UnitObject> Units
+        {
+            get
+            {
+                return this.units;
+            }
+
+            set
+            {
+                this.units = value;
+                this.OnPropertyChanged();
+            }
         }
     }
 }

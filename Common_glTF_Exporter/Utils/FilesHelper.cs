@@ -1,11 +1,10 @@
-﻿using System.IO;
-using Autodesk.Revit.UI;
-using System.Windows.Forms;
-using System;
-
-namespace Common_glTF_Exporter.Utils
+﻿namespace Common_glTF_Exporter.Utils
 {
-    class FilesHelper
+    using System.IO;
+    using System.Windows.Forms;
+    using Autodesk.Revit.UI;
+
+    internal class FilesHelper
     {
         public static bool AskToSave(ref string filename, string filter, string defaultExt, string initialDirectory = null)
         {
@@ -14,11 +13,13 @@ namespace Common_glTF_Exporter.Utils
                 saveDialog.Filter = filter;
                 saveDialog.DefaultExt = defaultExt;
                 saveDialog.FileName = filename;
+
                 // -- Optional initial directory
                 if (initialDirectory != null)
                 {
                     saveDialog.InitialDirectory = initialDirectory;
                 }
+
                 DialogResult resultDialog = saveDialog.ShowDialog();
                 filename = saveDialog.FileName;
                 if (resultDialog != System.Windows.Forms.DialogResult.OK)
@@ -26,11 +27,13 @@ namespace Common_glTF_Exporter.Utils
                     return false;
                 }
             }
+
             if (File.Exists(filename) && FileIsLocked(filename, FileAccess.ReadWrite))
             {
                 TaskDialog.Show("Error", "The file is opened by another process, please close it and try again");
                 return false;
             }
+
             return true;
         }
 
@@ -40,6 +43,7 @@ namespace Common_glTF_Exporter.Utils
             {
                 return false;
             }
+
             // Try to open the file with the indicated access.
             try
             {
