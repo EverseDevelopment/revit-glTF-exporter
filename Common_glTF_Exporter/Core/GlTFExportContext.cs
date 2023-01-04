@@ -18,6 +18,16 @@ namespace Revit_glTF_Exporter
     /// </summary>
     public class GLTFExportContext : IExportContext
     {
+        /// <summary>
+        /// Gets a stateful, uuid indexable list for all nodes in the export.
+        /// </summary>
+        public IndexedDictionary<GLTFNode> nodes = new IndexedDictionary<GLTFNode>();
+
+        /// <summary>
+        /// Gets a stateful, uuid indexable list for all materials in the export.
+        /// </summary>
+        public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
+
         private static readonly bool RetainCurvedSurfaceFacets = false;
 
         // Unit conversion factors.
@@ -64,12 +74,7 @@ namespace Revit_glTF_Exporter
         /// <summary>
         /// Gets a list of root nodes defining scenes.
         /// </summary>
-        public List<GLTFScene> scenes = new List<GLTFScene>();
-
-        /// <summary>
-        /// Gets a stateful, uuid indexable list for all nodes in the export.
-        /// </summary>
-        public IndexedDictionary<GLTFNode> nodes = new IndexedDictionary<GLTFNode>();
+        public List<GLTFScene> scenes { get; } = new List<GLTFScene>();
 
         /// <summary>
         /// Gets a stateful, uuid indexable list for all meshes in the export.
@@ -78,11 +83,6 @@ namespace Revit_glTF_Exporter
         /// A stateful, uuid indexable list for all meshes in the export.
         /// </value>
         public IndexedDictionary<GLTFMesh> meshes { get; } = new IndexedDictionary<GLTFMesh>();
-
-        /// <summary>
-        /// Stateful, uuid indexable list for all materials in the export.
-        /// </summary>
-        public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
 
         /// <summary>
         /// Gets a list of all buffers referencing the binary file data.
@@ -164,7 +164,7 @@ namespace Revit_glTF_Exporter
         /// Runs once for each element, we create a new glTFNode and glTF Mesh keyed to the elements
         /// uuid, and reset the "_current" variables.
         /// </summary>
-        /// <param name="elementId">ElementId of Element being processed</param>
+        /// <param name="elementId">ElementId of Element being processed.</param>
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
@@ -279,7 +279,7 @@ namespace Revit_glTF_Exporter
         {
             if (!Util.CanBeLockOrHidden(element, view) ||
             currentVertices == null ||
-            currentVertices.List.Count == 0)
+            !currentVertices.List.Any())
             {
                 return;
             }
@@ -451,32 +451,25 @@ namespace Revit_glTF_Exporter
 
                 for (int i = 0; i < triangles; i++)
                 {
-                    try
+                    MeshTriangle triangle = mesh.get_Triangle(i);
+
+                    if (triangle.Equals(null))
                     {
-                        MeshTriangle triangle = mesh.get_Triangle(i);
+                        continue;
+                    }
 
-                        if (triangle.Equals(null))
-                        {
-                            continue;
-                        }
-
-                        List<PointIntObject> points = new List<PointIntObject>
+                    List<PointIntObject> points = new List<PointIntObject>
                         {
                             new PointIntObject(preferences, triangle.get_Vertex(0), pointToRelocate),
                             new PointIntObject(preferences, triangle.get_Vertex(1), pointToRelocate),
                             new PointIntObject(preferences, triangle.get_Vertex(2), pointToRelocate),
                         };
 
-                        GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
+                    GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
 
-                        if (preferences.normals)
-                        {
-                            GLTFExportUtils.AddRPCNormals(preferences, triangle, currentGeometry.CurrentItem);
-                        }
-                    }
-                    catch
+                    if (preferences.normals)
                     {
-                        continue;
+                        GLTFExportUtils.AddRPCNormals(preferences, triangle, currentGeometry.CurrentItem);
                     }
                 }
             }

@@ -85,7 +85,7 @@
             if (dialogResult == true)
             {
                 string filename = fileName;
-                string directory = filename.Replace(".gltf", "");
+                string directory = filename.Replace(".gltf", string.Empty);
                 string nameOnly = System.IO.Path.GetFileNameWithoutExtension(filename);
 
                 SettingsConfig.Set("path", directory);

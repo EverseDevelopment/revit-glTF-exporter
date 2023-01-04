@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autodesk.Revit.DB;
-
-namespace Common_glTF_Exporter.Model
+﻿namespace Common_glTF_Exporter.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Autodesk.Revit.DB;
+
     public class UnitObject
     {
         public UnitObject(
         #if REVIT2019 || REVIT2020
-        DisplayUnitType displayUnitType
+        DisplayUnitType displayUnitType)
         #else
-        ForgeTypeId forgeTypeId
+        ForgeTypeId forgeTypeId)
         #endif
-        )
-                {
+        {
         #if REVIT2019 || REVIT2020
 
             this.DisplayUnitType = displayUnitType;
@@ -30,8 +29,8 @@ namespace Common_glTF_Exporter.Model
 
         #if REVIT2019 || REVIT2020
         public DisplayUnitType DisplayUnitType { get; internal set; }
-        #else
 
+        #else
         public ForgeTypeId ForgeTypeId { get; internal set; }
 
         #endif

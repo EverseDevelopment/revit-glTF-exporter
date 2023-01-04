@@ -1,15 +1,15 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
-    using Autodesk.Revit.DB;
-    using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using Revit_glTF_Exporter;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Windows.Controls;
+    using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Core;
+    using Common_glTF_Exporter.Windows.MainWindow;
+    using Revit_glTF_Exporter;
 
-    class MaterialUtils
+    public class MaterialUtils
     {
         public static Material GetMeshMaterial(Document doc, Mesh mesh)
         {
@@ -43,8 +43,5 @@
                 materials.AddOrUpdateCurrentMaterial(material.UniqueId, gl_mat, doubleSided);
             }
         }
-
-
-
     }
 }

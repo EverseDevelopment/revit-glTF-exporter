@@ -144,6 +144,8 @@
         /// Return a string for a real number
         /// formatted to two decimal places.
         /// </summary>
+        /// <returns>Real number with two decimal places.</returns>
+        /// <param name="a">Number to be converted to string.</param>
         public static string RealString(double a)
         {
             return a.ToString("0.##");
@@ -156,9 +158,12 @@
         /// or vector with its coordinates
         /// formatted to two decimal places.
         /// </summary>
+        /// <returns>A string that represents a XYZ point coordinates.</returns>
+        /// <param name="p">XYZ point.</param>
         public static string PointString(XYZ p)
         {
-            return string.Format("({0},{1},{2})",
+            return string.Format(
+              "({0},{1},{2})",
               RealString(p.X),
               RealString(p.Y),
               RealString(p.Z));
@@ -169,6 +174,8 @@
         /// https://github.com/va3c/RvtVa3c
         /// Return an integer value for a Revit Color.
         /// </summary>
+        /// <returns>An int that represents a RGB color.</returns>
+        /// <param name="color">Color.</param>
         public static int ColorToInt(Color color)
         {
             return ((int)color.Red) << 16
@@ -185,6 +192,8 @@
         /// family and symbol name for a family instance,
         /// element id and element name.
         /// </summary>
+        /// <returns>The element description.</returns>
+        /// <param name="e">Revit element.</param>
         public static string ElementDescription(Element e)
         {
             if (e == null)
@@ -192,10 +201,7 @@
                 return "<null>";
             }
 
-            // For a wall, the element name equals the
-            // wall type name, which is equivalent to the
-            // family name ...
-
+            // For a wall, the element name equals the wall type name, which is equivalent to the family name ...
             FamilyInstance fi = e as FamilyInstance;
 
             string typeName = e.GetType().Name;
@@ -225,7 +231,7 @@
 
         /// <summary>
         /// Gets a list of "Project UUID" values corresponding to
-        /// an element's dependent (hosted) elements
+        /// an element's dependent (hosted) elements.
         /// </summary>
         /// <param name="e">Revit element.</param>
         /// <returns>List of dependent element Project UUID values.</returns>

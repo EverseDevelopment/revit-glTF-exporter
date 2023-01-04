@@ -21,7 +21,7 @@
         /// <param name="buffers">buffers.</param>
         /// <param name="binaryFileData">binaryFileData.</param>
         /// <param name="preferences">preferences.</param>
-        public static void Save(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers, List<GLTFBinaryData> binaryFileData, Preferences preferences) 
+        public static void Save(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers, List<GLTFBinaryData> binaryFileData, Preferences preferences)
         {
             if (preferences.singleBinary)
             {
@@ -44,13 +44,13 @@
                 }
 
                 GLTFBuffer buffer = new GLTFBuffer();
-                string bufferUri = String.Concat(preferences.fileName, ".bin");
+                string bufferUri = string.Concat(preferences.fileName, ".bin");
                 buffer.uri = bufferUri;
                 buffer.byteLength = bytePosition;
                 buffers.Clear();
                 buffers.Add(buffer);
 
-                string fileDirectory = String.Concat(preferences.path, ".bin");
+                string fileDirectory = string.Concat(preferences.path, ".bin");
                 BinFile.Create(fileDirectory, binaryFileData, preferences.normals, preferences.batchId);
             }
             else

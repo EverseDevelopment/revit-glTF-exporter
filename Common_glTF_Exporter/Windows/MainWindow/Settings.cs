@@ -26,8 +26,8 @@
                 if (property.PropertyType == typeof(CompressionEnum))
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();
-                    Enum.TryParse(result, out CompressionEnum myStatus);
-                    preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
+                    Enum.TryParse(result, out CompressionEnum unitStatus);
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
                 if (property.PropertyType == typeof(string))
@@ -38,20 +38,19 @@
 
                 if (
                 #if REVIT2019 || REVIT2020
-                property.PropertyType == typeof(DisplayUnitType)
+                property.PropertyType == typeof(DisplayUnitType))
                 #else
-                property.PropertyType == typeof(ForgeTypeId)
+                property.PropertyType == typeof(ForgeTypeId))
                 #endif
-                )
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();
 
                     #if REVIT2019 || REVIT2020
-                    Enum.TryParse(result, out DisplayUnitType myStatus);
+                    Enum.TryParse(result, out DisplayUnitType unitStatus);
                     #else
                     ForgeTypeId myStatus = new ForgeTypeId(result);
                     #endif
-                    preferenceType.GetProperty(propertyName).SetValue(preferences, myStatus);
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
                 if (property.PropertyType == typeof(int))

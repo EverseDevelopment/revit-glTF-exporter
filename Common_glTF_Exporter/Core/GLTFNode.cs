@@ -12,23 +12,27 @@
     public class GLTFNode
     {
         /// <summary>
-        /// The user-defined name of this object.
+        /// Gets or sets the user-defined name of this object.
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// The index of the mesh in this node.
+        /// Gets or sets the index of the mesh in this node.
         /// </summary>
         public int? mesh { get; set; } = null;
+
         /// <summary>
-        /// A floating-point 4x4 transformation matrix stored in column major order.
+        /// Gets or sets a floating-point 4x4 transformation matrix stored in column major order.
         /// </summary>
         public List<float> matrix { get; set; }
+
         /// <summary>
-        /// The indices of this node's children.
+        /// Gets or sets the indices of this node's children.
         /// </summary>
         public List<int> children { get; set; }
+
         /// <summary>
-        /// The extras describing this node.
+        /// Gets or sets the extras describing this node.
         /// </summary>
         public GLTFExtras extras { get; set; }
     }
