@@ -1,12 +1,6 @@
-﻿
-namespace Common_glTF_Exporter.Export
+﻿namespace Common_glTF_Exporter.Export
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO.Ports;
-    using System.Linq;
-    using System.Text;
-    using System.Xml.Linq;
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Core;
     using Revit_glTF_Exporter;

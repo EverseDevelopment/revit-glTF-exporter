@@ -8,45 +8,38 @@
     /// </summary>
     public class GLTFBufferView
     {
+        public GLTFBufferView(int buffer, int byteOffset, int byteLength, Targets target, string name)
+        {
+            this.buffer = buffer;
+            this.byteOffset = byteOffset;
+            this.byteLength = byteLength;
+            this.target = target;
+            this.name = name;
+        }
+
         /// <summary>
         /// Gets or sets the index of the buffer.
         /// </summary>
-        /// <value>
-        /// The index of the buffer.
-        /// </value>
         public int buffer { get; set; }
 
         /// <summary>
         /// Gets or sets the offset into the buffer in bytes.
         /// </summary>
-        /// <value>
-        /// The offset into the buffer in bytes.
-        /// </value>
         public int byteOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the length of the bufferView in bytes.
         /// </summary>
-        /// <value>
-        /// The length of the bufferView in bytes.
-        /// </value>
         public int byteLength { get; set; }
 
         /// <summary>
         /// Gets or sets the target that the GPU buffer should be bound to.
         /// </summary>
-        /// <value>
-        /// The target that the GPU buffer should be bound to.
-        /// </value>
         public Targets target { get; set; }
 
         /// <summary>
         /// Gets or sets a user defined name for this view.
         /// </summary>
-        /// <value>
-        /// A user defined name for this view.
-        /// </value>
         public string name { get; set; }
     }
-
 }

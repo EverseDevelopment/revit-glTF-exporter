@@ -1,8 +1,8 @@
 ﻿namespace Revit_glTF_Exporter
 {
-    using Common_glTF_Exporter.Core;
     using System;
     using System.Collections.Generic;
+    using Common_glTF_Exporter.Core;
 
     /// <summary>
     /// Container for holding a strict set of items
@@ -12,6 +12,7 @@
     public class IndexedDictionary<T>
     {
         private Dictionary<string, int> dict = new Dictionary<string, int>();
+
         /// <summary>
         /// Gets all the generic elements inside the IndexedDictionary.
         /// </summary>
@@ -23,9 +24,9 @@
         public string CurrentKey { get; private set; }
 
         /// <summary>
-        /// Gets 
+        /// Gets the dictionary.
         /// </summary>
-        public Dictionary<string,T> Dict
+        public Dictionary<string, T> Dict
         {
             get
             {
@@ -50,17 +51,13 @@
         /// <summary>
         /// Gets the index of the most recently accessed item (not effected by GetElement()).
         /// </summary>
-        /// <value>
-        /// The index of the most recently accessed item (not effected by GetElement()).
-        /// </value>
         public int CurrentIndex
         {
             get { return this.dict[this.CurrentKey]; }
         }
 
         /// <summary>
-        /// Add a new item to the list, if it already exists then the 
-        /// current item will be set to this item.
+        /// Add a new item to the list, if it already exists then the current item will be set to this item.
         /// </summary>
         /// <param name="uuid">Unique identifier for the item.</param>
         /// <param name="elem">The item to add.</param>
@@ -81,8 +78,7 @@
         }
 
         /// <summary>
-        /// Add a new gltfMaterial to the list, if it already exists then the 
-        /// current item will be set to this item.
+        /// Add a new gltfMaterial to the list, if it already exists then the current item will be set to this item.
         /// </summary>
         /// <param name="uuid">Unique identifier for the item.</param>
         /// <param name="elem">The item to add.</param>
@@ -109,7 +105,6 @@
             return false;
         }
 
-
         /// <summary>
         /// Check if the container already has an item with this key.
         /// </summary>
@@ -124,7 +119,7 @@
         /// Returns the index for an item given it's unique identifier.
         /// </summary>
         /// <param name="uuid">Unique identifier for the item.</param>
-        /// <returns>index of item or -1</returns>
+        /// <returns>index of item or -1. </returns>
         public int GetIndexFromUUID(string uuid)
         {
             if (!this.Contains(uuid))
@@ -138,8 +133,8 @@
         /// <summary>
         /// Returns an item given it's unique identifier.
         /// </summary>
-        /// <param name="uuid">Unique identifier for the item</param>
-        /// <returns>the item</returns>
+        /// <param name="uuid">Unique identifier for the item. </param>
+        /// <returns>Element.</returns>
         public T GetElement(string uuid)
         {
             int index = this.GetIndexFromUUID(uuid);
@@ -150,7 +145,7 @@
         /// Returns as item given it's index location.
         /// </summary>
         /// <param name="index">The item's index location.</param>
-        /// <returns>the item</returns>
+        /// <returns>Element.</returns>
         public T GetElement(int index)
         {
             if (index < 0 || index > this.List.Count - 1)

@@ -4,8 +4,7 @@ namespace Revit_glTF_Exporter
     using Common_glTF_Exporter.Core;
 
     /// <summary>
-    /// Magic numbers to differentiate scalar and vector.
-    /// array buffers.
+    /// Magic numbers to differentiate scalar and vector array buffers
     /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#buffers-and-buffer-views.
     /// </summary>
     public enum Targets
@@ -15,7 +14,7 @@ namespace Revit_glTF_Exporter
     }
 
     /// <summary>
-    /// Magic numbers to differentiate array buffer component types.
+    /// Magic numbers to differentiate array buffer component types
     /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#accessor-element-size.
     /// </summary>
     public enum ComponentType

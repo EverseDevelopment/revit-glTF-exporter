@@ -54,6 +54,8 @@
         /// <returns>Returns the GLTFBinaryData object.</returns>
         public static GLTFBinaryData AddGeometryMeta(List<GLTFBuffer> buffers, List<GLTFAccessor> accessors, List<GLTFBufferView> bufferViews, GeometryDataObject geomData, string name, int elementId, bool exportBatchId, bool exportNormals)
         {
+            int byteOffset = 0;
+
             // add a buffer
             GLTFBuffer buffer = new GLTFBuffer();
             buffer.uri = string.Concat(name, ".bin");
@@ -62,169 +64,20 @@
             GLTFBinaryData bufferData = new GLTFBinaryData();
             bufferData.name = buffer.uri;
 
-            foreach (var coord in geomData.Vertices)
-            {
-                float floatValue = Convert.ToSingle(coord);
-                bufferData.vertexBuffer.Add(floatValue);
-            }
+            byteOffset = GLTFBinaryDataUtils.ExportVertices(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors, out int sizeOfVec3View, out int elementsPerVertex);
 
-            foreach (var index in geomData.Faces)
+            if (exportNormals)
             {
-                bufferData.indexBuffer.Add(index);
+                byteOffset = GLTFBinaryDataUtils.ExportNormals(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
             }
 
             if (exportBatchId)
             {
-                foreach (var vertice in geomData.Vertices)
-                {
-                    bufferData.batchIdBuffer.Add(elementId);
-                }
+                byteOffset = GLTFBinaryDataUtils.ExportBatchId(bufferIdx, byteOffset, sizeOfVec3View, elementsPerVertex, elementId, geomData, bufferData, bufferViews, accessors);
             }
 
-            if (exportNormals)
-            {
-                foreach (var normal in geomData.Normals)
-                {
-                    float floatValue = Convert.ToSingle(normal);
-                    bufferData.normalBuffer.Add(floatValue);
-                }
-            }
+            byteOffset = GLTFBinaryDataUtils.ExportFaces(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
 
-            // Get max and min for vertex data
-            float[] vertexMinMax = Util.GetVec3MinMax(bufferData.vertexBuffer);
-
-            // Get max and min for index data
-            int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
-
-            // Get max and min for batchId data
-            float[] batchIdMinMax = default;
-            if (exportBatchId)
-            {
-                batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
-            }
-
-            // Get max and min for normal data
-            float[] normalMinMax = default;
-            if (exportNormals)
-            {
-                normalMinMax = Util.GetVec3MinMax(bufferData.normalBuffer);
-            }
-
-            // Buffer views and accessors
-
-            // Add a vec3 buffer view
-            int elementsPerVertex = 3;
-            int bytesPerElement = 4;
-            int bytesPerVertex = elementsPerVertex * bytesPerElement;
-            int numVec3 = geomData.Vertices.Count / elementsPerVertex;
-            int sizeOfVec3View = numVec3 * bytesPerVertex;
-            GLTFBufferView vec3View = new GLTFBufferView();
-            var byteOffset = 0;
-            vec3View.buffer = bufferIdx;
-            vec3View.byteOffset = byteOffset;
-            vec3View.byteLength = sizeOfVec3View;
-            vec3View.target = Targets.ARRAY_BUFFER;
-            bufferViews.Add(vec3View);
-            int vec3ViewIdx = bufferViews.Count - 1;
-
-            // add a position accessor
-            GLTFAccessor positionAccessor = new GLTFAccessor();
-            positionAccessor.bufferView = vec3ViewIdx;
-            positionAccessor.byteOffset = 0;
-            positionAccessor.componentType = ComponentType.FLOAT;
-            positionAccessor.count = geomData.Vertices.Count / elementsPerVertex;
-            positionAccessor.type = "VEC3";
-            positionAccessor.max = new List<float>() { vertexMinMax[1], vertexMinMax[3], vertexMinMax[5] };
-            positionAccessor.min = new List<float>() { vertexMinMax[0], vertexMinMax[2], vertexMinMax[4] };
-            positionAccessor.name = "POSITION";
-            accessors.Add(positionAccessor);
-            bufferData.vertexAccessorIndex = accessors.Count - 1;
-            byteOffset += vec3View.byteLength;
-
-
-            if (exportNormals)
-            {
-                // Add a normals (vec3) buffer view
-                int elementsPerNormal = 3;
-                int bytesPerNormalElement = 4;
-                int bytesPerNormal = elementsPerNormal * bytesPerNormalElement;
-                int numVec3Normals = geomData.Normals.Count / elementsPerNormal;
-                int sizeOfVec3ViewNormals = numVec3Normals * bytesPerNormal;
-                GLTFBufferView vec3ViewNormals = new GLTFBufferView();
-                vec3ViewNormals.buffer = bufferIdx;
-                vec3ViewNormals.byteOffset = byteOffset;
-                vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
-                vec3ViewNormals.target = Targets.ARRAY_BUFFER;
-                bufferViews.Add(vec3ViewNormals);
-                int vec3ViewNormalsIdx = bufferViews.Count - 1;
-
-                // add a normals accessor
-                GLTFAccessor normalsAccessor = new GLTFAccessor();
-                normalsAccessor.bufferView = vec3ViewNormalsIdx;
-                normalsAccessor.byteOffset = 0;
-                normalsAccessor.componentType = ComponentType.FLOAT;
-                normalsAccessor.count = geomData.Normals.Count / elementsPerNormal;
-                normalsAccessor.type = "VEC3";
-                normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
-                normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
-                normalsAccessor.name = "NORMALS";
-                accessors.Add(normalsAccessor);
-                bufferData.normalsAccessorIndex = accessors.Count - 1;
-                byteOffset += vec3ViewNormals.byteLength;
-            }
-
-            if (exportBatchId)
-            {
-                // Add a batchId buffer view
-                GLTFBufferView batchIdsView = new GLTFBufferView();
-                batchIdsView.buffer = bufferIdx;
-                batchIdsView.byteOffset = byteOffset;
-                batchIdsView.byteLength = sizeOfVec3View;
-                batchIdsView.target = Targets.ARRAY_BUFFER;
-                bufferViews.Add(batchIdsView);
-                int batchIdsViewIdx = bufferViews.Count - 1;
-
-                // add a batchId accessor
-                GLTFAccessor batchIdAccessor = new GLTFAccessor();
-                batchIdAccessor.bufferView = batchIdsViewIdx;
-                batchIdAccessor.byteOffset = 0;
-                batchIdAccessor.componentType = ComponentType.FLOAT;
-                batchIdAccessor.count = geomData.Vertices.Count / elementsPerVertex;
-                batchIdAccessor.type = "VEC3";
-                batchIdAccessor.max = new List<float>() { batchIdMinMax[1], batchIdMinMax[3], batchIdMinMax[5] };
-                batchIdAccessor.min = new List<float>() { batchIdMinMax[0], batchIdMinMax[2], batchIdMinMax[4] };
-                batchIdAccessor.name = "BATCH_ID";
-                accessors.Add(batchIdAccessor);
-                bufferData.batchIdAccessorIndex = accessors.Count - 1;
-                byteOffset += batchIdsView.byteLength;
-            }
-
-            // Add a faces / indexes buffer view
-            int elementsPerIndex = 1;
-            int bytesPerIndexElement = 4;
-            int bytesPerIndex = elementsPerIndex * bytesPerIndexElement;
-            int numIndexes = geomData.Faces.Count;
-            int sizeOfIndexView = numIndexes * bytesPerIndex;
-            GLTFBufferView facesView = new GLTFBufferView();
-            facesView.buffer = bufferIdx;
-            facesView.byteOffset = byteOffset;
-            facesView.byteLength = sizeOfIndexView;
-            facesView.target = Targets.ELEMENT_ARRAY_BUFFER;
-            bufferViews.Add(facesView);
-            int facesViewIdx = bufferViews.Count - 1;
-
-            // add a face accessor
-            GLTFAccessor faceAccessor = new GLTFAccessor();
-            faceAccessor.bufferView = facesViewIdx;
-            faceAccessor.byteOffset = 0;
-            faceAccessor.componentType = ComponentType.UNSIGNED_INT;
-            faceAccessor.count = geomData.Faces.Count / elementsPerIndex;
-            faceAccessor.type = "SCALAR";
-            faceAccessor.max = new List<float>() { faceMinMax[1] };
-            faceAccessor.min = new List<float>() { faceMinMax[0] };
-            faceAccessor.name = "FACE";
-            accessors.Add(faceAccessor);
-            bufferData.indexAccessorIndex = accessors.Count - 1;
             return bufferData;
         }
 
