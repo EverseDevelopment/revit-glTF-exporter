@@ -43,24 +43,22 @@ Name: "{commonpf64}eversegltfExporter\"
 Type: filesandordirs; Name: "{commonpf64}\eversegltfExporter\"        
 
 [Files]
-
-Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2019}"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2020}"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2021}"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2022}"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2023}"; Flags: ignoreversion 
-
-Source: "..\Common_glTF_Exporter\*.config"; DestDir: "{userappdata}{#Revit2019}\eversegltfExporter\"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.config"; DestDir: "{userappdata}{#Revit2020}\eversegltfExporter\"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.config"; DestDir: "{userappdata}{#Revit2021}\eversegltfExporter\"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.config"; DestDir: "{userappdata}{#Revit2022}\eversegltfExporter\"; Flags: ignoreversion 
-Source: "..\Common_glTF_Exporter\*.config"; DestDir: "{userappdata}{#Revit2023}\eversegltfExporter\"; Flags: ignoreversion 
+Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2019}"; Flags: ignoreversion
+Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2020}"; Flags: ignoreversion
+Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2021}"; Flags: ignoreversion
+Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2022}"; Flags: ignoreversion
+Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2023}"; Flags: ignoreversion
 
 Source: "..\Revit_glTF_Exporter_2019\bin\Release\*"; Excludes: "*.addin,*.config"  ; DestDir: "{userappdata}{#Revit2019}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\Revit_glTF_Exporter_2020\bin\Release\*"; Excludes: "*.addin,*.config"  ; DestDir: "{userappdata}{#Revit2020}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\Revit_glTF_Exporter_2021\bin\Release\*"; Excludes: "*.addin,*.config"  ; DestDir: "{userappdata}{#Revit2021}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\Revit_glTF_Exporter_2022\bin\Release\*"; Excludes: "*.addin,*.config"  ; DestDir: "{userappdata}{#Revit2022}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\Revit_glTF_Exporter_2023\bin\Release\*"; Excludes: "*.addin,*.config"  ; DestDir: "{userappdata}{#Revit2023}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs 
+
+Source: "..\Common_glTF_Exporter\*.config"; DestDir: "{userappdata}{#Revit2023}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs 
+
+
+
 
 Source: "Resources\GLTFExporter.ico"; DestDir: "{userappdata}\eversegltfExporter\Images\"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

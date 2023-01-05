@@ -143,8 +143,7 @@
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\"
+    <PostBuildEvent>		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\"
 		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\Images"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\Images\"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2020\eversegltfExporter\"
