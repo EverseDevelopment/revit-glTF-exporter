@@ -62,7 +62,7 @@ jobs:
 
     - name: Building the installer
       run: |
-        "%programfiles(x86)%\Inno Setup 6\iscc.exe" "InstallScript.iss"
+        "%programfiles(x86)%\Inno Setup 6\ISCC.exe" "InstallScript.iss"
       shell: cmd
       
     - name: Upload the installer as an artifact
