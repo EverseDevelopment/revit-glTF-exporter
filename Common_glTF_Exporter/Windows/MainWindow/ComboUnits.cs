@@ -19,7 +19,7 @@
             unitTextBlock.Content = LabelUtils.GetLabelFor(internalProjectDisplayUnitType);
             if (initialUnits == "null")
             {
-                SettingsConfig.Set("units", internalProjectDisplayUnitType.ToString());
+                SettingsConfig.SetValue("units", internalProjectDisplayUnitType.ToString());
             }
 
             #else
@@ -28,7 +28,7 @@
             unitTextBlock.Content = LabelUtils.GetLabelForUnit(internalProjectUnitTypeId).ToString();
             if (initialUnits == "null")
             {
-                SettingsConfig.Set("units", internalProjectUnitTypeId.TypeId.ToString());
+                SettingsConfig.SetValue("units", internalProjectUnitTypeId.TypeId.ToString());
             }
 
             #endif

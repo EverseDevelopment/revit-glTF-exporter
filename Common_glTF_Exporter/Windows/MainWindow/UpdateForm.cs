@@ -61,6 +61,7 @@
                     }
 
                     #if REVIT2019 || REVIT2020
+
                     if (property.PropertyType == typeof(DisplayUnitType))
                     {
                         List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
@@ -73,7 +74,9 @@
                         UnitObject elementSel = itemSource.First(x => x.DisplayUnitType == unitType);
                         comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
                     }
+
                     #else
+
                     if (property.PropertyType == typeof(ForgeTypeId))
                     {
                         List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
@@ -84,6 +87,7 @@
                         UnitObject elementSel = itemSource.First(x => x.ForgeTypeId == forgeTypeId);
                         comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
                     }
+
                     #endif
                 }
                 catch (Exception ex)

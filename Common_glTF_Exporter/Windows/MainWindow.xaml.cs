@@ -84,8 +84,8 @@
                 string directory = filename.Replace(".gltf", string.Empty);
                 string nameOnly = System.IO.Path.GetFileNameWithoutExtension(filename);
 
-                SettingsConfig.Set("path", directory);
-                SettingsConfig.Set("fileName", nameOnly);
+                SettingsConfig.SetValue("path", directory);
+                SettingsConfig.SetValue("fileName", nameOnly);
 
                 this.ExportView3D(exportView, false);
             }
@@ -133,7 +133,7 @@
         private void TrueFalseToggles(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.Primitives.ToggleButton button = sender as System.Windows.Controls.Primitives.ToggleButton;
-            SettingsConfig.Set(button.Name, button.IsChecked.ToString());
+            SettingsConfig.SetValue(button.Name, button.IsChecked.ToString());
         }
 
         private void RadioButtonClick(object sender, RoutedEventArgs e)
@@ -141,7 +141,7 @@
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name;
             string key = "compression";
-            SettingsConfig.Set(key, value);
+            SettingsConfig.SetValue(key, value);
         }
 
         private void DigitsSliderValueChanged(object sender, RoutedEventArgs e)
@@ -149,7 +149,7 @@
             Slider slider = sender as Slider;
             int value = Convert.ToInt32(slider.Value.ToString());
             string key = "digits";
-            SettingsConfig.Set(key, value.ToString());
+            SettingsConfig.SetValue(key, value.ToString());
         }
     }
 }

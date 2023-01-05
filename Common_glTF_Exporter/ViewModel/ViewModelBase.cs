@@ -20,11 +20,11 @@
             {
             #if REVIT2019 || REVIT2020
 
-                SettingsConfig.Set("units", unitobject.DisplayUnitType.ToString());
+                SettingsConfig.SetValue("units", unitobject.DisplayUnitType.ToString());
 
             #else
 
-            SettingsConfig.Set("units", unitobject.ForgeTypeId.TypeId.ToString());
+            SettingsConfig.SetValue("units", unitobject.ForgeTypeId.TypeId.ToString());
 
             #endif
             }

@@ -1,10 +1,8 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
-    using System;
     using System.Configuration;
     using System.IO;
     using System.Reflection;
-    using Autodesk.Internal.InfoCenter;
     using Configuration = System.Configuration.Configuration;
 
     public static class SettingsConfig
@@ -15,13 +13,13 @@
 
         public static string GetValue(string key)
         {
-            Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap { ExeConfigFilename = appSettingsName }, ConfigurationUserLevel.None);
+            Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap { ExeConfigFilename = appSettingsFile }, ConfigurationUserLevel.None);
             return configuration.AppSettings.Settings[key].Value;
         }
 
-        public static void Set(string key, string value)
+        public static void SetValue(string key, string value)
         {
-            Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap { ExeConfigFilename = appSettingsName }, ConfigurationUserLevel.None);
+            Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap { ExeConfigFilename = appSettingsFile }, ConfigurationUserLevel.None);
             configuration.AppSettings.Settings[key].Value = value;
             configuration.Save(ConfigurationSaveMode.Modified, true);
             ConfigurationManager.RefreshSection("appSettings");
