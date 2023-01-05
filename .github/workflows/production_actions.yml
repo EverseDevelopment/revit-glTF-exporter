@@ -29,7 +29,7 @@ jobs:
 
     - name: Building the installer
       run: |
-        "%programfiles(x86)%\Inno Setup 6\ISCC.exe" ".\GLTFExporter.Installer\InstallScript.iss"
+        "%programfiles(x86)%\Inno Setup 6\ISCC.exe" ".\GLTFExporter.Installer\InstallScript.iss" /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release
       shell: cmd
       
     - name: Upload the installer as an artifact
