@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE;REVIT2020</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\..\..\Downloads\e-verse.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Revit_glTF_Exporter_2023\e-verse.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\danie\AppData\Local\Temp\vs26A4.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -34,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>C:\Users\danie\AppData\Local\Temp\vs26A4.tmp\Release\</IntermediateOutputPath>
+    <CodeAnalysisRuleSet>..\Revit_glTF_Exporter_2023\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'REVIT2019|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
