@@ -59,15 +59,5 @@ namespace Revit_glTF_Exporter.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap gltf {
-            get {
-                object obj = ResourceManager.GetObject("gltf", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
