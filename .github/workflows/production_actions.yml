@@ -9,10 +9,6 @@ jobs:
 
   build:
   
-    strategy:
-      matrix:
-        configuration: [Release]
-        
     # The type of runner that the job will run on
     runs-on: windows-latest 
     env:
@@ -26,17 +22,13 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        
-    - name: Creating Release
-      id: create-release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    - name: Build   
+      uses: actions/setup-dotnet@v3
       with:
-        tag_name: tagname
-        release_name: GLTFExporter Release tagname
-        draft: false
-        prerelease: false
+        dotnet-version: | 
+          4.7.x
+          4.8.x
+    - run: dotnet build --configuration Release Revit_glTF_Exporter
 
     - name: Building the installer
       run: |
