@@ -57,12 +57,25 @@ jobs:
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
     
-    # Launch the installer
-    - name: Release with Notes
-      uses: "marvinpinto/action-automatic-releases@latest"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        prerelease: false
-        title: "Production Build"
+        tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}
+        release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }}
         automatic_release_tag: "latest"
-        files: GLTFExporter.Installer/Installer/*.exe
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: .\GLTFExporter.Installer\Installer\GLTFExporter.exe
+        asset_name: GLTFExporter.exe
+        asset_content_type: application/zip
