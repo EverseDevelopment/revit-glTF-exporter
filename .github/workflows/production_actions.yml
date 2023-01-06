@@ -35,5 +35,5 @@ jobs:
     - name: Upload the installer as an artifact
       uses: actions/upload-artifact@v2      
       with:
-        path: "../GLTFExporter.Installer/Installer/GTLFExporter.exe"
+        path: "GLTFExporter.Installer/Installer/GTLFExporter.exe"
         name: wininstaller-innosetup
