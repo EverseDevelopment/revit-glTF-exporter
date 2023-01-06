@@ -55,7 +55,7 @@ jobs:
       
     # Change the version inside of the .iss file
     - name: Setting new version to installer
-      run: (Get-Content InstallScript.iss) -replace 'AppVersion=1.0.0', 'AppVersion=1.1.1' | Out-File -encoding ASCII InstallScript.iss
+      run: (Get-Content GLTFExporter.Installer/InstallScript.iss) -replace 'AppVersion=1.0.0', 'AppVersion=1.1.1' | Out-File -encoding ASCII GLTFExporter.Installer/InstallScript.iss
         
     # Build the solution on the Release mode
     - name: Build and Publish App
