@@ -49,11 +49,11 @@ Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2021}";
 Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2022}"; Flags: ignoreversion
 Source: "..\Common_glTF_Exporter\*.addin"; DestDir: "{userappdata}{#Revit2023}"; Flags: ignoreversion
 
-Source: "..\Revit_glTF_Exporter_2019\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2019}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\Revit_glTF_Exporter_2020\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2020}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\Revit_glTF_Exporter_2021\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2021}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\Revit_glTF_Exporter_2022\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2022}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\Revit_glTF_Exporter_2023\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2023}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs 
+Source: "..\Revit_glTF_Exporter_2019\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2019}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\Revit_glTF_Exporter_2020\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2020}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\Revit_glTF_Exporter_2021\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2021}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\Revit_glTF_Exporter_2022\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2022}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\Revit_glTF_Exporter_2023\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2023}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs 
 
 Source: "Resources\GLTFExporter.ico"; DestDir: "{userappdata}\eversegltfExporter\Images\"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
