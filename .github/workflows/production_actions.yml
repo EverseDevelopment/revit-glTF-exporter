@@ -42,4 +42,5 @@ jobs:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         title: "Production Build"
+        automatic_release_tag: "latest"
         files: GLTFExporter.Installer/Installer/*.exe
