@@ -22,18 +22,18 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Build   
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: | 
-          4.7.x
-          4.8.x
-    - run: dotnet build --configuration Release Revit_glTF_Exporter
-
-    - name: Building the installer
-      run: |
-        "%programfiles(x86)%\Inno Setup 6\ISCC.exe" ".\GLTFExporter.Installer\InstallScript.iss"
-      shell: cmd
+        
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.1
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.6
+     
+    - name: Restore NuGet Packages
+      run: nuget restore EVS.Civil3D.sln
+        
+    - name: Build and Publish App
+      run: msbuild Revit_glTF_Exporter.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
       
     - name: Upload the installer as an artifact
       uses: actions/upload-artifact@v2      
