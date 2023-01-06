@@ -1,0 +1,49 @@
+name: Deploy to Production
+
+on:
+  push:
+    # this will cause the action to run on pushes to main
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+  
+    # The type of runner that the job will run on
+    runs-on: windows-latest 
+    env:
+        Solution_Name: Revit_glTF_Exporter.sln
+    outputs:
+      Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }} 
+      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}   
+     
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    # Installing the MSBuild
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.1
+    
+    # Install and restore the necessary NuGet packages
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.6
+     
+    - name: Restore NuGet Packages
+      run: nuget restore Revit_glTF_Exporter.sln
+        
+    # Build the solution on the Release mode
+    - name: Build and Publish App
+      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
+    
+    # Launch the installer
+    - name: Release with Notes
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        title: "Production Build"
+        automatic_release_tag: "latest"
+        files: GLTFExporter.Installer/Installer/*.exe

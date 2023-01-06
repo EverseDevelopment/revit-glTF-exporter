@@ -55,5 +55,6 @@ Source: "..\Revit_glTF_Exporter_2021\bin\Release\*"; Excludes: "*.addin" ; DestD
 Source: "..\Revit_glTF_Exporter_2022\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2022}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\Revit_glTF_Exporter_2023\bin\Release\*"; Excludes: "*.addin" ; DestDir: "{userappdata}{#Revit2023}\eversegltfExporter\"; Flags: ignoreversion recursesubdirs createallsubdirs 
 
+
 Source: "Resources\GLTFExporter.ico"; DestDir: "{userappdata}\eversegltfExporter\Images\"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

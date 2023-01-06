@@ -22,6 +22,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revit_glTF_Exporter_Installer", "GLTFExporter.Installer\Revit_glTF_Exporter_Installer.csproj", "{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{09B25CFE-1D0B-4824-8751-4AE5438429D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1F31FFFC-4D24-4314-A9AE-2BA73129FA7C}"
+	ProjectSection(SolutionItems) = preProject
+		production_actions.yml = production_actions.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +61,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1F31FFFC-4D24-4314-A9AE-2BA73129FA7C} = {09B25CFE-1D0B-4824-8751-4AE5438429D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {353E0F25-678F-4C1A-9C06-30CB2D416677}
