@@ -1,0 +1,4 @@
+#GitVersion.yml
+
+mode: ContinuousDeployment
+next-version: 0.1.0
