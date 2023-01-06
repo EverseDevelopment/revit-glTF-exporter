@@ -35,8 +35,11 @@ jobs:
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
       
-    - name: Upload the installer as an artifact
-      uses: actions/upload-artifact@v2      
+#     - run: Get-ChildItem -Path EVS.Civil3D.Setup\Installer
+    - name: Release with Notes
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        path: "GLTFExporter.Installer/Installer/GTLFExporter.exe"
-        name: wininstaller-innosetup
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        title: "Production Build"
+        files: GLTFExporter.Installer/Installer/*.exe
