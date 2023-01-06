@@ -52,11 +52,15 @@ jobs:
      
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
+      
+    # Change the version inside of the .iss file
+    - name: Setting new version to installer
+      run: (Get-Content InstallScript.iss) -replace 'AppVersion=1.0.0', 'AppVersion=1.1.1' | Out-File -encoding ASCII InstallScript.iss
         
     # Build the solution on the Release mode
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
-    
+        
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
