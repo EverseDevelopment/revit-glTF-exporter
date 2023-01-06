@@ -23,19 +23,22 @@ jobs:
       with:
         fetch-depth: 0
         
+    # Installing the MSBuild
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.1
-      
+    
+    # Install and restore the necessary NuGet packages
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.6
      
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
         
+    # Build the solution on the Release mode
     - name: Build and Publish App
-      run: msbuild Revit_glTF_Exporter.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
-      
-#     - run: Get-ChildItem -Path EVS.Civil3D.Setup\Installer
+      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
+    
+    # Launch the installer
     - name: Release with Notes
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
