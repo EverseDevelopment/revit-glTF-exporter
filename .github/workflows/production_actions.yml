@@ -35,7 +35,6 @@ jobs:
       with:
         tag_name: tagname
         release_name: GLTFExporter Release tagname
-        automatic_release_tag: "latest"
         draft: false
         prerelease: false
 
