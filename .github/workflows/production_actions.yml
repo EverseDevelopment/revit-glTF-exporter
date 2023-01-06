@@ -30,7 +30,7 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.6
      
     - name: Restore NuGet Packages
-      run: nuget restore EVS.Civil3D.sln
+      run: nuget restore Revit_glTF_Exporter.sln
         
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
