@@ -54,11 +54,11 @@ jobs:
       run: nuget restore Revit_glTF_Exporter.sln
       
     # Change the version inside of the 'InstallScript.iss' file
-    - name: Setting new version to installer
+    - name: Setting new version to the 'InstallScript.iss' file
       run: (Get-Content GLTFExporter.Installer/InstallScript.iss) -replace 'AppVersion=1.0.0', 'AppVersion=v${{ steps.gitversion.outputs.majorMinorPatch }}' | Out-File -encoding ASCII GLTFExporter.Installer/InstallScript.iss
         
     # Change the version inside 'App.config' file
-    - name: Setting new version to installer
+    - name: Setting new version to the App.config file
       run: (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="v1.0.0"', 'key="version" value="v${{ steps.gitversion.outputs.majorMinorPatch }}"' | Out-File -encoding ASCII Common_glTF_Exporter/App.config
         
     # Build the solution on the Release mode
