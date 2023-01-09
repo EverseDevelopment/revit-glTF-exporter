@@ -28,6 +28,8 @@
             this.View = view;
 
             UpdateForm.Run(this.MainWindow_Border);
+
+            LabelVersion.Update(this.UnitsViewModel);
         }
 
         public static MainWindow MainView { get; set; }
