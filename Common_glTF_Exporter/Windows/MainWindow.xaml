@@ -64,15 +64,20 @@
                     Height="50" 
                     FontSize="20" 
                     FontWeight="Light" 
-                    Margin="7,-1,134,0" VerticalAlignment="Top">
+                    Margin="7,-1,43,0" VerticalAlignment="Top">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="border" Width="290" Background="Transparent">
+                        <Border x:Name="border" Width="290" Background="Transparent">
                             <Grid>
-                                <TextBlock Text="glTF Exporter" 
+                                <TextBlock Text="glTF Exporter |"
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
                                            Margin="47,0,0,0" Height="30" Width="122"></TextBlock>
+                                <TextBlock 
+                                           TextAlignment="Left"
+                                           Margin="175,14,23,17"
+                                           FontSize="15" Height="19" Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
                                        Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
