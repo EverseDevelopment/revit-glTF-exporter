@@ -8,6 +8,7 @@
     {
         private UnitObject selectedUnit;
         private ObservableCollection<UnitObject> units;
+        private string version;
 
         public UnitsViewModel()
         {
@@ -60,6 +61,20 @@
             set
             {
                 this.units = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Version
+        {
+            get
+            {
+                return this.version;
+            }
+
+            set
+            {
+                this.version = value;
                 this.OnPropertyChanged();
             }
         }
