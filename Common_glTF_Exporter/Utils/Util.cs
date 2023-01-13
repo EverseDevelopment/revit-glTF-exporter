@@ -58,20 +58,17 @@
         /// <summary>
         /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
         /// </summary>
-        /// <param name="value">Value to convert.</param>
         /// <param name="preferences">User preferences.</param>
         /// <returns>Converted value.</returns>
-        public static double ConvertFeetToUnitTypeId(
-            double value,
-            Preferences preferences)
+        public static double ConvertFeetToUnitTypeId(Preferences preferences)
         {
             #if REVIT2019 || REVIT2020
 
-            return Math.Round(UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units), preferences.digits);
+            return Math.Round(UnitUtils.Convert(1, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units), preferences.digits);
 
             #else
 
-            return Math.Round(UnitUtils.Convert(value, UnitTypeId.Feet, preferences.units), preferences.digits);
+            return Math.Round(UnitUtils.Convert(1, UnitTypeId.Feet, preferences.units), preferences.digits);
 
             #endif
         }

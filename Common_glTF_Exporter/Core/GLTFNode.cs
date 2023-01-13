@@ -35,5 +35,20 @@
         /// Gets or sets the extras describing this node.
         /// </summary>
         public GLTFExtras extras { get; set; }
+
+        /// <summary>
+        /// Gets or sets rotation of the node.
+        /// </summary>
+        public List<double> rotation { get; set; }
+
+        /// <summary>
+        /// Gets or sets translation of the node.
+        /// </summary>
+        public List<double> translation { get; set; }
+
+        /// <summary>
+        /// Gets or sets scale of the node.
+        /// </summary>
+        public List<double> scale { get; set; }
     }
 }

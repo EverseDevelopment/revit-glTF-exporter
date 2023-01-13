@@ -22,6 +22,12 @@
 
                 View view = doc.ActiveView;
 
+                if (view.GetType().Name != "View3D")
+                {
+                    TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
+                    return Result.Succeeded;
+                }
+
                 MainWindow mainWindow = new MainWindow(doc, view);
                 mainWindow.ShowDialog();
 

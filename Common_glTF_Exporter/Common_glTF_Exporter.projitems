@@ -31,7 +31,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitGrids.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitMaterials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTF.cs" />

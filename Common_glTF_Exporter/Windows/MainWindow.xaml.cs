@@ -66,15 +66,6 @@
 
         private void OnExportView(object sender, RoutedEventArgs e)
         {
-            if (this.View.GetType().Name != "View3D")
-            {
-                this.Hide();
-                TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
-                this.Close();
-                return;
-            }
-
-            this.Show();
             View3D exportView = this.View as View3D;
 
             string fileName = SettingsConfig.GetValue("fileName");

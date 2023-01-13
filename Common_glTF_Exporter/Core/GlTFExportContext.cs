@@ -7,7 +7,6 @@ namespace Revit_glTF_Exporter
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Export;
-    using Common_glTF_Exporter.Extensions;
     using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.Windows.MainWindow;
@@ -32,7 +31,7 @@ namespace Revit_glTF_Exporter
         private Document doc;
         private bool skipElementFlag = false;
         private Element element;
-        private XYZ pointToRelocate = new XYZ(0, 0, 0);
+        private List<double> pointToRelocate = new List<double> { 0, 0, 0 };
         private View view;
         private Preferences preferences;
 
@@ -62,7 +61,6 @@ namespace Revit_glTF_Exporter
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             this.doc = doc;
             view = doc.ActiveView;
-            pointToRelocate = Common_glTF_Exporter.Windows.MainWindow.ExportToZero.GetPointToRelocate(this.doc);
         }
 
         // The following properties are the root elements of the glTF format spec. They will be serialized into the final *.gltf file.
@@ -122,6 +120,21 @@ namespace Revit_glTF_Exporter
 
             rootNode = new GLTFNode();
             rootNode.name = "rootNode";
+
+            if (preferences.flipAxis)
+            {
+                rootNode.rotation = new List<double> { 0.7071, 0, 0, -0.7071 };
+            }
+
+            double scale = Util.ConvertFeetToUnitTypeId(preferences);
+            rootNode.scale = new List<double> { scale, scale, scale };
+
+            if (preferences.relocateTo0)
+            {
+                pointToRelocate = ExportToZero.GetPointToRelocate(this.doc, scale);
+                rootNode.translation = pointToRelocate;
+            }
+
             rootNode.children = new List<int>();
 
             nodes.AddOrUpdateCurrent("rootNode", rootNode);
@@ -250,9 +263,9 @@ namespace Revit_glTF_Exporter
             {
                 List<PointIntObject> points = new List<PointIntObject>
                 {
-                    new PointIntObject(preferences, pts[facet.V1], pointToRelocate),
-                    new PointIntObject(preferences, pts[facet.V2], pointToRelocate),
-                    new PointIntObject(preferences, pts[facet.V3], pointToRelocate),
+                    new PointIntObject(preferences, pts[facet.V1]),
+                    new PointIntObject(preferences, pts[facet.V2]),
+                    new PointIntObject(preferences, pts[facet.V3]),
                 };
 
                 GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
@@ -458,9 +471,9 @@ namespace Revit_glTF_Exporter
 
                     List<PointIntObject> points = new List<PointIntObject>
                         {
-                            new PointIntObject(preferences, triangle.get_Vertex(0), pointToRelocate),
-                            new PointIntObject(preferences, triangle.get_Vertex(1), pointToRelocate),
-                            new PointIntObject(preferences, triangle.get_Vertex(2), pointToRelocate),
+                            new PointIntObject(preferences, triangle.get_Vertex(0)),
+                            new PointIntObject(preferences, triangle.get_Vertex(1)),
+                            new PointIntObject(preferences, triangle.get_Vertex(2)),
                         };
 
                     GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
