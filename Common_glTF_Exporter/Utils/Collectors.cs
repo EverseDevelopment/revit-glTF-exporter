@@ -22,7 +22,7 @@
                .WhereElementIsNotElementType()
                .ToElements()
                .Cast<Element>()
-               .Where(e => e.CanBeHidden(doc.ActiveView) && e.CanBeLocked())
+               .Where(e => e.CanBeHidden(doc.ActiveView) && e.Category != null)
                .ToList();
         }
     }

@@ -75,8 +75,11 @@
                                            Margin="47,0,0,0" Height="30" Width="122"></TextBlock>
                                 <TextBlock 
                                            TextAlignment="Left"
-                                           Margin="166,14,32,17"
-                                           FontSize="15" Height="19" Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"></TextBlock>
+                                           Margin="185,14,32,17"
+                                           FontSize="15" 
+                                           Height="19" 
+                                           Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                           Foreground="Black"></TextBlock>
 
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
@@ -171,7 +174,7 @@
                                       HorizontalAlignment="Left" 
                                       VerticalAlignment="Center" 
                                       Data="M 0 0 L 6 6 L 12 0" 
-                                      Stroke="#F94F46" 
+                                      Stroke="#707070" 
                                       Margin="265,0,0,0" 
                                       Height="8" 
                                       Stretch="Fill" 
@@ -249,7 +252,7 @@
             <Label      
                         Style="{DynamicResource SecondaryLabel}"
                         HorizontalAlignment="Left" 
-                        Margin="7,203,0,0" 
+                        Margin="10,203,0,0" 
                         Content="Export unit:"
                         Height="28" 
                         VerticalAlignment="Top" 

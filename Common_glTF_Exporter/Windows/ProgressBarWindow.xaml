@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="184"
+             Height="230"
              Width="308"
              ResizeMode="NoResize"
              Topmost="True"
@@ -54,9 +54,24 @@
                     Minimum="0"
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                        
                     Maximum="{Binding Path=ProgressBarMax}"
-                    Value="{Binding Path=ProgressBarValue}"
-                    Margin="27,74,32,0" Height="25" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                    Value="{Binding Path=ProgressBarGraphicValue}"
+                    Margin="27,74,32,0" 
+                    Height="22" 
+                    VerticalAlignment="Top" 
+                    Grid.ColumnSpan="2">
             </ProgressBar>
+
+            <TextBlock DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       TextWrapping="Wrap" 
+                       Text="{Binding Path=ProgressBarPercentage, StringFormat={}{0:0}%}" 
+                       TextAlignment="Center"
+                       Foreground="Black" 
+                       HorizontalAlignment="Left" Width="50" Margin="120,78,0,0" Height="17" VerticalAlignment="Top"/>
+            <Button Content="Cancel" 
+                    Style="{DynamicResource MainButtonStyle}"
+                    Margin="80,0,86,21"
+                    Click="CancelProcess_Click"  
+                    Height="28" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
         </Grid>
     </Border>
 

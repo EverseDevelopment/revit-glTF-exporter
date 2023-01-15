@@ -24,7 +24,7 @@
 
                 if (view.GetType().Name != "View3D")
                 {
-                    TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
+                    MessageWindow.Show("Wrong View", "You must be in a 3D view to export");
                     return Result.Succeeded;
                 }
 

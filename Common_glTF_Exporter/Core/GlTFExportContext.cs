@@ -31,7 +31,7 @@ namespace Revit_glTF_Exporter
         private Document doc;
         private bool skipElementFlag = false;
         private Element element;
-        private List<double> pointToRelocate = new List<double> { 0, 0, 0 };
+        private List<float> pointToRelocate = new List<float> { 0, 0, 0 };
         private View view;
         private Preferences preferences;
 
@@ -131,7 +131,7 @@ namespace Revit_glTF_Exporter
 
             if (preferences.relocateTo0)
             {
-                pointToRelocate = ExportToZero.GetPointToRelocate(this.doc, scale);
+                pointToRelocate = ExportToZero.GetPointToRelocate(this.doc, scale, preferences.flipAxis);
                 rootNode.translation = pointToRelocate;
             }
 
@@ -177,8 +177,6 @@ namespace Revit_glTF_Exporter
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
-
             element = doc.GetElement(elementId);
 
             if (!Util.CanBeLockOrHidden(element, view) ||
@@ -194,25 +192,26 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
+            ProgressBarWindow.ViewModel.ProgressBarValue++;
+
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
             newNode.name = Util.ElementDescription(element);
 
             // get the extras for this element
             GLTFExtras extras = new GLTFExtras();
-            extras.uniqueId = element.UniqueId;
 
             if (preferences.properties)
             {
+                extras.uniqueId = element.UniqueId;
                 extras.parameters = Util.GetElementParameters(element, true);
+                extras.elementCategory = element.Category.Name;
             }
 
             if (preferences.elementId)
             {
                 extras.elementId = element.Id.IntegerValue;
             }
-
-            extras.elementCategory = element.Category.Name;
 
             newNode.extras = extras;
 
@@ -263,9 +262,9 @@ namespace Revit_glTF_Exporter
             {
                 List<PointIntObject> points = new List<PointIntObject>
                 {
-                    new PointIntObject(preferences, pts[facet.V1]),
-                    new PointIntObject(preferences, pts[facet.V2]),
-                    new PointIntObject(preferences, pts[facet.V3]),
+                    new PointIntObject(pts[facet.V1]),
+                    new PointIntObject(pts[facet.V2]),
+                    new PointIntObject(pts[facet.V3]),
                 };
 
                 GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
@@ -438,8 +437,6 @@ namespace Revit_glTF_Exporter
 
         public void OnRPC(RPCNode node)
         {
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
-
             var meshes = GeometryUtils.GetMeshes(doc, element);
 
             if (!meshes.Any())
@@ -471,9 +468,9 @@ namespace Revit_glTF_Exporter
 
                     List<PointIntObject> points = new List<PointIntObject>
                         {
-                            new PointIntObject(preferences, triangle.get_Vertex(0)),
-                            new PointIntObject(preferences, triangle.get_Vertex(1)),
-                            new PointIntObject(preferences, triangle.get_Vertex(2)),
+                            new PointIntObject(triangle.get_Vertex(0)),
+                            new PointIntObject(triangle.get_Vertex(1)),
+                            new PointIntObject(triangle.get_Vertex(2)),
                         };
 
                     GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);

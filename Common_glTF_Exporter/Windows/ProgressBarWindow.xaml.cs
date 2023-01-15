@@ -25,9 +25,11 @@
         public static ProgressBarWindow Create(double maxValue, double currentValue, string message)
         {
             var progressBar = new ProgressBarWindow();
+            ProgressBarWindow.ViewModel.ProgressBarGraphicValue = maxValue * 0.07;
             ProgressBarWindow.ViewModel.ProgressBarValue = currentValue;
             ProgressBarWindow.ViewModel.Message = message;
             ProgressBarWindow.ViewModel.ProgressBarMax = maxValue;
+            ProgressBarWindow.ViewModel.ProgressBarPercentage = 0;
             progressBar.Show();
             ProgressBarWindow.MainView.Topmost = true;
             return progressBar;
@@ -49,6 +51,14 @@
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+
+        private void CancelProcess_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Add a bool to the export interface to implement a real
+            // cancelling button
+
+            this.Close();
         }
     }
 }

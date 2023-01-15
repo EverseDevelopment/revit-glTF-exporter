@@ -16,7 +16,7 @@
         /// <returns>If the given element can't be locked OR can't be hidden, it will returns FALSE. Otherwise, will returns TRUE.</returns>
         public static bool CanBeLockOrHidden(Element element, View view)
         {
-            if (!element.CanBeLocked() || !element.CanBeHidden(view))
+            if (!element.CanBeHidden(view))
             {
                 return false;
             }
@@ -29,6 +29,7 @@
             // Get the bounding box of the visible elements
             List<XYZ> maxPoints = new List<XYZ>();
             List<XYZ> minPoints = new List<XYZ>();
+            List<string> categories = new List<string>();
 
             foreach (Element element in elements)
             {
@@ -39,7 +40,7 @@
                     continue;
                 }
 
-                if (element.CanBeHidden(view) && element.CanBeLocked())
+                if (element.CanBeHidden(view))
                 {
                     maxPoints.Add(elementBoundingBox.Max);
                     minPoints.Add(elementBoundingBox.Min);

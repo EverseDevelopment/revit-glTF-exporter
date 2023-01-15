@@ -12,7 +12,7 @@
     /// </summary>
     public class PointIntObject : IComparable<PointIntObject>
     {
-        public PointIntObject(Preferences preferences, XYZ p)
+        public PointIntObject(XYZ p)
         {
             this.X = p.X;
             this.Y = p.Y;

@@ -590,7 +590,7 @@
                               HorizontalAlignment="Center" 
                               VerticalAlignment="Center" 
                               Data="M 0 0 L 6 6 L 12 0" 
-                              Stroke="Gray"
+                              Stroke="{StaticResource MainGray}"
                               StrokeThickness="2"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -605,7 +605,7 @@
                                     Value="M 0 6 L 6 0 L 12 6"/>
                             <Setter TargetName="Arrow" 
                                     Property="Stroke" 
-                                    Value="Gray"/>
+                                    Value="{StaticResource WindowButtonColor}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="gd" 

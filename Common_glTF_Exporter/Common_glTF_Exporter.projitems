@@ -48,6 +48,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Preferences.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\UpdateForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
     </Compile>
@@ -82,6 +85,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Windows\MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml" />
     <Page Include="$(MSBuildThisFileDirectory)Windows\Resources.xaml">
       <SubType>Designer</SubType>

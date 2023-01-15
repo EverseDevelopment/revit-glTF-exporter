@@ -44,7 +44,7 @@
         /// <summary>
         /// Gets or sets translation of the node.
         /// </summary>
-        public List<double> translation { get; set; }
+        public List<float> translation { get; set; }
 
         /// <summary>
         /// Gets or sets scale of the node.
