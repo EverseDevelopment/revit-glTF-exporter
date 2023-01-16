@@ -12,32 +12,11 @@
     /// </summary>
     public class PointIntObject : IComparable<PointIntObject>
     {
-        public PointIntObject(Preferences preferences, XYZ p, XYZ pointToRelocate)
+        public PointIntObject(XYZ p)
         {
-            this.X = Util.ConvertFeetToUnitTypeId(p.X, preferences);
-            this.Y = Util.ConvertFeetToUnitTypeId(p.Y, preferences);
-            this.Z = Util.ConvertFeetToUnitTypeId(p.Z, preferences);
-
-            if (preferences.relocateTo0)
-            {
-                this.BoundingBoxMidPointX = Util.ConvertFeetToUnitTypeId(pointToRelocate.X, preferences);
-                this.BoundingBoxMidPointY = Util.ConvertFeetToUnitTypeId(pointToRelocate.Y, preferences);
-                this.BoundingBoxMidPointZ = Util.ConvertFeetToUnitTypeId(pointToRelocate.Z, preferences);
-
-                pointToRelocate = new XYZ(this.BoundingBoxMidPointX, this.BoundingBoxMidPointY, this.BoundingBoxMidPointZ);
-
-                this.X -= pointToRelocate.X;
-                this.Y -= pointToRelocate.Y;
-                this.Z -= pointToRelocate.Z;
-            }
-
-            if (preferences.flipAxis)
-            {
-                this.X = -this.X;
-                double tmp = this.Y;
-                this.Y = this.Z;
-                this.Z = tmp;
-            }
+            this.X = p.X;
+            this.Y = p.Y;
+            this.Z = p.Z;
         }
 
         public double X { get; set; }
@@ -45,12 +24,6 @@
         public double Y { get; set; }
 
         public double Z { get; set; }
-
-        private double BoundingBoxMidPointX { get; set; }
-
-        private double BoundingBoxMidPointY { get; set; }
-
-        private double BoundingBoxMidPointZ { get; set; }
 
         public int CompareTo(PointIntObject a)
         {

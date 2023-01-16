@@ -8,7 +8,9 @@
     public class ProgressBarWindowViewModel : INotifyPropertyChanged
     {
         private double progressBarMax;
+        private double progressBarPercentage;
         private double progressBarValue;
+        private double progressBarGraphicValue;
         private string message;
         private ICommand closeWindowCommand;
 
@@ -28,6 +30,20 @@
             }
         }
 
+        public double ProgressBarPercentage
+        {
+            get
+            {
+                return this.progressBarPercentage;
+            }
+
+            set
+            {
+                this.progressBarPercentage = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public double ProgressBarValue
         {
             get
@@ -37,7 +53,27 @@
 
             set
             {
+                if (((value / ProgressBarMax) * 100) > 7)
+                {
+                    ProgressBarGraphicValue = value;
+                }
+
                 this.progressBarValue = value;
+                ProgressBarPercentage = (value / ProgressBarMax) * 100;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public double ProgressBarGraphicValue
+        {
+            get
+            {
+                return this.progressBarGraphicValue;
+            }
+
+            set
+            {
+                this.progressBarGraphicValue = value;
                 this.OnPropertyChanged();
             }
         }

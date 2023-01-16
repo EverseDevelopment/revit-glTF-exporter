@@ -4,7 +4,6 @@
     using System.Linq;
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Extensions;
     using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Windows.MainWindow;
     using Revit_glTF_Exporter;
@@ -62,11 +61,6 @@
         public static void AddRPCNormals(Preferences preferences, MeshTriangle triangle, GeometryDataObject geomDataObj)
         {
             XYZ normal = GeometryUtils.GetNormal(triangle);
-
-            if (preferences.flipAxis)
-            {
-                normal = normal.FlipCoordinates();
-            }
 
             for (int j = 0; j < 3; j++)
             {
@@ -139,11 +133,6 @@
                         {
                             XYZ newNormalPoint = normalPoint;
 
-                            if (preferences.flipAxis)
-                            {
-                                newNormalPoint = normalPoint.FlipCoordinates();
-                            }
-
                             normals.Add(newNormalPoint.X);
                             normals.Add(newNormalPoint.Y);
                             normals.Add(newNormalPoint.Z);
@@ -160,11 +149,6 @@
                         foreach (var normal in polymesh.GetNormals())
                         {
                             var newNormal = normal;
-
-                            if (preferences.flipAxis)
-                            {
-                                newNormal = normal.FlipCoordinates();
-                            }
 
                             for (int j = 0; j < 3; j++)
                             {
@@ -183,11 +167,6 @@
                     foreach (XYZ normal in polymeshNormals)
                     {
                         var newNormal = transform.OfVector(normal);
-
-                        if (preferences.flipAxis)
-                        {
-                            newNormal = newNormal.FlipCoordinates();
-                        }
 
                         normals.Add(newNormal.X);
                         normals.Add(newNormal.Y);

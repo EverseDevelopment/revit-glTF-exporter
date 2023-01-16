@@ -1,15 +1,19 @@
 ﻿namespace Revit_glTF_Exporter
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Forms;
     using System.Windows.Input;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using View = Autodesk.Revit.DB.View;
 
     /// <summary>
     /// Interaction logic for Settings.xaml.
@@ -38,59 +42,53 @@
 
         private UnitsViewModel UnitsViewModel { get; set; }
 
-        public void ExportView3D(View3D view3d, bool mode)
+        private void OnExportView(object sender, RoutedEventArgs e)
         {
-            Document doc = view3d.Document;
+            View3D exportView = this.View as View3D;
+
+            string fileName = SettingsConfig.GetValue("fileName");
+            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
+
+            if (dialogResult != true)
+            {
+                return;
+            }
+
+            string directory = fileName.Replace(".gltf", string.Empty);
+            string nameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
+
+            SettingsConfig.SetValue("path", directory);
+            SettingsConfig.SetValue("fileName", nameOnly);
+
+            Document doc = exportView.Document;
+
+            List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
+
+            if (!elementsInView.Any())
+            {
+                MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
+                return;
+            }
 
             ProgressBarWindow progressBar =
-                ProgressBarWindow.Create(Collectors.AllVisibleElementsByView(doc, doc.ActiveView).Count, 0, "Converting elements...");
+                ProgressBarWindow.Create(elementsInView.Count, 0, "Converting elements...");
 
             // Use our custom implementation of IExportContext as the exporter context.
             GLTFExportContext ctx = new GLTFExportContext(doc);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
-
             exporter.ShouldStopOnError = false;
 
             #if REVIT2019
-            exporter.Export(view3d);
+            exporter.Export(exportView);
             #else
-            exporter.Export(view3d as View);
+            exporter.Export(exportView as View);
             #endif
 
             ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
             Thread.Sleep(1000);
             progressBar.Close();
-        }
-
-        private void OnExportView(object sender, RoutedEventArgs e)
-        {
-            if (this.View.GetType().Name != "View3D")
-            {
-                this.Hide();
-                TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
-                this.Close();
-                return;
-            }
-
-            this.Show();
-            View3D exportView = this.View as View3D;
-
-            string fileName = SettingsConfig.GetValue("fileName");
-            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
-
-            if (dialogResult == true)
-            {
-                string filename = fileName;
-                string directory = filename.Replace(".gltf", string.Empty);
-                string nameOnly = System.IO.Path.GetFileNameWithoutExtension(filename);
-
-                SettingsConfig.SetValue("path", directory);
-                SettingsConfig.SetValue("fileName", nameOnly);
-
-                this.ExportView3D(exportView, false);
-            }
         }
 
         private void Advanced_Settings_Button(object sender, RoutedEventArgs e)

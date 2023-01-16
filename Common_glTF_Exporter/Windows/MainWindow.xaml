@@ -75,8 +75,11 @@
                                            Margin="47,0,0,0" Height="30" Width="122"></TextBlock>
                                 <TextBlock 
                                            TextAlignment="Left"
-                                           Margin="166,14,32,17"
-                                           FontSize="15" Height="19" Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"></TextBlock>
+                                           Margin="185,14,32,17"
+                                           FontSize="15" 
+                                           Height="19" 
+                                           Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                           Foreground="Black"></TextBlock>
 
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
@@ -127,7 +130,7 @@
             <Label
                 Style="{DynamicResource SecondaryLabel}"
                 HorizontalAlignment="Left" 
-                Margin="49,76,0,0" 
+                Margin="51,76,0,0" 
                 Height="24" 
                 VerticalAlignment="Top"
                 Content="Export Materials" Width="96"/>
@@ -171,7 +174,7 @@
                                       HorizontalAlignment="Left" 
                                       VerticalAlignment="Center" 
                                       Data="M 0 0 L 6 6 L 12 0" 
-                                      Stroke="#F94F46" 
+                                      Stroke="#707070" 
                                       Margin="265,0,0,0" 
                                       Height="8" 
                                       Stretch="Fill" 
@@ -221,13 +224,14 @@
                            Content="Project units:" Width="72">
             </Label>
             <Label x:Name="UnitTextBlock" 
+                              HorizontalContentAlignment="Left"
                                Style="{DynamicResource SecondaryLabel}"
                                Content="Meters"
                                HorizontalAlignment="Left" 
-                               Width="83"  
+                               Width="210"  
                                Height="26"
-                               HorizontalContentAlignment="Left"
-                               Margin="82,172,0,0" VerticalAlignment="Top">
+                               
+                               Margin="90,172,0,0" VerticalAlignment="Top">
             </Label>
             <ComboBox  x:Name="units" 
                        ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
@@ -248,7 +252,7 @@
             <Label      
                         Style="{DynamicResource SecondaryLabel}"
                         HorizontalAlignment="Left" 
-                        Margin="7,203,0,0" 
+                        Margin="10,203,0,0" 
                         Content="Export unit:"
                         Height="28" 
                         VerticalAlignment="Top" 
@@ -269,7 +273,7 @@
                 <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="48,299,0,0" 
+                    Margin="50,299,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export Normals" Width="96"/>
@@ -284,7 +288,7 @@
                 <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="198,298,0,0" 
+                    Margin="208,298,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export Levels" Width="96"/>
@@ -299,7 +303,7 @@
                 <Label      
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="41,328,0,0" 
+                    Margin="50,328,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export Ligths" 
@@ -315,7 +319,7 @@
                 <Label       
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="197,328,0,0" 
+                    Margin="208,328,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export Grids" 
@@ -331,7 +335,7 @@
                 <Label   
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="45,359,0,0" 
+                    Margin="50,359,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export BatchId" 
@@ -347,7 +351,7 @@
                 <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="210,358,0,0" 
+                    Margin="208,358,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export Prop" 
@@ -363,7 +367,7 @@
                 <Label        
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="53,388,0,0" 
+                    Margin="50,388,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Export to (0,0,0)" 
@@ -379,7 +383,7 @@
                 <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="201,388,0,0" 
+                    Margin="208,388,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
                     Content="Flip YZ-Axys" Width="86"/>
@@ -409,20 +413,20 @@
                                  Margin="10,0,0,0" 
                                  VerticalAlignment="Center"
                                  Click="RadioButtonClick"/>
-                    <RadioButton x:Name="Meshopt" 
+                    <!--<RadioButton x:Name="Meshopt" 
                                  Grid.Column="1" 
                                  Content="Meshopt" 
                                  HorizontalAlignment="Left" 
                                  Margin="10,0,0,0" 
                                  VerticalAlignment="Center" 
                                  Width="66"
-                                 Click="RadioButtonClick"/>
+                                 Click="RadioButtonClick"/>-->
                     <RadioButton x:Name="Draco" 
-                                 Grid.Column="2" 
+                                 Grid.Column="1" 
                                  Content="DRACO" 
-                                 HorizontalAlignment="Center" 
+                                 HorizontalAlignment="Left" 
                                  VerticalAlignment="Center"
-                                 Click="RadioButtonClick"/>
+                                 Click="RadioButtonClick" Grid.ColumnSpan="2" Margin="46,0,0,0"/>
                     <RadioButton x:Name="ZIP" 
                                  Grid.Column="3" 
                                  Content="ZIP" 

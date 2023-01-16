@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="184"
+             Height="230"
              Width="308"
              ResizeMode="NoResize"
              Topmost="True"
@@ -49,23 +49,29 @@
                    FontWeight="Light" 
                    Margin="89,6,6,0" RenderTransformOrigin="0.012,0.623" Grid.Column="1">X</Button>
 
-            <ProgressBar 
+            <ProgressBar Style="{DynamicResource ProgressBarStyle}" 
                     Name="ProgressBar"
                     Minimum="0"
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                        
                     Maximum="{Binding Path=ProgressBarMax}"
-                    Value="{Binding Path=ProgressBarValue}"
-                    Margin="40,74,40,0" Height="25" VerticalAlignment="Top" Grid.ColumnSpan="2">
-                <ProgressBar.Foreground>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="White"/>
-                        <GradientStop Color="#F94F46" Offset="1"/>
-                        <GradientStop Color="#F94F46" Offset="0.504"/>
-                        <GradientStop Color="#FFFF736C" Offset="0.134"/>
-                        <GradientStop Color="#FFFBA5A0" Offset="0.304"/>
-                    </LinearGradientBrush>
-                </ProgressBar.Foreground>
+                    Value="{Binding Path=ProgressBarGraphicValue}"
+                    Margin="27,74,32,0" 
+                    Height="22" 
+                    VerticalAlignment="Top" 
+                    Grid.ColumnSpan="2">
             </ProgressBar>
+
+            <TextBlock DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       TextWrapping="Wrap" 
+                       Text="{Binding Path=ProgressBarPercentage, StringFormat={}{0:0}%}" 
+                       TextAlignment="Center"
+                       Foreground="Black" 
+                       HorizontalAlignment="Left" Width="50" Margin="120,78,0,0" Height="17" VerticalAlignment="Top"/>
+            <Button Content="Cancel" 
+                    Style="{DynamicResource MainButtonStyle}"
+                    Margin="80,0,86,21"
+                    Click="CancelProcess_Click"  
+                    Height="28" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
         </Grid>
     </Border>
 

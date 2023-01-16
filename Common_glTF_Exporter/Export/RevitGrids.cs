@@ -38,19 +38,19 @@
 
                 grid.origin = new List<double>()
                 {
-                    Util.ConvertFeetToUnitTypeId(origin.X, preferences),
-                    Util.ConvertFeetToUnitTypeId(origin.Y, preferences),
-                    Util.ConvertFeetToUnitTypeId(origin.Z, preferences),
+                    origin.X,
+                    origin.Y,
+                    origin.Z,
                 };
 
                 grid.direction = new List<double>()
                 {
-                    Util.ConvertFeetToUnitTypeId(direction.X, preferences),
-                    Util.ConvertFeetToUnitTypeId(direction.Y, preferences),
-                    Util.ConvertFeetToUnitTypeId(direction.Z, preferences),
+                    direction.X,
+                    direction.Y,
+                    direction.Z,
                 };
 
-                grid.length = Util.ConvertFeetToUnitTypeId(length, preferences);
+                grid.length = length;
 
                 xtras.gridParameters = grid;
                 xtras.uniqueId = g.UniqueId;

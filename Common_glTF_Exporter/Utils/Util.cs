@@ -16,7 +16,7 @@
         /// <returns>If the given element can't be locked OR can't be hidden, it will returns FALSE. Otherwise, will returns TRUE.</returns>
         public static bool CanBeLockOrHidden(Element element, View view)
         {
-            if (!element.CanBeLocked() || !element.CanBeHidden(view))
+            if (!element.CanBeHidden(view))
             {
                 return false;
             }
@@ -29,6 +29,7 @@
             // Get the bounding box of the visible elements
             List<XYZ> maxPoints = new List<XYZ>();
             List<XYZ> minPoints = new List<XYZ>();
+            List<string> categories = new List<string>();
 
             foreach (Element element in elements)
             {
@@ -39,7 +40,7 @@
                     continue;
                 }
 
-                if (element.CanBeHidden(view) && element.CanBeLocked())
+                if (element.CanBeHidden(view))
                 {
                     maxPoints.Add(elementBoundingBox.Max);
                     minPoints.Add(elementBoundingBox.Min);
@@ -58,20 +59,17 @@
         /// <summary>
         /// Convert the given <paramref name="value"/> as a feet to the given <paramref name="forgeTypeId"/> unit.
         /// </summary>
-        /// <param name="value">Value to convert.</param>
         /// <param name="preferences">User preferences.</param>
         /// <returns>Converted value.</returns>
-        public static double ConvertFeetToUnitTypeId(
-            double value,
-            Preferences preferences)
+        public static double ConvertFeetToUnitTypeId(Preferences preferences)
         {
             #if REVIT2019 || REVIT2020
 
-            return Math.Round(UnitUtils.Convert(value, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units), preferences.digits);
+            return Math.Round(UnitUtils.Convert(1, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units), preferences.digits);
 
             #else
 
-            return Math.Round(UnitUtils.Convert(value, UnitTypeId.Feet, preferences.units), preferences.digits);
+            return Math.Round(UnitUtils.Convert(1, UnitTypeId.Feet, preferences.units), preferences.digits);
 
             #endif
         }
