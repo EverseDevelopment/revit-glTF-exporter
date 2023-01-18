@@ -21,6 +21,7 @@
     
     <CornerRadius x:Key="borderRadiusLarge" BottomLeft="15" BottomRight="15" TopLeft="15" TopRight="15"/>
     <System:Double x:Key="SecondaryFontSize">12</System:Double>
+    <System:Double x:Key="MainFontSize">15</System:Double>
     <FontFamily x:Key="FormFamily">Roboto</FontFamily>
      
     <!--Control template for Main forms-->
@@ -172,8 +173,22 @@
         <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
         <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="FontWeight"  Value="Light"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Height" Value="24"/>
     </Style>
-    
+
+    <!--Customization of labels template-->
+    <Style x:Key="TitleLabels" TargetType="{x:Type Label}">
+        <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource MainFontSize}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="FontWeight"  Value="DemiBold"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Height" Value="31"/>
+    </Style>
+
     <!--MainButtons Custom template-->
     <ControlTemplate  x:Key="CloseButtonStyleTemplate" TargetType="Button">
         <Border x:Name="border" 

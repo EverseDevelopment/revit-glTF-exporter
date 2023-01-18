@@ -11,7 +11,7 @@
              Background="{x:Null}"
              mc:Ignorable="d" 
              Width="350" 
-             Height="410"
+             Height="690"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -118,9 +118,69 @@
                    FontSize="16" 
                    FontWeight="Light" 
                    Margin="272,10,17,0" RenderTransformOrigin="0.012,0.623">X</Button>
+            <Label  
+                    Style="{DynamicResource TitleLabels}"
+                    HorizontalAlignment="Left" 
+                    Margin="6,62,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Format"
+                    Width="92"/>
+            <Rectangle  VerticalAlignment="Top" 
+                        Fill="Gray" 
+                        Height="1" 
+                        Margin="70,79,13,0" 
+                        Opacity="0.2" 
+                        RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+
+            <Grid>
+                <RadioButton x:Name="gltf" 
+                                 Grid.Column="0" 
+                                 Content="glTF" 
+                                 HorizontalAlignment="Left" 
+                                 Margin="11,107,0,0"
+                                 Click="RadioButtonFormatClick" 
+                                 RenderTransformOrigin="0.5,0.5" 
+                                 Width="94" 
+                                 Height="14" 
+                                 VerticalAlignment="Top">
+                </RadioButton>
+                <RadioButton x:Name="glb" 
+                                 Content="glb" 
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,107,0,0"
+                                 Click="RadioButtonFormatClick" 
+                                 RenderTransformOrigin="0.15,0.625" 
+                                 Width="60" 
+                                 Height="14" 
+                                 VerticalAlignment="Top"/>
+            </Grid>
+
+            <Label   
+                    Style="{DynamicResource TitleLabels}"      
+                    HorizontalAlignment="Left" 
+                    Margin="6,139,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Visualization"
+                    Width="92"/>
+            <Rectangle  VerticalAlignment="Top" 
+                        Fill="Gray" 
+                        Height="1" 
+                        Margin="109,157,13,0" 
+                        Opacity="0.2" 
+                        RenderTransformOrigin="0.5,0.5"/>
+
             <ToggleButton
               x:Name="materials"
-              Margin="10,78,264,0"
+              Margin="12,185,262,0"
               Style="{DynamicResource SwitchTypeToggleButton}" 
               Height="16" 
               VerticalAlignment="Top"
@@ -130,290 +190,172 @@
             <Label
                 Style="{DynamicResource SecondaryLabel}"
                 HorizontalAlignment="Left" 
-                Margin="51,76,0,0" 
-                Height="24" 
+                Margin="53,183,0,0" 
                 VerticalAlignment="Top"
-                Content="Export Materials" Width="96"/>
+                Content="Export Materials" 
+                Width="96"/>
             <ToggleButton
-                x:Name="elementId"
-                Margin="10,106,264,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export ElementId of each Revit element"/>
-            <Label
-                Style="{DynamicResource SecondaryLabel}"
-                HorizontalAlignment="Left" 
-                Margin="51,104,0,0" 
-                Height="24" 
-                VerticalAlignment="Top"
-                Content="Export ElementId" Width="96"/>
-
-            <Button 
-                    Style="{DynamicResource CloseButtonStyle}" 
-                    Name="AdvancedSettingsButton" 
-                    Foreground="Black" 
-                    BorderThickness="0" 
-                    Click="Advanced_Settings_Button" 
-                    Background="Transparent" 
-                    Height="39" 
-                    FontSize="15" 
-                    FontWeight="Light" 
-                    Margin="10,246,10,0" VerticalAlignment="Top">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="border" Width="290" Background="Transparent">
-                            <Grid>
-                                <TextBlock Text="Advanced Settings" 
-                                           VerticalAlignment="Center" 
-                                           HorizontalAlignment="Left" Margin="2,0,0,0"></TextBlock>
-                                <Path x:Name="SlideUp_Image"
-                                      Visibility="Visible" 
-                                      SnapsToDevicePixels="True"  
-                                      HorizontalAlignment="Left" 
-                                      VerticalAlignment="Center" 
-                                      Data="M 0 0 L 6 6 L 12 0" 
-                                      Stroke="#707070" 
-                                      Margin="265,0,0,0" 
-                                      Height="8" 
-                                      Stretch="Fill" 
-                                      Width="13"
-                                      StrokeThickness="2"/>
-                                <Path x:Name="SlideDown_Image"
-                                      Visibility="Hidden" 
-                                      SnapsToDevicePixels="True"  
-                                      HorizontalAlignment="Left" 
-                                      VerticalAlignment="Center" 
-                                      Data="M 0 6 L 6 0 L 12 6 " 
-                                      Stroke="#F94F46" 
-                                      Margin="265,0,0,0" 
-                                      Height="8" 
-                                      Stretch="Fill" 
-                                      Width="13"
-                                      StrokeThickness="2"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers >
-                            <Trigger Property="IsDefaulted" Value="True">
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-
-            <Button Content="Export" 
-                    Style="{DynamicResource MainButtonStyle}"
-                    Margin="10,0,10,10"
-                    Click="OnExportView" 
-                    Height="38" VerticalAlignment="Bottom"/>
-
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" Height="1" Margin="58,149,10,0" Opacity="0.2"/>
-            <Label         Style="{DynamicResource SecondaryLabel}"
-                           HorizontalAlignment="Left" 
-                           Margin="10,173,0,0" 
-                           Height="24" 
-                           VerticalAlignment="Top"
-                           Content="Project units:" Width="72">
-            </Label>
-            <Label x:Name="UnitTextBlock" 
-                              HorizontalContentAlignment="Left"
-                               Style="{DynamicResource SecondaryLabel}"
-                               Content="Meters"
-                               HorizontalAlignment="Left" 
-                               Width="210"  
-                               Height="26"
-                               
-                               Margin="90,172,0,0" VerticalAlignment="Top">
-            </Label>
-            <ComboBox  x:Name="units" 
-                       ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
-                       SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                       DisplayMemberPath="Label" 
-                       Margin="84,202,18,0" 
-                       Height="30" 
-                       VerticalAlignment="Top"/>
-            <Label         
-                    HorizontalAlignment="Left" 
-                    Margin="7,133,0,0" 
-                    Height="33" 
-                    VerticalAlignment="Top"
-                    Content="Units"
-                    FontSize="15"
-                    FontWeight="Light"  
-                    Width="46"/>
-            <Label      
-                        Style="{DynamicResource SecondaryLabel}"
-                        HorizontalAlignment="Left" 
-                        Margin="10,203,0,0" 
-                        Content="Export unit:"
-                        Height="28" 
-                        VerticalAlignment="Top" 
-                        Width="72" 
-                        RenderTransformOrigin="0.595,0.511">
-            </Label>
-
-            <!--Advanced Settings Grid-->
-            <Grid x:Name="Advanced_Settings_Grid" Visibility="Collapsed">
-                <ToggleButton
-                x:Name="normals"
-                Margin="10,302,264,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export mesh normals"/>
-                <Label    
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="50,299,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export Normals" Width="96"/>
-                <ToggleButton
-                x:Name="levels"
-                Margin="166,302,108,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export Revit levels"/>
-                <Label  
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="208,298,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export Levels" Width="96"/>
-                <ToggleButton
-                x:Name="lights"
-                Margin="10,331,264,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export Revit scene ligths"/>
-                <Label      
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="50,328,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export Ligths" 
-                    Width="96"/>
-                <ToggleButton
-                x:Name="grids"
-                Margin="166,330,108,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export Revit grids"/>
-                <Label       
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="208,328,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export Grids" 
-                    Width="96"/>
-                <ToggleButton
-                x:Name="batchId"
-                Margin="10,362,264,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export Revit batchId"/>
-                <Label   
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="50,359,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export BatchId" 
-                    Width="96"/>
-                <ToggleButton
-                x:Name="properties"
-                Margin="166,362,108,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Export all the properties from each element"/>
-                <Label    
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="208,358,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export Prop" 
-                    Width="68"/>
-                <ToggleButton
-                x:Name="relocateTo0"
-                Margin="10,392,264,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
-                VerticalAlignment="Top"
-                Click="TrueFalseToggles"
-                ToolTip="Move the center of the model to 0,0,0"/>
-                <Label        
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="50,388,0,0" 
-                    Height="24" 
-                    VerticalAlignment="Top"
-                    Content="Export to (0,0,0)" 
-                    Width="86"/>
-                <ToggleButton
                 x:Name="flipAxis"
-                Margin="166,392,108,0"
+                Margin="168,185,106,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
                 Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Rotate axis of the model 90 degress"/>
-                <Label  
+            <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="208,388,0,0" 
+                    Margin="210,183,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Flip YZ-Axys" 
+                    Width="86"/>
+            <ToggleButton
+                x:Name="normals"
+                Margin="12,216,262,0"
+                Style="{DynamicResource SwitchTypeToggleButton}" 
+                Height="16" 
+                VerticalAlignment="Top"
+                Click="TrueFalseToggles"
+                ToolTip="Export mesh normals"/>
+            <Label    
+                    Style="{DynamicResource SecondaryLabel}"
+                    HorizontalAlignment="Left" 
+                    Margin="53,213,0,0"  
+                    VerticalAlignment="Top"
+                    Content="Export Normals" 
+                    Width="96"/>
+            <ToggleButton
+                x:Name="relocateTo0"
+                Margin="168,216,106,0"
+                Style="{DynamicResource SwitchTypeToggleButton}" 
+                Height="16" 
+                VerticalAlignment="Top"
+                Click="TrueFalseToggles"
+                ToolTip="Move the center of the model to 0,0,0"/>
+            <Label        
+                    Style="{DynamicResource SecondaryLabel}"
+                    HorizontalAlignment="Left" 
+                    Margin="210,213,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Export to (0,0,0)" 
+                    Width="86"/>
+            <ComboBox  x:Name="units" 
+                       ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
+                       SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                       DisplayMemberPath="Label" 
+                       Margin="78,303,16,0" 
+                       Height="30" 
+                       VerticalAlignment="Top"/>
+            <Label         
+                    Style="{DynamicResource TitleLabels}"
+                    HorizontalAlignment="Left" 
+                    Margin="6,254,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Units"
+                    Width="46"/>
+            <Rectangle  VerticalAlignment="Top" 
+                        Fill="Gray" Height="1" 
+                        Margin="55,272,13,0" 
+                        Opacity="0.2"/>
+            <Label      
+                        Style="{DynamicResource SecondaryLabel}"
+                        HorizontalAlignment="Left" 
+                        Margin="8,304,0,0" 
+                        Content="Export unit:"
+                        VerticalAlignment="Top" 
+                        Width="72">
+            </Label>
+
+            <Label         
+                    Style="{DynamicResource TitleLabels}"
+                    HorizontalAlignment="Left" 
+                    Margin="6,347,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Data"
+                    Width="46"/>
+            <Rectangle  VerticalAlignment="Top" 
+                        Fill="Gray" 
+                        Height="1" 
+                        Margin="55,364,13,0" 
+                        Opacity="0.2"/>
+
+            <ToggleButton
+                x:Name="levels"
+                Margin="168,398,106,0"
+                Style="{DynamicResource SwitchTypeToggleButton}" 
+                Height="16" 
+                VerticalAlignment="Top"
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit levels"/>
+            <Label  
+                    Style="{DynamicResource SecondaryLabel}"
+                    HorizontalAlignment="Left" 
+                    Margin="210,395,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Export Levels" 
+                    Width="96"/>
+            <ToggleButton
+                x:Name="grids"
+                Margin="168,430,106,0"
+                Style="{DynamicResource SwitchTypeToggleButton}" 
+                Height="16" 
+                VerticalAlignment="Top"
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit grids"/>
+            <Label       
+                    Style="{DynamicResource SecondaryLabel}"
+                    HorizontalAlignment="Left" 
+                    Margin="210,426,0,0" 
                     Height="24" 
                     VerticalAlignment="Top"
-                    Content="Flip YZ-Axys" Width="86"/>
-                <Label         
+                    Content="Export Grids" 
+                    Width="96"/>
+            <ToggleButton
+                x:Name="batchId"
+                Margin="12,398,262,0"
+                Style="{DynamicResource SwitchTypeToggleButton}" 
+                Height="16" 
+                VerticalAlignment="Top"
+                Click="TrueFalseToggles"
+                ToolTip="Export Revit batchId"/>
+            <Label   
+                    Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="6,421,0,0" 
-                    Height="29" 
+                    Margin="53,395,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Export BatchId" 
+                    Width="96"/>
+            <ToggleButton
+                x:Name="properties"
+                Margin="12,430,262,0"
+                Style="{DynamicResource SwitchTypeToggleButton}" 
+                Height="16" 
+                VerticalAlignment="Top"
+                Click="TrueFalseToggles"
+                ToolTip="Export all the properties from each element"/>
+            <Label    
+                    Style="{DynamicResource SecondaryLabel}"
+                    HorizontalAlignment="Left" 
+                    Margin="53,426,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Export Prop" 
+                    Width="68"/>
+            <Label        
+                    Style="{DynamicResource TitleLabels}"
+                    HorizontalAlignment="Left" 
+                    Margin="6,472,0,0" 
                     VerticalAlignment="Top"
                     Content="Compression" 
-                    FontSize="15"
-                    FontWeight="Light"
-                    Width="97" 
-                    RenderTransformOrigin="0.489,-0.042"/>
-                <Grid Height="50" 
-                      Margin="0,446,0,0" 
-                      VerticalAlignment="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-                    <RadioButton x:Name="None" 
+                    Width="97"/>
+
+            <RadioButton x:Name="None" 
                                  Grid.Column="0" 
                                  Content="None" 
                                  HorizontalAlignment="Left" 
-                                 Margin="10,0,0,0" 
-                                 VerticalAlignment="Center"
+                                 Margin="10,518,0,0" 
+                                 VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
-                    <!--<RadioButton x:Name="Meshopt" 
+            <!--<RadioButton x:Name="Meshopt" 
                                  Grid.Column="1" 
                                  Content="Meshopt" 
                                  HorizontalAlignment="Left" 
@@ -421,34 +363,29 @@
                                  VerticalAlignment="Center" 
                                  Width="66"
                                  Click="RadioButtonClick"/>-->
-                    <RadioButton x:Name="Draco" 
-                                 Grid.Column="1" 
+            <RadioButton x:Name="Draco" 
                                  Content="DRACO" 
                                  HorizontalAlignment="Left" 
-                                 VerticalAlignment="Center"
-                                 Click="RadioButtonClick" Grid.ColumnSpan="2" Margin="46,0,0,0"/>
-                    <RadioButton x:Name="ZIP" 
-                                 Grid.Column="3" 
+                                 VerticalAlignment="Top"
+                                 Click="RadioButtonClick" Margin="234,518,0,0"/>
+            <RadioButton x:Name="ZIP" 
                                  Content="ZIP" 
-                                 HorizontalAlignment="Left" 
-                                 Margin="10,0,0,0" 
-                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,518,0,0" 
+                                 VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
-                </Grid>
-                <Slider Name="digits" IsSnapToTickEnabled="True" TickFrequency="1" ToolTip="Reducing the accuracy can affect the quality of the exported geometry." Grid.Column="0" Margin="10,531,10,0" Maximum="6" Minimum="0" AutoToolTipPlacement="TopLeft" VerticalAlignment="Top" ValueChanged="DigitsSliderValueChanged"/>
-                <Rectangle  VerticalAlignment="Top" 
-                Fill="Gray" Height="1" Margin="103,438,10,0" Opacity="0.2"/>
-                <Rectangle  VerticalAlignment="Top" 
-                Fill="Gray" Height="1" Margin="116,506,10,0" Opacity="0.2"/>
-                <Label         
-                HorizontalAlignment="Left" 
-                Margin="7,489,0,0"
-                FontSize="15"
-                Height="32"
-                FontWeight="Light"
-                VerticalAlignment="Top"
-                Content="Decimal Digits" Width="109"/>
-            </Grid>
+            <Rectangle  VerticalAlignment="Top" 
+                            Fill="Gray" 
+                            Height="1" 
+                            Margin="108,488,10,0" 
+                            Opacity="0.2"/>
+
+            <Button Content="Export" 
+                    Style="{DynamicResource MainButtonStyle}"
+                    Margin="10,0,10,10"
+                    Click="OnExportView" 
+                    Height="38" VerticalAlignment="Bottom"/>
+
         </Grid>
     </Border>
 

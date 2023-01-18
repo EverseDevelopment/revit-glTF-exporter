@@ -16,8 +16,6 @@
         /// <param name="preferences">preferences.</param>
         public static void Save(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers, List<GLTFBinaryData> binaryFileData, Preferences preferences)
         {
-            if (preferences.singleBinary)
-            {
                 int bytePosition = 0;
                 int currentBuffer = 0;
 
@@ -46,28 +44,6 @@
 
                 string fileDirectory = string.Concat(preferences.path, ".bin");
                 BinFile.Create(fileDirectory, binaryFileData, preferences.normals, preferences.batchId);
-            }
-            else
-            {
-                foreach (var bin in binaryFileData)
-                {
-                    using (FileStream f = File.Create(preferences.path + bin.name))
-                    {
-                        using (BinaryWriter writer = new BinaryWriter(f))
-                        {
-                            foreach (var coord in bin.vertexBuffer)
-                            {
-                                writer.Write((float)coord);
-                            }
-
-                            foreach (var index in bin.indexBuffer)
-                            {
-                                writer.Write((int)index);
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

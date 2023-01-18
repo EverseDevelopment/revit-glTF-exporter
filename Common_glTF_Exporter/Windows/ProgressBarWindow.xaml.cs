@@ -55,9 +55,7 @@
 
         private void CancelProcess_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Add a bool to the export interface to implement a real
-            // cancelling button
-
+            GLTFExportContext.cancelation = true;
             this.Close();
         }
     }

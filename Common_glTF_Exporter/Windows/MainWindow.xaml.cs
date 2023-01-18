@@ -28,7 +28,7 @@
 
             this.InitializeComponent();
 
-            ComboUnits.Set(doc, this.UnitTextBlock);
+            ComboUnits.Set(doc);
             this.View = view;
 
             UpdateForm.Run(this.MainWindow_Border);
@@ -46,15 +46,16 @@
         {
             View3D exportView = this.View as View3D;
 
+            string format = string.Concat(".", SettingsConfig.GetValue("format"));
             string fileName = SettingsConfig.GetValue("fileName");
-            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
+            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
 
             if (dialogResult != true)
             {
                 return;
             }
 
-            string directory = fileName.Replace(".gltf", string.Empty);
+            string directory = fileName.Replace(format, string.Empty);
             string nameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
 
             SettingsConfig.SetValue("path", directory);
@@ -91,30 +92,6 @@
             progressBar.Close();
         }
 
-        private void Advanced_Settings_Button(object sender, RoutedEventArgs e)
-        {
-            _ = this.Advanced_Settings_Grid.Visibility == System.Windows.Visibility.Visible ?
-                (this.Advanced_Settings_Grid.Visibility = System.Windows.Visibility.Collapsed) : (this.Advanced_Settings_Grid.Visibility = System.Windows.Visibility.Visible);
-
-            var template = this.AdvancedSettingsButton.Template;
-
-            var slideUpImage = (System.Windows.Shapes.Path)template.FindName("SlideUp_Image", this.AdvancedSettingsButton);
-            var slideDownImage = (System.Windows.Shapes.Path)template.FindName("SlideDown_Image", this.AdvancedSettingsButton);
-
-            if (slideUpImage.Visibility == System.Windows.Visibility.Visible)
-            {
-                slideUpImage.Visibility = System.Windows.Visibility.Hidden;
-                slideDownImage.Visibility = System.Windows.Visibility.Visible;
-            }
-            else if (slideDownImage.Visibility == System.Windows.Visibility.Visible)
-            {
-                slideUpImage.Visibility = System.Windows.Visibility.Visible;
-                slideDownImage.Visibility = System.Windows.Visibility.Hidden;
-            }
-
-            _ = this.MainWindow_Window.Height == 700 ? (this.MainWindow_Window.Height = 410) : (this.MainWindow_Window.Height = 700);
-        }
-
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -141,6 +118,14 @@
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name;
             string key = "compression";
+            SettingsConfig.SetValue(key, value);
+        }
+
+        private void RadioButtonFormatClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
+            string value = button.Name;
+            string key = "format";
             SettingsConfig.SetValue(key, value);
         }
 

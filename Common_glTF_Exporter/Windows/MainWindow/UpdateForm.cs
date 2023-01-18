@@ -47,6 +47,15 @@
                         currentCheckbox.IsChecked = true;
                     }
 
+                    if (property.PropertyType == typeof(FormatEnum))
+                    {
+                        List<Control> controls = children.Where(t => t is System.Windows.Controls.RadioButton).ToList();
+                        List<System.Windows.Controls.RadioButton> listOfCheckboxes = controls.Cast<System.Windows.Controls.RadioButton>().ToList();
+                        string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
+                        System.Windows.Controls.RadioButton currentCheckbox = listOfCheckboxes.FirstOrDefault(t => t.Name.Equals(value));
+                        currentCheckbox.IsChecked = true;
+                    }
+
                     if (property.PropertyType == typeof(int))
                     {
                         Slider slider = children.FirstOrDefault(t => t.Name.Equals(property.Name)) as Slider;
