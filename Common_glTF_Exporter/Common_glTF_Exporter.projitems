@@ -52,7 +52,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DatabaseKeyValueAccesor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\LabelVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ComboUnits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelTraslation.cs" />
