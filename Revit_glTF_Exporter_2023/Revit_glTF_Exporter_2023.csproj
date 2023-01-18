@@ -69,12 +69,20 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64">
-      <Version>2023.0.0</Version> <PrivateAssets>all</PrivateAssets> <ExcludeAssets>runtime</ExcludeAssets>
+      <Version>2023.0.0</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.118</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite">
+      <Version>1.0.117</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite.Core">
+      <Version>1.0.117</Version>
     </PackageReference>
     <PackageReference Include="System.IO.Compression">
       <Version>4.3.0</Version>
