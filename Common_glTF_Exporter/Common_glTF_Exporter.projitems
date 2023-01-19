@@ -23,11 +23,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Export\Binaries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\FileExport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GlbFile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbWrite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbBinInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbJsonInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbHeaderInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\RevitGridParametersObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />

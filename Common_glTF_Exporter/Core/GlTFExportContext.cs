@@ -154,18 +154,8 @@ namespace Revit_glTF_Exporter
                 RevitGrids.Export(doc, ref nodes, ref rootNode, preferences);
             }
 
-            string gltfJson = GltfJson.Get(scenes, nodes.List, meshes.List, materials.List, buffers, 
-                bufferViews, accessors, preferences);
-            if (preferences.format == FormatEnum.gltf)
-            {
-                Binaries.Save(bufferViews, buffers, binaryFileData, preferences);
-
-                GltfFile.Create(preferences, gltfJson);
-            }
-            else
-            {
-                GlbFile.Create(preferences, binaryFileData, gltfJson);
-            }
+            FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
+                scenes, nodes, meshes, materials, accessors);
 
             Compression.Run(preferences);
         }
