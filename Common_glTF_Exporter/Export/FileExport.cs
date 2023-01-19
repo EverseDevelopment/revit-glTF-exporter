@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Autodesk.Revit.DB;
@@ -31,7 +32,8 @@ namespace Common_glTF_Exporter.Export
                 string gltfJson = GltfJson.Get(scenes, nodes.List, meshes.List, materials.List, buffers,
                 bufferViews, accessors, preferences);
 
-                GltfFile.Create(preferences, gltfJson);
+                string gltfName = string.Concat(preferences.path, ".gltf");
+                File.WriteAllText(gltfName, gltfJson);
             }
             else
             {
