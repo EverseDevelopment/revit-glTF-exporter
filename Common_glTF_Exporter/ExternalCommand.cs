@@ -24,16 +24,15 @@
                 View view = doc.ActiveView;
 
                 gLTFDatabase db = new gLTFDatabase();
-                TaskDialog.Show("Database is ok!", "Success");
 
-                //if (view.GetType().Name != "View3D")
-                //{
-                //    MessageWindow.Show("Wrong View", "You must be in a 3D view to export");
-                //    return Result.Succeeded;
-                //}
+                if (view.GetType().Name != "View3D")
+                {
+                    MessageWindow.Show("Wrong View", "You must be in a 3D view to export");
+                    return Result.Succeeded;
+                }
 
-                //MainWindow mainWindow = new MainWindow(doc, view);
-                //mainWindow.ShowDialog();
+                MainWindow mainWindow = new MainWindow(doc, view);
+                mainWindow.ShowDialog();
 
                 return Result.Succeeded;
             }

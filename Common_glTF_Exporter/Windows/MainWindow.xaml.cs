@@ -46,8 +46,9 @@
         {
             View3D exportView = this.View as View3D;
 
+            string format = string.Concat(".", DatabaseKeyValueAccesor.GetValue("format"));
             string fileName = DatabaseKeyValueAccesor.GetValue("fileName");
-            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
+            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
 
             if (dialogResult != true)
             {
@@ -125,7 +126,7 @@
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name;
             string key = "format";
-            SettingsConfig.SetValue(key, value);
+            DatabaseKeyValueAccesor.SetValue(key, value);
         }
 
         private void DigitsSliderValueChanged(object sender, RoutedEventArgs e)

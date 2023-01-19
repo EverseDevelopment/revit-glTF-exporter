@@ -32,7 +32,7 @@
 
                 if (property.PropertyType == typeof(FormatEnum))
                 {
-                    string result = SettingsConfig.GetValue(propertyName).ToString();
+                    string result = DatabaseKeyValueAccesor.GetValue(propertyName).ToString();
                     Enum.TryParse(result, out FormatEnum unitStatus);
                     preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }

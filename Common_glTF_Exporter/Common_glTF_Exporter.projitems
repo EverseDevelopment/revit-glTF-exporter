@@ -25,7 +25,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Database\CustomEmbeddedDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Database\gLTFDatabase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Export\Binaries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\FileExport.cs" />
