@@ -65,11 +65,11 @@
         {
             #if REVIT2019 || REVIT2020
 
-            return Math.Round(UnitUtils.Convert(1, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units), preferences.digits);
+            return UnitUtils.Convert(1, DisplayUnitType.DUT_DECIMAL_FEET, preferences.units);
 
             #else
 
-            return Math.Round(UnitUtils.Convert(1, UnitTypeId.Feet, preferences.units), preferences.digits);
+            return UnitUtils.Convert(1, UnitTypeId.Feet, preferences.units);
 
             #endif
         }

@@ -30,6 +30,13 @@
                     preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
+                if (property.PropertyType == typeof(FormatEnum))
+                {
+                    string result = SettingsConfig.GetValue(propertyName).ToString();
+                    Enum.TryParse(result, out FormatEnum unitStatus);
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
+                }
+
                 if (property.PropertyType == typeof(string))
                 {
                     var tempvalue = SettingsConfig.GetValue(propertyName).ToString();

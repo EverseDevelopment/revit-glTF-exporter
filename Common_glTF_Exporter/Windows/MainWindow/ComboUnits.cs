@@ -9,14 +9,13 @@
 
     public static class ComboUnits
     {
-        public static void Set(Document doc, System.Windows.Controls.Label unitTextBlock)
+        public static void Set(Document doc)
         {
             string initialUnits = SettingsConfig.GetValue("units");
 
             #if REVIT2019 || REVIT2020
 
             DisplayUnitType internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
-            unitTextBlock.Content = LabelUtils.GetLabelFor(internalProjectDisplayUnitType);
             if (initialUnits == "null")
             {
                 SettingsConfig.SetValue("units", internalProjectDisplayUnitType.ToString());
@@ -25,7 +24,6 @@
             #else
 
             ForgeTypeId internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
-            unitTextBlock.Content = LabelUtils.GetLabelForUnit(internalProjectUnitTypeId).ToString();
             if (initialUnits == "null")
             {
                 SettingsConfig.SetValue("units", internalProjectUnitTypeId.TypeId.ToString());

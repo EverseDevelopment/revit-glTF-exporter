@@ -5,7 +5,7 @@
     using Common_glTF_Exporter.Utils;
     using Revit_glTF_Exporter;
 
-    public static class ExportToZero
+    public static class ModelTraslation
     {
         public static List<float> GetPointToRelocate(Document doc, double scale, bool flip)
         {

@@ -10,17 +10,21 @@
         ZIP,
     }
 
+    public enum FormatEnum
+    {
+        gltf,
+        glb,
+    }
+
     public class Preferences
     {
         public bool materials { get; set; }
 
-        public bool elementId { get; set; }
+        public FormatEnum format { get; set; }
 
         public bool normals { get; set; }
 
         public bool levels { get; set; }
-
-        public bool lights { get; set; }
 
         public bool grids { get; set; }
 
@@ -32,8 +36,6 @@
 
         public bool flipAxis { get; set; }
 
-        public bool singleBinary { get; set; }
-
         public CompressionEnum compression { get; set; }
 
         #if REVIT2019 || REVIT2020
@@ -44,7 +46,6 @@
         public ForgeTypeId units { get; set; }
 
         #endif
-        public int digits { get; set; }
 
         public string path { get; set; }
 
