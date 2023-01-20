@@ -46,8 +46,8 @@
         {
             View3D exportView = this.View as View3D;
 
-            string format = string.Concat(".", SettingsConfig.GetValue("format"));
-            string fileName = SettingsConfig.GetValue("fileName");
+            string format = string.Concat(".", DatabaseKeyValueAccesor.GetValue("format"));
+            string fileName = DatabaseKeyValueAccesor.GetValue("fileName");
             bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
 
             if (dialogResult != true)
@@ -58,8 +58,8 @@
             string directory = fileName.Replace(format, string.Empty);
             string nameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
 
-            SettingsConfig.SetValue("path", directory);
-            SettingsConfig.SetValue("fileName", nameOnly);
+            DatabaseKeyValueAccesor.SetValue("path", directory);
+            DatabaseKeyValueAccesor.SetValue("fileName", nameOnly);
 
             Document doc = exportView.Document;
 
@@ -110,7 +110,7 @@
         private void TrueFalseToggles(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.Primitives.ToggleButton button = sender as System.Windows.Controls.Primitives.ToggleButton;
-            SettingsConfig.SetValue(button.Name, button.IsChecked.ToString());
+            DatabaseKeyValueAccesor.SetValue(button.Name, button.IsChecked.ToString());
         }
 
         private void RadioButtonClick(object sender, RoutedEventArgs e)
@@ -118,7 +118,7 @@
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name;
             string key = "compression";
-            SettingsConfig.SetValue(key, value);
+            DatabaseKeyValueAccesor.SetValue(key, value);
         }
 
         private void RadioButtonFormatClick(object sender, RoutedEventArgs e)
@@ -126,7 +126,7 @@
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name;
             string key = "format";
-            SettingsConfig.SetValue(key, value);
+            DatabaseKeyValueAccesor.SetValue(key, value);
         }
 
         private void DigitsSliderValueChanged(object sender, RoutedEventArgs e)
@@ -134,7 +134,7 @@
             Slider slider = sender as Slider;
             int value = Convert.ToInt32(slider.Value.ToString());
             string key = "digits";
-            SettingsConfig.SetValue(key, value.ToString());
+            DatabaseKeyValueAccesor.SetValue(key, value.ToString());
         }
     }
 }

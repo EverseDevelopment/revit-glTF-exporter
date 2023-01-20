@@ -13,7 +13,8 @@
         /// <param name="binaryFileData">binary file data.</param>
         /// <param name="exportNormals">export normals.</param>
         /// <param name="exportBatchId">export BatchId.</param>
-        public static void Create(string filename, List<GLTFBinaryData> binaryFileData, bool exportNormals, bool exportBatchId)
+        public static void Create(string filename, List<GLTFBinaryData> binaryFileData, 
+            bool exportNormals, bool exportBatchId)
         {
             using (FileStream f = File.Create(filename))
             {

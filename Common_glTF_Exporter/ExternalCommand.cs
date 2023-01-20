@@ -5,6 +5,7 @@
     using Autodesk.Revit.Attributes;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
+    using Common_glTF_Exporter.Database;
 
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
@@ -35,6 +36,7 @@
             }
             catch (Exception ex)
             {
+                TaskDialog.Show($"Database error: {ex.Message}!", "Error");
                 message = ex.Message;
                 return Result.Failed;
             }

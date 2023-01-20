@@ -23,6 +23,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\CustomEmbeddedDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\gLTFDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\FileExport.cs" />
@@ -49,7 +51,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DatabaseKeyValueAccesor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\LabelVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ComboUnits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelTraslation.cs" />
@@ -106,10 +108,5 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)App.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

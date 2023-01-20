@@ -19,27 +19,27 @@
 
                 if (property.PropertyType == typeof(bool))
                 {
-                    var tempvalue = Convert.ToBoolean(SettingsConfig.GetValue(propertyName));
+                    var tempvalue = Convert.ToBoolean(DatabaseKeyValueAccesor.GetValue(propertyName));
                     preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
                 }
 
                 if (property.PropertyType == typeof(CompressionEnum))
                 {
-                    string result = SettingsConfig.GetValue(propertyName).ToString();
+                    string result = DatabaseKeyValueAccesor.GetValue(propertyName).ToString();
                     Enum.TryParse(result, out CompressionEnum unitStatus);
                     preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
                 if (property.PropertyType == typeof(FormatEnum))
                 {
-                    string result = SettingsConfig.GetValue(propertyName).ToString();
+                    string result = DatabaseKeyValueAccesor.GetValue(propertyName).ToString();
                     Enum.TryParse(result, out FormatEnum unitStatus);
                     preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
                 if (property.PropertyType == typeof(string))
                 {
-                    var tempvalue = SettingsConfig.GetValue(propertyName).ToString();
+                    var tempvalue = DatabaseKeyValueAccesor.GetValue(propertyName).ToString();
                     preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
                 }
 
@@ -50,7 +50,7 @@
                 property.PropertyType == typeof(ForgeTypeId))
                 #endif
                 {
-                    string result = SettingsConfig.GetValue(propertyName).ToString();
+                    string result = DatabaseKeyValueAccesor.GetValue(propertyName).ToString();
 
                     #if REVIT2019 || REVIT2020
                     Enum.TryParse(result, out DisplayUnitType unitStatus);
@@ -62,7 +62,7 @@
 
                 if (property.PropertyType == typeof(int))
                 {
-                    var tempvalue = Convert.ToInt32(SettingsConfig.GetValue(propertyName).ToString());
+                    var tempvalue = Convert.ToInt32(DatabaseKeyValueAccesor.GetValue(propertyName).ToString());
                     preferenceType.GetProperty(propertyName).SetValue(preferences, tempvalue);
                 }
             }

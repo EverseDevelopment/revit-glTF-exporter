@@ -16,7 +16,7 @@
     {
         public static void Update(UnitsViewModel unitsViewModel)
         {
-            string version = SettingsConfig.GetValue("version");
+            string version = DatabaseKeyValueAccesor.GetValue("version");
 
             unitsViewModel.Version = version;
         }
