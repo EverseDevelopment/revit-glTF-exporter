@@ -18,16 +18,21 @@
             this.DataContext = this;
         }
 
+        public static MainWindow mainWin;
+
         public static ProgressBarWindow MainView { get; set; }
 
         public static ProgressBarWindowViewModel ViewModel { get; set; } = new ProgressBarWindowViewModel();
 
-        public static ProgressBarWindow Create(double maxValue, double currentValue, string message)
+        public static ProgressBarWindow Create(double maxValue, double currentValue, 
+            string message, MainWindow mainWindow)
         {
+            mainWin = mainWindow;
             var progressBar = new ProgressBarWindow();
             ProgressBarWindow.ViewModel.ProgressBarGraphicValue = maxValue * 0.07;
             ProgressBarWindow.ViewModel.ProgressBarValue = currentValue;
             ProgressBarWindow.ViewModel.Message = message;
+            ProgressBarWindow.ViewModel.Action = "Cancel";
             ProgressBarWindow.ViewModel.ProgressBarMax = maxValue;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 0;
             progressBar.Show();
@@ -56,6 +61,11 @@
         private void CancelProcess_Click(object sender, RoutedEventArgs e)
         {
             GLTFExportContext.cancelation = true;
+            if (ViewModel.Action == "Accept")
+            {
+                mainWin.Close();
+            }
+
             this.Close();
         }
     }

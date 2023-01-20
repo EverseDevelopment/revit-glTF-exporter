@@ -67,7 +67,8 @@
                        TextAlignment="Center"
                        Foreground="Black" 
                        HorizontalAlignment="Left" Width="50" Margin="120,78,0,0" Height="17" VerticalAlignment="Top"/>
-            <Button Content="Cancel" 
+            <Button Content="{Binding Action, UpdateSourceTrigger=PropertyChanged}" 
+                    DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Style="{DynamicResource MainButtonStyle}"
                     Margin="80,0,86,21"
                     Click="CancelProcess_Click"  
