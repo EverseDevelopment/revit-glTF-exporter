@@ -12,6 +12,7 @@
         private double progressBarValue;
         private double progressBarGraphicValue;
         private string message;
+        private string action;
         private ICommand closeWindowCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -88,6 +89,20 @@
             set
             {
                 this.message = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Action
+        {
+            get
+            {
+                return this.action;
+            }
+
+            set
+            {
+                this.action = value;
                 this.OnPropertyChanged();
             }
         }

@@ -72,7 +72,7 @@
             }
 
             ProgressBarWindow progressBar =
-                ProgressBarWindow.Create(elementsInView.Count, 0, "Converting elements...");
+                ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
 
             // Use our custom implementation of IExportContext as the exporter context.
             GLTFExportContext ctx = new GLTFExportContext(doc);
@@ -87,9 +87,10 @@
             exporter.Export(exportView as View);
             #endif
 
-            ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
             Thread.Sleep(1000);
-            progressBar.Close();
+            ProgressBarWindow.ViewModel.ProgressBarValue++;
+            ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
+            ProgressBarWindow.ViewModel.Action = "Accept";
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
