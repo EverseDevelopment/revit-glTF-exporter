@@ -23,8 +23,6 @@
 
                 View view = doc.ActiveView;
 
-                gLTFDatabase db = new gLTFDatabase();
-
                 if (view.GetType().Name != "View3D")
                 {
                     MessageWindow.Show("Wrong View", "You must be in a 3D view to export");
