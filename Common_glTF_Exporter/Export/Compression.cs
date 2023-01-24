@@ -15,25 +15,32 @@
             if (preferences.compression.Equals(CompressionEnum.ZIP))
             {
                 List<string> files = new List<string>();
-                string zipFile = string.Concat(preferences.path, ".zip");
-
-                if (preferences.format == FormatEnum.gltf)
+                try
                 {
-                    string gltfFile = string.Concat(preferences.path, ".gltf");
-                    string binFile = string.Concat(preferences.path, ".bin");
+                    string zipFile = string.Concat(preferences.path, ".zip");
 
-                    files.Add(gltfFile);
-                    files.Add(binFile);
+                    if (preferences.format == FormatEnum.gltf)
+                    {
+                        string gltfFile = string.Concat(preferences.path, ".gltf");
+                        string binFile = string.Concat(preferences.path, ".bin");
+
+                        files.Add(gltfFile);
+                        files.Add(binFile);
+                    }
+                    else
+                    {
+                        string glbFile = string.Concat(preferences.path, ".glb");
+                        files.Add(glbFile);
+                    }
+
+                    // TODO: Validate if there is an existing ZIP
+                    ZIP.Compress(zipFile, files);
                 }
-                else
+                finally
                 {
-                    string glbFile = string.Concat(preferences.path, ".glb");
-                    files.Add(glbFile);
+                    // -- always delete files in finally to ensure the cleanup if some error exists
+                    files.ForEach(x => File.Delete(x));
                 }
-
-                // TODO: Validate if there is an existing ZIP
-                ZIP.Compress(zipFile, files);
-                files.ForEach(x => File.Delete(x));
             }
         }
     }

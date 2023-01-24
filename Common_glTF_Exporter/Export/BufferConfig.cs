@@ -8,7 +8,9 @@ namespace Common_glTF_Exporter.Export
 {
     public static class BufferConfig
     {
-        public static void Run(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers, 
+        const string BIN = ".bin";
+
+        public static void Run(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers,
             Preferences preferences)
         {
             int bytePosition = 0;
@@ -34,7 +36,7 @@ namespace Common_glTF_Exporter.Export
 
             if (preferences.format == FormatEnum.gltf)
             {
-                string bufferUri = string.Concat(preferences.fileName, ".bin");
+                string bufferUri = string.Concat(preferences.fileName, BIN);
                 buffer.uri = bufferUri;
             }
 

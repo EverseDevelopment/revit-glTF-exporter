@@ -2,10 +2,7 @@ namespace Revit_glTF_Exporter
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Media.Media3D;
     using Autodesk.Revit.DB;
-    using Autodesk.Revit.DB.DirectContext3D;
-    using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Export;
     using Common_glTF_Exporter.Model;
@@ -260,6 +257,8 @@ namespace Revit_glTF_Exporter
             }
         }
 
+        const char UNDERSCORE = '_';
+
         /// <summary>
         /// Runs at the end of an element being processed, after all other calls for that element.
         /// Here we compile all the "_current" variables (geometry and vertices) onto glTF buffers.
@@ -300,9 +299,10 @@ namespace Revit_glTF_Exporter
 
                 foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
                 {
-                    currentGeometry.GetElement(vertex_key).Vertices.Add(p.Key.X);
-                    currentGeometry.GetElement(vertex_key).Vertices.Add(p.Key.Y);
-                    currentGeometry.GetElement(vertex_key).Vertices.Add(p.Key.Z);
+                    var vertices = currentGeometry.GetElement(vertex_key).Vertices;
+                    vertices.Add(p.Key.X);
+                    vertices.Add(p.Key.Y);
+                    vertices.Add(p.Key.Z);
                 }
             }
 
@@ -321,8 +321,7 @@ namespace Revit_glTF_Exporter
 
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split('_')[1];
-
+                string material_key = kvp.Key.Split(UNDERSCORE).First();
                 GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
@@ -422,7 +421,6 @@ namespace Revit_glTF_Exporter
         public void OnRPC(RPCNode node)
         {
             var meshes = GeometryUtils.GetMeshes(doc, element);
-
             if (!meshes.Any())
             {
                 return;
@@ -431,7 +429,6 @@ namespace Revit_glTF_Exporter
             foreach (var mesh in meshes)
             {
                 int triangles = mesh.NumTriangles;
-
                 if (triangles.Equals(0))
                 {
                     continue;
@@ -444,7 +441,6 @@ namespace Revit_glTF_Exporter
                 for (int i = 0; i < triangles; i++)
                 {
                     MeshTriangle triangle = mesh.get_Triangle(i);
-
                     if (triangle.Equals(null))
                     {
                         continue;

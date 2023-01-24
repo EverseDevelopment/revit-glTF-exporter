@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Windows.MainWindow;
 
@@ -76,26 +77,9 @@
 
         public static float[] GetVec3MinMax(List<float> vec3)
         {
-            List<float> xvalues = new List<float>();
-            List<float> yvalues = new List<float>();
-            List<float> zvalues = new List<float>();
-            for (int i = 0; i < vec3.Count; i++)
-            {
-                if ((i % 3) == 0)
-                {
-                    xvalues.Add(vec3[i]);
-                }
-
-                if ((i % 3) == 1)
-                {
-                    yvalues.Add(vec3[i]);
-                }
-
-                if ((i % 3) == 2)
-                {
-                    zvalues.Add(vec3[i]);
-                }
-            }
+            var xvalues = vec3.Where((i, j) => j % 3 == 0).ToList();
+            var yvalues = vec3.Where((i, j) => j % 3 == 1).ToList();
+            var zvalues = vec3.Where((i, j) => j % 3 == 2).ToList();
 
             float maxX = xvalues.Max();
             float minX = xvalues.Min();
@@ -174,6 +158,11 @@
               | (int)color.Blue;
         }
 
+        const string SpaceStr = " ";
+        const string NullStr = "<null>";
+        const string LessSignStr = "<";
+        const string GreaterSignStr = "<";
+
         /// <summary>
         /// From Jeremy Tammik's RvtVa3c exporter:
         /// https://github.com/va3c/RvtVa3c
@@ -189,35 +178,41 @@
         {
             if (e == null)
             {
-                return "<null>";
+                return NullStr;
             }
 
             // For a wall, the element name equals the wall type name, which is equivalent to the family name ...
             FamilyInstance fi = e as FamilyInstance;
+            StringBuilder sb = new StringBuilder();
 
-            string typeName = e.GetType().Name;
+            sb.Append(e.GetType().Name);
+            sb.Append(SpaceStr);
 
-            string categoryName = (e.Category == null)
-              ? string.Empty
-              : string.Concat(e.Category.Name, " ");
+            if (e.Category != null)
+            {
+                sb.Append(e.Category.Name);
+                sb.Append(SpaceStr);
+            }
 
-            string familyName = (fi == null)
-              ? string.Empty
-              : string.Concat(fi.Symbol.Family.Name, " ");
+            if (fi != null)
+            {
+                sb.Append(fi.Symbol.Family.Name);
+                sb.Append(SpaceStr);
 
-            string symbolName = (fi == null
-              || e.Name.Equals(fi.Symbol.Name))
-                ? string.Empty
-                : string.Concat(fi.Symbol.Name, " ");
+                if (!e.Name.Equals(fi.Symbol.Name))
+                {
+                    sb.Append(fi.Symbol.Name);
+                    sb.Append(SpaceStr);
+                }
+            }
 
-            return string.Format(
-              "{0} {1}{2}{3}<{4} {5}>",
-              typeName,
-              categoryName,
-              familyName,
-              symbolName,
-              e.Id.IntegerValue,
-              e.Name);
+            sb.Append(LessSignStr);
+            sb.Append(e.Id.IntegerValue);
+            sb.Append(SpaceStr);
+            sb.Append(e.Name);
+            sb.Append(GreaterSignStr);
+
+            return sb.ToString();
         }
 
         /// <summary>
@@ -250,6 +245,8 @@
             return dependentElementUuids;
         }
 
+        const string TypeStr = "Type ";
+
         /// <summary>
         /// From Jeremy Tammik's RvtVa3c exporter:
         /// https://github.com/va3c/RvtVa3c
@@ -261,9 +258,10 @@
         /// <returns>Element parameters dictionary.</returns>
         public static Dictionary<string, string> GetElementParameters(Element element, bool includeType)
         {
-            IList<Parameter> parameters = element.GetOrderedParameters();
+            IEnumerable<Parameter> parameters = element.GetOrderedParameters();
 
-            Dictionary<string, string> parametersDictionary = new Dictionary<string, string>(parameters.Count);
+            Dictionary<string, string> parametersDictionary = new Dictionary<string, string>(parameters.Count());
+            HashSet<string> keys = new HashSet<string>();
 
             string key;
             string val;
@@ -272,16 +270,10 @@
             {
                 key = parameter.Definition.Name;
 
-                if (!parametersDictionary.ContainsKey(key))
+                if (!keys.Contains(key))
                 {
-                    if (parameter.StorageType == StorageType.String)
-                    {
-                        val = parameter.AsString();
-                    }
-                    else
-                    {
-                        val = parameter.AsValueString();
-                    }
+                    keys.Add(key);
+                    val = GetParameterValue(parameter);
 
                     if (!string.IsNullOrEmpty(val))
                     {
@@ -301,19 +293,11 @@
                     parameters = typ.GetOrderedParameters();
                     foreach (Parameter parameter in parameters)
                     {
-                        key = string.Concat("Type ", parameter.Definition.Name);
+                        key = string.Concat(TypeStr, parameter.Definition.Name);
 
                         if (!parametersDictionary.ContainsKey(key))
                         {
-                            if (parameter.StorageType == StorageType.String)
-                            {
-                                val = parameter.AsString();
-                            }
-                            else
-                            {
-                                val = parameter.AsValueString();
-                            }
-
+                            val = GetParameterValue(parameter);
                             if (!string.IsNullOrEmpty(val))
                             {
                                 parametersDictionary.Add(key, val);
@@ -324,6 +308,18 @@
             }
 
             return parametersDictionary;
+        }
+
+        private static string GetParameterValue(Parameter parameter)
+        {
+            if (parameter.StorageType == StorageType.String)
+            {
+                return parameter.AsString();
+            }
+            else
+            {
+                return parameter.AsValueString();
+            }
         }
     }
 }
