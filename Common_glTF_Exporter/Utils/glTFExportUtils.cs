@@ -10,6 +10,9 @@
 
     public class GLTFExportUtils
     {
+        const int DEF_COLOR = 250;
+        const string DEF_MATERIAL_NAME = "default";
+
         public static GLTFMaterial GetGLTFMaterial(List<GLTFMaterial> gltfMaterials, Material material, bool doubleSided)
         {
             // search for an already existing material
@@ -18,7 +21,7 @@
             x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
             x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue && x.doubleSided == doubleSided);
 
-            return m != null ? m : GLTFExportUtils.CreateGLTFMaterial("default", 0, new Color(250, 250, 250), doubleSided);
+            return m != null ? m : GLTFExportUtils.CreateGLTFMaterial(DEF_MATERIAL_NAME, 0, new Color(DEF_COLOR, DEF_COLOR, DEF_COLOR), doubleSided);
         }
 
         public static GLTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color, bool doubleSided)
@@ -46,6 +49,8 @@
             }
         }
 
+        const string UNDERSCORE = "_";
+
         public static void AddOrUpdateCurrentItem(
             IndexedDictionary<GLTFNode> nodes,
             IndexedDictionary<GeometryDataObject> geomDataObj,
@@ -53,7 +58,7 @@
             IndexedDictionary<GLTFMaterial> materials)
         {
             // Add new "_current" entries if vertex_key is unique
-            string vertex_key = string.Concat(nodes.CurrentKey, "_", materials.CurrentKey);
+            string vertex_key = string.Concat(nodes.CurrentKey, UNDERSCORE, materials.CurrentKey);
             geomDataObj.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
             vertexIntObj.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
         }
@@ -69,6 +74,8 @@
                 geomDataObj.Normals.Add(normal.Z);
             }
         }
+
+        const string BIN = ".bin";
 
         /// <summary>
         /// Takes the intermediate geometry data and performs the calculations
@@ -89,7 +96,7 @@
 
             // add a buffer
             GLTFBuffer buffer = new GLTFBuffer();
-            buffer.uri = string.Concat(name, ".bin");
+            buffer.uri = string.Concat(name, BIN);
             buffers.Add(buffer);
             int bufferIdx = buffers.Count - 1;
             GLTFBinaryData bufferData = new GLTFBinaryData();

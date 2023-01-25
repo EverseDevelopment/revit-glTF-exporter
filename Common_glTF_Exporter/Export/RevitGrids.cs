@@ -20,52 +20,41 @@
         /// <param name="preferences">preferences. </param>
         public static void Export(Document doc, ref IndexedDictionary<GLTFNode> nodes, ref GLTFNode rootNode, Preferences preferences)
         {
-            FilteredElementCollector col = new FilteredElementCollector(doc)
-                .OfClass(typeof(Grid));
-
-            var grids = col.ToElements();
-
-            foreach (Grid g in grids)
+            using (FilteredElementCollector col = new FilteredElementCollector(doc).OfClass(typeof(Grid)))
             {
-                Line l = g.Curve as Line;
-
-                var origin = l.Origin;
-                var direction = l.Direction;
-                var length = l.Length;
-
-                var xtras = new GLTFExtras();
-                var grid = new RevitGridParametersObject();
-
-                grid.origin = new List<double>()
+                var grids = col.ToElements();
+                for (int i = 0; i < grids.Count; i++)
                 {
-                    origin.X,
-                    origin.Y,
-                    origin.Z,
-                };
+                    Grid g = grids[i] as Grid;
+                    Line l = g.Curve as Line;
 
-                grid.direction = new List<double>()
-                {
-                    direction.X,
-                    direction.Y,
-                    direction.Z,
-                };
+                    var origin = l.Origin;
+                    var direction = l.Direction;
+                    var length = l.Length;
 
-                grid.length = length;
+                    var xtras = new GLTFExtras();
+                    var grid = new RevitGridParametersObject();
 
-                xtras.gridParameters = grid;
-                xtras.uniqueId = g.UniqueId;
+                    grid.origin = new List<double>() { origin.X, origin.Y, origin.Z };
 
-                if (preferences.properties)
-                {
-                    xtras.parameters = Util.GetElementParameters(g, true);
+                    grid.direction = new List<double>() { direction.X, direction.Y, direction.Z, };
+                    grid.length = length;
+
+                    xtras.gridParameters = grid;
+                    xtras.uniqueId = g.UniqueId;
+
+                    if (preferences.properties)
+                    {
+                        xtras.parameters = Util.GetElementParameters(g, true);
+                    }
+
+                    var gridNode = new GLTFNode();
+                    gridNode.name = g.Name;
+                    gridNode.extras = xtras;
+
+                    nodes.AddOrUpdateCurrent(g.UniqueId, gridNode);
+                    rootNode.children.Add(nodes.CurrentIndex);
                 }
-
-                var gridNode = new GLTFNode();
-                gridNode.name = g.Name;
-                gridNode.extras = xtras;
-
-                nodes.AddOrUpdateCurrent(g.UniqueId, gridNode);
-                rootNode.children.Add(nodes.CurrentIndex);
             }
         }
     }

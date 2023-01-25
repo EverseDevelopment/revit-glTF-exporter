@@ -32,7 +32,6 @@
             this.View = view;
 
             UpdateForm.Run(this.MainWindow_Border);
-
             LabelVersion.Update(this.UnitsViewModel);
         }
 
@@ -49,7 +48,6 @@
             string format = string.Concat(".", DatabaseKeyValueAccesor.GetValue("format"));
             string fileName = DatabaseKeyValueAccesor.GetValue("fileName");
             bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
-
             if (dialogResult != true)
             {
                 return;
@@ -62,7 +60,6 @@
             DatabaseKeyValueAccesor.SetValue("fileName", nameOnly);
 
             Document doc = exportView.Document;
-
             List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
 
             if (!elementsInView.Any())
