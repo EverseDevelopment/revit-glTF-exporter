@@ -81,9 +81,6 @@
     <PackageReference Include="System.Data.SQLite">
       <Version>1.0.117</Version>
     </PackageReference>
-    <PackageReference Include="System.Data.SQLite.Core">
-      <Version>1.0.117</Version>
-    </PackageReference>
     <PackageReference Include="System.IO.Compression">
       <Version>4.3.0</Version>
     </PackageReference>
@@ -106,7 +103,8 @@
 		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\"
 		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\Images"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\Images\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\"
+		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\"
+                                if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2021\eversegltfExporter\"
 		if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2021"
 	</PostBuildEvent>
