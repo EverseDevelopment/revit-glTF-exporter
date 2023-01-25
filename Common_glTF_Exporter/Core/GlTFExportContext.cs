@@ -321,7 +321,7 @@ namespace Revit_glTF_Exporter
 
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split(UNDERSCORE).First();
+                string material_key = kvp.Key.Split(UNDERSCORE)[1];
                 GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
