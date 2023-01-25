@@ -110,6 +110,7 @@
 		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\Images"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\Images\"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\"
+                                if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2019\eversegltfExporter\"
 		if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2019"
 	</PostBuildEvent>

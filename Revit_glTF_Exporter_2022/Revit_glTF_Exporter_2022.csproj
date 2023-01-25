@@ -99,13 +99,13 @@
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\Images"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\Images\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
-		if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2022"
-	</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
+if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\Images"
+if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\Images\"
+if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
+if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
+if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2022\eversegltfExporter\"
+if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2022"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
