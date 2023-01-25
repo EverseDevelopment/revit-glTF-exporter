@@ -81,9 +81,6 @@
     <PackageReference Include="System.Data.SQLite">
       <Version>1.0.117</Version>
     </PackageReference>
-    <PackageReference Include="System.Data.SQLite.Core">
-      <Version>1.0.117</Version>
-    </PackageReference>
     <PackageReference Include="System.IO.Compression">
       <Version>4.3.0</Version>
     </PackageReference>
