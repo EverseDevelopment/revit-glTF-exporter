@@ -1,6 +1,7 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Autodesk.Revit.DB;
 
     public class GeometryUtils
@@ -10,21 +11,13 @@
             var geoEle = GetGeometryElement(doc, element);
 
             List<Mesh> meshes = new List<Mesh>();
-
-            foreach (GeometryObject geoObject in geoEle)
+            foreach (GeometryObject geoObject in geoEle.OfType<GeometryInstance>())
             {
-                if (geoObject is GeometryInstance)
+                GeometryInstance geoInst = geoObject as GeometryInstance;
+                foreach (var geoObj in geoInst.GetInstanceGeometry().OfType<Mesh>())
                 {
-                    GeometryInstance geoInst = geoObject as GeometryInstance;
-
-                    foreach (var geoObj in geoInst.GetInstanceGeometry())
-                    {
-                        if (geoObj is Mesh)
-                        {
-                            Mesh mesh = geoObj as Mesh;
-                            meshes.Add(mesh);
-                        }
-                    }
+                    Mesh mesh = geoObj as Mesh;
+                    meshes.Add(mesh);
                 }
             }
 
@@ -50,8 +43,9 @@
 
         public static XYZ GetNormal(MeshTriangle triangle)
         {
-            XYZ side1 = triangle.get_Vertex(1) - triangle.get_Vertex(0);
-            XYZ side2 = triangle.get_Vertex(2) - triangle.get_Vertex(0);
+            var vertex0 = triangle.get_Vertex(0);
+            XYZ side1 = triangle.get_Vertex(1) - vertex0;
+            XYZ side2 = triangle.get_Vertex(2) - vertex0;
             XYZ normal = side1.CrossProduct(side2);
             return normal.Normalize();
         }

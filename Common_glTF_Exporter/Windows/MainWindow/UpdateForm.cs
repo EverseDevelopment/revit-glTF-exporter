@@ -21,79 +21,81 @@
             PropertyInfo[] properties = typeof(Preferences).GetProperties();
             var preferenceType = typeof(Preferences);
 
-            List<System.Windows.Controls.Control> children = AllChildren(border);
+            Dictionary<string, Control> controls = GetControls(border);
 
             foreach (PropertyInfo property in properties)
             {
                 try
                 {
-                    if (property.PropertyType == typeof(bool))
-                    {
-                        ToggleButton button = children.FirstOrDefault(t => t.Name.Equals(property.Name)) as ToggleButton;
-
-                        if (button != null)
-                        {
-                            button.IsChecked = Convert.ToBoolean(preferenceType.
-                                GetProperty(property.Name).GetValue(preferences));
-                        }
-                    }
-
-                    if (property.PropertyType == typeof(CompressionEnum))
-                    {
-                        List<Control> controls = children.Where(t => t is System.Windows.Controls.RadioButton).ToList();
-                        List<System.Windows.Controls.RadioButton> listOfCheckboxes = controls.Cast<System.Windows.Controls.RadioButton>().ToList();
-                        string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
-                        System.Windows.Controls.RadioButton currentCheckbox = listOfCheckboxes.FirstOrDefault(t => t.Name.Equals(value));
-                        currentCheckbox.IsChecked = true;
-                    }
-
-                    if (property.PropertyType == typeof(int))
-                    {
-                        Slider slider = children.FirstOrDefault(t => t.Name.Equals(property.Name)) as Slider;
-
-                        if (slider == null)
-                        {
-                            continue;
-                        }
-
-                        string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
-                        slider.Value = Convert.ToDouble(preferenceType.GetProperty(property.Name).GetValue(preferences));
-                    }
-
-                    #if REVIT2019 || REVIT2020
-
-                    if (property.PropertyType == typeof(DisplayUnitType))
-                    {
-                        List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
-                        System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
-
-                        string value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
-                        Enum.TryParse(value, out DisplayUnitType unitType);
-
-                        var itemSource = comboBox.ItemsSource as ObservableCollection<UnitObject>;
-                        UnitObject elementSel = itemSource.First(x => x.DisplayUnitType == unitType);
-                        comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
-                    }
-
-                    #else
-
-                    if (property.PropertyType == typeof(ForgeTypeId))
-                    {
-                        List<Control> controls = children.Where(t => t.Name.Equals(property.Name)).ToList();
-                        System.Windows.Controls.ComboBox comboBox = controls.Cast<System.Windows.Controls.ComboBox>().First();
-                        ForgeTypeId forgeTypeId = preferenceType.GetProperty(property.Name).GetValue(preferences) as ForgeTypeId;
-                        UnitObject newObjt = new UnitObject(forgeTypeId);
-                        var itemSource = comboBox.ItemsSource as ObservableCollection<UnitObject>;
-                        UnitObject elementSel = itemSource.First(x => x.ForgeTypeId == forgeTypeId);
-                        comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
-                    }
-
-                    #endif
+                    SetControlValue(property, preferences, preferenceType, controls);
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
+            }
+        }
+
+        private static Dictionary<string, Control> GetControls(Border border)
+        {
+            var controls = new Dictionary<string, Control>();
+            var children = AllChildren(border);
+
+            foreach (var child in children)
+            {
+                controls[child.Name] = child;
+            }
+
+            return controls;
+        }
+
+        private static void SetControlValue(PropertyInfo property, Preferences preferences, Type preferenceType, Dictionary<string, Control> controls)
+        {
+            switch (property.PropertyType.Name)
+            {
+                case "Boolean":
+                    var button = controls[property.Name] as ToggleButton;
+                    if (button != null)
+                    {
+                        button.IsChecked = Convert.ToBoolean(preferenceType.GetProperty(property.Name).GetValue(preferences));
+                    }
+
+                    break;
+                case "CompressionEnum":
+                case "FormatEnum":
+                    var radioButton = controls.Values.OfType<System.Windows.Controls.RadioButton>().FirstOrDefault(t => t.Name.Equals(preferenceType.GetProperty(property.Name).GetValue(preferences).ToString()));
+                    if (radioButton != null)
+                    {
+                        radioButton.IsChecked = true;
+                    }
+
+                    break;
+                case "Int32":
+                    var slider = controls[property.Name] as Slider;
+                    if (slider != null)
+                    {
+                        slider.Value = Convert.ToDouble(preferenceType.GetProperty(property.Name).GetValue(preferences));
+                    }
+
+                    break;
+                case "DisplayUnitType":
+                case "ForgeTypeId":
+                    var comboBox = controls[property.Name] as System.Windows.Controls.ComboBox;
+
+#if REVIT2019 || REVIT2020
+                    var itemSource = comboBox.ItemsSource as ObservableCollection<UnitObject>;
+                    var value = preferenceType.GetProperty(property.Name).GetValue(preferences).ToString();
+                    Enum.TryParse(value, out DisplayUnitType unitType);
+                    var elementSel = itemSource.First(x => x.DisplayUnitType == unitType);
+                    comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
+#else
+                        ForgeTypeId forgeTypeId = preferenceType.GetProperty(property.Name).GetValue(preferences) as ForgeTypeId;
+                        UnitObject newObjt = new UnitObject(forgeTypeId);
+                        var itemSource = comboBox.ItemsSource as ObservableCollection<UnitObject>;
+                        UnitObject elementSel = itemSource.First(x => x.ForgeTypeId == forgeTypeId);
+                        comboBox.SelectedIndex = comboBox.Items.IndexOf(elementSel);
+#endif
+                    break;
             }
         }
 

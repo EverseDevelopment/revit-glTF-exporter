@@ -20,11 +20,11 @@
             {
             #if REVIT2019 || REVIT2020
 
-                SettingsConfig.SetValue("units", unitobject.DisplayUnitType.ToString());
+                DatabaseKeyValueAccesor.SetValue("units", unitobject.DisplayUnitType.ToString());
 
             #else
 
-            SettingsConfig.SetValue("units", unitobject.ForgeTypeId.TypeId.ToString());
+            DatabaseKeyValueAccesor.SetValue("units", unitobject.ForgeTypeId.TypeId.ToString());
 
             #endif
             }

@@ -5,6 +5,7 @@
     using Autodesk.Revit.Attributes;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
+    using Common_glTF_Exporter.Database;
 
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
@@ -22,6 +23,12 @@
 
                 View view = doc.ActiveView;
 
+                if (view.GetType().Name != "View3D")
+                {
+                    MessageWindow.Show("Wrong View", "You must be in a 3D view to export");
+                    return Result.Succeeded;
+                }
+
                 MainWindow mainWindow = new MainWindow(doc, view);
                 mainWindow.ShowDialog();
 
@@ -29,6 +36,7 @@
             }
             catch (Exception ex)
             {
+                TaskDialog.Show($"Database error: {ex.Message}!", "Error");
                 message = ex.Message;
                 return Result.Failed;
             }

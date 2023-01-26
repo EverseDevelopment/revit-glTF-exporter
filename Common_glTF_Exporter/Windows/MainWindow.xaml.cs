@@ -1,15 +1,19 @@
 ﻿namespace Revit_glTF_Exporter
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Forms;
     using System.Windows.Input;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using View = Autodesk.Revit.DB.View;
 
     /// <summary>
     /// Interaction logic for Settings.xaml.
@@ -24,11 +28,10 @@
 
             this.InitializeComponent();
 
-            ComboUnits.Set(doc, this.UnitTextBlock);
+            ComboUnits.Set(doc);
             this.View = view;
 
             UpdateForm.Run(this.MainWindow_Border);
-
             LabelVersion.Update(this.UnitsViewModel);
         }
 
@@ -38,83 +41,53 @@
 
         private UnitsViewModel UnitsViewModel { get; set; }
 
-        public void ExportView3D(View3D view3d, bool mode)
+        private void OnExportView(object sender, RoutedEventArgs e)
         {
-            Document doc = view3d.Document;
+            View3D exportView = this.View as View3D;
+
+            string format = string.Concat(".", DatabaseKeyValueAccesor.GetValue("format"));
+            string fileName = DatabaseKeyValueAccesor.GetValue("fileName");
+            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
+            if (dialogResult != true)
+            {
+                return;
+            }
+
+            string directory = fileName.Replace(format, string.Empty);
+            string nameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
+
+            DatabaseKeyValueAccesor.SetValue("path", directory);
+            DatabaseKeyValueAccesor.SetValue("fileName", nameOnly);
+
+            Document doc = exportView.Document;
+            List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
+
+            if (!elementsInView.Any())
+            {
+                MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
+                return;
+            }
 
             ProgressBarWindow progressBar =
-                ProgressBarWindow.Create(Collectors.AllVisibleElementsByView(doc, doc.ActiveView).Count, 0, "Converting elements...");
+                ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
 
             // Use our custom implementation of IExportContext as the exporter context.
             GLTFExportContext ctx = new GLTFExportContext(doc);
 
             // Create a new custom exporter with the context.
             CustomExporter exporter = new CustomExporter(doc, ctx);
-
             exporter.ShouldStopOnError = false;
 
             #if REVIT2019
-            exporter.Export(view3d);
+            exporter.Export(exportView);
             #else
-            exporter.Export(view3d as View);
+            exporter.Export(exportView as View);
             #endif
 
-            ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
             Thread.Sleep(1000);
-            progressBar.Close();
-        }
-
-        private void OnExportView(object sender, RoutedEventArgs e)
-        {
-            if (this.View.GetType().Name != "View3D")
-            {
-                this.Hide();
-                TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
-                this.Close();
-                return;
-            }
-
-            this.Show();
-            View3D exportView = this.View as View3D;
-
-            string fileName = SettingsConfig.GetValue("fileName");
-            bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, ".gltf");
-
-            if (dialogResult == true)
-            {
-                string filename = fileName;
-                string directory = filename.Replace(".gltf", string.Empty);
-                string nameOnly = System.IO.Path.GetFileNameWithoutExtension(filename);
-
-                SettingsConfig.SetValue("path", directory);
-                SettingsConfig.SetValue("fileName", nameOnly);
-
-                this.ExportView3D(exportView, false);
-            }
-        }
-
-        private void Advanced_Settings_Button(object sender, RoutedEventArgs e)
-        {
-            _ = this.Advanced_Settings_Grid.Visibility == System.Windows.Visibility.Visible ?
-                (this.Advanced_Settings_Grid.Visibility = System.Windows.Visibility.Collapsed) : (this.Advanced_Settings_Grid.Visibility = System.Windows.Visibility.Visible);
-
-            var template = this.AdvancedSettingsButton.Template;
-
-            var slideUpImage = (System.Windows.Shapes.Path)template.FindName("SlideUp_Image", this.AdvancedSettingsButton);
-            var slideDownImage = (System.Windows.Shapes.Path)template.FindName("SlideDown_Image", this.AdvancedSettingsButton);
-
-            if (slideUpImage.Visibility == System.Windows.Visibility.Visible)
-            {
-                slideUpImage.Visibility = System.Windows.Visibility.Hidden;
-                slideDownImage.Visibility = System.Windows.Visibility.Visible;
-            }
-            else if (slideDownImage.Visibility == System.Windows.Visibility.Visible)
-            {
-                slideUpImage.Visibility = System.Windows.Visibility.Visible;
-                slideDownImage.Visibility = System.Windows.Visibility.Hidden;
-            }
-
-            _ = this.MainWindow_Window.Height == 700 ? (this.MainWindow_Window.Height = 410) : (this.MainWindow_Window.Height = 700);
+            ProgressBarWindow.ViewModel.ProgressBarValue++;
+            ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
+            ProgressBarWindow.ViewModel.Action = "Accept";
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -135,7 +108,7 @@
         private void TrueFalseToggles(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.Primitives.ToggleButton button = sender as System.Windows.Controls.Primitives.ToggleButton;
-            SettingsConfig.SetValue(button.Name, button.IsChecked.ToString());
+            DatabaseKeyValueAccesor.SetValue(button.Name, button.IsChecked.ToString());
         }
 
         private void RadioButtonClick(object sender, RoutedEventArgs e)
@@ -143,7 +116,15 @@
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
             string value = button.Name;
             string key = "compression";
-            SettingsConfig.SetValue(key, value);
+            DatabaseKeyValueAccesor.SetValue(key, value);
+        }
+
+        private void RadioButtonFormatClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
+            string value = button.Name;
+            string key = "format";
+            DatabaseKeyValueAccesor.SetValue(key, value);
         }
 
         private void DigitsSliderValueChanged(object sender, RoutedEventArgs e)
@@ -151,7 +132,7 @@
             Slider slider = sender as Slider;
             int value = Convert.ToInt32(slider.Value.ToString());
             string key = "digits";
-            SettingsConfig.SetValue(key, value.ToString());
+            DatabaseKeyValueAccesor.SetValue(key, value.ToString());
         }
     }
 }

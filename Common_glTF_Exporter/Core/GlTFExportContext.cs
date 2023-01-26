@@ -2,13 +2,11 @@ namespace Revit_glTF_Exporter
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Media.Media3D;
     using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Export;
-    using Common_glTF_Exporter.Extensions;
     using Common_glTF_Exporter.Model;
+    using Common_glTF_Exporter.Transform;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.Windows.MainWindow;
     using Transform = Autodesk.Revit.DB.Transform;
@@ -18,6 +16,8 @@ namespace Revit_glTF_Exporter
     /// </summary>
     public class GLTFExportContext : IExportContext
     {
+        public static bool cancelation { get; set; } = false;
+
         /// <summary>
         /// Gets a stateful, uuid indexable list for all nodes in the export.
         /// </summary>
@@ -28,11 +28,9 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
 
-        // Unit conversion factors.
         private Document doc;
         private bool skipElementFlag = false;
         private Element element;
-        private XYZ pointToRelocate = new XYZ(0, 0, 0);
         private View view;
         private Preferences preferences;
 
@@ -62,7 +60,6 @@ namespace Revit_glTF_Exporter
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             this.doc = doc;
             view = doc.ActiveView;
-            pointToRelocate = Common_glTF_Exporter.Windows.MainWindow.ExportToZero.GetPointToRelocate(this.doc);
         }
 
         // The following properties are the root elements of the glTF format spec. They will be serialized into the final *.gltf file.
@@ -113,19 +110,25 @@ namespace Revit_glTF_Exporter
         }
 
         /// <summary>
-        /// Runs once at beginning of export. Sets up the root node and scene.
+        /// Runs once at beginning of export.
         /// </summary>
         /// <returns>TRUE if starded.</returns>
         public bool Start()
         {
+            cancelation = false;
             transformStack.Push(Transform.Identity);
 
+            // Creation Root Node
             rootNode = new GLTFNode();
             rootNode.name = "rootNode";
+            rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
+            rootNode.scale = ModelScale.Get(preferences);
+            rootNode.translation = ModelTraslation.GetPointToRelocate(doc, rootNode.scale[0], preferences.flipAxis);
             rootNode.children = new List<int>();
 
             nodes.AddOrUpdateCurrent("rootNode", rootNode);
 
+            // Creation default scene
             GLTFScene defaultScene = new GLTFScene();
             defaultScene.nodes.Add(0);
             scenes.Add(defaultScene);
@@ -134,24 +137,22 @@ namespace Revit_glTF_Exporter
         }
 
         /// <summary>
-        /// Runs once at end of export. Serializes the gltf properties and wites out the *.gltf and
-        /// *.bin files.
+        /// Runs once at end of export.
         /// </summary>
         public void Finish()
         {
-            // TODO: [RM] Standardize what non glTF spec elements will go into this "BIM glTF
-            // superset" and write a spec for it. Gridlines below are an example.
+            if (cancelation)
+            {
+                return;
+            }
 
-            // Add gridlines as gltf nodes in the format: Origin {Vec3<double>}, Direction
-            // {Vec3<double>}, Length {double}
             if (preferences.grids)
             {
                 RevitGrids.Export(doc, ref nodes, ref rootNode, preferences);
             }
 
-            Binaries.Save(bufferViews, buffers, binaryFileData, preferences);
-
-            GltfFile.Create(scenes, nodes.List, meshes.List, materials.List, buffers, bufferViews, accessors, preferences);
+            FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
+                scenes, nodes, meshes, materials, accessors);
 
             Compression.Run(preferences);
         }
@@ -164,8 +165,6 @@ namespace Revit_glTF_Exporter
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
-
             element = doc.GetElement(elementId);
 
             if (!Util.CanBeLockOrHidden(element, view) ||
@@ -181,25 +180,22 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
+            ProgressBarWindow.ViewModel.ProgressBarValue++;
+
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
-            newNode.name = Util.ElementDescription(element);
 
             // get the extras for this element
             GLTFExtras extras = new GLTFExtras();
-            extras.uniqueId = element.UniqueId;
 
             if (preferences.properties)
             {
+                newNode.name = Util.ElementDescription(element);
+                extras.uniqueId = element.UniqueId;
                 extras.parameters = Util.GetElementParameters(element, true);
-            }
-
-            if (preferences.elementId)
-            {
+                extras.elementCategory = element.Category.Name;
                 extras.elementId = element.Id.IntegerValue;
             }
-
-            extras.elementCategory = element.Category.Name;
 
             newNode.extras = extras;
 
@@ -248,14 +244,11 @@ namespace Revit_glTF_Exporter
 
             foreach (PolymeshFacet facet in facets)
             {
-                List<PointIntObject> points = new List<PointIntObject>
+                foreach (int index in facet.GetVertices())
                 {
-                    new PointIntObject(preferences, pts[facet.V1], pointToRelocate),
-                    new PointIntObject(preferences, pts[facet.V2], pointToRelocate),
-                    new PointIntObject(preferences, pts[facet.V3], pointToRelocate),
-                };
-
-                GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
+                    int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[index]));
+                    currentGeometry.CurrentItem.Faces.Add(vertexIndex);
+                }
             }
 
             if (preferences.normals)
@@ -263,6 +256,8 @@ namespace Revit_glTF_Exporter
                 GLTFExportUtils.AddNormals(preferences, transform, polymesh, currentGeometry.CurrentItem.Normals);
             }
         }
+
+        const char UNDERSCORE = '_';
 
         /// <summary>
         /// Runs at the end of an element being processed, after all other calls for that element.
@@ -304,9 +299,10 @@ namespace Revit_glTF_Exporter
 
                 foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
                 {
-                    currentGeometry.GetElement(vertex_key).Vertices.Add(p.Key.X);
-                    currentGeometry.GetElement(vertex_key).Vertices.Add(p.Key.Y);
-                    currentGeometry.GetElement(vertex_key).Vertices.Add(p.Key.Z);
+                    var vertices = currentGeometry.GetElement(vertex_key).Vertices;
+                    vertices.Add(p.Key.X);
+                    vertices.Add(p.Key.Y);
+                    vertices.Add(p.Key.Z);
                 }
             }
 
@@ -325,8 +321,7 @@ namespace Revit_glTF_Exporter
 
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split('_')[1];
-
+                string material_key = kvp.Key.Split(UNDERSCORE)[1];
                 GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
@@ -384,7 +379,7 @@ namespace Revit_glTF_Exporter
         public bool IsCanceled()
         {
             // This method is invoked many times during the export process.
-            return false;
+            return cancelation;
         }
 
         public RenderNodeAction OnViewBegin(ViewNode node)
@@ -425,10 +420,7 @@ namespace Revit_glTF_Exporter
 
         public void OnRPC(RPCNode node)
         {
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
-
             var meshes = GeometryUtils.GetMeshes(doc, element);
-
             if (!meshes.Any())
             {
                 return;
@@ -437,7 +429,6 @@ namespace Revit_glTF_Exporter
             foreach (var mesh in meshes)
             {
                 int triangles = mesh.NumTriangles;
-
                 if (triangles.Equals(0))
                 {
                     continue;
@@ -450,7 +441,6 @@ namespace Revit_glTF_Exporter
                 for (int i = 0; i < triangles; i++)
                 {
                     MeshTriangle triangle = mesh.get_Triangle(i);
-
                     if (triangle.Equals(null))
                     {
                         continue;
@@ -458,9 +448,9 @@ namespace Revit_glTF_Exporter
 
                     List<PointIntObject> points = new List<PointIntObject>
                         {
-                            new PointIntObject(preferences, triangle.get_Vertex(0), pointToRelocate),
-                            new PointIntObject(preferences, triangle.get_Vertex(1), pointToRelocate),
-                            new PointIntObject(preferences, triangle.get_Vertex(2), pointToRelocate),
+                            new PointIntObject(triangle.get_Vertex(0)),
+                            new PointIntObject(triangle.get_Vertex(1)),
+                            new PointIntObject(triangle.get_Vertex(2)),
                         };
 
                     GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);

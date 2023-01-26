@@ -23,15 +23,22 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Export\Binaries.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\CustomEmbeddedDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\gLTFDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\FileExport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbBinInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbJsonInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GlbHeaderInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\GltfJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\RevitGridParametersObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Export\GltfFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitGrids.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitMaterials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTF.cs" />
@@ -39,16 +46,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelRotation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DatabaseKeyValueAccesor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\LabelVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ComboUnits.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\ExportToZero.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelTraslation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Preferences.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\MainWindow\UpdateForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
     </Compile>
@@ -83,6 +95,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Windows\MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml" />
     <Page Include="$(MSBuildThisFileDirectory)Windows\Resources.xaml">
       <SubType>Designer</SubType>
@@ -92,10 +108,5 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)App.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

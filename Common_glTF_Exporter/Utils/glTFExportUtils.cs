@@ -4,13 +4,15 @@
     using System.Linq;
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Extensions;
     using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Windows.MainWindow;
     using Revit_glTF_Exporter;
 
     public class GLTFExportUtils
     {
+        const int DEF_COLOR = 250;
+        const string DEF_MATERIAL_NAME = "default";
+
         public static GLTFMaterial GetGLTFMaterial(List<GLTFMaterial> gltfMaterials, Material material, bool doubleSided)
         {
             // search for an already existing material
@@ -19,7 +21,7 @@
             x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
             x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue && x.doubleSided == doubleSided);
 
-            return m != null ? m : GLTFExportUtils.CreateGLTFMaterial("default", 0, new Color(250, 250, 250), doubleSided);
+            return m != null ? m : GLTFExportUtils.CreateGLTFMaterial(DEF_MATERIAL_NAME, 0, new Color(DEF_COLOR, DEF_COLOR, DEF_COLOR), doubleSided);
         }
 
         public static GLTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color, bool doubleSided)
@@ -47,6 +49,8 @@
             }
         }
 
+        const string UNDERSCORE = "_";
+
         public static void AddOrUpdateCurrentItem(
             IndexedDictionary<GLTFNode> nodes,
             IndexedDictionary<GeometryDataObject> geomDataObj,
@@ -54,7 +58,7 @@
             IndexedDictionary<GLTFMaterial> materials)
         {
             // Add new "_current" entries if vertex_key is unique
-            string vertex_key = string.Concat(nodes.CurrentKey, "_", materials.CurrentKey);
+            string vertex_key = string.Concat(nodes.CurrentKey, UNDERSCORE, materials.CurrentKey);
             geomDataObj.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
             vertexIntObj.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
         }
@@ -63,11 +67,6 @@
         {
             XYZ normal = GeometryUtils.GetNormal(triangle);
 
-            if (preferences.flipAxis)
-            {
-                normal = normal.FlipCoordinates();
-            }
-
             for (int j = 0; j < 3; j++)
             {
                 geomDataObj.Normals.Add(normal.X);
@@ -75,6 +74,8 @@
                 geomDataObj.Normals.Add(normal.Z);
             }
         }
+
+        const string BIN = ".bin";
 
         /// <summary>
         /// Takes the intermediate geometry data and performs the calculations
@@ -95,7 +96,7 @@
 
             // add a buffer
             GLTFBuffer buffer = new GLTFBuffer();
-            buffer.uri = string.Concat(name, ".bin");
+            buffer.uri = string.Concat(name, BIN);
             buffers.Add(buffer);
             int bufferIdx = buffers.Count - 1;
             GLTFBinaryData bufferData = new GLTFBinaryData();
@@ -139,11 +140,6 @@
                         {
                             XYZ newNormalPoint = normalPoint;
 
-                            if (preferences.flipAxis)
-                            {
-                                newNormalPoint = normalPoint.FlipCoordinates();
-                            }
-
                             normals.Add(newNormalPoint.X);
                             normals.Add(newNormalPoint.Y);
                             normals.Add(newNormalPoint.Z);
@@ -160,11 +156,6 @@
                         foreach (var normal in polymesh.GetNormals())
                         {
                             var newNormal = normal;
-
-                            if (preferences.flipAxis)
-                            {
-                                newNormal = normal.FlipCoordinates();
-                            }
 
                             for (int j = 0; j < 3; j++)
                             {
@@ -183,11 +174,6 @@
                     foreach (XYZ normal in polymeshNormals)
                     {
                         var newNormal = transform.OfVector(normal);
-
-                        if (preferences.flipAxis)
-                        {
-                            newNormal = newNormal.FlipCoordinates();
-                        }
 
                         normals.Add(newNormal.X);
                         normals.Add(newNormal.Y);

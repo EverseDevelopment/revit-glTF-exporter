@@ -11,5 +11,7 @@
     public class GLTFVersion
     {
         public string version = "2.0";
+        public string generator = "e-verse custom generator";
+        public string copyright = "free tool created by e-verse";
     }
 }
