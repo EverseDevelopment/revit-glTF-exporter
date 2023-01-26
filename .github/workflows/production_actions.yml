@@ -1,0 +1,88 @@
+name: Deploy to Production
+
+on:
+  push:
+    # this will cause the action to run on pushes to main
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+  
+    # The type of runner that the job will run on
+    runs-on: windows-latest 
+    env:
+        Solution_Name: Revit_glTF_Exporter.sln
+    outputs:
+      Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }} 
+      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}   
+     
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+   # install and calculate the new version with GitVersion  
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.7
+      with:
+        versionSpec: '5.5.0'
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v0.9.7
+      with:
+        useConfigFile: true
+        configFilePath: GitVersion.yml
+        
+      id: gitversion # step id used as reference for output values
+    - name: Display GitVersion outputs
+      run: |
+        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+        echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"   
+        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
+        
+    # Installing the MSBuild
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.1
+    
+    # Install and restore the necessary NuGet packages
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.6
+     
+    - name: Restore NuGet Packages
+      run: nuget restore Revit_glTF_Exporter.sln
+      
+    # Change the version inside of the 'InstallScript.iss' file
+    - name: Setting new version to the 'InstallScript.iss' file
+      run: (Get-Content GLTFExporter.Installer/InstallScript.iss) -replace 'AppVersion=1.0.0', 'AppVersion=v${{ steps.gitversion.outputs.majorMinorPatch }}' | Out-File -encoding ASCII GLTFExporter.Installer/InstallScript.iss
+        
+    # Change the version inside 'App.config' file
+    - name: Setting new version to the App.config file
+      run: (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="v1.0.0"', 'key="version" value="v${{ steps.gitversion.outputs.majorMinorPatch }}"' | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+        
+    # Build the solution on the Release mode
+    - name: Build and Publish App
+      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}
+        release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }}
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: .\GLTFExporter.Installer\Installer\GTLFExporter.exe
+        asset_name: GLTFExporter.exe
+        asset_content_type: application/zip
