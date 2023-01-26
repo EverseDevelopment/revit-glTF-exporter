@@ -86,7 +86,7 @@
 
             Thread.Sleep(1000);
             ProgressBarWindow.ViewModel.ProgressBarValue++;
-            ProgressBarWindow.ViewModel.Message = "GLTF exportation completed!";
+            ProgressBarWindow.ViewModel.Message = "Export completed!";
             ProgressBarWindow.ViewModel.Action = "Accept";
         }
 
