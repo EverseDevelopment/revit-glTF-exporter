@@ -14,7 +14,7 @@
         {
             string initialUnits = DatabaseKeyValueAccesor.GetValue("units");
 
-#if REVIT2019 || REVIT2020
+            #if REVIT2019 || REVIT2020
 
             if (initialUnits == "null")
             {
@@ -22,7 +22,7 @@
                 DatabaseKeyValueAccesor.SetValue("units", unit.ToString());
             }
 
-#else
+            #else
 
             if (initialUnits == "null")
             {
@@ -30,7 +30,7 @@
                 DatabaseKeyValueAccesor.SetValue("units", unit.TypeId.ToString());
             }
 
-#endif
+            #endif
         }
     }
 }

@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Database\gLTFDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Export\Draco.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\FileExport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GlbFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GlbBinInfo.cs" />

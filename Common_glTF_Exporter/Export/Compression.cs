@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using dracowrapper;
 
     public class Compression
     {
@@ -12,35 +13,18 @@
         /// <param name="preferences">preferences.</param>
         public static void Run(Preferences preferences)
         {
-            if (preferences.compression.Equals(CompressionEnum.ZIP))
+            switch (preferences.compression)
             {
-                List<string> files = new List<string>();
-                try
-                {
-                    string zipFile = string.Concat(preferences.path, ".zip");
-
-                    if (preferences.format == FormatEnum.gltf)
-                    {
-                        string gltfFile = string.Concat(preferences.path, ".gltf");
-                        string binFile = string.Concat(preferences.path, ".bin");
-
-                        files.Add(gltfFile);
-                        files.Add(binFile);
-                    }
-                    else
-                    {
-                        string glbFile = string.Concat(preferences.path, ".glb");
-                        files.Add(glbFile);
-                    }
-
-                    // TODO: Validate if there is an existing ZIP
-                    ZIP.Compress(zipFile, files);
-                }
-                finally
-                {
-                    // -- always delete files in finally to ensure the cleanup if some error exists
-                    files.ForEach(x => File.Delete(x));
-                }
+                case CompressionEnum.ZIP:
+                    ZIP.Compress(preferences);
+                    break;
+                case CompressionEnum.Draco:
+                    Draco.Compress(preferences);
+                    break;
+                case CompressionEnum.Meshopt:
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -35,6 +35,9 @@
     <CodeAnalysisRuleSet>e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DracoWrapper">
+      <HintPath>..\packages\Draco\DracoWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
