@@ -5,6 +5,7 @@
     using System.Text;
     using System.Windows.Controls;
     using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Utils;
 
     public static class ComboUnits
@@ -13,23 +14,23 @@
         {
             string initialUnits = DatabaseKeyValueAccesor.GetValue("units");
 
-            #if REVIT2019 || REVIT2020
+#if REVIT2019 || REVIT2020
 
-            DisplayUnitType internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
             if (initialUnits == "null")
             {
-                DatabaseKeyValueAccesor.SetValue("units", internalProjectDisplayUnitType.ToString());
+                DisplayUnitType unit = DisplayUnitType.DUT_METERS;
+                DatabaseKeyValueAccesor.SetValue("units", unit.ToString());
             }
 
-            #else
+#else
 
-            ForgeTypeId internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
             if (initialUnits == "null")
             {
-                DatabaseKeyValueAccesor.SetValue("units", internalProjectUnitTypeId.TypeId.ToString());
+                ForgeTypeId unit = UnitTypeId.Meters;
+                DatabaseKeyValueAccesor.SetValue("units", unit.TypeId.ToString());
             }
 
-            #endif
+#endif
         }
     }
 }
