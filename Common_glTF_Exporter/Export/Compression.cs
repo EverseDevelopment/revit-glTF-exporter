@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using dracowrapper;
 
     public class Compression
     {
@@ -12,15 +13,18 @@
         /// <param name="preferences">preferences.</param>
         public static void Run(Preferences preferences)
         {
-            if (preferences.compression.Equals(CompressionEnum.ZIP))
+            switch (preferences.compression)
             {
-                string gltfFile = string.Concat(preferences.path, "gltf");
-                string binFile = string.Concat(preferences.path, "bin");
-                string zipFile = string.Concat(preferences.path, "zip");
-                List<string> files = new List<string> { gltfFile, binFile };
-
-                ZIP.Compress(zipFile, files);
-                files.ForEach(x => File.Delete(x));
+                case CompressionEnum.ZIP:
+                    ZIP.Compress(preferences);
+                    break;
+                case CompressionEnum.Draco:
+                    Draco.Compress(preferences);
+                    break;
+                case CompressionEnum.Meshopt:
+                    break;
+                default:
+                    break;
             }
         }
     }

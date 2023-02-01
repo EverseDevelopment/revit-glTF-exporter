@@ -3,6 +3,7 @@
     using System.IO;
     using System.Windows.Forms;
     using Autodesk.Revit.UI;
+    using Revit_glTF_Exporter;
 
     internal class FilesHelper
     {
@@ -30,7 +31,7 @@
 
             if (File.Exists(filename) && FileIsLocked(filename, FileAccess.ReadWrite))
             {
-                TaskDialog.Show("Error", "The file is opened by another process, please close it and try again");
+                MessageWindow.Show("Error", "The file is opened by another process, please close it and try again");
                 return false;
             }
 

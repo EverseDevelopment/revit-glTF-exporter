@@ -5,30 +5,29 @@
     using System.Text;
     using System.Windows.Controls;
     using Autodesk.Revit.DB;
+    using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Utils;
 
     public static class ComboUnits
     {
-        public static void Set(Document doc, System.Windows.Controls.Label unitTextBlock)
+        public static void Set(Document doc)
         {
-            string initialUnits = SettingsConfig.GetValue("units");
+            string initialUnits = DatabaseKeyValueAccesor.GetValue("units");
 
             #if REVIT2019 || REVIT2020
 
-            DisplayUnitType internalProjectDisplayUnitType = doc.GetUnits().GetFormatOptions(UnitType.UT_Length).DisplayUnits;
-            unitTextBlock.Content = LabelUtils.GetLabelFor(internalProjectDisplayUnitType);
             if (initialUnits == "null")
             {
-                SettingsConfig.SetValue("units", internalProjectDisplayUnitType.ToString());
+                DisplayUnitType unit = DisplayUnitType.DUT_METERS;
+                DatabaseKeyValueAccesor.SetValue("units", unit.ToString());
             }
 
             #else
 
-            ForgeTypeId internalProjectUnitTypeId = doc.GetUnits().GetFormatOptions(SpecTypeId.Length).GetUnitTypeId();
-            unitTextBlock.Content = LabelUtils.GetLabelForUnit(internalProjectUnitTypeId).ToString();
             if (initialUnits == "null")
             {
-                SettingsConfig.SetValue("units", internalProjectUnitTypeId.TypeId.ToString());
+                ForgeTypeId unit = UnitTypeId.Meters;
+                DatabaseKeyValueAccesor.SetValue("units", unit.TypeId.ToString());
             }
 
             #endif
