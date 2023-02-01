@@ -62,7 +62,11 @@
             Document doc = exportView.Document;
             List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
 
-            if (!elementsInView.Any())
+            if (!elementsInView.Any() ||
+                elementsInView.TrueForAll(ele =>
+                ele is Level ||
+                ele is Autodesk.Revit.DB.Grid ||
+                ele is ModelLine))
             {
                 MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
                 return;

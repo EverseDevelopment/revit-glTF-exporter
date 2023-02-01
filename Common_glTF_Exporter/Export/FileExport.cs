@@ -47,7 +47,6 @@ namespace Common_glTF_Exporter.Export
 
                 GlbFile.Create(preferences, binaryFileData, gltfJson);
             }
-
         }
     }
 }

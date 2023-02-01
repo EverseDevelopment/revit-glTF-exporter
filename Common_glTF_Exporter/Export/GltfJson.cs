@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Visual;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Windows.MainWindow;
 using Newtonsoft.Json;
@@ -28,17 +29,32 @@ namespace Common_glTF_Exporter.Export
                 asset = new GLTFVersion(),
                 scenes = scenes,
                 nodes = nodes,
-                meshes = meshes,
             };
+
+            if (meshes.Any())
+            {
+                model.meshes = meshes;
+            }
 
             if (materials.Any())
             {
                 model.materials = materials;
             }
 
-            model.buffers = buffers;
-            model.bufferViews = bufferViews;
-            model.accessors = accessors;
+            if (bufferViews.Any())
+            {
+                model.bufferViews = bufferViews;
+            }
+
+            if (accessors.Any())
+            {
+                model.accessors = accessors;
+            }
+
+            if (buffers.Any())
+            {
+                model.buffers = buffers;
+            }
 
             // Write the *.gltf file
             string serializedModel = JsonConvert.SerializeObject(
