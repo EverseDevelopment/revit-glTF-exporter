@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		production_actions.yml = production_actions.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GltfInstaller", "GltfInstaller\GltfInstaller.csproj", "{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
