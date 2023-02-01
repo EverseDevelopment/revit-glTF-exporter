@@ -36,8 +36,7 @@
             }
             catch (Exception ex)
             {
-                TaskDialog.Show($"Database error: {ex.Message}!", "Error");
-                message = ex.Message;
+                MessageWindow.Show("Error", ex.Message);
                 return Result.Failed;
             }
         }
