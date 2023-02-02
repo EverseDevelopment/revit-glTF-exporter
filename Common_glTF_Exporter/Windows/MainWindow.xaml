@@ -38,7 +38,7 @@
 
     <Border 
         x:Name="MainWindow_Border" 
-        Background="White" 
+        Background="#f3f6f0" 
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8" 
@@ -118,6 +118,20 @@
                    FontSize="16" 
                    FontWeight="Light" 
                    Margin="272,10,17,0" RenderTransformOrigin="0.012,0.623">X</Button>
+            <Line Stroke="Black"
+                  X2="1000"
+                  VerticalAlignment="Top"
+                  Margin="-9,57,-9,0" RenderTransformOrigin="0.5,0.5" Height="1">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+
             <Label  
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
@@ -125,21 +139,6 @@
                     VerticalAlignment="Top"
                     Content="Format"
                     Width="92"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" 
-                        Height="1" 
-                        Margin="70,79,13,0" 
-                        Opacity="0.2" 
-                        RenderTransformOrigin="0.5,0.5">
-                <Rectangle.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Rectangle.RenderTransform>
-            </Rectangle>
 
             <Grid>
                 <RadioButton x:Name="gltf" 
@@ -164,6 +163,12 @@
                                  VerticalAlignment="Top"/>
             </Grid>
 
+            <Line Stroke="Gray" 
+                  StrokeDashArray="5 5" 
+                  X2="10000"
+                  VerticalAlignment="Top"
+                  Margin="4,136,16,0"/>
+
             <Label   
                     Style="{DynamicResource TitleLabels}"      
                     HorizontalAlignment="Left" 
@@ -171,12 +176,7 @@
                     VerticalAlignment="Top"
                     Content="Visualization"
                     Width="92"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" 
-                        Height="1" 
-                        Margin="109,157,13,0" 
-                        Opacity="0.2" 
-                        RenderTransformOrigin="0.5,0.5"/>
+
 
             <ToggleButton
               x:Name="materials"
@@ -243,7 +243,7 @@
                        ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
                        SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                        DisplayMemberPath="Label" 
-                       Margin="78,303,16,0" 
+                       Margin="77,301,17,0" 
                        Height="30" 
                        VerticalAlignment="Top"/>
             <Label         
@@ -253,10 +253,11 @@
                     VerticalAlignment="Top"
                     Content="Units"
                     Width="46"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" Height="1" 
-                        Margin="55,272,13,0" 
-                        Opacity="0.2"/>
+            <Line Stroke="Gray" 
+                  StrokeDashArray="5 5" 
+                  X2="10000"
+                  VerticalAlignment="Top"
+                  Margin="8,251,12,0"/>
             <Label      
                         Style="{DynamicResource SecondaryLabel}"
                         HorizontalAlignment="Left" 
@@ -273,12 +274,11 @@
                     VerticalAlignment="Top"
                     Content="Data"
                     Width="46"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" 
-                        Height="1" 
-                        Margin="55,364,13,0" 
-                        Opacity="0.2"/>
-
+            <Line Stroke="Gray" 
+                  StrokeDashArray="5 5" 
+                  X2="10000"
+                  VerticalAlignment="Top"
+                  Margin="7,350,19,0"/>
             <ToggleButton
                 x:Name="levels"
                 Margin="168,398,106,0"
@@ -347,6 +347,11 @@
                     VerticalAlignment="Top"
                     Content="Compression" 
                     Width="97"/>
+            <Line Stroke="Gray" 
+                  StrokeDashArray="5 5" 
+                  X2="10000"
+                  VerticalAlignment="Top"
+                  Margin="8,466,18,0"/>
 
             <RadioButton x:Name="None" 
                                  Grid.Column="0" 
@@ -374,17 +379,17 @@
                                  Margin="0,518,0,0" 
                                  VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
-            <Rectangle  VerticalAlignment="Top" 
-                            Fill="Gray" 
-                            Height="1" 
-                            Margin="108,488,10,0" 
-                            Opacity="0.2"/>
 
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
                     Margin="10,0,10,10"
                     Click="OnExportView" 
                     Height="38" VerticalAlignment="Bottom"/>
+
+
+
+
+
 
         </Grid>
     </Border>

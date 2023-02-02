@@ -5,9 +5,9 @@
   x:Class="Ductulator.Resources">
 
     <!-- Gray Scales-->
-    <SolidColorBrush x:Key="MainGray" Color="#707070"/>
+    <SolidColorBrush x:Key="MainGray" Color="#80848d"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
-    <SolidColorBrush x:Key="BackgroundColor" Color="White"/>
+    <SolidColorBrush x:Key="BackgroundColor" Color="#f3f6f0"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     
     <!--Main Colours-->
@@ -183,7 +183,7 @@
         <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
         <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
         <Setter Property="FontSize" Value="{StaticResource MainFontSize}"/>
-        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Foreground" Value="{StaticResource WindowButtonColor}"/>
         <Setter Property="FontWeight"  Value="DemiBold"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Height" Value="31"/>
@@ -774,6 +774,8 @@
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid x:Name="MainRow" >
                         <Grid>
+                            
+                            
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
                                     Path=ActualHeight}" />
@@ -789,9 +791,12 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition x:Name="TopRow" />
                                 <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Ellipse x:Name="BackgroundEllipse1"
+                                 Grid.Row="1"
                                  Grid.RowSpan="2"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="2"
@@ -802,7 +807,7 @@
                                  HorizontalAlignment="Center"
                                  Fill="{StaticResource WindowButtonColorDim}" />
                             <Ellipse x:Name="BackgroundEllipse2"
-                                 Grid.Row="0"
+                                 Grid.Row="1"
                                  Grid.RowSpan="2"
                                  Grid.Column="3"
                                  Grid.ColumnSpan="2"
@@ -813,7 +818,7 @@
                                  HorizontalAlignment="Center"
                                  Fill="{StaticResource WindowButtonColorDim}" />
                             <Border x:Name="BackgroundBorder"
-                                Grid.Row="0"
+                                Grid.Row="1"
                                 Grid.RowSpan="2"
                                 Grid.Column="1"
                                 Grid.ColumnSpan="3"
@@ -879,7 +884,7 @@
                                     Value="{StaticResource ToggleButtonFalseBackground}" />
                             <Setter TargetName="ForegroundEllipse" 
                                     Property="Fill"
-                                    Value="{StaticResource BackgroundColor}" />
+                                    Value="#18263c" />
                             <Setter TargetName="AnimationSizeBorder" 
                                     Property="Width" 
                                     Value="0" />
@@ -947,7 +952,8 @@
                             <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource SecondaryGray}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource MainGray}"/>
+                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource WindowButtonColor}"/>
+                            <Setter Property="Stroke" TargetName="Border" Value="{StaticResource WindowButtonColor}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                     
