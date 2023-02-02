@@ -15,7 +15,7 @@
              Style="{DynamicResource CustomWindowStyle}">
 
 
-    <Border Background="White" 
+    <Border Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8"
