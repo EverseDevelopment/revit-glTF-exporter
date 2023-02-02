@@ -21,25 +21,25 @@
                               Direction="0"></DropShadowEffect>
         </Border.Effect>
 
-        <Grid x:Name="Root" Background="Transparent" Margin="-1,0,0,0" HorizontalAlignment="Left" Width="405">
+        <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
 
 
-            <Image x:Name="Banner" Margin="126,36,265,40" />
+            <Image x:Name="Banner" Margin="41,36,265,40" />
             <TextBlock
                     Text="Welcome"
-                    Margin="267,175,88,141"
+                    Margin="267,175,30,310"
                     Background="Transparent"
                     FontSize="20"
                     FontWeight="Bold"/>
             <TextBlock
-                    Margin="267,48,36,0"
+                    Margin="267,48,23,0"
                     VerticalAlignment="Top"
                     Background="Transparent"
                     FontSize="30"
                     FontWeight="Bold" Height="127"><Run Text="Made with "/><LineBreak/><Run Text="love by "/><LineBreak/><Run Text="e-verse"/></TextBlock>
             <TextBlock
                     Text="Made with love by e-verse"
-                    Margin="258,371,3,10"
+                    Margin="250,482,11,10"
                     Background="Transparent"
                     FontSize="15"
                     FontWeight="Bold"/>
@@ -63,7 +63,7 @@
             <Button
             x:Name="Cancel"
             Height="27"
-            Margin="382,10,-23,0"
+            Margin="405,10,24,0"
             Background="Transparent"
             BorderBrush="Transparent" 
             VerticalAlignment="Top" RenderTransformOrigin="0.667,0.593">
@@ -80,4 +80,13 @@
 
         </Grid>
     </Border>
+
+    <wixsharp:WpfDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </wixsharp:WpfDialog.Resources>
+
 </wixsharp:WpfDialog>
