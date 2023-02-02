@@ -4,6 +4,9 @@
   xmlns:System="clr-namespace:System;assembly=mscorlib"
   x:Class="Ductulator.Resources">
 
+    <!-- Font Family-->
+    <FontFamily x:Key="NeuzeitGrotesk">pack://application:,,,/Fonts/#Neuzeit Grotesk</FontFamily>
+
     <!-- Gray Scales-->
     <SolidColorBrush x:Key="MainGray" Color="#80848d"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
@@ -22,7 +25,6 @@
     <CornerRadius x:Key="borderRadiusLarge" BottomLeft="15" BottomRight="15" TopLeft="15" TopRight="15"/>
     <System:Double x:Key="SecondaryFontSize">12</System:Double>
     <System:Double x:Key="MainFontSize">15</System:Double>
-    <FontFamily x:Key="FormFamily">Roboto</FontFamily>
      
     <!--Control template for Main forms-->
     <ControlTemplate x:Key="WindowTemplate" TargetType="{x:Type Window}">
@@ -106,7 +108,7 @@
     <!--Customization of MainButtons template-->
     <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Template" Value="{StaticResource MainButtonStyleTemplate}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="14px"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -170,7 +172,7 @@
     <!--Customization of labels template-->
     <Style x:Key="SecondaryLabel" TargetType="{x:Type Label}">
         <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
         <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
         <Setter Property="FontWeight"  Value="Light"/>
@@ -181,7 +183,7 @@
     <!--Customization of labels template-->
     <Style x:Key="TitleLabels" TargetType="{x:Type Label}">
         <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="{StaticResource MainFontSize}"/>
         <Setter Property="Foreground" Value="{StaticResource WindowButtonColor}"/>
         <Setter Property="FontWeight"  Value="DemiBold"/>
@@ -214,7 +216,7 @@
     <!--Customization of MainButtons template-->
     <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Template" Value="{StaticResource CloseButtonStyleTemplate}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -395,7 +397,7 @@
     <!--TextBox Custom template-->
     <Style x:Key="MainTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Template" Value="{StaticResource MainTextBoxTemplate}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="14px"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Background">
@@ -560,7 +562,7 @@
     
     <!--Definition of Combobox-->
     <Style x:Key="ComboBoxTextBoxStyle" TargetType="{x:Type TextBox}">
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="FontSize" Value="14px"/>
@@ -927,7 +929,7 @@
        TargetType="{x:Type RadioButton}">
         <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
+        <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
 
         <Setter Property="Template">

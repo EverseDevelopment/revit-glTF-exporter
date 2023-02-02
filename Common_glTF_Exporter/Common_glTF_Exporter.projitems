@@ -88,6 +88,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Black.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Content Include="$(MSBuildThisFileDirectory)Images\gltf.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
