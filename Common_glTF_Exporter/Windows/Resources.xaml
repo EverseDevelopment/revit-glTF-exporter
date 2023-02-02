@@ -8,8 +8,9 @@
     <FontFamily x:Key="NeuzeitGrotesk">pack://application:,,,/Fonts/#Neuzeit Grotesk</FontFamily>
 
     <!-- Gray Scales-->
-    <SolidColorBrush x:Key="MainGray" Color="#80848d"/>
-    <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
+    <SolidColorBrush x:Key="MainGray" Color="#18263c"/>
+    <SolidColorBrush x:Key="SecondaryGray" Color="#8d8d8d"/>
+    <SolidColorBrush x:Key="HoverGray" Color="#e8e8e8"/>
     <SolidColorBrush x:Key="BackgroundColor" Color="#f3f6f0"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     
@@ -154,6 +155,13 @@
         <Setter Property="Height"  Value="28"/>
     </Style>
 
+    <Style x:Key="DashedLine" TargetType="{x:Type Line}">
+        <Setter Property="StrokeDashArray" Value="5 5"/>
+        <Setter Property="Opacity" Value="0.36"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Stroke" Value="{DynamicResource SecondaryGray}"/>
+        <Setter Property="X2" Value="10000"/>
+    </Style>
 
     <!--SecondaryButtons Custom template-->
     <ControlTemplate  x:Key="LabelsTemplate" TargetType="Label">
@@ -576,7 +584,7 @@
                             CornerRadius="15,15,15,15"
                             BorderThickness="1"
                             Background="{StaticResource BackgroundColor}"
-                            BorderBrush="{StaticResource MainGray}">
+                            BorderBrush="{StaticResource SecondaryGray}">
                             <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
 
@@ -607,7 +615,7 @@
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Center" 
                               Data="M 0 0 L 6 6 L 12 0" 
-                              Stroke="{StaticResource MainGray}"
+                              Stroke="{StaticResource SecondaryGray}"
                               StrokeThickness="1"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -728,7 +736,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource SecondaryGray}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverGray}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="Red"/>
@@ -958,8 +966,8 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Fill" TargetName="Border" Value="{StaticResource SecondaryGray}"/>
-                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource SecondaryGray}"/>
+                            <Setter Property="Fill" TargetName="Border" Value="{StaticResource HoverGray}"/>
+                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource HoverGray}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource WindowButtonColor}"/>
