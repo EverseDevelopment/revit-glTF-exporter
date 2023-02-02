@@ -118,10 +118,11 @@
                    FontSize="16" 
                    FontWeight="Light" 
                    Margin="272,10,17,0" RenderTransformOrigin="0.012,0.623">X</Button>
-            <Line Stroke="Black"
+            <Line Stroke="{DynamicResource MainGray}"
                   X2="1000"
+                  StrokeThickness="4"
                   VerticalAlignment="Top"
-                  Margin="-9,57,-9,0" RenderTransformOrigin="0.5,0.5" Height="1">
+                  Margin="-9,57,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1"/>
@@ -163,10 +164,7 @@
                                  VerticalAlignment="Top"/>
             </Grid>
 
-            <Line Stroke="Gray" 
-                  StrokeDashArray="5 5" 
-                  X2="10000"
-                  VerticalAlignment="Top"
+            <Line Style="{DynamicResource DashedLine}"
                   Margin="4,136,16,0"/>
 
             <Label   
@@ -253,10 +251,7 @@
                     VerticalAlignment="Top"
                     Content="Units"
                     Width="46"/>
-            <Line Stroke="Gray" 
-                  StrokeDashArray="5 5" 
-                  X2="10000"
-                  VerticalAlignment="Top"
+            <Line Style="{DynamicResource DashedLine}"
                   Margin="8,251,12,0"/>
             <Label      
                         Style="{DynamicResource SecondaryLabel}"
@@ -274,10 +269,7 @@
                     VerticalAlignment="Top"
                     Content="Data"
                     Width="46"/>
-            <Line Stroke="Gray" 
-                  StrokeDashArray="5 5" 
-                  X2="10000"
-                  VerticalAlignment="Top"
+            <Line Style="{DynamicResource DashedLine}"
                   Margin="7,350,19,0"/>
             <ToggleButton
                 x:Name="levels"
@@ -347,10 +339,7 @@
                     VerticalAlignment="Top"
                     Content="Compression" 
                     Width="97"/>
-            <Line Stroke="Gray" 
-                  StrokeDashArray="5 5" 
-                  X2="10000"
-                  VerticalAlignment="Top"
+            <Line Style="{DynamicResource DashedLine}"
                   Margin="8,466,18,0"/>
 
             <RadioButton x:Name="None" 
