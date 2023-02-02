@@ -571,10 +571,10 @@
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Grid>
                         <Border x:Name="TextBorder"
-                            CornerRadius="3,3,3,3"
-                            BorderThickness="0.8,0.8,0.8,0.8"
+                            CornerRadius="15,15,15,15"
+                            BorderThickness="1"
                             Background="{StaticResource BackgroundColor}"
-                            BorderBrush="{StaticResource SecondaryGray}">
+                            BorderBrush="{StaticResource MainGray}">
                             <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
 
@@ -591,7 +591,7 @@
                     <Grid x:Name="gd">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="25" />
                         </Grid.ColumnDefinitions>
                         <Border x:Name="Border" 
                                 SnapsToDevicePixels="True" 
@@ -599,14 +599,14 @@
                                 Background="Transparent" 
                                 BorderBrush="Transparent"
                                 BorderThickness="0,0.8,0.8,0.8" 
-                                CornerRadius="0 5 5 0"/>
+                                CornerRadius="0 15 15 0"/>
                         <Path x:Name="Arrow" SnapsToDevicePixels="True" 
                               Grid.Column="1" 
-                              HorizontalAlignment="Center" 
+                              HorizontalAlignment="Left" 
                               VerticalAlignment="Center" 
                               Data="M 0 0 L 6 6 L 12 0" 
                               Stroke="{StaticResource MainGray}"
-                              StrokeThickness="2"/>
+                              StrokeThickness="1"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="ToggleButton.IsMouseOver" Value="True">
@@ -667,7 +667,7 @@
                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
-                            Margin="5,0,0,0"/>
+                            Margin="15,0,0,0"/>
                         <Popup x:Name="Popup"
                             Grid.Column="0" 
                             Placement="Bottom"
@@ -679,7 +679,7 @@
                                 SnapsToDevicePixels="True"                
                                 MinWidth="{TemplateBinding ActualWidth}"
                                 MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                Margin="5,0,5,5">
+                                Margin="15,0,5,5">
                                 <Border 
                                     x:Name="DropDownBorder"
                                     BorderThickness="1"
@@ -687,9 +687,9 @@
                                     Background="{StaticResource BackgroundColor}"
                                     BorderBrush="White">
                                     <Border.Effect>
-                                        <DropShadowEffect BlurRadius="8" 
+                                        <DropShadowEffect BlurRadius="9" 
                                                           Color="Gray" 
-                                                          Opacity="0.4" 
+                                                          Opacity="0.5" 
                                                           ShadowDepth="0" 
                                                           Direction="0"/>
                                     </Border.Effect>
@@ -714,12 +714,14 @@
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
                     <Border Name="Border"
-                              Padding="2"
-                              SnapsToDevicePixels="true">
+                            VerticalAlignment="Center"
+                            Padding="12 5 5 2"
+                            SnapsToDevicePixels="true">
                         <ContentPresenter Name="ContentSite" IsHitTestVisible="True" />
                     </Border>
                     <ControlTemplate.Triggers>

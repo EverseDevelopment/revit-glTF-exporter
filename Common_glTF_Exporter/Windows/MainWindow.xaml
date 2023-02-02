@@ -11,7 +11,7 @@
              Background="{x:Null}"
              mc:Ignorable="d" 
              Width="350" 
-             Height="690"
+             Height="734"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -38,7 +38,7 @@
 
     <Border 
         x:Name="MainWindow_Border" 
-        Background="#f3f6f0" 
+        Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8" 
@@ -382,15 +382,13 @@
 
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="10,0,10,10"
+                    Margin="8,580,17,0"
                     Click="OnExportView" 
-                    Height="38" VerticalAlignment="Bottom"/>
-
-
-
-
-
-
+                    Height="34" VerticalAlignment="Top"/>
+            <Label
+                Style="{DynamicResource SecondaryLabel}" 
+                Margin="158,640,10,0"
+                Content="Made with love by e-verse" Height="24" VerticalAlignment="Top"/>
         </Grid>
     </Border>
 
