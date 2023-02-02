@@ -772,16 +772,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
+
                     <Grid x:Name="MainRow" >
                         <Grid>
-                            
-                            
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
                                     Path=ActualHeight}" />
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
                                     Path=ActualHeight}" />
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="{Binding ElementName=TopRow,
+                                    Path=ActualHeight}" />
+                                <ColumnDefinition Width="{Binding ElementName=TopRow,
+                                    Path=ActualHeight}" />
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
                                     Path=ActualHeight}" />
                                 <ColumnDefinition Width="{Binding ElementName=TopRow,
@@ -800,31 +803,34 @@
                                  Grid.RowSpan="2"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="2"
-                                 Width="{Binding ElementName=MainRow,
-                                                 Path=ActualHeight}"
-                                 Height="{Binding ElementName=MainRow,
-                                                  Path=ActualHeight}"
-                                 HorizontalAlignment="Center"
+                                 Width="{Binding ElementName=SmallerSpheres,
+                                                 Path=ActualWidth}"
+                                 Height="{Binding ElementName=SmallerSpheres,
+                                                  Path=ActualWidth}"
+                                 HorizontalAlignment="Left"
                                  Fill="{StaticResource WindowButtonColorDim}" />
                             <Ellipse x:Name="BackgroundEllipse2"
                                  Grid.Row="1"
                                  Grid.RowSpan="2"
-                                 Grid.Column="3"
+                                 Grid.Column="5"
                                  Grid.ColumnSpan="2"
-                                 Width="{Binding ElementName=MainRow,
-                                                 Path=ActualHeight}"
-                                 Height="{Binding ElementName=MainRow,
-                                                  Path=ActualHeight}"
-                                 HorizontalAlignment="Center"
+                                 Width="{Binding ElementName=SmallerSpheres,
+                                                 Path=ActualWidth}"
+                                 Height="{Binding ElementName=SmallerSpheres,
+                                                  Path=ActualWidth}"
+                                 HorizontalAlignment="Right"
                                  Fill="{StaticResource WindowButtonColorDim}" />
                             <Border x:Name="BackgroundBorder"
                                 Grid.Row="1"
                                 Grid.RowSpan="2"
                                 Grid.Column="1"
-                                Grid.ColumnSpan="3"
+                                Grid.ColumnSpan="5"
                                     Width="{Binding ElementName=MainRow,
                                                  Path=ActualWidth}"
                                 Background="{StaticResource WindowButtonColorDim}" />
+                            <Border x:Name="SmallerSpheres"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"/>
                             <Border x:Name="AnimationSizeBorder"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"/>
