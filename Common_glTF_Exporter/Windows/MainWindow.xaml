@@ -38,7 +38,7 @@
 
     <Border 
         x:Name="MainWindow_Border" 
-        Background="Transparent"
+        Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8" 
@@ -137,7 +137,7 @@
             <Label  
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,62,0,0" 
+                    Margin="12,64,0,0" 
                     VerticalAlignment="Top"
                     Content="Format"
                     Width="92"/>
@@ -171,7 +171,7 @@
             <Label   
                     Style="{DynamicResource TitleLabels}"      
                     HorizontalAlignment="Left" 
-                    Margin="6,139,0,0" 
+                    Margin="12,142,0,0" 
                     VerticalAlignment="Top"
                     Content="Visualization"
                     Width="92"/>
@@ -188,7 +188,7 @@
             <Label
                 Style="{DynamicResource SecondaryLabel}"
                 HorizontalAlignment="Left" 
-                Margin="53,183,0,0" 
+                Margin="53,181,0,0" 
                 VerticalAlignment="Top"
                 Content="Export Materials" 
                 Width="96"/>
@@ -202,7 +202,7 @@
             <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="210,183,0,0" 
+                    Margin="210,181,0,0" 
                     VerticalAlignment="Top"
                     Content="Flip YZ-Axys" 
                     Width="86"/>
@@ -216,7 +216,7 @@
             <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="53,213,0,0"  
+                    Margin="53,212,0,0"  
                     VerticalAlignment="Top"
                     Content="Export Normals" 
                     Width="96"/>
@@ -230,7 +230,7 @@
             <Label        
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="210,213,0,0" 
+                    Margin="210,212,0,0" 
                     VerticalAlignment="Top"
                     Content="Export to (0,0,0)" 
                     Width="86"/>
@@ -244,7 +244,7 @@
             <Label         
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,266,0,0" 
+                    Margin="12,266,0,0" 
                     VerticalAlignment="Top"
                     Content="Units"
                     Width="46"/>
@@ -328,7 +328,7 @@
             <Label        
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,472,0,0" 
+                    Margin="12,472,0,0" 
                     VerticalAlignment="Top"
                     Content="Compression" 
                     Width="97"/>
@@ -364,13 +364,15 @@
 
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="94,572,87,0"
+                    Margin="94,570,87,0"
                     Click="OnExportView" 
                     Height="19" VerticalAlignment="Top"/>
             <Label
                 Style="{DynamicResource SecondaryLabel}" 
                 Margin="158,630,10,0"
-                Content="Made with love by e-verse" Height="24" VerticalAlignment="Top"/>
+                Content="Made with love by e-verse" 
+                Height="11" 
+                VerticalAlignment="Top"/>
         </Grid>
     </Border>
 
