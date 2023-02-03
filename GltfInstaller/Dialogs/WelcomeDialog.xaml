@@ -8,18 +8,20 @@
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d" Height="538" Width="485">
     <Border
-            Margin="10,10,10,10"
+            Margin="5,5,5,5"
             Background="#e2d8cc"
             BorderBrush="Transparent"
             BorderThickness="1" 
-            CornerRadius="8,8,8,8">
-        <Border.Effect>
+            CornerRadius="8,8,8,8"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <!--<Border.Effect>
             <DropShadowEffect BlurRadius="20" 
                               Color="Gray" 
                               Opacity="0.3" 
                               ShadowDepth="0" 
                               Direction="0"></DropShadowEffect>
-        </Border.Effect>
+        </Border.Effect>-->
 
         <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
 

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Nsis;
-using WixSharp.UI.WPF;
 
 namespace GltfInstaller
 {

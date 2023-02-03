@@ -1,17 +1,13 @@
-using Caliburn.Micro;
-using System.Runtime.InteropServices;
 using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
-using System.Windows.Input;
-using System.ComponentModel;
-using System.Windows.Media;
-using System.Runtime.CompilerServices;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace GltfInstaller
 {
@@ -33,6 +29,9 @@ namespace GltfInstaller
             InitializeComponent();
         }
 
+        private System.Windows.Point _dragStartPoint;
+        private bool _isDragging;
+
         /// <summary>
         /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
         /// This is a convenient place to do further initialization activities (e.g. localization).
@@ -42,9 +41,27 @@ namespace GltfInstaller
             var container = ManagedFormHost;
             var parent = container.Parent as Form;
             parent.FormBorderStyle = FormBorderStyle.None;
+            PreviewMouseLeftButtonDown += (s, e) =>
+            {
+                _dragStartPoint = e.GetPosition(this);
+                _isDragging = true;
+            };
 
-            //parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
+            PreviewMouseLeftButtonUp += (s, e) => _isDragging = false;
+            PreviewMouseMove += (s, e) =>
+            {
+                if (!_isDragging)
+                    return;
 
+                System.Windows.Point currentPoint = e.GetPosition(this);
+                double deltaX = currentPoint.X - _dragStartPoint.X;
+                double deltaY = currentPoint.Y - _dragStartPoint.Y;
+
+                parent.Left += Convert.ToInt32(deltaX);
+                parent.Top += Convert.ToInt32(deltaY);
+            };
+
+            parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
             var host = new WelcomeDialogModel { Host = ManagedFormHost };
             ViewModelBinder.Bind(host, this, null);
         }
@@ -59,9 +76,7 @@ namespace GltfInstaller
         int nWidthEllipse,  // height of ellipse
         int nHeightEllipse  // width of ellipse
         );
-
     }
-
 
     /// <summary>
     /// ViewModel for standard WelcomeDialog.
