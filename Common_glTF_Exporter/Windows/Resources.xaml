@@ -695,7 +695,7 @@
                                     BorderThickness="1"
                                     CornerRadius="{StaticResource borderRadius}"
                                     Background="{StaticResource BackgroundColor}"
-                                    BorderBrush="White">
+                                    BorderBrush="{StaticResource BackgroundColor}">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="9" 
                                                           Color="Gray" 
