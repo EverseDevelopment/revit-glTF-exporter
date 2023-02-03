@@ -10,114 +10,60 @@
     d:DesignWidth="512"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
-    <Grid x:Name="Root">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="53" />
-        </Grid.RowDefinitions>
-        <Border
-            Margin="-1,-1,-1,0"
+    <Border
+            Margin="5,5,5,5"
+            Background="#e2d8cc"
+            BorderBrush="Transparent"
+            BorderThickness="1" 
+            CornerRadius="8,8,8,8"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="White"
-            BorderBrush="Gray"
-            BorderThickness="1">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="80" />
-                </Grid.ColumnDefinitions>
+            VerticalAlignment="Stretch">
 
-                <Image
-                    x:Name="Banner"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
-                <StackPanel Margin="9">
-                    <TextBlock
-                        x:Name="DialogTitleLabel"
-                        Grid.Column="0"
-                        Background="White"
-                        FontSize="12"
-                        FontWeight="Bold">
-                        [ProgressDlgTitleInstalling]
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-        </Border>
+        <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
 
-        <StackPanel Grid.Row="1" Margin="20,10">
+            <Image
+                    x:Name="Banner" Margin="346,46,36,246" />
+
+
             <TextBlock
-                x:Name="DialogDescription"
-                MinHeight="35"
-                TextWrapping="WrapWithOverflow">
-                [ProgressDlgTextInstalling]
-            </TextBlock>
-            <StackPanel
-                MinHeight="30"
-                Margin="0,40,0,0"
-                Orientation="Horizontal">
-                <TextBlock x:Name="CurrentStatus">
-                    [ProgressDlgStatusLabel]
-                </TextBlock>
-                <TextBlock x:Name="CurrentAction" TextWrapping="WrapWithOverflow" />
-            </StackPanel>
+                    Margin="35,58,184,0"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    FontSize="30"
+                    FontWeight="Bold" Height="80">
+                    <Run Text="Made with love by"/><LineBreak/>
+                    <Run Text="e-verse"/></TextBlock>
+
+
             <ProgressBar
-                Height="10"
-                Margin="10"
+                Margin="136,251,136,126"
                 VerticalContentAlignment="Center"
                 Maximum="100"
                 Value="{Binding ProgressValue}" />
-            <Grid
-                x:Name="UacPromptIsVisible"
-                Width="328"
-                MinHeight="35">
-                <TextBlock
-                    x:Name="UacPrompt"
-                    FontStyle="Italic"
-                    Foreground="#FF0967FC"
-                    TextWrapping="WrapWithOverflow" />
-            </Grid>
-        </StackPanel>
 
-        <Border
-            Grid.Row="2"
-            Margin="-1,0,-1,-1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            BorderBrush="Gray"
-            BorderThickness="1">
-            <StackPanel
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
-                <Separator Width="10" Opacity="0" />
-                <Button
-                    x:Name="GoPrev"
-                    Height="23"
-                    MinWidth="73"
-                    IsEnabled="False">
-                    [WixUIBack]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-                <Button
+            <Button Style="{DynamicResource MainButtonStyle}"   
                     x:Name="GoNext"
-                    Height="23"
+                    Height="NaN"
                     MinWidth="73"
-                    IsEnabled="False">
-                    [WixUINext]
-                </Button>
-                <Separator Width="20" Opacity="0" />
-                <Button
+                    IsEnabled="False" Margin="309,332,27,26">
+                [WixUINext]
+            </Button>
+
+            <Button Style="{DynamicResource MainButtonStyle}"   
                     x:Name="Cancel"
-                    Height="23"
-                    MinWidth="73">
-                    [WixUICancel]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-            </StackPanel>
-        </Border>
-    </Grid>
+                    Height="NaN"
+                    MinWidth="73" Margin="35,332,290,26">
+                [WixUICancel]
+            </Button>
+        </Grid>
+    </Border>
+
+    <wixsharp:WpfDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </wixsharp:WpfDialog.Resources>
+
 </wixsharp:WpfDialog>

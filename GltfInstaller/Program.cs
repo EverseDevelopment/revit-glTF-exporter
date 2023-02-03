@@ -21,8 +21,6 @@ namespace GltfInstaller
 
             project.ManagedUI.InstallDialogs.Add<GltfInstaller.WelcomeDialog>()
                                             .Add<GltfInstaller.LicenceDialog>()
-                                            .Add<GltfInstaller.FeaturesDialog>()
-                                            .Add<GltfInstaller.InstallDirDialog>()
                                             .Add<GltfInstaller.ProgressDialog>()
                                             .Add<GltfInstaller.ExitDialog>();
 
@@ -40,7 +38,7 @@ namespace GltfInstaller
             {
                 Primary = { FileName = msiFile },
 
-                OutputFile = "MyProduct.exe",
+                OutputFile = "glTFExporter.exe",
                 //IconFile = "",
 
                 VersionInfo = new VersionInformation("1.0.0.0")

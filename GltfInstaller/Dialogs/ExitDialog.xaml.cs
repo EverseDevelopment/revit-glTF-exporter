@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
+using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
@@ -27,6 +30,9 @@ namespace GltfInstaller
             InitializeComponent();
         }
 
+        private System.Windows.Point _dragStartPoint;
+        private bool _isDragging;
+
         /// <summary>
         /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
         /// This is a convenient place to do further initialization activities (e.g. localization).
@@ -35,23 +41,58 @@ namespace GltfInstaller
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
 
-            ViewModelBinder.Bind(new ExitDialogModel { Host = ManagedFormHost }, this, null);
-        }
+            var container = ManagedFormHost;
+            var parent = container.Parent as Form;
+            parent.FormBorderStyle = FormBorderStyle.None;
+            PreviewMouseLeftButtonDown += (s, e) =>
+            {
+                _dragStartPoint = e.GetPosition(this);
+                _isDragging = true;
+            };
 
-        /// <summary>
-        /// Updates the titles of the dialog depending on the success of the installation action.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        public void UpdateTitles(ISession session)
+            PreviewMouseLeftButtonUp += (s, e) => _isDragging = false;
+            PreviewMouseMove += (s, e) =>
+            {
+                if (!_isDragging)
+                    return;
+
+                System.Windows.Point currentPoint = e.GetPosition(this);
+                double deltaX = currentPoint.X - _dragStartPoint.X;
+                double deltaY = currentPoint.Y - _dragStartPoint.Y;
+
+                parent.Left += Convert.ToInt32(deltaX);
+                parent.Top += Convert.ToInt32(deltaY);
+            };
+                
+                
+                parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
+                var host = new WelcomeDialogModel { Host = ManagedFormHost };
+                ViewModelBinder.Bind(host, this, null);
+            }
+
+            [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+            private static extern IntPtr CreateRoundRectRgn
+            (
+            int nLeftRect,      // x-coordinate of upper-left corner
+            int nTopRect,       // y-coordinate of upper-left corner
+            int nRightRect,     // x-coordinate of lower-right corner
+            int nBottomRect,    // y-coordinate of lower-right corner
+            int nWidthEllipse,  // height of ellipse
+            int nHeightEllipse  // width of ellipse
+            );
+
+            /// <summary>
+            /// Updates the titles of the dialog depending on the success of the installation action.
+            /// </summary>
+            /// <param name="session">The session.</param>
+            public void UpdateTitles(ISession session)
         {
             if (Shell.UserInterrupted || Shell.Log.Contains("User canceled installation."))
             {
-                DialogTitleLabel.Text = "[UserExitTitle]";
                 DialogDescription.Text = "[UserExitDescription1]";
             }
             else if (Shell.ErrorDetected)
             {
-                DialogTitleLabel.Text = "[FatalErrorTitle]";
                 DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
             }
 

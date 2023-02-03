@@ -7,7 +7,7 @@
     <!-- Gray Scales-->
     <SolidColorBrush x:Key="MainGray" Color="#707070"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
-    <SolidColorBrush x:Key="BackgroundColor" Color="White"/>
+    <SolidColorBrush x:Key="BackgroundColor" Color="#e2d8cc"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     
     <!--Main Colours-->

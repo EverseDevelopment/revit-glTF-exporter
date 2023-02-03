@@ -47,21 +47,21 @@ namespace GltfInstaller
         /// <param name="session">The session.</param>
         public void UpdateTitles(ISession session)
         {
-            if (session.IsUninstalling())
-            {
-                DialogTitleLabel.Text = "[ProgressDlgTitleRemoving]";
-                DialogDescription.Text = "[ProgressDlgTextRemoving]";
-            }
-            else if (session.IsRepairing())
-            {
-                DialogTitleLabel.Text = "[ProgressDlgTextRepairing]";
-                DialogDescription.Text = "[ProgressDlgTitleRepairing]";
-            }
-            else if (session.IsInstalling())
-            {
-                DialogTitleLabel.Text = "[ProgressDlgTitleInstalling]";
-                DialogDescription.Text = "[ProgressDlgTextInstalling]";
-            }
+            //if (session.IsUninstalling())
+            //{
+            //    DialogTitleLabel.Text = "[ProgressDlgTitleRemoving]";
+            //    DialogDescription.Text = "[ProgressDlgTextRemoving]";
+            //}
+            //else if (session.IsRepairing())
+            //{
+            //    DialogTitleLabel.Text = "[ProgressDlgTextRepairing]";
+            //    DialogDescription.Text = "[ProgressDlgTitleRepairing]";
+            //}
+            //else if (session.IsInstalling())
+            //{
+            //    DialogTitleLabel.Text = "[ProgressDlgTitleInstalling]";
+            //    DialogDescription.Text = "[ProgressDlgTextInstalling]";
+            //}
 
             // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
             this.Localize();
@@ -81,7 +81,7 @@ namespace GltfInstaller
         /// <param name="defaultButton">The default button.</param>
         /// <returns></returns>
         public override MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
-            => model?.ProcessMessage(messageType, messageRecord, CurrentStatus.Text) ?? MessageResult.None;
+            => model?.ProcessMessage(messageType, messageRecord, "Finish!") ?? MessageResult.None;
 
         /// <summary>
         /// Called when MSI execution is complete.

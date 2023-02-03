@@ -5,114 +5,81 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
-    d:DesignHeight="408"
-    d:DesignWidth="512"
     DialogTitle="[ProductName] Setup"
-    mc:Ignorable="d">
-    <Grid x:Name="Root">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="53" />
-        </Grid.RowDefinitions>
-        <Border
-            Margin="-1,-1,-1,0"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="White"
-            BorderBrush="Gray"
-            BorderThickness="1">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="80" />
-                </Grid.ColumnDefinitions>
+    mc:Ignorable="d" Height="436" Width="509">
 
-                <Image
-                    x:Name="Banner"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
-                <StackPanel Margin="9">
-                    <TextBlock
-                        Grid.Column="0"
-                        Background="White"
-                        FontSize="12"
-                        FontWeight="Bold">
-                        [LicenseAgreementDlgTitle]
-                    </TextBlock>
-                    <TextBlock
-                        x:Name="DialogDescription"
-                        Margin="17,5"
-                        VerticalAlignment="Stretch"
-                        Background="White"
-                        TextWrapping="WrapWithOverflow">
-                        [AdvancedWelcomeEulaDlgTitle]
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-        </Border>
-        <RichTextBox
-            x:Name="LicenceText"
-            Grid.Row="1"
-            Margin="10,10,10,35"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="White"
-            HorizontalScrollBarVisibility="Auto"
-            IsReadOnly="True"
-            IsReadOnlyCaretVisible="False"
-            VerticalScrollBarVisibility="Auto" />
-        <CheckBox
+    <Border
+            Margin="5,0,0,5"
+            Background="#e2d8cc"
+            BorderBrush="Transparent"
+            BorderThickness="1" 
+            CornerRadius="8,8,8,8" HorizontalAlignment="Left" Width="497" Height="421" VerticalAlignment="Bottom">
+
+        <Grid x:Name="Root">
+
+
+
+
+            <Image
+                    x:Name="Banner" Margin="346,60,43,263" />
+            <TextBlock
+                    Margin="53,68,166,0"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    FontSize="30"
+                    FontWeight="Bold" Height="81">
+                    <Run Text="Made with love by"/><LineBreak/>
+                    <Run Text="e-verse"/></TextBlock>
+
+            <CheckBox
             x:Name="LicenseAcceptedChecked"
-            Grid.Row="1"
-            Margin="10"
+             Content="I accept all terms and conditions"
+            Margin="53,0,230,209"
             VerticalAlignment="Bottom"
-            VerticalContentAlignment="Center">
-            [LicenseAgreementDlgLicenseAcceptedCheckBox]
-        </CheckBox>
+            VerticalContentAlignment="Center"/>
 
-        <Border
-            Grid.Row="2"
-            Margin="-1,0,-1,-1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            BorderBrush="Gray"
-            BorderThickness="1">
-            <StackPanel
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
-                <Button
-                    x:Name="Print"
-                    Height="23"
-                    MinWidth="73">
-                    [WixUIPrint]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-                <Button
+            <Button Style="{DynamicResource MainButtonStyle}"
                     x:Name="GoPrev"
-                    Height="23"
-                    MinWidth="73">
+                    Height="NaN"
+                    MinWidth="73" 
+                    Margin="53,349,286,39">
                     [WixUIBack]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-                <Button
+            </Button>
+
+            <Button Style="{DynamicResource MainButtonStyle}"
                     x:Name="GoNext"
-                    Height="23"
-                    MinWidth="73">
-                    [WixUINext]
-                </Button>
-                <Separator Width="20" Opacity="0" />
-                <Button
-                    x:Name="Cancel"
-                    Height="23"
-                    MinWidth="73">
-                    [WixUICancel]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-            </StackPanel>
-        </Border>
-    </Grid>
+                    Content="Next"
+                    Height="NaN"
+                    MinWidth="73" 
+                    Margin="282,349,58,39">
+            </Button>
+
+            <Button
+            x:Name="Cancel"
+            Height="27"
+            Margin="436,10,16,0"
+            Background="Transparent"
+            BorderBrush="Transparent" 
+            VerticalAlignment="Top" RenderTransformOrigin="0.667,0.593">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                X
+            </Button>
+        </Grid>
+    </Border>
+
+    <wixsharp:WpfDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </wixsharp:WpfDialog.Resources>
+
 </wixsharp:WpfDialog>
