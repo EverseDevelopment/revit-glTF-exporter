@@ -11,7 +11,7 @@
     <SolidColorBrush x:Key="MainGray" Color="#18263c"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#8d8d8d"/>
     <SolidColorBrush x:Key="HoverGray" Color="#e8e8e8"/>
-    <SolidColorBrush x:Key="BackgroundColor" Color="#f3f6f0"/>
+    <SolidColorBrush x:Key="BackgroundColor" Color="#e8e3df"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     
     <!--Main Colours-->

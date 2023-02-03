@@ -64,32 +64,20 @@
                     Height="50" 
                     FontSize="20" 
                     FontWeight="Light" 
-                    Margin="7,-1,43,0" VerticalAlignment="Top">
+                    Margin="7,-1,178,0" VerticalAlignment="Top">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Width="290" Background="Transparent">
                             <Grid>
-                                <TextBlock Text="glTF Exporter"
-                                           VerticalAlignment="Center" 
-                                           HorizontalAlignment="Left" 
-                                           Margin="47,0,0,0" Height="30" Width="122"></TextBlock>
-                                <TextBlock 
-                                           TextAlignment="Left"
-                                           Margin="185,14,32,17"
-                                           FontSize="15" 
-                                           Height="19" 
-                                           Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                           Foreground="Black"></TextBlock>
-
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
                                        Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
-                                       Width="37" 
+                                       Width="115" 
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="0,2,0,8"/>
+                                       Margin="2,5,0,5"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers >
@@ -105,6 +93,14 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+
+            <TextBlock 
+                                           TextAlignment="Left"
+                                           Margin="165,15,52,646"
+                                           FontSize="15" 
+                                           Height="19" 
+                                           Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                           Foreground="Black"></TextBlock>
 
             <Button  
                    Style="{DynamicResource CloseButtonStyle}"
