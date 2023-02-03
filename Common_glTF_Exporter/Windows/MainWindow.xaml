@@ -11,7 +11,7 @@
              Background="{x:Null}"
              mc:Ignorable="d" 
              Width="350" 
-             Height="734"
+             Height="720"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -38,7 +38,7 @@
 
     <Border 
         x:Name="MainWindow_Border" 
-        Background="{DynamicResource BackgroundColor}"
+        Background="Transparent"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8" 
@@ -120,9 +120,10 @@
                    Margin="272,10,17,0" RenderTransformOrigin="0.012,0.623">X</Button>
             <Line Stroke="{DynamicResource MainGray}"
                   X2="1000"
+                  Opacity="0.5"
                   StrokeThickness="4"
                   VerticalAlignment="Top"
-                  Margin="-9,57,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
+                  Margin="-9,59,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1"/>
@@ -146,10 +147,10 @@
                                  Grid.Column="0" 
                                  Content="glTF" 
                                  HorizontalAlignment="Left" 
-                                 Margin="11,107,0,0"
+                                 Margin="13,107,0,0"
                                  Click="RadioButtonFormatClick" 
                                  RenderTransformOrigin="0.5,0.5" 
-                                 Width="94" 
+                                 Width="69" 
                                  Height="14" 
                                  VerticalAlignment="Top">
                 </RadioButton>
@@ -165,7 +166,7 @@
             </Grid>
 
             <Line Style="{DynamicResource DashedLine}"
-                  Margin="4,136,16,0"/>
+                  Margin="4,138,16,0"/>
 
             <Label   
                     Style="{DynamicResource TitleLabels}"      
@@ -178,9 +179,8 @@
 
             <ToggleButton
               x:Name="materials"
-              Margin="12,185,262,0"
+              Margin="12,189,262,0"
               Style="{DynamicResource SwitchTypeToggleButton}" 
-              Height="16" 
               VerticalAlignment="Top"
               Click="TrueFalseToggles"
               ToolTip="Add or remove materiales from export">
@@ -194,9 +194,8 @@
                 Width="96"/>
             <ToggleButton
                 x:Name="flipAxis"
-                Margin="168,185,106,0"
+                Margin="166,189,108,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Rotate axis of the model 90 degress"/>
@@ -209,9 +208,8 @@
                     Width="86"/>
             <ToggleButton
                 x:Name="normals"
-                Margin="12,216,262,0"
+                Margin="12,220,262,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export mesh normals"/>
@@ -224,9 +222,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="relocateTo0"
-                Margin="168,216,106,0"
+                Margin="166,220,108,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Move the center of the model to 0,0,0"/>
@@ -247,16 +244,16 @@
             <Label         
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,254,0,0" 
+                    Margin="6,266,0,0" 
                     VerticalAlignment="Top"
                     Content="Units"
                     Width="46"/>
             <Line Style="{DynamicResource DashedLine}"
-                  Margin="8,251,12,0"/>
+                  Margin="8,260,12,0"/>
             <Label      
                         Style="{DynamicResource SecondaryLabel}"
                         HorizontalAlignment="Left" 
-                        Margin="8,304,0,0" 
+                        Margin="7,304,0,0" 
                         Content="Export unit:"
                         VerticalAlignment="Top" 
                         Width="72">
@@ -265,7 +262,7 @@
             <Label         
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,347,0,0" 
+                    Margin="12,354,0,0" 
                     VerticalAlignment="Top"
                     Content="Data"
                     Width="46"/>
@@ -273,9 +270,8 @@
                   Margin="7,350,19,0"/>
             <ToggleButton
                 x:Name="levels"
-                Margin="168,398,106,0"
+                Margin="168,401,106,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export Revit levels"/>
@@ -288,9 +284,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="grids"
-                Margin="168,430,106,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
+                Margin="168,432,106,0"
+                Style="{DynamicResource SwitchTypeToggleButton}"
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export Revit grids"/>
@@ -304,9 +299,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="batchId"
-                Margin="12,398,262,0"
+                Margin="12,401,262,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export Revit batchId"/>
@@ -319,9 +313,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="properties"
-                Margin="12,430,262,0"
+                Margin="12,432,262,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export all the properties from each element"/>
@@ -340,13 +333,13 @@
                     Content="Compression" 
                     Width="97"/>
             <Line Style="{DynamicResource DashedLine}"
-                  Margin="8,466,18,0"/>
+                  Margin="8,460,18,0"/>
 
             <RadioButton x:Name="None" 
                                  Grid.Column="0" 
                                  Content="None" 
                                  HorizontalAlignment="Left" 
-                                 Margin="10,518,0,0" 
+                                 Margin="13,517,0,0" 
                                  VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
             <!--<RadioButton x:Name="Meshopt" 
@@ -361,22 +354,22 @@
                                  Content="DRACO" 
                                  HorizontalAlignment="Left" 
                                  VerticalAlignment="Top"
-                                 Click="RadioButtonClick" Margin="234,518,0,0"/>
+                                 Click="RadioButtonClick" Margin="234,517,0,0"/>
             <RadioButton x:Name="ZIP" 
                                  Content="ZIP" 
                                  HorizontalAlignment="Center" 
-                                 Margin="0,518,0,0" 
+                                 Margin="0,517,0,0" 
                                  VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
 
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="8,580,17,0"
+                    Margin="94,572,87,0"
                     Click="OnExportView" 
-                    Height="34" VerticalAlignment="Top"/>
+                    Height="19" VerticalAlignment="Top"/>
             <Label
                 Style="{DynamicResource SecondaryLabel}" 
-                Margin="158,640,10,0"
+                Margin="158,630,10,0"
                 Content="Made with love by e-verse" Height="24" VerticalAlignment="Top"/>
         </Grid>
     </Border>

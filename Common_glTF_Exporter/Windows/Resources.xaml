@@ -748,9 +748,7 @@
     </Style>
 
 
-    <Style x:Key="SwitchTypeToggleButton"
-       TargetType="{x:Type ToggleButton}">
-
+    <Style x:Key="SwitchTypeToggleButton" TargetType="{x:Type ToggleButton}">
         <Style.Resources>
             <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
 
@@ -781,6 +779,8 @@
             </Style>
 
         </Style.Resources>
+        <Setter Property="Height" Value="9" />
+        <Setter Property="Width" Value="33" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
