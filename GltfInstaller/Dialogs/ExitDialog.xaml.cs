@@ -63,9 +63,9 @@ namespace GltfInstaller
                 parent.Left += Convert.ToInt32(deltaX);
                 parent.Top += Convert.ToInt32(deltaY);
             };
-                
-                
-                parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
+            container.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e3df");
+
+            parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
                 var host = new WelcomeDialogModel { Host = ManagedFormHost };
                 ViewModelBinder.Bind(host, this, null);
             }

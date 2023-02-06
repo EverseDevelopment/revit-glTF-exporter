@@ -8,7 +8,7 @@ namespace GltfInstaller
     {
         static void Main()
         {
-            var project = new ManagedProject("MyProduct",
+            var project = new ManagedProject("Leia glTF exporter",
                               new Dir(@"%ProgramFiles%\My Company\My Product",
                                   new File("Program.cs")));
 

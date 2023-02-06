@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GltfInstaller
 {
@@ -41,6 +42,13 @@ namespace GltfInstaller
             var container = ManagedFormHost;
             var parent = container.Parent as Form;
             parent.FormBorderStyle = FormBorderStyle.None;
+
+            var view = parent as IShellView;
+            view?.SetSize(510, 571);
+
+            container.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            parent.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+
             PreviewMouseLeftButtonDown += (s, e) =>
             {
                 _dragStartPoint = e.GetPosition(this);

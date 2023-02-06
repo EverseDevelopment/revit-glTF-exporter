@@ -5,15 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
-    d:DesignHeight="408"
-    d:DesignWidth="512"
+    d:DesignHeight="571"
+    d:DesignWidth="510"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
 
 
     <Border
             Margin="5,5,5,5"
-            Background="#E7E3df"
+            Background="#e8e3df"
             BorderBrush="Transparent"
             BorderThickness="1" 
             CornerRadius="8,8,8,8"
@@ -29,7 +29,7 @@
 
         <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
 
-            <Image x:Name="Banner" Margin="331,60,57,239" />
+            <Image x:Name="Banner" Margin="331,60,57,411" />
             <TextBlock
                     Margin="53,68,166,0"
                     VerticalAlignment="Top"
@@ -48,23 +48,17 @@
 
             <Button Style="{DynamicResource MainButtonStyle}" 
                     x:Name="GoExit"
-                    Height="23"
-                    MinWidth="73" Margin="333,347,29,0" VerticalAlignment="Top">
-                [WixUIFinish]
+                    Content="Finish"
+                    MinWidth="73" 
+                    Margin="333,502,29,0" 
+                    VerticalAlignment="Top">
             </Button>
 
-            <Button  
-                   Style="{DynamicResource CloseButtonStyle}"
-                   Name="Cancel" 
-                   Foreground="Black" 
-                   BorderThickness="0" 
-                   Background="Transparent" 
+            <Button 
+                   Style="{DynamicResource TabCloseButtonStyle}"
+                   Name="Cancel"
                    VerticalAlignment="Top" 
-                   Height="21" 
-                   FontSize="16" 
-                   FontWeight="Light" 
-                   Margin="430,15,17,0" 
-                   RenderTransformOrigin="0.012,0.623">X</Button>
+                   Margin="452,13,17,0"/>
 
         </Grid>
     </Border>

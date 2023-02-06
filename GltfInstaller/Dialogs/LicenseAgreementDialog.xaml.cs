@@ -75,6 +75,8 @@ namespace GltfInstaller
                 parent.Top += Convert.ToInt32(deltaY);
             };
 
+            container.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e3df");
+
             parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
             var host = new WelcomeDialogModel { Host = ManagedFormHost };
             ViewModelBinder.Bind(host, this, null);
@@ -90,6 +92,11 @@ namespace GltfInstaller
             int nWidthEllipse,  // height of ellipse
             int nHeightEllipse  // width of ellipse
         );
+
+        private void LicenseAcceptedChecked_Checked(object sender, RoutedEventArgs e)
+        {
+            //Enable or disable next button
+        }
     }
 
     /// <summary>

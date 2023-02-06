@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
-    d:DesignHeight="408"
-    d:DesignWidth="512"
+    d:DesignHeight="571"
+    d:DesignWidth="510"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
     <Border
@@ -22,7 +22,7 @@
         <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
 
             <Image
-                    x:Name="Banner" Margin="346,46,36,246" />
+                    x:Name="Banner" Margin="346,46,36,416" />
 
 
             <TextBlock
@@ -36,24 +36,23 @@
 
 
             <ProgressBar
-                Margin="136,251,136,126"
+                Margin="35,371,33,165"
                 VerticalContentAlignment="Center"
                 Maximum="100"
                 Value="{Binding ProgressValue}" />
 
             <Button Style="{DynamicResource MainButtonStyle}"   
                     x:Name="GoNext"
-                    Height="NaN"
+                    Content="Next"
                     MinWidth="73"
-                    IsEnabled="False" Margin="309,332,27,26">
-                [WixUINext]
+                    IsEnabled="False" Margin="290,499,46,24">
             </Button>
 
             <Button Style="{DynamicResource MainButtonStyle}"   
                     x:Name="Cancel"
-                    Height="NaN"
-                    MinWidth="73" Margin="35,332,290,26">
-                [WixUICancel]
+                    Content="Cancel"
+                    MinWidth="73" 
+                    Margin="35,499,290,24">
             </Button>
         </Grid>
     </Border>

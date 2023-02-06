@@ -5,75 +5,61 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
-    d:DesignHeight="408"
-    d:DesignWidth="512"
+    d:DesignHeight="571"
+    d:DesignWidth="510"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
-    <Grid x:Name="Root">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="53" />
-        </Grid.RowDefinitions>
-        <Border
-            Margin="-1,-1,-1,0"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="White"
-            BorderBrush="Gray"
-            BorderThickness="1">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="80" />
-                </Grid.ColumnDefinitions>
 
-                <Image
-                    x:Name="Banner"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
-                <StackPanel Margin="9">
-                    <TextBlock
+    <Border
+            Margin="5,5,5,5"
+            Background="#e8e3df"
+            BorderBrush="Transparent"
+            BorderThickness="1" 
+            CornerRadius="8,8,8,8"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+        <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="212*"/>
+                <RowDefinition Height="0*"/>
+                <RowDefinition Height="347*"/>
+            </Grid.RowDefinitions>
+
+            <Image
+                  x:Name="Banner"
+                  Grid.Row="1"
+                  Grid.ColumnSpan="2"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch" />
+
+            <TextBlock
                         Grid.Column="0"
                         Background="White"
                         FontSize="12"
-                        FontWeight="Bold">
+                        FontWeight="Bold" Margin="19,26,308,124">
                         [MaintenanceTypeDlgTitle]
-                    </TextBlock>
-                    <TextBlock
+            </TextBlock>
+            <TextBlock
                         x:Name="DialogDescription"
-                        Margin="17,5"
-                        VerticalAlignment="Stretch"
+                        Margin="19,173,274,0"
                         Background="White"
                         TextWrapping="WrapWithOverflow">
                         [MaintenanceTypeDlgDescription]
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-        </Border>
+            </TextBlock>
 
-        <Grid Grid.Row="1" Margin="20,10,20,10">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
             <Button
                 x:Name="Change"
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top" Margin="21,121,0,0">
                 [MaintenanceTypeDlgChangeButton]
             </Button>
             <TextBlock
                 MinHeight="35"
-                Margin="20,35,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                TextWrapping="WrapWithOverflow">
+                Margin="20,174,251,139"
+                TextWrapping="WrapWithOverflow" Grid.Row="2">
                 [MaintenanceTypeDlgChangeText]
             </TextBlock>
 
@@ -83,7 +69,7 @@
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top" Margin="21,224,0,0" Grid.RowSpan="2">
                 [MaintenanceTypeDlgRepairButton]
             </Button>
             <TextBlock
@@ -102,55 +88,41 @@
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top" Margin="19,56,0,0">
                 [MaintenanceTypeDlgRemoveButton]
             </Button>
             <TextBlock
                 Grid.Row="2"
                 MinHeight="35"
-                Margin="20,35,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
+                Margin="12,20,287,277"
                 TextWrapping="WrapWithOverflow">
                 [MaintenanceTypeDlgRemoveText]
             </TextBlock>
-        </Grid>
 
-        <Border
-            Grid.Row="2"
-            Margin="-1,0,-1,-1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            BorderBrush="Gray"
-            BorderThickness="1">
-            <StackPanel
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
-                <Separator Width="10" Opacity="0" />
-                <Button
-                    x:Name="GoPrev"
-                    Height="23"
-                    MinWidth="73">
-                    [WixUIBack]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-                <Button
+            <Button Style="{DynamicResource MainButtonStyle}"               
+                    Content="Next"
                     x:Name="GoNext"
-                    Height="23"
-                    IsEnabled="false"
-                    MinWidth="73">
-                    [WixUINext]
-                </Button>
-                <Separator Width="20" Opacity="0" />
-                <Button
-                    x:Name="Cancel"
-                    Height="23"
-                    MinWidth="73">
-                    [WixUICancel]
-                </Button>
-                <Separator Width="10" Opacity="0" />
-            </StackPanel>
-        </Border>
-    </Grid>
+                    Width="180"
+                    Height="38"
+                    Margin="300,289,20,0" 
+                    VerticalAlignment="Top" Grid.Row="1" Grid.RowSpan="2">
+            </Button>
+            
+            <Button 
+                   Style="{DynamicResource TabCloseButtonStyle}"
+                   Name="Cancel"
+                   VerticalAlignment="Top" 
+                   Margin="452,13,17,0"/>
+
+        </Grid>
+    </Border>
+
+    <wixsharp:WpfDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </wixsharp:WpfDialog.Resources>
+
 </wixsharp:WpfDialog>

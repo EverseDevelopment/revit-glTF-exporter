@@ -6,7 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
     DialogTitle="[ProductName] Setup"
-    mc:Ignorable="d" Height="538" Width="485">
+    mc:Ignorable="d" 
+    Width="510"
+    Height="571" >
     <Border
             Margin="5,5,5,5"
             Background="#e8e3df"
@@ -15,29 +17,38 @@
             CornerRadius="8,8,8,8"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        
+
         <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="212*"/>
+                <RowDefinition Height="0*"/>
+                <RowDefinition Height="347*"/>
+            </Grid.RowDefinitions>
 
 
-            <Image x:Name="Banner" Margin="41,36,265,40" />
+            <Image x:Name="Banner" Margin="41,36,265,131" Grid.RowSpan="3" />
             <TextBlock
-                    Text="Welcome"
-                    Margin="266,200,31,285"
+                    Margin="290,20,109,290"
                     Background="Transparent"
                     FontSize="20"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" Grid.Row="1" Grid.RowSpan="2"><Run Text="Welcome"/><Run Language="es-es" Text="!"/></TextBlock>
             <TextBlock
-                    Margin="267,48,23,0"
+                    Margin="290,51,30,151"
+                    Background="Transparent"
+                    FontSize="20"
+                    FontWeight="ExtraLight" Grid.Row="1" Grid.RowSpan="2"><Run Text="You're in the rigth "/><LineBreak/><Run Text="place! Install our "/><LineBreak/><Run Text="special Revit addon. "/><LineBreak/><Run Text="Its free simple and "/><LineBreak/><Run Text="made with love"/></TextBlock>
+            <TextBlock
+                    Margin="290,59,58,0"
                     VerticalAlignment="Top"
                     Background="Transparent"
                     FontSize="30"
                     FontWeight="Bold" Height="127"><Run Text="Made with "/><LineBreak/><Run Text="love by "/><LineBreak/><Run Text="e-verse"/></TextBlock>
             <TextBlock
                     Text="Made with love by e-verse"
-                    Margin="250,482,11,10"
+                    Margin="250,308,58,10"
                     Background="Transparent"
                     FontSize="15"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" Grid.Row="1" Grid.RowSpan="2"/>
 
 
             <Button Style="{DynamicResource MainButtonStyle}"               
@@ -45,21 +56,15 @@
                     x:Name="GoNext"
                     Width="180"
                     Height="38"
-                    Margin="256,313,17,0" VerticalAlignment="Top">
+                    Margin="290,219,30,0" 
+                    VerticalAlignment="Top" Grid.Row="1" Grid.RowSpan="2">
             </Button>
 
-            <Button  
-                   Style="{DynamicResource CloseButtonStyle}"
-                   Name="Cancel" 
-                   Foreground="Black" 
-                   BorderThickness="0" 
-                   Background="Transparent" 
+            <Button 
+                   Style="{DynamicResource TabCloseButtonStyle}"
+                   Name="Cancel"
                    VerticalAlignment="Top" 
-                   Height="21" 
-                   FontSize="16" 
-                   FontWeight="Light" 
-                   Margin="430,10,17,0" 
-                   RenderTransformOrigin="0.012,0.623">X</Button>
+                   Margin="452,13,17,0"/>
         </Grid>
     </Border>
 

@@ -5,7 +5,7 @@
   x:Class="Ductulator.Resources">
 
     <!-- Gray Scales-->
-    <SolidColorBrush x:Key="MainGray" Color="#707070"/>
+    <SolidColorBrush x:Key="MainGray" Color="#18263c"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
     <SolidColorBrush x:Key="BackgroundColor" Color="#e2d8cc"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
@@ -75,7 +75,7 @@
     <!--MainButtons Custom template-->
     <ControlTemplate  x:Key="MainButtonStyleTemplate" TargetType="Button">
         <Border x:Name="border" 
-                    CornerRadius="{StaticResource borderRadiusLarge}" 
+                    CornerRadius="20" 
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}" 
                 Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
@@ -107,13 +107,13 @@
     <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Template" Value="{StaticResource MainButtonStyleTemplate}"/>
         <Setter Property="FontFamily" Value="{StaticResource FormFamily}"/>
-        <Setter Property="FontSize" Value="14px"/>
+        <Setter Property="FontSize" Value="20px"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
         <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
-        <Setter Property="Height"  Value="38"/>
+        <Setter Property="Height"  Value="36"/>
     </Style>
 
 
@@ -1226,6 +1226,92 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="CLoseButtomTemp" TargetType="{x:Type Button}">
+        <Grid>
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition x:Name="TopRow" />
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Path
+                            x:Name="Cross"
+                          Grid.Row="1"
+                          Grid.Column="1"
+                          Data="M0,0 L4,4 M0,4 L4,0"
+                          Stretch="Fill"
+                          Stroke="{StaticResource MainGray}"
+                          StrokeThickness="1"/>
+
+            </Grid>
+            <Border x:Name="border" 
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}" 
+                    BorderThickness="{TemplateBinding BorderThickness}" 
+                    SnapsToDevicePixels="true">
+                <ContentPresenter x:Name="contentPresenter" 
+                                      Focusable="False" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      Margin="{TemplateBinding Padding}" 
+                                      RecognizesAccessKey="True" 
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <Ellipse x:Name="circleBorder"
+                             Stroke="{StaticResource MainGray}"
+                             StrokeThickness="1" 
+                             Fill="Transparent">
+            </Ellipse>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" 
+                                TargetName="border" 
+                                Value="Transparent"/>
+                <Setter Property="BorderBrush" 
+                                TargetName="border" 
+                                Value="Transparent"/>
+                <Setter Property="Opacity" 
+                                TargetName="circleBorder" 
+                                Value="0.5"/>
+                <Setter Property="Opacity" 
+                                TargetName="Cross" 
+                                Value="0.5"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" 
+                                TargetName="border" 
+                                Value="Transparent"/>
+                <Setter Property="BorderBrush" 
+                                TargetName="border" 
+                                Value="Transparent"/>
+                <Setter Property="Opacity" 
+                                TargetName="circleBorder" 
+                                Value="0.3"/>
+                <Setter Property="Opacity" 
+                                TargetName="Cross" 
+                                Value="0.3"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="TabCloseButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="26"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Template" Value="{StaticResource CLoseButtomTemp}"/>
     </Style>
 
 </ResourceDictionary> 
