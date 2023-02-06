@@ -14,6 +14,8 @@
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            gLTFDatabase db = new gLTFDatabase();
+
             try
             {
                 UIApplication uiapp = commandData.Application;

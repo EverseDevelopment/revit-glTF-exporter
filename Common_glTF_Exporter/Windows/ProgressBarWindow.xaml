@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="230"
+             Height="232"
              Width="308"
              ResizeMode="NoResize"
              Topmost="True"
@@ -26,28 +26,74 @@
 
         <Grid Margin="0"
               Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="187*"/>
-                <ColumnDefinition Width="109*"/>
-            </Grid.ColumnDefinitions>
+
+            <Button 
+                    Style="{DynamicResource CloseButtonStyle}" 
+                    Name="TitleButton" 
+                    Foreground="Black" 
+                    BorderThickness="0" 
+                    Click="Title_Link" 
+                    Background="Transparent" 
+                    Height="50" 
+                    FontSize="20" 
+                    FontWeight="Light" 
+                    Margin="6,4,179,0" VerticalAlignment="Top">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Width="290" Background="Transparent">
+                            <Grid>
+                                <Image Name="SlideUp_Image" 
+                                       Visibility="Visible" 
+                                       Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
+                                       HorizontalAlignment="Left"
+                                       Width="115" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="2,5,0,5"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Line Stroke="{DynamicResource MainGray}"
+                  X2="1000"
+                  Opacity="0.5"
+                  StrokeThickness="4"
+                  VerticalAlignment="Top"
+                  Margin="0,59,0,0" RenderTransformOrigin="0.5,0.5" Height="2">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+
             <TextBlock DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        TextWrapping="Wrap" 
                        Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" 
                        TextAlignment="Center"
                        Foreground="Black" 
-                       HorizontalAlignment="Left" Width="266" Margin="15,33,0,0" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                       HorizontalAlignment="Center" Width="266" Margin="0,66,0,0" Height="26" VerticalAlignment="Top"/>
             <Button  
-                   Style="{DynamicResource ActionButtonStyle}"
-                   Name="CloseButton" 
-                   Foreground="Black" 
-                   BorderThickness="0" 
-                   Click="Close_Click" 
-                   Background="Transparent" 
-                   VerticalAlignment="Top" 
-                   Height="21" 
-                   FontSize="16" 
-                   FontWeight="Light" 
-                   Margin="89,6,6,0" RenderTransformOrigin="0.012,0.623" Grid.Column="1">X</Button>
+                   Style="{DynamicResource TabCloseButtonStyle}"
+                   Name="CloseButton"  
+                   Click="CancelProcess_Click" 
+                   VerticalAlignment="Top" Margin="266,18,10,0"/>
 
             <ProgressBar Style="{DynamicResource ProgressBarStyle}" 
                     Name="ProgressBar"
@@ -55,24 +101,22 @@
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                        
                     Maximum="{Binding Path=ProgressBarMax}"
                     Value="{Binding Path=ProgressBarGraphicValue}"
-                    Margin="27,74,32,0" 
-                    Height="22" 
-                    VerticalAlignment="Top" 
-                    Grid.ColumnSpan="2">
-            </ProgressBar>
+                    Margin="30,124,32,0" 
+                    Height="11" 
+                    VerticalAlignment="Top"/>
 
             <TextBlock DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        TextWrapping="Wrap" 
                        Text="{Binding Path=ProgressBarPercentage, StringFormat={}{0:0}%}" 
                        TextAlignment="Center"
                        Foreground="Black" 
-                       HorizontalAlignment="Left" Width="50" Margin="120,78,0,0" Height="17" VerticalAlignment="Top"/>
+                       HorizontalAlignment="Left" Width="50" Margin="126,99,0,0" Height="18" VerticalAlignment="Top"/>
             <Button Content="{Binding Action, UpdateSourceTrigger=PropertyChanged}" 
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="80,0,86,21"
+                    Margin="80,0,86,16"
                     Click="CancelProcess_Click"  
-                    Height="28" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+                    VerticalAlignment="Bottom"/>
         </Grid>
     </Border>
 

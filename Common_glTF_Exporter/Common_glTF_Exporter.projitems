@@ -88,6 +88,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Images\Heart.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Black.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
