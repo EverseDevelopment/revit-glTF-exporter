@@ -8,10 +8,10 @@
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d" 
     Width="510"
-    Height="571" >
+    Height="424" >
     <Border
             Margin="5,5,5,5"
-            Background="#e8e3df"
+            Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent"
             BorderThickness="1" 
             CornerRadius="8,8,8,8"
@@ -19,52 +19,137 @@
             VerticalAlignment="Stretch">
 
         <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="212*"/>
-                <RowDefinition Height="0*"/>
-                <RowDefinition Height="347*"/>
-            </Grid.RowDefinitions>
+            <Button 
+                    Style="{DynamicResource CloseButtonStyle}" 
+                    Name="TitleButton" 
+                    Foreground="Black" 
+                    BorderThickness="0" 
+                    Click="Title_Link" 
+                    Background="Transparent" 
+                    Height="50" 
+                    FontSize="20" 
+                    FontWeight="Light" 
+                    Margin="20,10,362,0" VerticalAlignment="Top">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Width="290" Background="Transparent">
+                            <Grid>
+                                <Image Name="SlideUp_Image" 
+                                       Visibility="Visible" 
+                                       Source="/GltfInstaller;component/Resources/gltf.png"
+                                       HorizontalAlignment="Left"
+                                       Width="115" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="2,5,0,5"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
-
-            <Image x:Name="Banner" Margin="41,36,265,131" Grid.RowSpan="3" />
             <TextBlock
-                    Margin="290,20,109,290"
+                    Margin="67,189,33,193"
                     Background="Transparent"
-                    FontSize="20"
-                    FontWeight="Bold" Grid.Row="1" Grid.RowSpan="2"><Run Text="Welcome"/><Run Language="es-es" Text="!"/></TextBlock>
+                    FontSize="16"
+                    FontWeight="ExtraLight"
+                    Text="You're in the right place! Install our special Revit addon."/>
             <TextBlock
-                    Margin="290,51,30,151"
+                    Margin="186,104,186,264"
                     Background="Transparent"
-                    FontSize="20"
-                    FontWeight="ExtraLight" Grid.Row="1" Grid.RowSpan="2"><Run Text="You're in the rigth "/><LineBreak/><Run Text="place! Install our "/><LineBreak/><Run Text="special Revit addon. "/><LineBreak/><Run Text="Its free simple and "/><LineBreak/><Run Text="made with love"/></TextBlock>
-            <TextBlock
-                    Margin="290,59,58,0"
-                    VerticalAlignment="Top"
-                    Background="Transparent"
-                    FontSize="30"
-                    FontWeight="Bold" Height="127"><Run Text="Made with "/><LineBreak/><Run Text="love by "/><LineBreak/><Run Text="e-verse"/></TextBlock>
-            <TextBlock
-                    Text="Made with love by e-verse"
-                    Margin="250,308,58,10"
-                    Background="Transparent"
-                    FontSize="15"
-                    FontWeight="Bold" Grid.Row="1" Grid.RowSpan="2"/>
-
+                    FontSize="26"
+                    FontWeight="Bold"
+                    Text="Welcome!" RenderTransformOrigin="0.494,0.501"
+                    />
 
             <Button Style="{DynamicResource MainButtonStyle}"               
                     Content="Install"
                     x:Name="GoNext"
                     Width="180"
                     Height="38"
-                    Margin="290,219,30,0" 
-                    VerticalAlignment="Top" Grid.Row="1" Grid.RowSpan="2">
-            </Button>
+                    Margin="160,302,160,0" 
+                    VerticalAlignment="Top"/>
 
             <Button 
                    Style="{DynamicResource TabCloseButtonStyle}"
                    Name="Cancel"
                    VerticalAlignment="Top" 
                    Margin="452,13,17,0"/>
+            <TextBlock
+                Margin="130,219,96,173"
+                Background="Transparent"
+                FontSize="16"
+                FontWeight="ExtraLight"
+                Text="It's free, simple and made with love."/>
+
+            <Button
+                    Style="{DynamicResource CloseButtonStyle}"
+                    Margin="332,376,24,0"
+                    Background="Transparent"
+                    Click="Title_Link"
+                    FontWeight="Light"
+                    FontSize="12"     
+                    Foreground="{DynamicResource MainGray}"
+                    VerticalAlignment="Top" Height="20">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="243*"/>
+                                    <ColumnDefinition Width="47*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Made with       by e-verse" 
+                                    Margin="4,1,1,-1"
+                                    FontWeight="Bold" Grid.ColumnSpan="2">
+                                </TextBlock>
+
+                                <Image Name="heartImage" 
+                                       Visibility="Visible" 
+                                       Source="/GltfInstaller;component/Resources/Heart.png"
+                                       HorizontalAlignment="Left"
+                                       Width="17" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="62,1,0,2" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
         </Grid>
     </Border>
 

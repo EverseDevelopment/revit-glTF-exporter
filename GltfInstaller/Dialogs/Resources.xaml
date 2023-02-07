@@ -7,9 +7,10 @@
     <!-- Gray Scales-->
     <SolidColorBrush x:Key="MainGray" Color="#18263c"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#d9d9d9"/>
-    <SolidColorBrush x:Key="BackgroundColor" Color="#e2d8cc"/>
+    <SolidColorBrush x:Key="BackgroundColor" Color="#e8e3df"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
-    
+    <SolidColorBrush x:Key="AuxiliaryGray" Color="#a5b6bf"/>
+
     <!--Main Colours-->
     <SolidColorBrush x:Key="WindowButtonColor" Color="#F94F46"/>
     <SolidColorBrush x:Key="WindowButtonColorDim" Color="#ff8b85"/>
@@ -1146,11 +1147,11 @@
         </Setter>
     </Style>
 
-    
+
     <Style x:Key="ProgressBarStyle" TargetType="{x:Type ProgressBar}">
         <Setter Property="Foreground" Value="{StaticResource BackgroundColor}"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource SecondaryGray}"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WindowForeColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -1178,14 +1179,14 @@
                         <Border Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{StaticResource borderRadiusLarge}">
+                                CornerRadius="{StaticResource borderRadius}">
                         </Border>
                         <Rectangle x:Name="PART_Track"/>
                         <Border x:Name="PART_Indicator"
-                                CornerRadius="15"
+                                CornerRadius="5"
                                 BorderThickness="0"
                                 HorizontalAlignment="Left"
-                                Background="#F94F46">
+                                Background="{StaticResource AuxiliaryGray}">
                             <Border.Effect>
                                 <DropShadowEffect
                                             BlurRadius="10" 
@@ -1209,7 +1210,7 @@
                                 </Rectangle>
                             </Grid>
                         </Border>
-                        
+
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Orientation" Value="Vertical">

@@ -1,16 +1,13 @@
 using Caliburn.Micro;
 using Microsoft.Deployment.WindowsInstaller;
-using System;
-using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
 
-namespace GltfInstaller
+namespace text
 {
     /// <summary>
     /// The standard ProgressDialog.
@@ -29,8 +26,6 @@ namespace GltfInstaller
         {
             InitializeComponent();
         }
-        private System.Windows.Point _dragStartPoint;
-        private bool _isDragging;
 
         /// <summary>
         /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
@@ -40,57 +35,11 @@ namespace GltfInstaller
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
 
-
-            var container = ManagedFormHost;
-            var parent = container.Parent as Form;
-            parent.FormBorderStyle = FormBorderStyle.None;
-
-            var view = parent as IShellView;
-            view?.SetSize(510, 424);
-
-            container.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            parent.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-
-            PreviewMouseLeftButtonDown += (s, e) =>
-            {
-                _dragStartPoint = e.GetPosition(this);
-                _isDragging = true;
-            };
-
-            PreviewMouseLeftButtonUp += (s, e) => _isDragging = false;
-            PreviewMouseMove += (s, e) =>
-            {
-                if (!_isDragging)
-                    return;
-
-                System.Windows.Point currentPoint = e.GetPosition(this);
-                double deltaX = currentPoint.X - _dragStartPoint.X;
-                double deltaY = currentPoint.Y - _dragStartPoint.Y;
-
-                parent.Left += Convert.ToInt32(deltaX);
-                parent.Top += Convert.ToInt32(deltaY);
-            };
-            container.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e3df");
-
-            parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
-
-
             model = new ProgressDialogModel { Host = ManagedFormHost };
             ViewModelBinder.Bind(model, this, null);
 
             model.StartExecute();
         }
-
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
-        (
-            int nLeftRect,      // x-coordinate of upper-left corner
-            int nTopRect,       // y-coordinate of upper-left corner
-            int nRightRect,     // x-coordinate of lower-right corner
-            int nBottomRect,    // y-coordinate of lower-right corner
-            int nWidthEllipse,  // height of ellipse
-            int nHeightEllipse  // width of ellipse
-        );
 
         /// <summary>
         /// Updates the titles of the dialog depending on what type of installation action MSI is performing.
@@ -98,21 +47,21 @@ namespace GltfInstaller
         /// <param name="session">The session.</param>
         public void UpdateTitles(ISession session)
         {
-            //if (session.IsUninstalling())
-            //{
-            //    DialogTitleLabel.Text = "[ProgressDlgTitleRemoving]";
-            //    DialogDescription.Text = "[ProgressDlgTextRemoving]";
-            //}
-            //else if (session.IsRepairing())
-            //{
-            //    DialogTitleLabel.Text = "[ProgressDlgTextRepairing]";
-            //    DialogDescription.Text = "[ProgressDlgTitleRepairing]";
-            //}
-            //else if (session.IsInstalling())
-            //{
-            //    DialogTitleLabel.Text = "[ProgressDlgTitleInstalling]";
-            //    DialogDescription.Text = "[ProgressDlgTextInstalling]";
-            //}
+            if (session.IsUninstalling())
+            {
+                DialogTitleLabel.Text = "[ProgressDlgTitleRemoving]";
+                DialogDescription.Text = "[ProgressDlgTextRemoving]";
+            }
+            else if (session.IsRepairing())
+            {
+                DialogTitleLabel.Text = "[ProgressDlgTextRepairing]";
+                DialogDescription.Text = "[ProgressDlgTitleRepairing]";
+            }
+            else if (session.IsInstalling())
+            {
+                DialogTitleLabel.Text = "[ProgressDlgTitleInstalling]";
+                DialogDescription.Text = "[ProgressDlgTextInstalling]";
+            }
 
             // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
             this.Localize();
@@ -132,7 +81,7 @@ namespace GltfInstaller
         /// <param name="defaultButton">The default button.</param>
         /// <returns></returns>
         public override MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
-            => model?.ProcessMessage(messageType, messageRecord, "Finish!") ?? MessageResult.None;
+            => model?.ProcessMessage(messageType, messageRecord, CurrentStatus.Text) ?? MessageResult.None;
 
         /// <summary>
         /// Called when MSI execution is complete.
@@ -148,11 +97,6 @@ namespace GltfInstaller
         {
             if (model != null)
                 model.ProgressValue = progressPercentage;
-        }
-
-        private void Title_Link(object sender, System.Windows.RoutedEventArgs e)
-        {
-
         }
     }
 

@@ -29,7 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		production_actions.yml = production_actions.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GltfInstaller", "GltfInstaller\GltfInstaller.csproj", "{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GltfInstaller", "GltfInstaller\GltfInstaller.csproj", "{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "text", "text\text.csproj", "{05BD3E76-CD49-4084-BEE4-B15CF0334392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05BD3E76-CD49-4084-BEE4-B15CF0334392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05BD3E76-CD49-4084-BEE4-B15CF0334392}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05BD3E76-CD49-4084-BEE4-B15CF0334392}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05BD3E76-CD49-4084-BEE4-B15CF0334392}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

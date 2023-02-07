@@ -44,10 +44,10 @@ namespace GltfInstaller
             parent.FormBorderStyle = FormBorderStyle.None;
 
             var view = parent as IShellView;
-            view?.SetSize(510, 571);
+            view?.SetSize(510, 424);
 
-            container.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            parent.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            //container.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            //parent.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 
             PreviewMouseLeftButtonDown += (s, e) =>
             {
@@ -85,6 +85,11 @@ namespace GltfInstaller
         int nWidthEllipse,  // height of ellipse
         int nHeightEllipse  // width of ellipse
         );
+
+        private void Title_Link(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/");
+        }
     }
 
     /// <summary>

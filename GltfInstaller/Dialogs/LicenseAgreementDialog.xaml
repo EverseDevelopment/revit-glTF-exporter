@@ -8,47 +8,80 @@
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d"
     Width="510"
-    Height="571" >
+    Height="424" >
 
     <Border
             Margin="5,0,0,5"
-            Background="#e8e3df"
+            Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent"
             BorderThickness="1" 
-            CornerRadius="8,8,8,8" HorizontalAlignment="Left" Width="497" Height="556" VerticalAlignment="Bottom">
+            CornerRadius="8,8,8,8" HorizontalAlignment="Left" Width="497" Height="409" VerticalAlignment="Bottom">
 
         <Grid x:Name="Root">
 
-            <Image
-                    x:Name="Banner" Margin="346,60,43,406" />
-            <TextBlock
-                    Margin="53,68,166,0"
-                    VerticalAlignment="Top"
-                    Background="Transparent"
-                    FontSize="30"
-                    FontWeight="Bold" Height="81">
-                    <Run Text="Made with love by"/><LineBreak/>
-                    <Run Text="e-verse"/></TextBlock>
+            <Button 
+                    Style="{DynamicResource CloseButtonStyle}" 
+                    Name="TitleButton" 
+                    Foreground="Black" 
+                    BorderThickness="0" 
+                    Click="Title_Link" 
+                    Background="Transparent" 
+                    Height="50" 
+                    FontSize="20" 
+                    FontWeight="Light" 
+                    Margin="20,10,362,0" VerticalAlignment="Top">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Width="290" Background="Transparent">
+                            <Grid>
+                                <Image Name="SlideUp_Image" 
+                                       Visibility="Visible" 
+                                       Source="/GltfInstaller;component/Resources/gltf.png"
+                                       HorizontalAlignment="Left"
+                                       Width="115" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="2,5,0,5"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
             <CheckBox
-            x:Name="LicenseAcceptedChecked"
-             Content="I accept all terms and conditions"
-            Margin="53,0,230,348"
-            VerticalAlignment="Bottom"
-            VerticalContentAlignment="Center" Checked="LicenseAcceptedChecked_Checked"/>
+                      FontSize="20"
+                      x:Name="LicenseAcceptedChecked"
+                      Content="I accept all terms and conditions"
+                      Margin="84,0,85,0"
+                      VerticalAlignment="Center"
+                      VerticalContentAlignment="Center" 
+                      Checked="LicenseAcceptedChecked_Checked"/>
 
             <Button Style="{DynamicResource MainButtonStyle}"
                     x:Name="GoPrev"
                     MinWidth="73"
                     Content="Back"
-                    Margin="53,480,286,39">
+                    Margin="53,302,286,0" Height="36" VerticalAlignment="Top">
             </Button>
 
             <Button Style="{DynamicResource MainButtonStyle}"
                     x:Name="GoNext"
                     Content="Next"
                     MinWidth="73"
-                    Margin="282,480,58,39">
+                    Margin="281,302,59,0" 
+                    Height="36" 
+                    VerticalAlignment="Top">
             </Button>
 
             <Button 
@@ -56,6 +89,64 @@
                    Name="Cancel"
                    VerticalAlignment="Top" 
                    Margin="452,13,17,0"/>
+
+            <Button
+                    Style="{DynamicResource CloseButtonStyle}"
+                    Margin="332,376,20,0"
+                    Background="Transparent"
+                    Click="Title_Link"
+                    FontWeight="Light"
+                    FontSize="12"     
+                    Foreground="{DynamicResource MainGray}"
+                    VerticalAlignment="Top" Height="20">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="243*"/>
+                                    <ColumnDefinition Width="47*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Made with       by e-verse" 
+                                    Margin="4,1,1,-1"
+                                    FontWeight="Bold" Grid.ColumnSpan="2">
+                                </TextBlock>
+
+                                <Image Name="heartImage" 
+                                       Visibility="Visible" 
+                                       Source="/GltfInstaller;component/Resources/Heart.png"
+                                       HorizontalAlignment="Left"
+                                       Width="17" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="62,1,0,2" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
         </Grid>
     </Border>
 

@@ -28,6 +28,13 @@ namespace GltfInstaller
         public ExitDialog()
         {
             InitializeComponent();
+            DialogDescription.TextInput += DialogDescription_TextInput;
+        }
+
+        private void DialogDescription_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {  
+            string text = e.Text;
+            MessageBox.Show(text, text);
         }
 
         private System.Windows.Point _dragStartPoint;
@@ -66,9 +73,22 @@ namespace GltfInstaller
             container.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e3df");
 
             parent.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, parent.Width, parent.Height, 20, 20));
-                var host = new WelcomeDialogModel { Host = ManagedFormHost };
+                var host = new ExitDialogModel { Host = ManagedFormHost };
                 ViewModelBinder.Bind(host, this, null);
+
+            if (DialogDescription.Text == "Click the Finish button to exit the Setup Wizard.")
+            {
+                DialogDescription.Text = "Congratulations! The addon was fully installed. " +
+                    "\n Thanks for trusting in our heroine LEIA! " +
+                    "\n \n Are you interested in taking part of our next \n " +
+                    "projects?";
             }
+            else
+            {
+
+            }
+
+        }
 
             [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
             private static extern IntPtr CreateRoundRectRgn
@@ -89,15 +109,22 @@ namespace GltfInstaller
         {
             if (Shell.UserInterrupted || Shell.Log.Contains("User canceled installation."))
             {
-                DialogDescription.Text = "[UserExitDescription1]";
+                DialogDescription.Text = "Hola1";
+                //DialogDescription.Text = "[UserExitDescription1]";
             }
             else if (Shell.ErrorDetected)
             {
-                DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
+                DialogDescription.Text = "Hola";
+                //DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
             }
 
             // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
             this.Localize();
+        }
+
+        private void Title_Link(object sender, System.Windows.RoutedEventArgs e)
+        {
+
         }
     }
 
