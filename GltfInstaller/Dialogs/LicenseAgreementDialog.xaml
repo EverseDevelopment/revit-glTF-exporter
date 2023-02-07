@@ -59,7 +59,7 @@
                 </Button.Template>
             </Button>
 
-            <CheckBox
+            <CheckBox Style="{DynamicResource CustomCheckbox}"
                       FontSize="20"
                       x:Name="LicenseAcceptedChecked"
                       Content="I accept all terms and conditions"
@@ -94,7 +94,7 @@
                     Style="{DynamicResource CloseButtonStyle}"
                     Margin="332,376,20,0"
                     Background="Transparent"
-                    Click="Title_Link"
+                    Click="Contact_Link"
                     FontWeight="Light"
                     FontSize="12"     
                     Foreground="{DynamicResource MainGray}"

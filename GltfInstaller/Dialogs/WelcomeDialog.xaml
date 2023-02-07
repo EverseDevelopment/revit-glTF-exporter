@@ -70,8 +70,7 @@
                     Background="Transparent"
                     FontSize="26"
                     FontWeight="Bold"
-                    Text="Welcome!" RenderTransformOrigin="0.494,0.501"
-                    />
+                    Text="Welcome!" RenderTransformOrigin="0.494,0.501"/>
 
             <Button Style="{DynamicResource MainButtonStyle}"               
                     Content="Install"

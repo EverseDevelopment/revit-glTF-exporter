@@ -99,7 +99,9 @@
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background"  TargetName="border" Value="{StaticResource SecondaryGray}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -226,7 +228,7 @@
     </Style>
 
     <!--Customization of Checkbox template-->
-    <Style x:Key="{x:Type CheckBox}" TargetType="{x:Type CheckBox}">
+    <Style x:Key="CustomCheckbox" TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{StaticResource MainGray}" />
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -240,8 +242,8 @@
                             <Border x:Name="Border"
                                     Width="20"
                                     Height="20"
-                                    Background="White"
-                                    CornerRadius="{StaticResource borderRadius}"
+                                    Background="{StaticResource BackgroundColor}"
+                                    CornerRadius="20"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="1"
                                     ClipToBounds="True">
@@ -250,10 +252,10 @@
                                       Height="12"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
-                                      Data="M27.903015,0L32,4.0970465 12.369019,23.728029 11.685974,24.520998 0,14.441042 3.7819824,10.054994 11.330017,16.567019z"
-                                      Fill="{StaticResource MainGray}"
+                                      Data="M -1,0 A 1,1 0 1 1 1,0 M -1,0 A 1,1 0 1 0 1,0"
+                                      Fill="{StaticResource WindowButtonColor}"
                                       Stretch="Fill"
-                                      Stroke="{StaticResource MainGray}"
+                                      Stroke="{StaticResource WindowButtonColor}"
                                       StrokeEndLineCap="Round"
                                       StrokeStartLineCap="Round"
                                       StrokeThickness="1" />
@@ -265,8 +267,12 @@
                                           RecognizesAccessKey="True" />
                     </BulletDecorator>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="false">
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource WindowButtonColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                            <Setter Property="BorderBrush" Value="{StaticResource MainGray}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
                             <Setter Property="BorderBrush" Value="{StaticResource MainGray}"  />

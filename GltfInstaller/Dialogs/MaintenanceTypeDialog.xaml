@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
-    d:DesignHeight="571"
+    d:DesignHeight="424"
     d:DesignWidth="510"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
@@ -26,93 +26,143 @@
                 <RowDefinition Height="347*"/>
             </Grid.RowDefinitions>
 
-            <Image
-                  x:Name="Banner"
-                  Grid.Row="1"
-                  Grid.ColumnSpan="2"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch" />
-
-            <TextBlock
-                        Grid.Column="0"
-                        Background="White"
-                        FontSize="12"
-                        FontWeight="Bold" Margin="19,26,308,124">
-                        [MaintenanceTypeDlgTitle]
-            </TextBlock>
-            <TextBlock
-                        x:Name="DialogDescription"
-                        Margin="19,173,274,0"
-                        Background="White"
-                        TextWrapping="WrapWithOverflow">
-                        [MaintenanceTypeDlgDescription]
-            </TextBlock>
-
-            <Button
-                x:Name="Change"
-                Height="23"
-                MinWidth="112"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top" Margin="21,121,0,0">
-                [MaintenanceTypeDlgChangeButton]
+            <Button 
+                    Style="{DynamicResource CloseButtonStyle}" 
+                    Name="TitleButton" 
+                    Foreground="Black" 
+                    BorderThickness="0" 
+                    Click="Title_Link" 
+                    Background="Transparent" 
+                    Height="50" 
+                    FontSize="20" 
+                    FontWeight="Light" 
+                    Margin="20,10,362,0" VerticalAlignment="Top">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Width="290" Background="Transparent">
+                            <Grid>
+                                <Image Name="SlideUp_Image" 
+                                       Visibility="Visible" 
+                                       Source="/GltfInstaller;component/Resources/gltf.png"
+                                       HorizontalAlignment="Left"
+                                       Width="115" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="2,5,0,5"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
+
             <TextBlock
-                MinHeight="35"
-                Margin="20,174,251,139"
-                TextWrapping="WrapWithOverflow" Grid.Row="2">
-                [MaintenanceTypeDlgChangeText]
-            </TextBlock>
+                    Margin="152,108,152,6"
+                    Background="Transparent"
+                    FontSize="26"
+                    FontWeight="Bold"
+                    Text="Welcome Back!" RenderTransformOrigin="0.494,0.501"/>
+            <TextBlock
+                    Margin="130,50,114,172"
+                    Background="Transparent"
+                    FontSize="16"
+                    FontWeight="ExtraLight"
+                    Text="Hope you had fun playing with Leia!" Grid.Row="2"/>
 
             <Button
+                Style="{DynamicResource MainButtonStyle}"
                 x:Name="Repair"
                 Grid.Row="1"
-                Height="23"
-                MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top" Margin="21,224,0,0" Grid.RowSpan="2">
-                [MaintenanceTypeDlgRepairButton]
+                VerticalAlignment="Top" 
+                Margin="46,153,0,0" 
+                Content="Repair" Grid.RowSpan="2" Width="180">
             </Button>
-            <TextBlock
-                Grid.Row="1"
-                MinHeight="35"
-                Margin="20,35,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                TextWrapping="WrapWithOverflow">
-                [MaintenanceTypeDlgRepairText]
-            </TextBlock>
+
 
             <Button
+                Style="{DynamicResource MainButtonStyle}"
                 x:Name="Remove"
                 Grid.Row="2"
-                Height="23"
-                MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top" Margin="19,56,0,0">
-                [MaintenanceTypeDlgRemoveButton]
+                VerticalAlignment="Top" 
+                Margin="272,153,0,0" 
+                Width="180"
+                Content="Remove">
             </Button>
-            <TextBlock
-                Grid.Row="2"
-                MinHeight="35"
-                Margin="12,20,287,277"
-                TextWrapping="WrapWithOverflow">
-                [MaintenanceTypeDlgRemoveText]
-            </TextBlock>
 
-            <Button Style="{DynamicResource MainButtonStyle}"               
-                    Content="Next"
-                    x:Name="GoNext"
-                    Width="180"
-                    Height="38"
-                    Margin="300,289,20,0" 
-                    VerticalAlignment="Top" Grid.Row="1" Grid.RowSpan="2">
-            </Button>
-            
             <Button 
                    Style="{DynamicResource TabCloseButtonStyle}"
                    Name="Cancel"
                    VerticalAlignment="Top" 
                    Margin="452,13,17,0"/>
+
+            <Button
+                    Style="{DynamicResource CloseButtonStyle}"
+                    Margin="332,226,20,0"
+                    Background="Transparent"
+                    Click="Contact_Link"
+                    FontWeight="Light"
+                    FontSize="12"     
+                    Foreground="{DynamicResource MainGray}"
+                    VerticalAlignment="Top" Height="20" Grid.Row="2">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="243*"/>
+                                    <ColumnDefinition Width="47*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Made with       by e-verse" 
+                                    Margin="4,1,1,-1"
+                                    FontWeight="Bold" Grid.ColumnSpan="2">
+                                </TextBlock>
+
+                                <Image Name="heartImage" 
+                                       Visibility="Visible" 
+                                       Source="/GltfInstaller;component/Resources/Heart.png"
+                                       HorizontalAlignment="Left"
+                                       Width="17" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="62,1,0,2" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
         </Grid>
     </Border>

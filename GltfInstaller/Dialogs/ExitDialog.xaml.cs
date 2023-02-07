@@ -78,7 +78,7 @@ namespace GltfInstaller
 
             if (DialogDescription.Text == "Click the Finish button to exit the Setup Wizard.")
             {
-                DialogDescription.Text = "Congratulations! The addon was fully installed. " +
+                DialogDescription.Text = "Congratulations! The process is completed. " +
                     "\n Thanks for trusting in our heroine LEIA! " +
                     "\n \n Are you interested in taking part of our next \n " +
                     "projects?";
@@ -124,7 +124,12 @@ namespace GltfInstaller
 
         private void Title_Link(object sender, System.Windows.RoutedEventArgs e)
         {
+            System.Diagnostics.Process.Start("https://e-verse.com/");
+        }
 
+        private void Contact_Link(object sender, System.Windows.RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/contact/");
         }
     }
 

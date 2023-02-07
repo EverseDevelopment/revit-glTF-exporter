@@ -62,11 +62,11 @@
             </Button>
 
             <TextBlock
-                    Margin="156,114,156,268"
+                    Margin="150,106,0,276"
                     Background="Transparent"
                     FontSize="16"
                     FontWeight="ExtraLight"
-                    Text="We're installing LEIA for you."/>
+                    Text="We're installing LEIA for you." HorizontalAlignment="Left" Width="208"/>
             <TextBlock
                     Margin="112,136,112,246"
                     Background="Transparent"
@@ -108,7 +108,7 @@
                     Style="{DynamicResource CloseButtonStyle}"
                     Margin="332,376,24,0"
                     Background="Transparent"
-                    Click="Title_Link"
+                    Click="Contact_Link"
                     FontWeight="Light"
                     FontSize="12"     
                     Foreground="{DynamicResource MainGray}"
@@ -160,7 +160,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            
+
         </Grid>
     </Border>
 
