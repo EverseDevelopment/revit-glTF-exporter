@@ -68,6 +68,10 @@
                 return;
             }
 
+            int numberRuns = int.Parse(DatabaseKeyValueAccesor.GetValue("runs"));
+            int incrementRun = numberRuns + 1;
+            DatabaseKeyValueAccesor.SetValue("runs", incrementRun.ToString());
+
             ProgressBarWindow progressBar =
                 ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
 
