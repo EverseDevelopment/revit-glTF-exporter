@@ -11,14 +11,360 @@
     <Media Id="1" Cabinet="Leia20glTF20exporter.cab" EmbedCab="yes" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder" Name="ProgramFilesFolder">
-        <Directory Id="ProgramFilesFolder.My20Company" Name="My Company">
-          <Directory Id="INSTALLDIR" Name="My Product">
+      <Directory Id="CommonAppDataFolder" Name="CommonAppDataFolder">
+        <Directory Id="CommonAppDataFolder.Autodesk" Name="Autodesk">
+          <Directory Id="CommonAppDataFolder.Autodesk.Revit" Name="Revit">
+            <Directory Id="INSTALLDIR" Name="Addins">
+              <Directory Id="INSTALLDIR.2019" Name="2019">
 
-            <Component Id="Component.Program.cs_2198778745" Guid="6fe30b47-2577-43ad-9095-1861347687db">
-              <File Id="Program.cs_2198778745" Source="Program.cs" />
-            </Component>
+                <Component Id="Component.Revit_glTF_Exporter.addin_1376700183" Guid="6fe30b47-2577-43ad-9095-18610f872d11">
+                  <File Id="Revit_glTF_Exporter.addin_1376700183" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                </Component>
 
+                <Directory Id="INSTALLDIR.2019.eversegltfExporter" Name="eversegltfExporter">
+
+                  <Component Id="Component.DracoWrapper.dll_1024475553" Guid="6fe30b47-2577-43ad-9095-1861fad0c9da">
+                    <File Id="DracoWrapper.dll_1024475553" Source="..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.dll_1227327935" Guid="6fe30b47-2577-43ad-9095-18616b95791c">
+                    <File Id="EntityFramework.dll_1227327935" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.SqlServer.dll_1024557420" Guid="6fe30b47-2577-43ad-9095-18615bc6b83f">
+                    <File Id="EntityFramework.SqlServer.dll_1024557420" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.SqlServer.dll" />
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_2178712760" Guid="6fe30b47-2577-43ad-9095-186145cf9be9">
+                    <File Id="Newtonsoft.Json.dll_2178712760" Source="..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.dll_509202983" Guid="6fe30b47-2577-43ad-9095-1861febb7fc3">
+                    <File Id="Revit_glTF_Exporter.dll_509202983" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_1661684077" Guid="6fe30b47-2577-43ad-9095-18615eb2092d">
+                    <File Id="Revit_glTF_Exporter.pdb_1661684077" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.pdb" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.dll_3665787352" Guid="6fe30b47-2577-43ad-9095-1861e26232b2">
+                    <File Id="System.Data.SQLite.dll_3665787352" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_2306224705" Guid="6fe30b47-2577-43ad-9095-186110edcd89">
+                    <File Id="System.Data.SQLite.EF6.dll_2306224705" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.EF6.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_4246708534" Guid="6fe30b47-2577-43ad-9095-186113ab0998">
+                    <File Id="System.Data.SQLite.Linq.dll_4246708534" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.Linq.dll" />
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2019.eversegltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_2044957379" Guid="6fe30b47-2577-43ad-9095-1861d1eb90d3">
+                      <File Id="gltf.png_2044957379" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\gltf.png" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2019.eversegltfExporter.x64" Name="x64">
+
+                    <Component Id="Component.SQLite.Interop.dll_2375860910" Guid="6fe30b47-2577-43ad-9095-18613a605554">
+                      <File Id="SQLite.Interop.dll_2375860910" Source="..\Revit_glTF_Exporter_2019\bin\Release\x64\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2019.eversegltfExporter.x86" Name="x86">
+
+                    <Component Id="Component.SQLite.Interop.dll_4171315142" Guid="6fe30b47-2577-43ad-9095-18616fb708fb">
+                      <File Id="SQLite.Interop.dll_4171315142" Source="..\Revit_glTF_Exporter_2019\bin\Release\x86\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+                </Directory>
+              </Directory>
+
+              <Directory Id="INSTALLDIR.2020" Name="2020">
+
+                <Component Id="Component.Revit_glTF_Exporter.addin_2673737562" Guid="6fe30b47-2577-43ad-9095-1861771fe38a">
+                  <File Id="Revit_glTF_Exporter.addin_2673737562" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                </Component>
+
+                <Directory Id="INSTALLDIR.2020.eversegltfExporter" Name="eversegltfExporter">
+
+                  <Component Id="Component.DracoWrapper.dll_1757626341" Guid="6fe30b47-2577-43ad-9095-18616e9ced0b">
+                    <File Id="DracoWrapper.dll_1757626341" Source="..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.dll_592043081" Guid="6fe30b47-2577-43ad-9095-1861d904b304">
+                    <File Id="EntityFramework.dll_592043081" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.SqlServer.dll_1042904574" Guid="6fe30b47-2577-43ad-9095-1861a2b72b0d">
+                    <File Id="EntityFramework.SqlServer.dll_1042904574" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.SqlServer.dll" />
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_1609324349" Guid="6fe30b47-2577-43ad-9095-18611ea4fec9">
+                    <File Id="Newtonsoft.Json.dll_1609324349" Source="..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.dll_2124566855" Guid="6fe30b47-2577-43ad-9095-1861a373e861">
+                    <File Id="Revit_glTF_Exporter.dll_2124566855" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_2397007193" Guid="6fe30b47-2577-43ad-9095-1861785dcf08">
+                    <File Id="Revit_glTF_Exporter.pdb_2397007193" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.pdb" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.dll_2676319400" Guid="6fe30b47-2577-43ad-9095-1861cad7f639">
+                    <File Id="System.Data.SQLite.dll_2676319400" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_2099703566" Guid="6fe30b47-2577-43ad-9095-18610fc67732">
+                    <File Id="System.Data.SQLite.EF6.dll_2099703566" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.EF6.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_994231352" Guid="6fe30b47-2577-43ad-9095-1861482d2949">
+                    <File Id="System.Data.SQLite.Linq.dll_994231352" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.Linq.dll" />
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2020.eversegltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_476925693" Guid="6fe30b47-2577-43ad-9095-1861e248618a">
+                      <File Id="gltf.png_476925693" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\gltf.png" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2020.eversegltfExporter.x64" Name="x64">
+
+                    <Component Id="Component.SQLite.Interop.dll_580299753" Guid="6fe30b47-2577-43ad-9095-1861fec982d9">
+                      <File Id="SQLite.Interop.dll_580299753" Source="..\Revit_glTF_Exporter_2020\bin\Release\x64\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2020.eversegltfExporter.x86" Name="x86">
+
+                    <Component Id="Component.SQLite.Interop.dll_2160780062" Guid="6fe30b47-2577-43ad-9095-18615eb63d1e">
+                      <File Id="SQLite.Interop.dll_2160780062" Source="..\Revit_glTF_Exporter_2020\bin\Release\x86\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+                </Directory>
+              </Directory>
+
+              <Directory Id="INSTALLDIR.2021" Name="2021">
+
+                <Component Id="Component.Revit_glTF_Exporter.addin_2632068654" Guid="6fe30b47-2577-43ad-9095-1861dd62c7a1">
+                  <File Id="Revit_glTF_Exporter.addin_2632068654" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                </Component>
+
+                <Directory Id="INSTALLDIR.2021.eversegltfExporter" Name="eversegltfExporter">
+
+                  <Component Id="Component.DracoWrapper.dll_2246826274" Guid="6fe30b47-2577-43ad-9095-1861db567c62">
+                    <File Id="DracoWrapper.dll_2246826274" Source="..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.dll_1143012814" Guid="6fe30b47-2577-43ad-9095-1861e9bfb6a8">
+                    <File Id="EntityFramework.dll_1143012814" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.SqlServer.dll_485590890" Guid="6fe30b47-2577-43ad-9095-18610273a564">
+                    <File Id="EntityFramework.SqlServer.dll_485590890" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.SqlServer.dll" />
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_3107938045" Guid="6fe30b47-2577-43ad-9095-186133a73c65">
+                    <File Id="Newtonsoft.Json.dll_3107938045" Source="..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.dll_828374437" Guid="6fe30b47-2577-43ad-9095-186161bd50fb">
+                    <File Id="Revit_glTF_Exporter.dll_828374437" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_555934083" Guid="6fe30b47-2577-43ad-9095-186187f89371">
+                    <File Id="Revit_glTF_Exporter.pdb_555934083" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.pdb" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.dll_3183406366" Guid="6fe30b47-2577-43ad-9095-1861ad4cb6ef">
+                    <File Id="System.Data.SQLite.dll_3183406366" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_1470069594" Guid="6fe30b47-2577-43ad-9095-186100021363">
+                    <File Id="System.Data.SQLite.EF6.dll_1470069594" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.EF6.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_2584485628" Guid="6fe30b47-2577-43ad-9095-186141bb1027">
+                    <File Id="System.Data.SQLite.Linq.dll_2584485628" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.Linq.dll" />
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2021.eversegltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_3543793804" Guid="6fe30b47-2577-43ad-9095-186126d26c2d">
+                      <File Id="gltf.png_3543793804" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\gltf.png" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2021.eversegltfExporter.x64" Name="x64">
+
+                    <Component Id="Component.SQLite.Interop.dll_2421974410" Guid="6fe30b47-2577-43ad-9095-1861cf3a3619">
+                      <File Id="SQLite.Interop.dll_2421974410" Source="..\Revit_glTF_Exporter_2021\bin\Release\x64\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2021.eversegltfExporter.x86" Name="x86">
+
+                    <Component Id="Component.SQLite.Interop.dll_4035495487" Guid="6fe30b47-2577-43ad-9095-18614946d156">
+                      <File Id="SQLite.Interop.dll_4035495487" Source="..\Revit_glTF_Exporter_2021\bin\Release\x86\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+                </Directory>
+              </Directory>
+
+              <Directory Id="INSTALLDIR.2022" Name="2022">
+
+                <Component Id="Component.Revit_glTF_Exporter.addin_3192477493" Guid="6fe30b47-2577-43ad-9095-18613913d92b">
+                  <File Id="Revit_glTF_Exporter.addin_3192477493" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                </Component>
+
+                <Directory Id="INSTALLDIR.2022.eversegltfExporter" Name="eversegltfExporter">
+
+                  <Component Id="Component.DracoWrapper.dll_1167828445" Guid="6fe30b47-2577-43ad-9095-18613ec90342">
+                    <File Id="DracoWrapper.dll_1167828445" Source="..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.dll_3744577923" Guid="6fe30b47-2577-43ad-9095-18616e5d235b">
+                    <File Id="EntityFramework.dll_3744577923" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.SqlServer.dll_55588788" Guid="6fe30b47-2577-43ad-9095-186186c7a50b">
+                    <File Id="EntityFramework.SqlServer.dll_55588788" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.SqlServer.dll" />
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_3750627755" Guid="6fe30b47-2577-43ad-9095-1861e1a3012b">
+                    <File Id="Newtonsoft.Json.dll_3750627755" Source="..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.dll_908968884" Guid="6fe30b47-2577-43ad-9095-18610f9314ea">
+                    <File Id="Revit_glTF_Exporter.dll_908968884" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_1181409246" Guid="6fe30b47-2577-43ad-9095-1861bfec56c1">
+                    <File Id="Revit_glTF_Exporter.pdb_1181409246" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.pdb" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.dll_2355165601" Guid="6fe30b47-2577-43ad-9095-1861aad3589d">
+                    <File Id="System.Data.SQLite.dll_2355165601" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_123873077" Guid="6fe30b47-2577-43ad-9095-1861f82b739a">
+                    <File Id="System.Data.SQLite.EF6.dll_123873077" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.EF6.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_3608590498" Guid="6fe30b47-2577-43ad-9095-1861f2e918f7">
+                    <File Id="System.Data.SQLite.Linq.dll_3608590498" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.Linq.dll" />
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2022.eversegltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_2750584505" Guid="6fe30b47-2577-43ad-9095-186159b3e16f">
+                      <File Id="gltf.png_2750584505" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\gltf.png" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2022.eversegltfExporter.x64" Name="x64">
+
+                    <Component Id="Component.SQLite.Interop.dll_1593537854" Guid="6fe30b47-2577-43ad-9095-186149641fdc">
+                      <File Id="SQLite.Interop.dll_1593537854" Source="..\Revit_glTF_Exporter_2022\bin\Release\x64\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2022.eversegltfExporter.x86" Name="x86">
+
+                    <Component Id="Component.SQLite.Interop.dll_3911715197" Guid="6fe30b47-2577-43ad-9095-1861ec7db532">
+                      <File Id="SQLite.Interop.dll_3911715197" Source="..\Revit_glTF_Exporter_2022\bin\Release\x86\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+                </Directory>
+              </Directory>
+
+              <Directory Id="INSTALLDIR.2023" Name="2023">
+
+                <Component Id="Component.Revit_glTF_Exporter.addin_1602958959" Guid="6fe30b47-2577-43ad-9095-18618726ef6e">
+                  <File Id="Revit_glTF_Exporter.addin_1602958959" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                </Component>
+
+                <Directory Id="INSTALLDIR.2023.eversegltfExporter" Name="eversegltfExporter">
+
+                  <Component Id="Component.DracoWrapper.dll_2659959509" Guid="6fe30b47-2577-43ad-9095-1861e6cee6b8">
+                    <File Id="DracoWrapper.dll_2659959509" Source="..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.dll_1041381302" Guid="6fe30b47-2577-43ad-9095-186189da1b73">
+                    <File Id="EntityFramework.dll_1041381302" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.dll" />
+                  </Component>
+
+                  <Component Id="Component.EntityFramework.SqlServer.dll_2828490203" Guid="6fe30b47-2577-43ad-9095-186109521a70">
+                    <File Id="EntityFramework.SqlServer.dll_2828490203" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.SqlServer.dll" />
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_1693631206" Guid="6fe30b47-2577-43ad-9095-1861219c6fc8">
+                    <File Id="Newtonsoft.Json.dll_1693631206" Source="..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.dll_804885513" Guid="6fe30b47-2577-43ad-9095-1861368b33db">
+                    <File Id="Revit_glTF_Exporter.dll_804885513" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.dll" />
+                  </Component>
+
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_1957366599" Guid="6fe30b47-2577-43ad-9095-1861980dba61">
+                    <File Id="Revit_glTF_Exporter.pdb_1957366599" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.pdb" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.dll_2587873883" Guid="6fe30b47-2577-43ad-9095-1861780a426c">
+                    <File Id="System.Data.SQLite.dll_2587873883" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_728045585" Guid="6fe30b47-2577-43ad-9095-1861103b303b">
+                    <File Id="System.Data.SQLite.EF6.dll_728045585" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.EF6.dll" />
+                  </Component>
+
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_1129213240" Guid="6fe30b47-2577-43ad-9095-18616662bd56">
+                    <File Id="System.Data.SQLite.Linq.dll_1129213240" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.Linq.dll" />
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2023.eversegltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_3113070203" Guid="6fe30b47-2577-43ad-9095-1861d762197e">
+                      <File Id="gltf.png_3113070203" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\gltf.png" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2023.eversegltfExporter.x64" Name="x64">
+
+                    <Component Id="Component.SQLite.Interop.dll_1693724217" Guid="6fe30b47-2577-43ad-9095-1861debf844d">
+                      <File Id="SQLite.Interop.dll_1693724217" Source="..\Revit_glTF_Exporter_2023\bin\Release\x64\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.2023.eversegltfExporter.x86" Name="x86">
+
+                    <Component Id="Component.SQLite.Interop.dll_3032169016" Guid="6fe30b47-2577-43ad-9095-18615f77149f">
+                      <File Id="SQLite.Interop.dll_3032169016" Source="..\Revit_glTF_Exporter_2023\bin\Release\x86\SQLite.Interop.dll" />
+                    </Component>
+
+                  </Directory>
+                </Directory>
+              </Directory>
+            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -49,7 +395,71 @@
     <Property Id="WixSharp_ModifyDialogs" Value="GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.MaintenanceTypeDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.FeaturesDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.ProgressDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.ExitDialog" />
 
     <Feature Id="Complete" Title="Complete" Absent="allow" Level="1">
-      <ComponentRef Id="Component.Program.cs_2198778745" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1376700183" />
+      <ComponentRef Id="Component.DracoWrapper.dll_1024475553" />
+      <ComponentRef Id="Component.EntityFramework.dll_1227327935" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_1024557420" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_2178712760" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_509202983" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1661684077" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_3665787352" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_2306224705" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_4246708534" />
+      <ComponentRef Id="Component.gltf.png_2044957379" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_2375860910" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_4171315142" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_2673737562" />
+      <ComponentRef Id="Component.DracoWrapper.dll_1757626341" />
+      <ComponentRef Id="Component.EntityFramework.dll_592043081" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_1042904574" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_1609324349" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_2124566855" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_2397007193" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_2676319400" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_2099703566" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_994231352" />
+      <ComponentRef Id="Component.gltf.png_476925693" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_580299753" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_2160780062" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_2632068654" />
+      <ComponentRef Id="Component.DracoWrapper.dll_2246826274" />
+      <ComponentRef Id="Component.EntityFramework.dll_1143012814" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_485590890" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_3107938045" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_828374437" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_555934083" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_3183406366" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_1470069594" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_2584485628" />
+      <ComponentRef Id="Component.gltf.png_3543793804" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_2421974410" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_4035495487" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_3192477493" />
+      <ComponentRef Id="Component.DracoWrapper.dll_1167828445" />
+      <ComponentRef Id="Component.EntityFramework.dll_3744577923" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_55588788" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_3750627755" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_908968884" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1181409246" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_2355165601" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_123873077" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_3608590498" />
+      <ComponentRef Id="Component.gltf.png_2750584505" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_1593537854" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_3911715197" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1602958959" />
+      <ComponentRef Id="Component.DracoWrapper.dll_2659959509" />
+      <ComponentRef Id="Component.EntityFramework.dll_1041381302" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_2828490203" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_1693631206" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_804885513" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1957366599" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_2587873883" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_728045585" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_1129213240" />
+      <ComponentRef Id="Component.gltf.png_3113070203" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_1693724217" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_3032169016" />
     </Feature>
 
     <InstallExecuteSequence>
