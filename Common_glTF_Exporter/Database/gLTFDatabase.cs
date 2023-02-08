@@ -40,6 +40,8 @@ namespace Common_glTF_Exporter.Database
                 AddKeyValueRow(new KeyValueDto() { Key = "path", Value = @"C:\Users\User\Desktop" });
                 AddKeyValueRow(new KeyValueDto() { Key = "fileName", Value = "3dExport" });
                 AddKeyValueRow(new KeyValueDto() { Key = "materials", Value = "true" });
+                AddKeyValueRow(new KeyValueDto() { Key = "version", Value = "1.0.0.0" });
+                AddKeyValueRow(new KeyValueDto() { Key = "runs", Value = "0" });
             }
         }
     }

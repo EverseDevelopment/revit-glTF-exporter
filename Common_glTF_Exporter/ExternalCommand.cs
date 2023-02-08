@@ -6,6 +6,7 @@
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter.Database;
+    using Common_glTF_Exporter.Utils;
 
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
@@ -14,6 +15,8 @@
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            gLTFDatabase db = new gLTFDatabase();
+
             try
             {
                 UIApplication uiapp = commandData.Application;

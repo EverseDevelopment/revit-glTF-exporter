@@ -11,7 +11,7 @@
              Background="{x:Null}"
              mc:Ignorable="d" 
              Width="350" 
-             Height="690"
+             Height="720"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -38,7 +38,7 @@
 
     <Border 
         x:Name="MainWindow_Border" 
-        Background="White" 
+        Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8" 
@@ -64,32 +64,20 @@
                     Height="50" 
                     FontSize="20" 
                     FontWeight="Light" 
-                    Margin="7,-1,43,0" VerticalAlignment="Top">
+                    Margin="6,4,179,0" VerticalAlignment="Top">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Width="290" Background="Transparent">
                             <Grid>
-                                <TextBlock Text="glTF Exporter"
-                                           VerticalAlignment="Center" 
-                                           HorizontalAlignment="Left" 
-                                           Margin="47,0,0,0" Height="30" Width="122"></TextBlock>
-                                <TextBlock 
-                                           TextAlignment="Left"
-                                           Margin="185,14,32,17"
-                                           FontSize="15" 
-                                           Height="19" 
-                                           Text="{Binding Path=Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                           Foreground="Black"></TextBlock>
-
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
                                        Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
-                                       Width="37" 
+                                       Width="115" 
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="0,2,0,8"/>
+                                       Margin="2,5,0,5"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers >
@@ -106,50 +94,56 @@
                 </Button.Template>
             </Button>
 
+            <TextBlock 
+                       Text="{Binding Path=Version, UpdateSourceTrigger=PropertyChanged}"
+                       TextAlignment="Left"
+                       Margin="228,18,30,0"
+                       FontSize="15" 
+                       Height="22" 
+                       FontWeight="Light"
+                       Foreground="Gray" 
+                VerticalAlignment="Top">
+            </TextBlock>
+
             <Button  
-                   Style="{DynamicResource CloseButtonStyle}"
-                   Name="CloseButton" 
-                   Foreground="Black" 
-                   BorderThickness="0" 
+                   Style="{DynamicResource TabCloseButtonStyle}"
+                   Name="CloseButton"  
                    Click="Close_Click" 
-                   Background="Transparent" 
                    VerticalAlignment="Top" 
-                   Height="21" 
-                   FontSize="16" 
-                   FontWeight="Light" 
-                   Margin="272,10,17,0" RenderTransformOrigin="0.012,0.623">X</Button>
-            <Label  
-                    Style="{DynamicResource TitleLabels}"
-                    HorizontalAlignment="Left" 
-                    Margin="6,62,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Format"
-                    Width="92"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" 
-                        Height="1" 
-                        Margin="70,79,13,0" 
-                        Opacity="0.2" 
-                        RenderTransformOrigin="0.5,0.5">
-                <Rectangle.RenderTransform>
+                   Margin="280,18,10,0"></Button>
+            <Line Stroke="{DynamicResource MainGray}"
+                  X2="1000"
+                  Opacity="0.5"
+                  StrokeThickness="4"
+                  VerticalAlignment="Top"
+                  Margin="-9,59,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
+                <Line.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleY="-1"/>
+                        <ScaleTransform ScaleY="1"/>
                         <SkewTransform/>
                         <RotateTransform/>
                         <TranslateTransform/>
                     </TransformGroup>
-                </Rectangle.RenderTransform>
-            </Rectangle>
+                </Line.RenderTransform>
+            </Line>
+
+            <Label  
+                    Style="{DynamicResource TitleLabels}"
+                    HorizontalAlignment="Left" 
+                    Margin="12,64,0,0" 
+                    VerticalAlignment="Top"
+                    Content="Format"
+                    Width="92"/>
 
             <Grid>
                 <RadioButton x:Name="gltf" 
                                  Grid.Column="0" 
                                  Content="glTF" 
                                  HorizontalAlignment="Left" 
-                                 Margin="11,107,0,0"
+                                 Margin="13,107,0,0"
                                  Click="RadioButtonFormatClick" 
                                  RenderTransformOrigin="0.5,0.5" 
-                                 Width="94" 
+                                 Width="69" 
                                  Height="14" 
                                  VerticalAlignment="Top">
                 </RadioButton>
@@ -164,25 +158,22 @@
                                  VerticalAlignment="Top"/>
             </Grid>
 
+            <Line Style="{DynamicResource DashedLine}"
+                  Margin="4,138,16,0"/>
+
             <Label   
                     Style="{DynamicResource TitleLabels}"      
                     HorizontalAlignment="Left" 
-                    Margin="6,139,0,0" 
+                    Margin="12,142,0,0" 
                     VerticalAlignment="Top"
                     Content="Visualization"
                     Width="92"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" 
-                        Height="1" 
-                        Margin="109,157,13,0" 
-                        Opacity="0.2" 
-                        RenderTransformOrigin="0.5,0.5"/>
+
 
             <ToggleButton
               x:Name="materials"
-              Margin="12,185,262,0"
+              Margin="12,189,262,0"
               Style="{DynamicResource SwitchTypeToggleButton}" 
-              Height="16" 
               VerticalAlignment="Top"
               Click="TrueFalseToggles"
               ToolTip="Add or remove materiales from export">
@@ -190,52 +181,49 @@
             <Label
                 Style="{DynamicResource SecondaryLabel}"
                 HorizontalAlignment="Left" 
-                Margin="53,183,0,0" 
+                Margin="53,181,0,0" 
                 VerticalAlignment="Top"
                 Content="Export Materials" 
                 Width="96"/>
             <ToggleButton
                 x:Name="flipAxis"
-                Margin="168,185,106,0"
+                Margin="166,189,108,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Rotate axis of the model 90 degress"/>
             <Label  
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="210,183,0,0" 
+                    Margin="210,181,0,0" 
                     VerticalAlignment="Top"
                     Content="Flip YZ-Axys" 
                     Width="86"/>
             <ToggleButton
                 x:Name="normals"
-                Margin="12,216,262,0"
+                Margin="12,220,262,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export mesh normals"/>
             <Label    
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="53,213,0,0"  
+                    Margin="53,212,0,0"  
                     VerticalAlignment="Top"
                     Content="Export Normals" 
                     Width="96"/>
             <ToggleButton
                 x:Name="relocateTo0"
-                Margin="168,216,106,0"
+                Margin="166,220,108,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Move the center of the model to 0,0,0"/>
             <Label        
                     Style="{DynamicResource SecondaryLabel}"
                     HorizontalAlignment="Left" 
-                    Margin="210,213,0,0" 
+                    Margin="210,212,0,0" 
                     VerticalAlignment="Top"
                     Content="Export to (0,0,0)" 
                     Width="86"/>
@@ -243,24 +231,22 @@
                        ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
                        SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                        DisplayMemberPath="Label" 
-                       Margin="78,303,16,0" 
+                       Margin="77,301,17,0" 
                        Height="30" 
                        VerticalAlignment="Top"/>
             <Label         
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,254,0,0" 
+                    Margin="12,266,0,0" 
                     VerticalAlignment="Top"
                     Content="Units"
                     Width="46"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" Height="1" 
-                        Margin="55,272,13,0" 
-                        Opacity="0.2"/>
+            <Line Style="{DynamicResource DashedLine}"
+                  Margin="8,260,12,0"/>
             <Label      
                         Style="{DynamicResource SecondaryLabel}"
                         HorizontalAlignment="Left" 
-                        Margin="8,304,0,0" 
+                        Margin="7,304,0,0" 
                         Content="Export unit:"
                         VerticalAlignment="Top" 
                         Width="72">
@@ -269,21 +255,16 @@
             <Label         
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,347,0,0" 
+                    Margin="12,354,0,0" 
                     VerticalAlignment="Top"
                     Content="Data"
                     Width="46"/>
-            <Rectangle  VerticalAlignment="Top" 
-                        Fill="Gray" 
-                        Height="1" 
-                        Margin="55,364,13,0" 
-                        Opacity="0.2"/>
-
+            <Line Style="{DynamicResource DashedLine}"
+                  Margin="7,350,19,0"/>
             <ToggleButton
                 x:Name="levels"
-                Margin="168,398,106,0"
+                Margin="168,401,106,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export Revit levels"/>
@@ -296,9 +277,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="grids"
-                Margin="168,430,106,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
+                Margin="168,432,106,0"
+                Style="{DynamicResource SwitchTypeToggleButton}"
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export Revit grids"/>
@@ -312,9 +292,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="batchId"
-                Margin="12,398,262,0"
+                Margin="12,401,262,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export Revit batchId"/>
@@ -327,9 +306,8 @@
                     Width="96"/>
             <ToggleButton
                 x:Name="properties"
-                Margin="12,430,262,0"
+                Margin="12,432,262,0"
                 Style="{DynamicResource SwitchTypeToggleButton}" 
-                Height="16" 
                 VerticalAlignment="Top"
                 Click="TrueFalseToggles"
                 ToolTip="Export all the properties from each element"/>
@@ -343,16 +321,18 @@
             <Label        
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="6,472,0,0" 
+                    Margin="12,472,0,0" 
                     VerticalAlignment="Top"
                     Content="Compression" 
                     Width="97"/>
+            <Line Style="{DynamicResource DashedLine}"
+                  Margin="8,460,18,0"/>
 
             <RadioButton x:Name="None" 
                                  Grid.Column="0" 
                                  Content="None" 
                                  HorizontalAlignment="Left" 
-                                 Margin="10,518,0,0" 
+                                 Margin="13,517,0,0" 
                                  VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
             <!--<RadioButton x:Name="Meshopt" 
@@ -367,25 +347,77 @@
                                  Content="DRACO" 
                                  HorizontalAlignment="Left" 
                                  VerticalAlignment="Top"
-                                 Click="RadioButtonClick" Margin="234,518,0,0"/>
+                                 Click="RadioButtonClick" Margin="234,517,0,0"/>
             <RadioButton x:Name="ZIP" 
                                  Content="ZIP" 
                                  HorizontalAlignment="Center" 
-                                 Margin="0,518,0,0" 
+                                 Margin="0,517,0,0" 
                                  VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
-            <Rectangle  VerticalAlignment="Top" 
-                            Fill="Gray" 
-                            Height="1" 
-                            Margin="108,488,10,0" 
-                            Opacity="0.2"/>
 
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="10,0,10,10"
+                    Margin="94,570,87,0"
                     Click="OnExportView" 
-                    Height="38" VerticalAlignment="Bottom"/>
+                    VerticalAlignment="Top"/>
 
+            <Button
+                    Style="{DynamicResource CloseButtonStyle}"
+                    Margin="165,634,-6,0"
+                    Background="Transparent"
+                    Click="Title_Link"
+                    FontWeight="Light"
+                    FontSize="12"     
+                    Foreground="{DynamicResource MainGray}"
+                    VerticalAlignment="Top" Height="22">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="243*"/>
+                                    <ColumnDefinition Width="47*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Made with       by e-verse" 
+                                    Margin="4,1,1,-1"
+                                    FontWeight="Bold" Grid.ColumnSpan="2">
+                                </TextBlock>
+
+                                <Image Name="heartImage" 
+                                       Visibility="Visible" 
+                                       Source="/Revit_glTF_Exporter;component/Resources/Heart.png"
+                                       HorizontalAlignment="Left"
+                                       Width="20" 
+                                       SnapsToDevicePixels="True" 
+                                       RenderOptions.BitmapScalingMode="HighQuality" 
+                                       RenderOptions.EdgeMode="Aliased" 
+                                       Margin="66,-1,0,4" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+
+            </Button>
         </Grid>
     </Border>
 
