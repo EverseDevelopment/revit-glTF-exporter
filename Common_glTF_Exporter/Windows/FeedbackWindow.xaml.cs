@@ -45,7 +45,7 @@
 
         private void Title_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/");
+            System.Diagnostics.Process.Start("https://e-verse.com/contact/");
         }
     }
 }
