@@ -107,6 +107,11 @@ namespace GltfInstaller
         {
             System.Diagnostics.Process.Start("https://e-verse.com/contact/");
         }
+
+        private void Terms_Link(object sender, System.Windows.RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/terms-and-conditions-aec-industry/");
+        }
     }
 
     /// <summary>

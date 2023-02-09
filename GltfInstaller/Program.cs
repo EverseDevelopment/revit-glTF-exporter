@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GltfInstaller.Properties;
+using System;
 using WixSharp;
 using WixSharp.Nsis;
 
@@ -8,27 +9,29 @@ namespace GltfInstaller
     {
         static void Main()
         {
+            //#if REVIT2019 || REVIT2020
+
             var project = new ManagedProject("Leia glTF exporter",
-                              new Dir(@"%CommonAppDataFolder%\Autodesk\Revit\Addins",
+                              new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins",
                                   new Dir(@"2019",
                                     new File(@"..\Common_glTF_Exporter\Revit_glTF_Exporter.addin"),
-                                    new Dir(@"eversegltfExporter",
+                                    new Dir(@"gltfExporter",
                                         new Files(@"..\Revit_glTF_Exporter_2019\bin\Release\*.*"))),
                                   new Dir(@"2020",
                                     new File(@"..\Common_glTF_Exporter\Revit_glTF_Exporter.addin"),
-                                    new Dir(@"eversegltfExporter",
+                                    new Dir(@"gltfExporter",
                                         new Files(@"..\Revit_glTF_Exporter_2020\bin\Release\*.*"))),
                                   new Dir(@"2021",
                                     new File(@"..\Common_glTF_Exporter\Revit_glTF_Exporter.addin"),
-                                    new Dir(@"eversegltfExporter",
+                                    new Dir(@"gltfExporter",
                                         new Files(@"..\Revit_glTF_Exporter_2021\bin\Release\*.*"))),
                                   new Dir(@"2022",
                                     new File(@"..\Common_glTF_Exporter\Revit_glTF_Exporter.addin"),
-                                    new Dir(@"eversegltfExporter",
+                                    new Dir(@"gltfExporter",
                                         new Files(@"..\Revit_glTF_Exporter_2022\bin\Release\*.*"))),
                                   new Dir(@"2023",
                                     new File(@"..\Common_glTF_Exporter\Revit_glTF_Exporter.addin"),
-                                    new Dir(@"eversegltfExporter",
+                                    new Dir(@"gltfExporter",
                                         new Files(@"..\Revit_glTF_Exporter_2023\bin\Release\*.*"))))
                               );
 
@@ -59,7 +62,7 @@ namespace GltfInstaller
                 Primary = { FileName = msiFile },
 
                 OutputFile = "glTFExporter.exe",
-                //IconFile = "",
+                IconFile = "Resources\\logo.ico",
 
                 VersionInfo = new VersionInformation("1.0.0.0")
                 {
@@ -74,6 +77,8 @@ namespace GltfInstaller
             };
 
             bootstrapper.Build();
+
+            //#endif
         }
     }
 }

@@ -11,74 +11,155 @@
     <Media Id="1" Cabinet="Leia20glTF20exporter.cab" EmbedCab="yes" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="CommonAppDataFolder" Name="CommonAppDataFolder">
-        <Directory Id="CommonAppDataFolder.Autodesk" Name="Autodesk">
-          <Directory Id="CommonAppDataFolder.Autodesk.Revit" Name="Revit">
+      <Directory Id="AppDataFolder" Name="AppDataFolder">
+        <Directory Id="AppDataFolder.Autodesk" Name="Autodesk">
+          <Directory Id="AppDataFolder.Autodesk.Revit" Name="Revit">
             <Directory Id="INSTALLDIR" Name="Addins">
               <Directory Id="INSTALLDIR.2019" Name="2019">
 
-                <Component Id="Component.Revit_glTF_Exporter.addin_1376700183" Guid="6fe30b47-2577-43ad-9095-18610f872d11">
-                  <File Id="Revit_glTF_Exporter.addin_1376700183" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                <Component Id="Component.Revit_glTF_Exporter.addin_2974217233" Guid="6fe30b47-2577-43ad-9095-18610b71e4a4">
+                  <File Id="Revit_glTF_Exporter.addin_2974217233" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                  <RemoveFolder Id="INSTALLDIR.2019" On="uninstall" />
+
+                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                  </RegistryKey>
                 </Component>
 
-                <Directory Id="INSTALLDIR.2019.eversegltfExporter" Name="eversegltfExporter">
+                <Directory Id="INSTALLDIR.2019.gltfExporter" Name="gltfExporter">
 
-                  <Component Id="Component.DracoWrapper.dll_1024475553" Guid="6fe30b47-2577-43ad-9095-1861fad0c9da">
-                    <File Id="DracoWrapper.dll_1024475553" Source="..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll" />
+                  <Component Id="Component.DracoWrapper.dll_3817637187" Guid="6fe30b47-2577-43ad-9095-186196ec4030">
+                    <File Id="DracoWrapper.dll_3817637187" Source="..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll" />
+                    <RemoveFolder Id="INSTALLDIR.2019.gltfExporter" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.dll_1227327935" Guid="6fe30b47-2577-43ad-9095-18616b95791c">
-                    <File Id="EntityFramework.dll_1227327935" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.dll" />
+                  <Component Id="Component.EntityFramework.dll_2203904919" Guid="6fe30b47-2577-43ad-9095-1861bdd5e3a6">
+                    <File Id="EntityFramework.dll_2203904919" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.SqlServer.dll_1024557420" Guid="6fe30b47-2577-43ad-9095-18615bc6b83f">
-                    <File Id="EntityFramework.SqlServer.dll_1024557420" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.SqlServer.dll" />
+                  <Component Id="Component.EntityFramework.SqlServer.dll_2058756212" Guid="6fe30b47-2577-43ad-9095-1861c85920f9">
+                    <File Id="EntityFramework.SqlServer.dll_2058756212" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.SqlServer.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Newtonsoft.Json.dll_2178712760" Guid="6fe30b47-2577-43ad-9095-186145cf9be9">
-                    <File Id="Newtonsoft.Json.dll_2178712760" Source="..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll" />
+                  <Component Id="Component.Newtonsoft.Json.dll_3292622055" Guid="6fe30b47-2577-43ad-9095-1861883500c4">
+                    <File Id="Newtonsoft.Json.dll_3292622055" Source="..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.dll_509202983" Guid="6fe30b47-2577-43ad-9095-1861febb7fc3">
-                    <File Id="Revit_glTF_Exporter.dll_509202983" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll_217336063" Guid="6fe30b47-2577-43ad-9095-1861635f6eb6">
+                    <File Id="Revit_glTF_Exporter.dll_217336063" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_1661684077" Guid="6fe30b47-2577-43ad-9095-18615eb2092d">
-                    <File Id="Revit_glTF_Exporter.pdb_1661684077" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.pdb" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll.config_4173053972" Guid="6fe30b47-2577-43ad-9095-18618d364dd5">
+                    <File Id="Revit_glTF_Exporter.dll.config_4173053972" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.dll_3665787352" Guid="6fe30b47-2577-43ad-9095-1861e26232b2">
-                    <File Id="System.Data.SQLite.dll_3665787352" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_4239863013" Guid="6fe30b47-2577-43ad-9095-18616efc61e8">
+                    <File Id="Revit_glTF_Exporter.pdb_4239863013" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_2306224705" Guid="6fe30b47-2577-43ad-9095-186110edcd89">
-                    <File Id="System.Data.SQLite.EF6.dll_2306224705" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.EF6.dll" />
+                  <Component Id="Component.System.Data.SQLite.dll_907689104" Guid="6fe30b47-2577-43ad-9095-1861134bb1a3">
+                    <File Id="System.Data.SQLite.dll_907689104" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_4246708534" Guid="6fe30b47-2577-43ad-9095-186113ab0998">
-                    <File Id="System.Data.SQLite.Linq.dll_4246708534" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.Linq.dll" />
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_1052290994" Guid="6fe30b47-2577-43ad-9095-18617799bf64">
+                    <File Id="System.Data.SQLite.EF6.dll_1052290994" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.EF6.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Directory Id="INSTALLDIR.2019.eversegltfExporter.Images" Name="Images">
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_1856260251" Guid="6fe30b47-2577-43ad-9095-186125fa49db">
+                    <File Id="System.Data.SQLite.Linq.dll_1856260251" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.Linq.dll" />
 
-                    <Component Id="Component.gltf.png_2044957379" Guid="6fe30b47-2577-43ad-9095-1861d1eb90d3">
-                      <File Id="gltf.png_2044957379" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\gltf.png" />
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2019.gltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_1400885341" Guid="6fe30b47-2577-43ad-9095-1861bdf8cfa6">
+                      <File Id="gltf.png_1400885341" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\gltf.png" />
+                      <RemoveFolder Id="INSTALLDIR.2019.gltfExporter.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_510139406" Guid="6fe30b47-2577-43ad-9095-186140438ded">
+                      <File Id="Heart.png_510139406" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_1167856133" Guid="6fe30b47-2577-43ad-9095-18617f6062a0">
+                      <File Id="logo.png_1167856133" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2019.eversegltfExporter.x64" Name="x64">
+                  <Directory Id="INSTALLDIR.2019.gltfExporter.x64" Name="x64">
 
-                    <Component Id="Component.SQLite.Interop.dll_2375860910" Guid="6fe30b47-2577-43ad-9095-18613a605554">
-                      <File Id="SQLite.Interop.dll_2375860910" Source="..\Revit_glTF_Exporter_2019\bin\Release\x64\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_2226856354" Guid="6fe30b47-2577-43ad-9095-1861c8c16e99">
+                      <File Id="SQLite.Interop.dll_2226856354" Source="..\Revit_glTF_Exporter_2019\bin\Release\x64\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2019.gltfExporter.x64" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2019.eversegltfExporter.x86" Name="x86">
+                  <Directory Id="INSTALLDIR.2019.gltfExporter.x86" Name="x86">
 
-                    <Component Id="Component.SQLite.Interop.dll_4171315142" Guid="6fe30b47-2577-43ad-9095-18616fb708fb">
-                      <File Id="SQLite.Interop.dll_4171315142" Source="..\Revit_glTF_Exporter_2019\bin\Release\x86\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_1267676420" Guid="6fe30b47-2577-43ad-9095-1861b7cd31b1">
+                      <File Id="SQLite.Interop.dll_1267676420" Source="..\Revit_glTF_Exporter_2019\bin\Release\x86\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2019.gltfExporter.x86" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
@@ -87,68 +168,149 @@
 
               <Directory Id="INSTALLDIR.2020" Name="2020">
 
-                <Component Id="Component.Revit_glTF_Exporter.addin_2673737562" Guid="6fe30b47-2577-43ad-9095-1861771fe38a">
-                  <File Id="Revit_glTF_Exporter.addin_2673737562" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                <Component Id="Component.Revit_glTF_Exporter.addin_1670683156" Guid="6fe30b47-2577-43ad-9095-1861ab1ba191">
+                  <File Id="Revit_glTF_Exporter.addin_1670683156" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                  <RemoveFolder Id="INSTALLDIR.2020" On="uninstall" />
+
+                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                  </RegistryKey>
                 </Component>
 
-                <Directory Id="INSTALLDIR.2020.eversegltfExporter" Name="eversegltfExporter">
+                <Directory Id="INSTALLDIR.2020.gltfExporter" Name="gltfExporter">
 
-                  <Component Id="Component.DracoWrapper.dll_1757626341" Guid="6fe30b47-2577-43ad-9095-18616e9ced0b">
-                    <File Id="DracoWrapper.dll_1757626341" Source="..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll" />
+                  <Component Id="Component.DracoWrapper.dll_1337434523" Guid="6fe30b47-2577-43ad-9095-1861fe95978a">
+                    <File Id="DracoWrapper.dll_1337434523" Source="..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll" />
+                    <RemoveFolder Id="INSTALLDIR.2020.gltfExporter" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.dll_592043081" Guid="6fe30b47-2577-43ad-9095-1861d904b304">
-                    <File Id="EntityFramework.dll_592043081" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.dll" />
+                  <Component Id="Component.EntityFramework.dll_3771468539" Guid="6fe30b47-2577-43ad-9095-18617917fb3d">
+                    <File Id="EntityFramework.dll_3771468539" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.SqlServer.dll_1042904574" Guid="6fe30b47-2577-43ad-9095-1861a2b72b0d">
-                    <File Id="EntityFramework.SqlServer.dll_1042904574" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.SqlServer.dll" />
+                  <Component Id="Component.EntityFramework.SqlServer.dll_293230519" Guid="6fe30b47-2577-43ad-9095-18613ce6976e">
+                    <File Id="EntityFramework.SqlServer.dll_293230519" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.SqlServer.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Newtonsoft.Json.dll_1609324349" Guid="6fe30b47-2577-43ad-9095-18611ea4fec9">
-                    <File Id="Newtonsoft.Json.dll_1609324349" Source="..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll" />
+                  <Component Id="Component.Newtonsoft.Json.dll_2765809228" Guid="6fe30b47-2577-43ad-9095-1861ef63a65a">
+                    <File Id="Newtonsoft.Json.dll_2765809228" Source="..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.dll_2124566855" Guid="6fe30b47-2577-43ad-9095-1861a373e861">
-                    <File Id="Revit_glTF_Exporter.dll_2124566855" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll_1518944493" Guid="6fe30b47-2577-43ad-9095-1861a825d547">
+                    <File Id="Revit_glTF_Exporter.dll_1518944493" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_2397007193" Guid="6fe30b47-2577-43ad-9095-1861785dcf08">
-                    <File Id="Revit_glTF_Exporter.pdb_2397007193" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.pdb" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll.config_2346593158" Guid="6fe30b47-2577-43ad-9095-1861b28fc546">
+                    <File Id="Revit_glTF_Exporter.dll.config_2346593158" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.dll_2676319400" Guid="6fe30b47-2577-43ad-9095-1861cad7f639">
-                    <File Id="System.Data.SQLite.dll_2676319400" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_1435154475" Guid="6fe30b47-2577-43ad-9095-1861f2220a1d">
+                    <File Id="Revit_glTF_Exporter.pdb_1435154475" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_2099703566" Guid="6fe30b47-2577-43ad-9095-18610fc67732">
-                    <File Id="System.Data.SQLite.EF6.dll_2099703566" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.EF6.dll" />
+                  <Component Id="Component.System.Data.SQLite.dll_4286228164" Guid="6fe30b47-2577-43ad-9095-18614233028d">
+                    <File Id="System.Data.SQLite.dll_4286228164" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_994231352" Guid="6fe30b47-2577-43ad-9095-1861482d2949">
-                    <File Id="System.Data.SQLite.Linq.dll_994231352" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.Linq.dll" />
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_3379263520" Guid="6fe30b47-2577-43ad-9095-186188884b65">
+                    <File Id="System.Data.SQLite.EF6.dll_3379263520" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.EF6.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Directory Id="INSTALLDIR.2020.eversegltfExporter.Images" Name="Images">
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_1043319601" Guid="6fe30b47-2577-43ad-9095-18615fe4dee5">
+                    <File Id="System.Data.SQLite.Linq.dll_1043319601" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.Linq.dll" />
 
-                    <Component Id="Component.gltf.png_476925693" Guid="6fe30b47-2577-43ad-9095-1861e248618a">
-                      <File Id="gltf.png_476925693" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\gltf.png" />
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2020.gltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_993881377" Guid="6fe30b47-2577-43ad-9095-186159f77dc5">
+                      <File Id="gltf.png_993881377" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\gltf.png" />
+                      <RemoveFolder Id="INSTALLDIR.2020.gltfExporter.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_2306198806" Guid="6fe30b47-2577-43ad-9095-18611e50c784">
+                      <File Id="Heart.png_2306198806" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_2853928737" Guid="6fe30b47-2577-43ad-9095-18619c39e81c">
+                      <File Id="logo.png_2853928737" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2020.eversegltfExporter.x64" Name="x64">
+                  <Directory Id="INSTALLDIR.2020.gltfExporter.x64" Name="x64">
 
-                    <Component Id="Component.SQLite.Interop.dll_580299753" Guid="6fe30b47-2577-43ad-9095-1861fec982d9">
-                      <File Id="SQLite.Interop.dll_580299753" Source="..\Revit_glTF_Exporter_2020\bin\Release\x64\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_3983050761" Guid="6fe30b47-2577-43ad-9095-18616b6379b4">
+                      <File Id="SQLite.Interop.dll_3983050761" Source="..\Revit_glTF_Exporter_2020\bin\Release\x64\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2020.gltfExporter.x64" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2020.eversegltfExporter.x86" Name="x86">
+                  <Directory Id="INSTALLDIR.2020.gltfExporter.x86" Name="x86">
 
-                    <Component Id="Component.SQLite.Interop.dll_2160780062" Guid="6fe30b47-2577-43ad-9095-18615eb63d1e">
-                      <File Id="SQLite.Interop.dll_2160780062" Source="..\Revit_glTF_Exporter_2020\bin\Release\x86\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_1244853281" Guid="6fe30b47-2577-43ad-9095-1861fd5bcc25">
+                      <File Id="SQLite.Interop.dll_1244853281" Source="..\Revit_glTF_Exporter_2020\bin\Release\x86\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2020.gltfExporter.x86" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
@@ -157,68 +319,149 @@
 
               <Directory Id="INSTALLDIR.2021" Name="2021">
 
-                <Component Id="Component.Revit_glTF_Exporter.addin_2632068654" Guid="6fe30b47-2577-43ad-9095-1861dd62c7a1">
-                  <File Id="Revit_glTF_Exporter.addin_2632068654" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                <Component Id="Component.Revit_glTF_Exporter.addin_4203761214" Guid="6fe30b47-2577-43ad-9095-18613a3cbdbb">
+                  <File Id="Revit_glTF_Exporter.addin_4203761214" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                  <RemoveFolder Id="INSTALLDIR.2021" On="uninstall" />
+
+                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                  </RegistryKey>
                 </Component>
 
-                <Directory Id="INSTALLDIR.2021.eversegltfExporter" Name="eversegltfExporter">
+                <Directory Id="INSTALLDIR.2021.gltfExporter" Name="gltfExporter">
 
-                  <Component Id="Component.DracoWrapper.dll_2246826274" Guid="6fe30b47-2577-43ad-9095-1861db567c62">
-                    <File Id="DracoWrapper.dll_2246826274" Source="..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll" />
+                  <Component Id="Component.DracoWrapper.dll_2551272602" Guid="6fe30b47-2577-43ad-9095-18611c733b83">
+                    <File Id="DracoWrapper.dll_2551272602" Source="..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll" />
+                    <RemoveFolder Id="INSTALLDIR.2021.gltfExporter" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.dll_1143012814" Guid="6fe30b47-2577-43ad-9095-1861e9bfb6a8">
-                    <File Id="EntityFramework.dll_1143012814" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.dll" />
+                  <Component Id="Component.EntityFramework.dll_3160884015" Guid="6fe30b47-2577-43ad-9095-18612f60cbaa">
+                    <File Id="EntityFramework.dll_3160884015" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.SqlServer.dll_485590890" Guid="6fe30b47-2577-43ad-9095-18610273a564">
-                    <File Id="EntityFramework.SqlServer.dll_485590890" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.SqlServer.dll" />
+                  <Component Id="Component.EntityFramework.SqlServer.dll_973496432" Guid="6fe30b47-2577-43ad-9095-186116013e27">
+                    <File Id="EntityFramework.SqlServer.dll_973496432" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.SqlServer.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Newtonsoft.Json.dll_3107938045" Guid="6fe30b47-2577-43ad-9095-186133a73c65">
-                    <File Id="Newtonsoft.Json.dll_3107938045" Source="..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll" />
+                  <Component Id="Component.Newtonsoft.Json.dll_132036310" Guid="6fe30b47-2577-43ad-9095-186181632c9e">
+                    <File Id="Newtonsoft.Json.dll_132036310" Source="..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.dll_828374437" Guid="6fe30b47-2577-43ad-9095-186161bd50fb">
-                    <File Id="Revit_glTF_Exporter.dll_828374437" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll_1856001888" Guid="6fe30b47-2577-43ad-9095-1861002738a8">
+                    <File Id="Revit_glTF_Exporter.dll_1856001888" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_555934083" Guid="6fe30b47-2577-43ad-9095-186187f89371">
-                    <File Id="Revit_glTF_Exporter.pdb_555934083" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.pdb" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll.config_758124720" Guid="6fe30b47-2577-43ad-9095-1861c714232c">
+                    <File Id="Revit_glTF_Exporter.dll.config_758124720" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.dll_3183406366" Guid="6fe30b47-2577-43ad-9095-1861ad4cb6ef">
-                    <File Id="System.Data.SQLite.dll_3183406366" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_1772211862" Guid="6fe30b47-2577-43ad-9095-1861c05b0250">
+                    <File Id="Revit_glTF_Exporter.pdb_1772211862" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_1470069594" Guid="6fe30b47-2577-43ad-9095-186100021363">
-                    <File Id="System.Data.SQLite.EF6.dll_1470069594" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.EF6.dll" />
+                  <Component Id="Component.System.Data.SQLite.dll_3915424496" Guid="6fe30b47-2577-43ad-9095-186134fadb5e">
+                    <File Id="System.Data.SQLite.dll_3915424496" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_2584485628" Guid="6fe30b47-2577-43ad-9095-186141bb1027">
-                    <File Id="System.Data.SQLite.Linq.dll_2584485628" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.Linq.dll" />
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_4166580761" Guid="6fe30b47-2577-43ad-9095-18612e84e10d">
+                    <File Id="System.Data.SQLite.EF6.dll_4166580761" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.EF6.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Directory Id="INSTALLDIR.2021.eversegltfExporter.Images" Name="Images">
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_1073321446" Guid="6fe30b47-2577-43ad-9095-18613986b06a">
+                    <File Id="System.Data.SQLite.Linq.dll_1073321446" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.Linq.dll" />
 
-                    <Component Id="Component.gltf.png_3543793804" Guid="6fe30b47-2577-43ad-9095-186126d26c2d">
-                      <File Id="gltf.png_3543793804" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\gltf.png" />
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2021.gltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_846010984" Guid="6fe30b47-2577-43ad-9095-1861fbe112de">
+                      <File Id="gltf.png_846010984" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\gltf.png" />
+                      <RemoveFolder Id="INSTALLDIR.2021.gltfExporter.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_2309679035" Guid="6fe30b47-2577-43ad-9095-1861d90e538b">
+                      <File Id="Heart.png_2309679035" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_817921130" Guid="6fe30b47-2577-43ad-9095-1861ba2ab79a">
+                      <File Id="logo.png_817921130" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2021.eversegltfExporter.x64" Name="x64">
+                  <Directory Id="INSTALLDIR.2021.gltfExporter.x64" Name="x64">
 
-                    <Component Id="Component.SQLite.Interop.dll_2421974410" Guid="6fe30b47-2577-43ad-9095-1861cf3a3619">
-                      <File Id="SQLite.Interop.dll_2421974410" Source="..\Revit_glTF_Exporter_2021\bin\Release\x64\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_4264602690" Guid="6fe30b47-2577-43ad-9095-1861a638ec0d">
+                      <File Id="SQLite.Interop.dll_4264602690" Source="..\Revit_glTF_Exporter_2021\bin\Release\x64\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2021.gltfExporter.x64" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2021.eversegltfExporter.x86" Name="x86">
+                  <Directory Id="INSTALLDIR.2021.gltfExporter.x86" Name="x86">
 
-                    <Component Id="Component.SQLite.Interop.dll_4035495487" Guid="6fe30b47-2577-43ad-9095-18614946d156">
-                      <File Id="SQLite.Interop.dll_4035495487" Source="..\Revit_glTF_Exporter_2021\bin\Release\x86\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_2295220" Guid="6fe30b47-2577-43ad-9095-18618b7fb98e">
+                      <File Id="SQLite.Interop.dll_2295220" Source="..\Revit_glTF_Exporter_2021\bin\Release\x86\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2021.gltfExporter.x86" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
@@ -227,68 +470,149 @@
 
               <Directory Id="INSTALLDIR.2022" Name="2022">
 
-                <Component Id="Component.Revit_glTF_Exporter.addin_3192477493" Guid="6fe30b47-2577-43ad-9095-18613913d92b">
-                  <File Id="Revit_glTF_Exporter.addin_3192477493" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                <Component Id="Component.Revit_glTF_Exporter.addin_1519930038" Guid="6fe30b47-2577-43ad-9095-18610d811cd9">
+                  <File Id="Revit_glTF_Exporter.addin_1519930038" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                  <RemoveFolder Id="INSTALLDIR.2022" On="uninstall" />
+
+                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                  </RegistryKey>
                 </Component>
 
-                <Directory Id="INSTALLDIR.2022.eversegltfExporter" Name="eversegltfExporter">
+                <Directory Id="INSTALLDIR.2022.gltfExporter" Name="gltfExporter">
 
-                  <Component Id="Component.DracoWrapper.dll_1167828445" Guid="6fe30b47-2577-43ad-9095-18613ec90342">
-                    <File Id="DracoWrapper.dll_1167828445" Source="..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll" />
+                  <Component Id="Component.DracoWrapper.dll_2066077424" Guid="6fe30b47-2577-43ad-9095-186106c6b9e5">
+                    <File Id="DracoWrapper.dll_2066077424" Source="..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll" />
+                    <RemoveFolder Id="INSTALLDIR.2022.gltfExporter" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.dll_3744577923" Guid="6fe30b47-2577-43ad-9095-18616e5d235b">
-                    <File Id="EntityFramework.dll_3744577923" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.dll" />
+                  <Component Id="Component.EntityFramework.dll_1076149131" Guid="6fe30b47-2577-43ad-9095-18614f6f970b">
+                    <File Id="EntityFramework.dll_1076149131" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.SqlServer.dll_55588788" Guid="6fe30b47-2577-43ad-9095-186186c7a50b">
-                    <File Id="EntityFramework.SqlServer.dll_55588788" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.SqlServer.dll" />
+                  <Component Id="Component.EntityFramework.SqlServer.dll_3565643517" Guid="6fe30b47-2577-43ad-9095-1861cd68621f">
+                    <File Id="EntityFramework.SqlServer.dll_3565643517" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.SqlServer.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Newtonsoft.Json.dll_3750627755" Guid="6fe30b47-2577-43ad-9095-1861e1a3012b">
-                    <File Id="Newtonsoft.Json.dll_3750627755" Source="..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll" />
+                  <Component Id="Component.Newtonsoft.Json.dll_1614157811" Guid="6fe30b47-2577-43ad-9095-1861082aa66c">
+                    <File Id="Newtonsoft.Json.dll_1614157811" Source="..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.dll_908968884" Guid="6fe30b47-2577-43ad-9095-18610f9314ea">
-                    <File Id="Revit_glTF_Exporter.dll_908968884" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll_959510744" Guid="6fe30b47-2577-43ad-9095-186190d19a27">
+                    <File Id="Revit_glTF_Exporter.dll_959510744" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_1181409246" Guid="6fe30b47-2577-43ad-9095-1861bfec56c1">
-                    <File Id="Revit_glTF_Exporter.pdb_1181409246" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.pdb" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll.config_1095557377" Guid="6fe30b47-2577-43ad-9095-18612714a0e2">
+                    <File Id="Revit_glTF_Exporter.dll.config_1095557377" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.dll_2355165601" Guid="6fe30b47-2577-43ad-9095-1861aad3589d">
-                    <File Id="System.Data.SQLite.dll_2355165601" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_875720734" Guid="6fe30b47-2577-43ad-9095-18614438a1cd">
+                    <File Id="Revit_glTF_Exporter.pdb_875720734" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_123873077" Guid="6fe30b47-2577-43ad-9095-1861f82b739a">
-                    <File Id="System.Data.SQLite.EF6.dll_123873077" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.EF6.dll" />
+                  <Component Id="Component.System.Data.SQLite.dll_2426243555" Guid="6fe30b47-2577-43ad-9095-1861b1547be4">
+                    <File Id="System.Data.SQLite.dll_2426243555" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_3608590498" Guid="6fe30b47-2577-43ad-9095-1861f2e918f7">
-                    <File Id="System.Data.SQLite.Linq.dll_3608590498" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.Linq.dll" />
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_2263924561" Guid="6fe30b47-2577-43ad-9095-1861f8e2bec7">
+                    <File Id="System.Data.SQLite.EF6.dll_2263924561" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.EF6.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Directory Id="INSTALLDIR.2022.eversegltfExporter.Images" Name="Images">
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_3017274448" Guid="6fe30b47-2577-43ad-9095-186185a2e0a4">
+                    <File Id="System.Data.SQLite.Linq.dll_3017274448" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.Linq.dll" />
 
-                    <Component Id="Component.gltf.png_2750584505" Guid="6fe30b47-2577-43ad-9095-186159b3e16f">
-                      <File Id="gltf.png_2750584505" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\gltf.png" />
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2022.gltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_2788170478" Guid="6fe30b47-2577-43ad-9095-1861a6979495">
+                      <File Id="gltf.png_2788170478" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\gltf.png" />
+                      <RemoveFolder Id="INSTALLDIR.2022.gltfExporter.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_3042360835" Guid="6fe30b47-2577-43ad-9095-186168b65978">
+                      <File Id="Heart.png_3042360835" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_3298937390" Guid="6fe30b47-2577-43ad-9095-1861f316ffe7">
+                      <File Id="logo.png_3298937390" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2022.eversegltfExporter.x64" Name="x64">
+                  <Directory Id="INSTALLDIR.2022.gltfExporter.x64" Name="x64">
 
-                    <Component Id="Component.SQLite.Interop.dll_1593537854" Guid="6fe30b47-2577-43ad-9095-186149641fdc">
-                      <File Id="SQLite.Interop.dll_1593537854" Source="..\Revit_glTF_Exporter_2022\bin\Release\x64\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_4214958065" Guid="6fe30b47-2577-43ad-9095-1861e571fabb">
+                      <File Id="SQLite.Interop.dll_4214958065" Source="..\Revit_glTF_Exporter_2022\bin\Release\x64\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2022.gltfExporter.x64" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2022.eversegltfExporter.x86" Name="x86">
+                  <Directory Id="INSTALLDIR.2022.gltfExporter.x86" Name="x86">
 
-                    <Component Id="Component.SQLite.Interop.dll_3911715197" Guid="6fe30b47-2577-43ad-9095-1861ec7db532">
-                      <File Id="SQLite.Interop.dll_3911715197" Source="..\Revit_glTF_Exporter_2022\bin\Release\x86\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_2019944697" Guid="6fe30b47-2577-43ad-9095-1861bbf04927">
+                      <File Id="SQLite.Interop.dll_2019944697" Source="..\Revit_glTF_Exporter_2022\bin\Release\x86\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2022.gltfExporter.x86" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
@@ -297,75 +621,183 @@
 
               <Directory Id="INSTALLDIR.2023" Name="2023">
 
-                <Component Id="Component.Revit_glTF_Exporter.addin_1602958959" Guid="6fe30b47-2577-43ad-9095-18618726ef6e">
-                  <File Id="Revit_glTF_Exporter.addin_1602958959" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                <Component Id="Component.Revit_glTF_Exporter.addin_662580862" Guid="6fe30b47-2577-43ad-9095-186121cce357">
+                  <File Id="Revit_glTF_Exporter.addin_662580862" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
+                  <RemoveFolder Id="INSTALLDIR.2023" On="uninstall" />
+
+                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                  </RegistryKey>
                 </Component>
 
-                <Directory Id="INSTALLDIR.2023.eversegltfExporter" Name="eversegltfExporter">
+                <Directory Id="INSTALLDIR.2023.gltfExporter" Name="gltfExporter">
 
-                  <Component Id="Component.DracoWrapper.dll_2659959509" Guid="6fe30b47-2577-43ad-9095-1861e6cee6b8">
-                    <File Id="DracoWrapper.dll_2659959509" Source="..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll" />
+                  <Component Id="Component.DracoWrapper.dll_430722913" Guid="6fe30b47-2577-43ad-9095-186128f6e83b">
+                    <File Id="DracoWrapper.dll_430722913" Source="..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll" />
+                    <RemoveFolder Id="INSTALLDIR.2023.gltfExporter" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.dll_1041381302" Guid="6fe30b47-2577-43ad-9095-186189da1b73">
-                    <File Id="EntityFramework.dll_1041381302" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.dll" />
+                  <Component Id="Component.EntityFramework.dll_1504507664" Guid="6fe30b47-2577-43ad-9095-186106a66f61">
+                    <File Id="EntityFramework.dll_1504507664" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.EntityFramework.SqlServer.dll_2828490203" Guid="6fe30b47-2577-43ad-9095-186109521a70">
-                    <File Id="EntityFramework.SqlServer.dll_2828490203" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.SqlServer.dll" />
+                  <Component Id="Component.EntityFramework.SqlServer.dll_1896123383" Guid="6fe30b47-2577-43ad-9095-18611b2c6f82">
+                    <File Id="EntityFramework.SqlServer.dll_1896123383" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.SqlServer.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Newtonsoft.Json.dll_1693631206" Guid="6fe30b47-2577-43ad-9095-1861219c6fc8">
-                    <File Id="Newtonsoft.Json.dll_1693631206" Source="..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll" />
+                  <Component Id="Component.Newtonsoft.Json.dll_1938338792" Guid="6fe30b47-2577-43ad-9095-186138105b7f">
+                    <File Id="Newtonsoft.Json.dll_1938338792" Source="..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.dll_804885513" Guid="6fe30b47-2577-43ad-9095-1861368b33db">
-                    <File Id="Revit_glTF_Exporter.dll_804885513" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll_2834351581" Guid="6fe30b47-2577-43ad-9095-1861d5b071e4">
+                    <File Id="Revit_glTF_Exporter.dll_2834351581" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_1957366599" Guid="6fe30b47-2577-43ad-9095-1861980dba61">
-                    <File Id="Revit_glTF_Exporter.pdb_1957366599" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.pdb" />
+                  <Component Id="Component.Revit_glTF_Exporter.dll.config_2844151436" Guid="6fe30b47-2577-43ad-9095-1861b300da5e">
+                    <File Id="Revit_glTF_Exporter.dll.config_2844151436" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.dll_2587873883" Guid="6fe30b47-2577-43ad-9095-1861780a426c">
-                    <File Id="System.Data.SQLite.dll_2587873883" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.dll" />
+                  <Component Id="Component.Revit_glTF_Exporter.pdb_2750561563" Guid="6fe30b47-2577-43ad-9095-1861766219bc">
+                    <File Id="Revit_glTF_Exporter.pdb_2750561563" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_728045585" Guid="6fe30b47-2577-43ad-9095-1861103b303b">
-                    <File Id="System.Data.SQLite.EF6.dll_728045585" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.EF6.dll" />
+                  <Component Id="Component.System.Data.SQLite.dll_1289429199" Guid="6fe30b47-2577-43ad-9095-186198f7efcf">
+                    <File Id="System.Data.SQLite.dll_1289429199" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_1129213240" Guid="6fe30b47-2577-43ad-9095-18616662bd56">
-                    <File Id="System.Data.SQLite.Linq.dll_1129213240" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.Linq.dll" />
+                  <Component Id="Component.System.Data.SQLite.EF6.dll_3415946188" Guid="6fe30b47-2577-43ad-9095-186168b1d6b4">
+                    <File Id="System.Data.SQLite.EF6.dll_3415946188" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.EF6.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
                   </Component>
 
-                  <Directory Id="INSTALLDIR.2023.eversegltfExporter.Images" Name="Images">
+                  <Component Id="Component.System.Data.SQLite.Linq.dll_1977022717" Guid="6fe30b47-2577-43ad-9095-18617ee19821">
+                    <File Id="System.Data.SQLite.Linq.dll_1977022717" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.Linq.dll" />
 
-                    <Component Id="Component.gltf.png_3113070203" Guid="6fe30b47-2577-43ad-9095-1861d762197e">
-                      <File Id="gltf.png_3113070203" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\gltf.png" />
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.2023.gltfExporter.Images" Name="Images">
+
+                    <Component Id="Component.gltf.png_2368315373" Guid="6fe30b47-2577-43ad-9095-1861e5adf872">
+                      <File Id="gltf.png_2368315373" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\gltf.png" />
+                      <RemoveFolder Id="INSTALLDIR.2023.gltfExporter.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_1541960703" Guid="6fe30b47-2577-43ad-9095-1861b63150a9">
+                      <File Id="Heart.png_1541960703" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_1891581321" Guid="6fe30b47-2577-43ad-9095-1861e73c9e2e">
+                      <File Id="logo.png_1891581321" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2023.eversegltfExporter.x64" Name="x64">
+                  <Directory Id="INSTALLDIR.2023.gltfExporter.x64" Name="x64">
 
-                    <Component Id="Component.SQLite.Interop.dll_1693724217" Guid="6fe30b47-2577-43ad-9095-1861debf844d">
-                      <File Id="SQLite.Interop.dll_1693724217" Source="..\Revit_glTF_Exporter_2023\bin\Release\x64\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_616201285" Guid="6fe30b47-2577-43ad-9095-18612799626b">
+                      <File Id="SQLite.Interop.dll_616201285" Source="..\Revit_glTF_Exporter_2023\bin\Release\x64\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2023.gltfExporter.x64" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
 
-                  <Directory Id="INSTALLDIR.2023.eversegltfExporter.x86" Name="x86">
+                  <Directory Id="INSTALLDIR.2023.gltfExporter.x86" Name="x86">
 
-                    <Component Id="Component.SQLite.Interop.dll_3032169016" Guid="6fe30b47-2577-43ad-9095-18615f77149f">
-                      <File Id="SQLite.Interop.dll_3032169016" Source="..\Revit_glTF_Exporter_2023\bin\Release\x86\SQLite.Interop.dll" />
+                    <Component Id="Component.SQLite.Interop.dll_3504577673" Guid="6fe30b47-2577-43ad-9095-186111beb87e">
+                      <File Id="SQLite.Interop.dll_3504577673" Source="..\Revit_glTF_Exporter_2023\bin\Release\x86\SQLite.Interop.dll" />
+                      <RemoveFolder Id="INSTALLDIR.2023.gltfExporter.x86" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
                     </Component>
 
                   </Directory>
                 </Directory>
               </Directory>
+
+              <Component Id="INSTALLDIR" Guid="6fe30b47-2577-43ad-9095-18616542ed73">
+                <RemoveFolder Id="INSTALLDIR" On="uninstall" />
+
+                <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                  <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                </RegistryKey>
+              </Component>
+
             </Directory>
+
+            <Component Id="AppDataFolder.Autodesk.Revit" Guid="6fe30b47-2577-43ad-9095-1861d9dd1207">
+              <RemoveFolder Id="AppDataFolder.Autodesk.Revit" On="uninstall" />
+
+              <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                <RegistryValue Value="0" Type="string" KeyPath="yes" />
+              </RegistryKey>
+            </Component>
+
           </Directory>
+
+          <Component Id="AppDataFolder.Autodesk" Guid="6fe30b47-2577-43ad-9095-18615d83165a">
+            <RemoveFolder Id="AppDataFolder.Autodesk" On="uninstall" />
+
+            <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+              <RegistryValue Value="0" Type="string" KeyPath="yes" />
+            </RegistryKey>
+          </Component>
+
         </Directory>
       </Directory>
     </Directory>
@@ -395,71 +827,89 @@
     <Property Id="WixSharp_ModifyDialogs" Value="GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.MaintenanceTypeDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.FeaturesDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.ProgressDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.ExitDialog" />
 
     <Feature Id="Complete" Title="Complete" Absent="allow" Level="1">
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1376700183" />
-      <ComponentRef Id="Component.DracoWrapper.dll_1024475553" />
-      <ComponentRef Id="Component.EntityFramework.dll_1227327935" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_1024557420" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_2178712760" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_509202983" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1661684077" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_3665787352" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_2306224705" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_4246708534" />
-      <ComponentRef Id="Component.gltf.png_2044957379" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_2375860910" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_4171315142" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_2673737562" />
-      <ComponentRef Id="Component.DracoWrapper.dll_1757626341" />
-      <ComponentRef Id="Component.EntityFramework.dll_592043081" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_1042904574" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_1609324349" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_2124566855" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_2397007193" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_2676319400" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_2099703566" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_994231352" />
-      <ComponentRef Id="Component.gltf.png_476925693" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_580299753" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_2160780062" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_2632068654" />
-      <ComponentRef Id="Component.DracoWrapper.dll_2246826274" />
-      <ComponentRef Id="Component.EntityFramework.dll_1143012814" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_485590890" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_3107938045" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_828374437" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_555934083" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_3183406366" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_1470069594" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_2584485628" />
-      <ComponentRef Id="Component.gltf.png_3543793804" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_2421974410" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_4035495487" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_3192477493" />
-      <ComponentRef Id="Component.DracoWrapper.dll_1167828445" />
-      <ComponentRef Id="Component.EntityFramework.dll_3744577923" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_55588788" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_3750627755" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_908968884" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1181409246" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_2355165601" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_123873077" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_3608590498" />
-      <ComponentRef Id="Component.gltf.png_2750584505" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_1593537854" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_3911715197" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1602958959" />
-      <ComponentRef Id="Component.DracoWrapper.dll_2659959509" />
-      <ComponentRef Id="Component.EntityFramework.dll_1041381302" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_2828490203" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_1693631206" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_804885513" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1957366599" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_2587873883" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_728045585" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_1129213240" />
-      <ComponentRef Id="Component.gltf.png_3113070203" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_1693724217" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_3032169016" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_2974217233" />
+      <ComponentRef Id="Component.DracoWrapper.dll_3817637187" />
+      <ComponentRef Id="Component.EntityFramework.dll_2203904919" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_2058756212" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_3292622055" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_217336063" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_4173053972" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_4239863013" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_907689104" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_1052290994" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_1856260251" />
+      <ComponentRef Id="Component.gltf.png_1400885341" />
+      <ComponentRef Id="Component.Heart.png_510139406" />
+      <ComponentRef Id="Component.logo.png_1167856133" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_2226856354" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_1267676420" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1670683156" />
+      <ComponentRef Id="Component.DracoWrapper.dll_1337434523" />
+      <ComponentRef Id="Component.EntityFramework.dll_3771468539" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_293230519" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_2765809228" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_1518944493" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_2346593158" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1435154475" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_4286228164" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_3379263520" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_1043319601" />
+      <ComponentRef Id="Component.gltf.png_993881377" />
+      <ComponentRef Id="Component.Heart.png_2306198806" />
+      <ComponentRef Id="Component.logo.png_2853928737" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_3983050761" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_1244853281" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_4203761214" />
+      <ComponentRef Id="Component.DracoWrapper.dll_2551272602" />
+      <ComponentRef Id="Component.EntityFramework.dll_3160884015" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_973496432" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_132036310" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_1856001888" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_758124720" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_1772211862" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_3915424496" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_4166580761" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_1073321446" />
+      <ComponentRef Id="Component.gltf.png_846010984" />
+      <ComponentRef Id="Component.Heart.png_2309679035" />
+      <ComponentRef Id="Component.logo.png_817921130" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_4264602690" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_2295220" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1519930038" />
+      <ComponentRef Id="Component.DracoWrapper.dll_2066077424" />
+      <ComponentRef Id="Component.EntityFramework.dll_1076149131" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_3565643517" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_1614157811" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_959510744" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_1095557377" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_875720734" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_2426243555" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_2263924561" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_3017274448" />
+      <ComponentRef Id="Component.gltf.png_2788170478" />
+      <ComponentRef Id="Component.Heart.png_3042360835" />
+      <ComponentRef Id="Component.logo.png_3298937390" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_4214958065" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_2019944697" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_662580862" />
+      <ComponentRef Id="Component.DracoWrapper.dll_430722913" />
+      <ComponentRef Id="Component.EntityFramework.dll_1504507664" />
+      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_1896123383" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_1938338792" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_2834351581" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_2844151436" />
+      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_2750561563" />
+      <ComponentRef Id="Component.System.Data.SQLite.dll_1289429199" />
+      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_3415946188" />
+      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_1977022717" />
+      <ComponentRef Id="Component.gltf.png_2368315373" />
+      <ComponentRef Id="Component.Heart.png_1541960703" />
+      <ComponentRef Id="Component.logo.png_1891581321" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_616201285" />
+      <ComponentRef Id="Component.SQLite.Interop.dll_3504577673" />
+      <ComponentRef Id="AppDataFolder.Autodesk" />
+      <ComponentRef Id="AppDataFolder.Autodesk.Revit" />
+      <ComponentRef Id="INSTALLDIR" />
     </Feature>
 
     <InstallExecuteSequence>

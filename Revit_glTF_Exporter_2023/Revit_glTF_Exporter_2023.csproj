@@ -106,8 +106,8 @@
   <PropertyGroup>
     <PostBuildEvent>
 		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\Resources"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\Resources\"
+		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\Images"
+		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\Images\"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
                                 if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
 		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"

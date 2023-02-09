@@ -23,7 +23,7 @@
     <CornerRadius x:Key="borderRadiusLarge" BottomLeft="15" BottomRight="15" TopLeft="15" TopRight="15"/>
     <System:Double x:Key="SecondaryFontSize">12</System:Double>
     <System:Double x:Key="MainFontSize">15</System:Double>
-    <FontFamily x:Key="FormFamily">Roboto</FontFamily>
+    <FontFamily x:Key="FormFamily">/Resources/#Neuzeit Grotesk</FontFamily>
      
     <!--Control template for Main forms-->
     <ControlTemplate x:Key="WindowTemplate" TargetType="{x:Type Window}">
@@ -233,6 +233,7 @@
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FontFamily" Value="Aharoni" />
         <Setter Property="BorderBrush" Value="{StaticResource MainGray}" />
         <Setter Property="Template">
             <Setter.Value>

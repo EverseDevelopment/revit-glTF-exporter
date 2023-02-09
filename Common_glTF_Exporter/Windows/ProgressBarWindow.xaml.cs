@@ -61,7 +61,7 @@
                 mainWin.Close();
             }
 
-            int numberRuns = int.Parse(DatabaseKeyValueAccesor.GetValue("runs"));
+            int numberRuns = int.Parse(SettingsConfig.GetValue("runs"));
             if (numberRuns == 3)
             {
                 FeedbackWindow feedbackWindow = new FeedbackWindow();

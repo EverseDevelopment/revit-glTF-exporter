@@ -109,13 +109,13 @@
 
             <Button
                     Style="{DynamicResource CloseButtonStyle}"
-                    Margin="332,226,20,0"
+                    Margin="332,376,13,0"
                     Background="Transparent"
                     Click="Contact_Link"
                     FontWeight="Light"
                     FontSize="12"     
                     Foreground="{DynamicResource MainGray}"
-                    VerticalAlignment="Top" Height="20" Grid.Row="2">
+                    VerticalAlignment="Top" Height="20">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
@@ -126,7 +126,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Text="Made with       by e-verse" 
-                                    Margin="4,1,1,-1"
+                                    Margin="0,1,5,-1"
                                     FontWeight="Bold" Grid.ColumnSpan="2">
                                 </TextBlock>
 
@@ -138,7 +138,7 @@
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="62,1,0,2" RenderTransformOrigin="0.5,0.5">
+                                       Margin="63,0,0,3" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleY="1"/>

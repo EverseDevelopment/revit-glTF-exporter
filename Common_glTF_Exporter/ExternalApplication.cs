@@ -13,9 +13,9 @@
     public class ExternalApplication : IExternalApplication
     {
         private static readonly string RIBBONTAB = "e-verse";
-        private static readonly string RIBBONPANEL = "glTF";
-        private static string pushButtonName = "glTF Exporter";
-        private static string pushButtonText = "glTF Exporter";
+        private static readonly string RIBBONPANEL = "Export";
+        private static string pushButtonName = "glTF";
+        private static string pushButtonText = "glTF";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
         private static string buttonIconsFolder = Path.GetDirectoryName(addInPath) + "\\Images\\";
 
@@ -79,7 +79,7 @@
             }
 
             PushButtonData pushDataButton = new PushButtonData(pushButtonName, pushButtonText, addInPath, "Revit_glTF_Exporter.ExternalCommand");
-            pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "gltf.png"), UriKind.Absolute));
+            pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "logo.png"), UriKind.Absolute));
 
             panel.AddItem(pushDataButton);
 

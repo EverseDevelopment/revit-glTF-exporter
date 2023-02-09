@@ -23,8 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Database\CustomEmbeddedDatabase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Database\gLTFDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Draco.cs" />
@@ -52,7 +50,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\DatabaseKeyValueAccesor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\FeedbackWindow.xaml.cs">
       <DependentUpon>FeedbackWindow.xaml</DependentUpon>
     </Compile>
@@ -94,6 +92,9 @@
     <Content Include="$(MSBuildThisFileDirectory)Images\Heart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Images\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Black.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -131,5 +132,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)App.config" />
   </ItemGroup>
 </Project>

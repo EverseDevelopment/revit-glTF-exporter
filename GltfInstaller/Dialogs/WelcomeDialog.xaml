@@ -9,6 +9,7 @@
     mc:Ignorable="d" 
     Width="510"
     Height="424" >
+
     <Border
             Margin="5,5,5,5"
             Background="{DynamicResource BackgroundColor}"
@@ -60,10 +61,10 @@
             </Button>
 
             <TextBlock
+                    FontWeight="Light"
                     Margin="67,189,33,193"
                     Background="Transparent"
                     FontSize="16"
-                    FontWeight="ExtraLight"
                     Text="You're in the right place! Install our special Revit addon."/>
             <TextBlock
                     Margin="186,104,186,264"
@@ -86,17 +87,17 @@
                    VerticalAlignment="Top" 
                    Margin="452,13,17,0"/>
             <TextBlock
+                FontWeight="Light"
                 Margin="130,219,96,173"
                 Background="Transparent"
                 FontSize="16"
-                FontWeight="ExtraLight"
                 Text="It's free, simple and made with love."/>
 
             <Button
                     Style="{DynamicResource CloseButtonStyle}"
-                    Margin="332,376,24,0"
+                    Margin="332,376,13,0"
                     Background="Transparent"
-                    Click="Title_Link"
+                    Click="Contact_Link"
                     FontWeight="Light"
                     FontSize="12"     
                     Foreground="{DynamicResource MainGray}"
@@ -111,7 +112,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Text="Made with       by e-verse" 
-                                    Margin="4,1,1,-1"
+                                    Margin="0,1,5,-1"
                                     FontWeight="Bold" Grid.ColumnSpan="2">
                                 </TextBlock>
 
@@ -123,7 +124,7 @@
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="62,1,0,2" RenderTransformOrigin="0.5,0.5">
+                                       Margin="63,0,0,3" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleY="1"/>
@@ -158,6 +159,7 @@
                 <ResourceDictionary Source="Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
     </wixsharp:WpfDialog.Resources>
 
 </wixsharp:WpfDialog>

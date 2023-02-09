@@ -61,12 +61,54 @@
 
             <CheckBox Style="{DynamicResource CustomCheckbox}"
                       FontSize="20"
+                      FontFamily="SegoeUI"
                       x:Name="LicenseAcceptedChecked"
-                      Content="I accept all terms and conditions"
+                      Content="I accept all"
                       Margin="84,0,85,0"
                       VerticalAlignment="Center"
                       VerticalContentAlignment="Center" 
                       Checked="LicenseAcceptedChecked_Checked"/>
+
+            <Button
+                    Style="{DynamicResource CloseButtonStyle}"
+                    Margin="211,0,75,0"
+                    Background="Transparent"
+                    Click="Terms_Link"
+                    FontWeight="Light"
+                    FontSize="20"   
+                    Foreground="{DynamicResource MainGray}"
+                    VerticalAlignment="Center" Height="25">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="243*"/>
+                                    <ColumnDefinition Width="47*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Terms and Conditions" 
+                                    Margin="0,0,17,0"
+                                    TextDecorations="Underline"
+                                    FontWeight="Medium"
+                                    FontFamily="Aharoni"
+                                    Grid.ColumnSpan="2">
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers >
+                            <Trigger Property="IsDefaulted" Value="True">
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
             <Button Style="{DynamicResource MainButtonStyle}"
                     x:Name="GoPrev"
@@ -92,7 +134,7 @@
 
             <Button
                     Style="{DynamicResource CloseButtonStyle}"
-                    Margin="332,376,20,0"
+                    Margin="332,376,13,0"
                     Background="Transparent"
                     Click="Contact_Link"
                     FontWeight="Light"
@@ -109,7 +151,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Text="Made with       by e-verse" 
-                                    Margin="4,1,1,-1"
+                                    Margin="0,1,5,-1"
                                     FontWeight="Bold" Grid.ColumnSpan="2">
                                 </TextBlock>
 
@@ -121,7 +163,7 @@
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="62,1,0,2" RenderTransformOrigin="0.5,0.5">
+                                       Margin="63,0,0,3" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleY="1"/>

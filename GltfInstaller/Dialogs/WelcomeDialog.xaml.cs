@@ -90,6 +90,11 @@ namespace GltfInstaller
         {
             System.Diagnostics.Process.Start("https://e-verse.com/");
         }
+
+        private void Contact_Link(object sender, System.Windows.RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/contact/");
+        }
     }
 
     /// <summary>

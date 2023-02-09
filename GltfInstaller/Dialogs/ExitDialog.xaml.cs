@@ -78,9 +78,9 @@ namespace GltfInstaller
 
             if (DialogDescription.Text == "Click the Finish button to exit the Setup Wizard.")
             {
-                DialogDescription.Text = "Congratulations! The process is completed. " +
+                DialogDescription.Text = "Congratulations! The process is complete. " +
                     "\n Thanks for trusting in our heroine LEIA! " +
-                    "\n \n Are you interested in taking part of our next \n " +
+                    "\n \n Are you interested in taking part in our next \n " +
                     "projects?";
             }
             else

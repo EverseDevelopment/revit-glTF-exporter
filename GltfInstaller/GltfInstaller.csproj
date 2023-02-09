@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net451</TargetFramework>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace("-", "_"))</RootNamespace>
-    <AssemblyName>GltfInstaller</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net451</TargetFramework>
+		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace("-", "_"))</RootNamespace>
+		<AssemblyName>GltfInstaller</AssemblyName>
+	</PropertyGroup>
   <ItemGroup>
     <None Remove="*.msi" />
     <None Remove="*.exe" />
@@ -24,6 +24,7 @@
     <None Remove="Dialogs\WelcomeDialog.xaml" />
     <None Remove="Resources\gltf.png" />
     <None Remove="Resources\Heart.png" />
+    <None Remove="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\gltf.png" />
@@ -69,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Heart.png" />
+    <Resource Include="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">

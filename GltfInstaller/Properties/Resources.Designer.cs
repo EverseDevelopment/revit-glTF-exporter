@@ -61,6 +61,16 @@ namespace GltfInstaller.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ahronbd {
+            get {
+                object obj = ResourceManager.GetObject("ahronbd", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap gltf {
@@ -77,6 +87,26 @@ namespace GltfInstaller.Properties {
             get {
                 object obj = ResourceManager.GetObject("Heart", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo {
+            get {
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] NeuzeitGro_Reg {
+            get {
+                object obj = ResourceManager.GetObject("NeuzeitGro-Reg", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }
