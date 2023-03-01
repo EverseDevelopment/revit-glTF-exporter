@@ -48,19 +48,20 @@
 
         public static int ExportVertices(int bufferIdx, int byteOffset, GeometryDataObject geomData, GLTFBinaryData bufferData, List<GLTFBufferView> bufferViews, List<GLTFAccessor> accessors, out int sizeOfVec3View, out int elementsPerVertex)
         {
-            var vertices = geomData.Vertices.Select(x => Convert.ToSingle(x));
-            bufferData.vertexBuffer.AddRange(vertices);
+            for (int i = 0; i < geomData.Vertices.Count; i++)
+            {
+                float floatValue = Convert.ToSingle(geomData.Vertices[i]);
+                bufferData.vertexBuffer.Add(floatValue);
+            }
 
             // Get max and min for vertex data
-            float[] vertexMinMax = Util.GetVec3MinMax(vertices);
+            float[] vertexMinMax = Util.GetVec3MinMax(bufferData.vertexBuffer);
 
             // Add a vec3 buffer view
             elementsPerVertex = 3;
             int bytesPerElement = 4;
             int bytesPerVertex = elementsPerVertex * bytesPerElement;
-            var verticesCount = vertices.Count();
-
-            int numVec3 = verticesCount / elementsPerVertex;
+            int numVec3 = geomData.Vertices.Count / elementsPerVertex;
             sizeOfVec3View = numVec3 * bytesPerVertex;
 
             GLTFBufferView vec3View = new GLTFBufferView(bufferIdx, byteOffset, sizeOfVec3View, Targets.ARRAY_BUFFER, string.Empty);
@@ -68,12 +69,13 @@
             int vec3ViewIdx = bufferViews.Count - 1;
 
             // add a position accessor
-            int count = verticesCount / elementsPerVertex;
+            int count = geomData.Vertices.Count / elementsPerVertex;
             var max = new List<float>(3) { vertexMinMax[1], vertexMinMax[3], vertexMinMax[5] };
             var min = new List<float>(3) { vertexMinMax[0], vertexMinMax[2], vertexMinMax[4] };
 
             GLTFAccessor positionAccessor = new GLTFAccessor(vec3ViewIdx, 0, ComponentType.FLOAT, count, VEC3_STR, max, min, POSITION_STR);
             accessors.Add(positionAccessor);
+            bufferData.vertexAccessorIndex = accessors.Count - 1;
             return byteOffset + vec3View.byteLength;
         }
 
