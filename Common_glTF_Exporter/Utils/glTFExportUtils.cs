@@ -32,7 +32,7 @@
             float opacity = 1 - (float)materialOpacity;
             gl_mat.name = materialName;
             GLTFPBR pbr = new GLTFPBR();
-            pbr.baseColorFactor = new List<float>() { color.Red / 255f, color.Green / 255f, color.Blue / 255f, opacity };
+            pbr.baseColorFactor = new List<float>(4) { color.Red / 255f, color.Green / 255f, color.Blue / 255f, opacity };
             pbr.metallicFactor = 0f;
             pbr.roughnessFactor = 1f;
             gl_mat.pbrMetallicRoughness = pbr;

@@ -57,7 +57,7 @@
 
         private static void SetMaterialsProperties(MaterialNode node, float opacity, ref GLTFPBR pbr, ref GLTFMaterial gl_mat)
         {
-            pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
+            pbr.baseColorFactor = new List<float>(4) { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
             pbr.metallicFactor = 0f;
             pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
             gl_mat.pbrMetallicRoughness = pbr;
