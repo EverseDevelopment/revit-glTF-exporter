@@ -205,8 +205,8 @@ namespace Revit_glTF_Exporter
             rootNode.children.Add(nodes.CurrentIndex);
 
             // Reset _currentGeometry for new element
-            currentGeometry = new IndexedDictionary<GeometryDataObject>();
-            currentVertices = new IndexedDictionary<VertexLookupIntObject>();
+            currentGeometry.Reset();
+            currentVertices.Reset();
 
             return RenderNodeAction.Proceed;
         }
@@ -446,14 +446,7 @@ namespace Revit_glTF_Exporter
                         continue;
                     }
 
-                    List<PointIntObject> points = new List<PointIntObject>
-                        {
-                            new PointIntObject(triangle.get_Vertex(0)),
-                            new PointIntObject(triangle.get_Vertex(1)),
-                            new PointIntObject(triangle.get_Vertex(2)),
-                        };
-
-                    GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
+                    GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, triangle);
 
                     if (preferences.normals)
                     {

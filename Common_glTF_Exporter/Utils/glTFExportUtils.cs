@@ -40,13 +40,16 @@
             return gl_mat;
         }
 
-        public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, List<PointIntObject> points)
+        public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, MeshTriangle triangle)
         {
-            foreach (var point in points)
-            {
-                int vertexIndex = vertex.AddVertex(point);
-                geometryDataObject.Faces.Add(vertexIndex);
-            }
+            var idx = vertex.AddVertex(new PointIntObject(triangle.get_Vertex(0)));
+            geometryDataObject.Faces.Add(idx);
+
+            var idx1 = vertex.AddVertex(new PointIntObject(triangle.get_Vertex(1)));
+            geometryDataObject.Faces.Add(idx1);
+
+            var idx2 = vertex.AddVertex(new PointIntObject(triangle.get_Vertex(2)));
+            geometryDataObject.Faces.Add(idx2);
         }
 
         const string UNDERSCORE = "_";

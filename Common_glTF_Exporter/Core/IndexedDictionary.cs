@@ -24,13 +24,18 @@
         public string CurrentKey { get; private set; }
 
         /// <summary>
+        /// Temp output used in 'this.Dict'
+        /// </summary>
+        Dictionary<string, T> output = new Dictionary<string, T>();
+
+        /// <summary>
         /// Gets the dictionary.
         /// </summary>
         public Dictionary<string, T> Dict
         {
             get
             {
-                var output = new Dictionary<string, T>();
+                output.Clear();
                 foreach (var kvp in this.dict)
                 {
                     output.Add(kvp.Key, this.List[kvp.Value]);
@@ -154,6 +159,14 @@
             }
 
             return this.List[index];
+        }
+
+        public void Reset()
+        {
+            this.dict.Clear();
+            this.List.Clear();
+            this.Dict.Clear();
+            this.CurrentKey = string.Empty;
         }
     }
 }
