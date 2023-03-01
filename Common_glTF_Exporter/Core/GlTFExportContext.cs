@@ -205,8 +205,15 @@ namespace Revit_glTF_Exporter
             rootNode.children.Add(nodes.CurrentIndex);
 
             // Reset _currentGeometry for new element
-            currentGeometry.Reset();
-            currentVertices.Reset();
+            if (currentGeometry == null)
+                currentGeometry = new IndexedDictionary<GeometryDataObject>();
+            else
+                currentGeometry.Reset();
+
+            if (currentVertices == null)
+                currentVertices = new IndexedDictionary<VertexLookupIntObject>();
+            else
+                currentVertices.Reset();
 
             return RenderNodeAction.Proceed;
         }
@@ -268,9 +275,12 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            if (!Util.CanBeLockOrHidden(element, view) ||
-            currentVertices == null ||
-            !currentVertices.List.Any())
+            if (currentVertices == null || !currentVertices.List.Any())
+            {
+                return;
+            }
+
+            if (!Util.CanBeLockOrHidden(element, view))
             {
                 return;
             }
