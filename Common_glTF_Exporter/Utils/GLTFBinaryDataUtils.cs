@@ -15,10 +15,7 @@
 
         public static int ExportFaces(int bufferIdx, int byteOffset, GeometryDataObject geomData, GLTFBinaryData bufferData, List<GLTFBufferView> bufferViews, List<GLTFAccessor> accessors)
         {
-            foreach (var index in geomData.Faces)
-            {
-                bufferData.indexBuffer.Add(index);
-            }
+            bufferData.indexBuffer.AddRange(geomData.Faces);
 
             // Get max and min for index data
             int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
@@ -50,8 +47,7 @@
         {
             for (int i = 0; i < geomData.Vertices.Count; i++)
             {
-                float floatValue = Convert.ToSingle(geomData.Vertices[i]);
-                bufferData.vertexBuffer.Add(floatValue);
+                bufferData.vertexBuffer.Add(Convert.ToSingle(geomData.Vertices[i]));
             }
 
             // Get max and min for vertex data
@@ -85,8 +81,7 @@
         {
             for (int i = 0; i < geomData.Normals.Count; i++)
             {
-                float floatValue = Convert.ToSingle(geomData.Normals[i]);
-                bufferData.normalBuffer.Add(floatValue);
+                bufferData.normalBuffer.Add(Convert.ToSingle(geomData.Normals[i]));
             }
 
             // Get max and min for normal data

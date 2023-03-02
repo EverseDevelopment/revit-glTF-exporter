@@ -247,9 +247,8 @@ namespace Revit_glTF_Exporter
             Transform transform = CurrentTransform;
             IList<XYZ> pts = polymesh.GetPoints();
             pts = pts.Select(p => transform.OfPoint(p)).ToList();
-            IList<PolymeshFacet> facets = polymesh.GetFacets();
 
-            foreach (PolymeshFacet facet in facets)
+            foreach (PolymeshFacet facet in polymesh.GetFacets())
             {
                 foreach (int index in facet.GetVertices())
                 {
@@ -280,15 +279,15 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (!Util.CanBeLockOrHidden(element, view))
-            {
-                return;
-            }
-
             if (skipElementFlag)
             {
                 // Duplicate element, skip.
                 skipElementFlag = false;
+                return;
+            }
+
+            if (!Util.CanBeLockOrHidden(element, view))
+            {
                 return;
             }
 
@@ -305,11 +304,9 @@ namespace Revit_glTF_Exporter
             // Add vertex data to _currentGeometry for each geometry/material pairing
             foreach (KeyValuePair<string, VertexLookupIntObject> kvp in currentVertices.Dict)
             {
-                string vertex_key = kvp.Key;
-
+                var vertices = currentGeometry.GetElement(kvp.Key).Vertices;
                 foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
                 {
-                    var vertices = currentGeometry.GetElement(vertex_key).Vertices;
                     vertices.Add(p.Key.X);
                     vertices.Add(p.Key.Y);
                     vertices.Add(p.Key.Z);

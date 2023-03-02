@@ -127,12 +127,18 @@
         /// <returns>index of item or -1. </returns>
         public int GetIndexFromUUID(string uuid)
         {
-            if (!this.Contains(uuid))
+            try
+            {
+                return this.dict[uuid];
+            }
+            catch (KeyNotFoundException)
             {
                 throw new Exception("Specified item could not be found.");
             }
-
-            return this.dict[uuid];
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting the specified item {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -143,21 +149,6 @@
         public T GetElement(string uuid)
         {
             int index = this.GetIndexFromUUID(uuid);
-            return this.List[index];
-        }
-
-        /// <summary>
-        /// Returns as item given it's index location.
-        /// </summary>
-        /// <param name="index">The item's index location.</param>
-        /// <returns>Element.</returns>
-        public T GetElement(int index)
-        {
-            if (index < 0 || index > this.List.Count - 1)
-            {
-                throw new Exception("Specified item could not be found.");
-            }
-
             return this.List[index];
         }
 
