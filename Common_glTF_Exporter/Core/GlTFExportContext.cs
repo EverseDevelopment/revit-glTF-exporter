@@ -28,7 +28,23 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
 
-        private Document doc;
+        private Document doc
+        {
+            get
+            {
+                if (documents.Count == 1)
+                {
+                    // normal document
+                    return documents[0];
+                }
+                else
+                {
+                    // link document
+                    return documents[1];
+                }
+            }
+        }
+
         private bool skipElementFlag = false;
         private Element element;
         private View view;
@@ -55,10 +71,15 @@ namespace Revit_glTF_Exporter
 
         private Stack<Transform> transformStack = new Stack<Transform>();
 
+        /// <summary>
+        /// container for the documents
+        /// </summary>
+        List<Document> documents = new List<Document>();
+
         public GLTFExportContext(Document doc)
         {
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
-            this.doc = doc;
+            documents.Add(doc);
             view = doc.ActiveView;
         }
 
@@ -402,6 +423,8 @@ namespace Revit_glTF_Exporter
 
         public RenderNodeAction OnLinkBegin(LinkNode node)
         {
+            documents.Add(node.GetDocument());
+
             transformStack.Push(
                 CurrentTransform.Multiply(node.GetTransform()));
 
@@ -413,6 +436,8 @@ namespace Revit_glTF_Exporter
         {
             // Note: This method is invoked even for instances that were skipped.
             transformStack.Pop();
+
+            documents.RemoveAt(1); // remove the item added in OnLinkBegin
         }
 
         public RenderNodeAction Begin(FaceNode node)
