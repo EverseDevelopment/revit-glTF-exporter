@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
     using Common_glTF_Exporter.Core;
 
     public static class BinFile
@@ -17,38 +18,38 @@
             bool exportNormals, bool exportBatchId)
         {
             using (FileStream f = File.Create(filename))
+            using (var writer = new BinaryWriter(new BufferedStream(f), Encoding.Default))
             {
-                using (BinaryWriter writer = new BinaryWriter(f))
+                foreach (var bin in binaryFileData)
                 {
-                    foreach (var bin in binaryFileData)
+                    for (int i = 0; i < bin.vertexBuffer.Count; i++)
                     {
-                        foreach (var coord in bin.vertexBuffer)
-                        {
-                            writer.Write((float)coord);
-                        }
+                        writer.Write((float)bin.vertexBuffer[i]);
+                    }
 
-                        if (exportNormals)
+                    if (exportNormals)
+                    {
+                        for (int i = 0; i < bin.normalBuffer.Count; i++)
                         {
-                            foreach (var normal in bin.normalBuffer)
-                            {
-                                writer.Write((float)normal);
-                            }
-                        }
-
-                        if (exportBatchId)
-                        {
-                            foreach (var batchId in bin.batchIdBuffer)
-                            {
-                                writer.Write((float)batchId);
-                            }
-                        }
-
-                        foreach (var index in bin.indexBuffer)
-                        {
-                            writer.Write((int)index);
+                            writer.Write((float)bin.normalBuffer[i]);
                         }
                     }
+
+                    if (exportBatchId)
+                    {
+                        for (int i = 0; i < bin.batchIdBuffer.Count; i++)
+                        {
+                            writer.Write((float)bin.batchIdBuffer[i]);
+                        }
+                    }
+
+                    for (int i = 0; i < bin.indexBuffer.Count; i++)
+                    {
+                        writer.Write((int)bin.indexBuffer[i]);
+                    }
                 }
+
+                writer.Flush();
             }
         }
     }

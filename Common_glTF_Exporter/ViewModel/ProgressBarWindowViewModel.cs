@@ -61,6 +61,8 @@
 
                 this.progressBarValue = value;
                 ProgressBarPercentage = (value / ProgressBarMax) * 100;
+                if (ProgressBarPercentage > 100)
+                    ProgressBarPercentage = 100;
                 this.OnPropertyChanged();
             }
         }

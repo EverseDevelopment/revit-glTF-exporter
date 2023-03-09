@@ -11,12 +11,11 @@
             var geoEle = GetGeometryElement(doc, element);
 
             List<Mesh> meshes = new List<Mesh>();
-            foreach (GeometryObject geoObject in geoEle.OfType<GeometryInstance>())
+            foreach (GeometryInstance geoObject in geoEle.OfType<GeometryInstance>())
             {
-                GeometryInstance geoInst = geoObject as GeometryInstance;
-                foreach (var geoObj in geoInst.GetInstanceGeometry().OfType<Mesh>())
+                foreach (var geoObj in geoObject.GetInstanceGeometry().OfType<Mesh>())
                 {
-                    Mesh mesh = geoObj as Mesh;
+                    Mesh mesh = geoObj;
                     meshes.Add(mesh);
                 }
             }

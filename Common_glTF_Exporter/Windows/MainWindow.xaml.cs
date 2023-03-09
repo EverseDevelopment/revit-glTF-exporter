@@ -88,7 +88,7 @@
             exporter.Export(exportView as View);
             #endif
 
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             ProgressBarWindow.ViewModel.ProgressBarValue++;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ProgressBarWindow.ViewModel.Action = "Accept";
