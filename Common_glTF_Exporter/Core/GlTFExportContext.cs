@@ -206,7 +206,7 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
-            if (linkTransformation==null & ProgressBarWindow.ViewModel.ProgressBarValue<100)
+            if (linkTransformation == null)
                 ProgressBarWindow.ViewModel.ProgressBarValue++;
 
             // create a new node for the element
