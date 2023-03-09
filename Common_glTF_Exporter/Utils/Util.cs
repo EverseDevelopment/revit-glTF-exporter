@@ -1,4 +1,4 @@
-﻿namespace Revit_glTF_Exporter
+namespace Revit_glTF_Exporter
 {
     using System;
     using System.Collections.Generic;
@@ -14,15 +14,22 @@
         /// </summary>
         /// <param name="element">Revit element.</param>
         /// <param name="view">Revit view.</param>
-        /// <returns>If the given element can't be locked OR can't be hidden, it will returns FALSE. Otherwise, will returns TRUE.</returns>
+        /// <returns>
+        /// If the given element can't be locked OR can't be hidden, it will returns FALSE.
+        /// Otherwise, will returns TRUE.
+        /// </returns>
         public static bool CanBeLockOrHidden(Element element, View view)
         {
-            if (!element.CanBeHidden(view))
+            if (element.Category.CanAddSubcategory)
             {
-                return false;
+                return true;
+            }
+            if (element.CanBeHidden(view))
+            {
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public static BoundingBoxXYZ GetElementsBoundingBox(View view, List<Element> elements)

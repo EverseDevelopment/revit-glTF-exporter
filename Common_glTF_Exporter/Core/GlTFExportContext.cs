@@ -47,6 +47,9 @@ namespace Revit_glTF_Exporter
 
         private bool skipElementFlag = false;
         private Element element;
+
+        public Transform linkTransformation { get; private set; }
+
         private View view;
         private Preferences preferences;
 
@@ -194,6 +197,8 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
+            linkTransformation = (element as RevitLinkInstance)?.GetTransform();
+
             if (nodes.Contains(element.UniqueId))
             {
                 // Duplicate element, skip adding.
@@ -201,7 +206,8 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
+            if (linkTransformation==null & ProgressBarWindow.ViewModel.ProgressBarValue<100)
+                ProgressBarWindow.ViewModel.ProgressBarValue++;
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
@@ -425,8 +431,7 @@ namespace Revit_glTF_Exporter
         {
             documents.Add(node.GetDocument());
 
-            transformStack.Push(
-                CurrentTransform.Multiply(node.GetTransform()));
+            transformStack.Push(CurrentTransform.Multiply(linkTransformation));
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
