@@ -35,7 +35,7 @@
 
     <Border 
         x:Name="MessageWindow_Border" 
-        Background="White" 
+        Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8" 

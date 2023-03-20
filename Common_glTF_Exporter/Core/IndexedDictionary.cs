@@ -24,13 +24,18 @@
         public string CurrentKey { get; private set; }
 
         /// <summary>
+        /// Temp output used in 'this.Dict'
+        /// </summary>
+        Dictionary<string, T> output = new Dictionary<string, T>();
+
+        /// <summary>
         /// Gets the dictionary.
         /// </summary>
         public Dictionary<string, T> Dict
         {
             get
             {
-                var output = new Dictionary<string, T>();
+                output.Clear();
                 foreach (var kvp in this.dict)
                 {
                     output.Add(kvp.Key, this.List[kvp.Value]);
@@ -122,12 +127,18 @@
         /// <returns>index of item or -1. </returns>
         public int GetIndexFromUUID(string uuid)
         {
-            if (!this.Contains(uuid))
+            try
+            {
+                return this.dict[uuid];
+            }
+            catch (KeyNotFoundException)
             {
                 throw new Exception("Specified item could not be found.");
             }
-
-            return this.dict[uuid];
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting the specified item {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -141,19 +152,12 @@
             return this.List[index];
         }
 
-        /// <summary>
-        /// Returns as item given it's index location.
-        /// </summary>
-        /// <param name="index">The item's index location.</param>
-        /// <returns>Element.</returns>
-        public T GetElement(int index)
+        public void Reset()
         {
-            if (index < 0 || index > this.List.Count - 1)
-            {
-                throw new Exception("Specified item could not be found.");
-            }
-
-            return this.List[index];
+            this.dict.Clear();
+            this.List.Clear();
+            this.Dict.Clear();
+            this.CurrentKey = string.Empty;
         }
     }
 }

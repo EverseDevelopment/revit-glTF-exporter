@@ -48,11 +48,6 @@
             }
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -66,7 +61,19 @@
                 mainWin.Close();
             }
 
+            int numberRuns = int.Parse(SettingsConfig.GetValue("runs"));
+            if (numberRuns == 3)
+            {
+                FeedbackWindow feedbackWindow = new FeedbackWindow();
+                feedbackWindow.Show();
+            }
+
             this.Close();
+        }
+
+        private void Title_Link(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/");
         }
     }
 }

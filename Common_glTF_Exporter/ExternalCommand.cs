@@ -5,7 +5,7 @@
     using Autodesk.Revit.Attributes;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
-    using Common_glTF_Exporter.Database;
+    using Common_glTF_Exporter.Utils;
 
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
@@ -14,6 +14,7 @@
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+
             try
             {
                 UIApplication uiapp = commandData.Application;
@@ -36,8 +37,7 @@
             }
             catch (Exception ex)
             {
-                TaskDialog.Show($"Database error: {ex.Message}!", "Error");
-                message = ex.Message;
+                MessageWindow.Show("Error", ex.Message);
                 return Result.Failed;
             }
         }

@@ -20,13 +20,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revit_glTF_Exporter_Installer", "GLTFExporter.Installer\Revit_glTF_Exporter_Installer.csproj", "{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{09B25CFE-1D0B-4824-8751-4AE5438429D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1F31FFFC-4D24-4314-A9AE-2BA73129FA7C}"
 	ProjectSection(SolutionItems) = preProject
 		production_actions.yml = production_actions.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GltfInstaller", "GltfInstaller\GltfInstaller.csproj", "{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08C807C1-C19A-424B-904A-548117F4B418} = {08C807C1-C19A-424B-904A-548117F4B418}
+		{3C679028-B7ED-4CD7-9307-0E9760E7EA8F} = {3C679028-B7ED-4CD7-9307-0E9760E7EA8F}
+		{829CE9C2-7723-4D1E-813A-C3AB7C6C1D51} = {829CE9C2-7723-4D1E-813A-C3AB7C6C1D51}
+		{9DDF0FE0-8B4F-42F9-867E-0E62184406F1} = {9DDF0FE0-8B4F-42F9-867E-0E62184406F1}
+		{C46F2444-59CD-40B4-9518-D30EC54EA212} = {C46F2444-59CD-40B4-9518-D30EC54EA212}
 	EndProjectSection
 EndProject
 Global
@@ -55,9 +62,10 @@ Global
 		{829CE9C2-7723-4D1E-813A-C3AB7C6C1D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{829CE9C2-7723-4D1E-813A-C3AB7C6C1D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{829CE9C2-7723-4D1E-813A-C3AB7C6C1D51}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45BA3621-6E7F-4D1C-8351-B7E17471EE9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

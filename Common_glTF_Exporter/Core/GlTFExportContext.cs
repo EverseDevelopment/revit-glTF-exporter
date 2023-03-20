@@ -28,9 +28,28 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
 
-        private Document doc;
+        private Document doc
+        {
+            get
+            {
+                if (documents.Count == 1)
+                {
+                    // normal document
+                    return documents[0];
+                }
+                else
+                {
+                    // link document
+                    return documents[1];
+                }
+            }
+        }
+
         private bool skipElementFlag = false;
         private Element element;
+
+        public Transform linkTransformation { get; private set; }
+
         private View view;
         private Preferences preferences;
 
@@ -55,10 +74,15 @@ namespace Revit_glTF_Exporter
 
         private Stack<Transform> transformStack = new Stack<Transform>();
 
+        /// <summary>
+        /// container for the documents
+        /// </summary>
+        List<Document> documents = new List<Document>();
+
         public GLTFExportContext(Document doc)
         {
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
-            this.doc = doc;
+            documents.Add(doc);
             view = doc.ActiveView;
         }
 
@@ -173,6 +197,8 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
+            linkTransformation = (element as RevitLinkInstance)?.GetTransform();
+
             if (nodes.Contains(element.UniqueId))
             {
                 // Duplicate element, skip adding.
@@ -180,7 +206,8 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
+            if (linkTransformation == null)
+                ProgressBarWindow.ViewModel.ProgressBarValue++;
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
@@ -205,8 +232,15 @@ namespace Revit_glTF_Exporter
             rootNode.children.Add(nodes.CurrentIndex);
 
             // Reset _currentGeometry for new element
-            currentGeometry = new IndexedDictionary<GeometryDataObject>();
-            currentVertices = new IndexedDictionary<VertexLookupIntObject>();
+            if (currentGeometry == null)
+                currentGeometry = new IndexedDictionary<GeometryDataObject>();
+            else
+                currentGeometry.Reset();
+
+            if (currentVertices == null)
+                currentVertices = new IndexedDictionary<VertexLookupIntObject>();
+            else
+                currentVertices.Reset();
 
             return RenderNodeAction.Proceed;
         }
@@ -240,9 +274,8 @@ namespace Revit_glTF_Exporter
             Transform transform = CurrentTransform;
             IList<XYZ> pts = polymesh.GetPoints();
             pts = pts.Select(p => transform.OfPoint(p)).ToList();
-            IList<PolymeshFacet> facets = polymesh.GetFacets();
 
-            foreach (PolymeshFacet facet in facets)
+            foreach (PolymeshFacet facet in polymesh.GetFacets())
             {
                 foreach (int index in facet.GetVertices())
                 {
@@ -268,9 +301,7 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            if (!Util.CanBeLockOrHidden(element, view) ||
-            currentVertices == null ||
-            !currentVertices.List.Any())
+            if (currentVertices == null || !currentVertices.List.Any())
             {
                 return;
             }
@@ -279,6 +310,11 @@ namespace Revit_glTF_Exporter
             {
                 // Duplicate element, skip.
                 skipElementFlag = false;
+                return;
+            }
+
+            if (!Util.CanBeLockOrHidden(element, view))
+            {
                 return;
             }
 
@@ -295,11 +331,9 @@ namespace Revit_glTF_Exporter
             // Add vertex data to _currentGeometry for each geometry/material pairing
             foreach (KeyValuePair<string, VertexLookupIntObject> kvp in currentVertices.Dict)
             {
-                string vertex_key = kvp.Key;
-
+                var vertices = currentGeometry.GetElement(kvp.Key).Vertices;
                 foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
                 {
-                    var vertices = currentGeometry.GetElement(vertex_key).Vertices;
                     vertices.Add(p.Key.X);
                     vertices.Add(p.Key.Y);
                     vertices.Add(p.Key.Z);
@@ -395,8 +429,9 @@ namespace Revit_glTF_Exporter
 
         public RenderNodeAction OnLinkBegin(LinkNode node)
         {
-            transformStack.Push(
-                CurrentTransform.Multiply(node.GetTransform()));
+            documents.Add(node.GetDocument());
+
+            transformStack.Push(CurrentTransform.Multiply(linkTransformation));
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
@@ -406,6 +441,8 @@ namespace Revit_glTF_Exporter
         {
             // Note: This method is invoked even for instances that were skipped.
             transformStack.Pop();
+
+            documents.RemoveAt(1); // remove the item added in OnLinkBegin
         }
 
         public RenderNodeAction Begin(FaceNode node)
@@ -446,14 +483,7 @@ namespace Revit_glTF_Exporter
                         continue;
                     }
 
-                    List<PointIntObject> points = new List<PointIntObject>
-                        {
-                            new PointIntObject(triangle.get_Vertex(0)),
-                            new PointIntObject(triangle.get_Vertex(1)),
-                            new PointIntObject(triangle.get_Vertex(2)),
-                        };
-
-                    GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, points);
+                    GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, triangle);
 
                     if (preferences.normals)
                     {
