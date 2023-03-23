@@ -66,3 +66,94 @@ jobs:
         id: run-tests
         run: |
           dotnet test
+      #dev_actions.yml
+
+name: Compile and run tests
+on:
+  push:
+    # this will cause the action to run on pushes to branches that start with the prefixes specified here
+    branches: [ develop, tests/*, features/*, docs/*, bugs/* ]
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+  pull_request:
+    # we'll also run this when pull requests to develop are opened
+    branches: [ develop ]
+
+jobs:
+  Build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    env:
+        Solution_Name: Revit_glTF_Exporter.sln
+    outputs:
+      Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }} 
+      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}   
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+       # install and calculate the new version with GitVersion  
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.5.0'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+        
+        id: gitversion # step id used as reference for output values
+      - name: Display GitVersion outputs
+        run: |
+          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+          echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"   
+          echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"    
+
+
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+
+      - name: Restore nuGet packages
+        run: nuget restore Revit_glTF_Exporter.sln 
+
+      - name: Run MSBuild
+        id: run-msbuild
+        run: |
+          msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release
+
+      - name: Run tests
+        id: run-tests
+        run: |
+          dotnet test
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}_QA
+          release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }} Testing
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: .\GltfInstaller\glTFExporter.exe
+          asset_name: GLTFExporter.exe
+          asset_content_type: application/zip
+
