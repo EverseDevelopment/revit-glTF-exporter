@@ -10,8 +10,10 @@
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
 
-
-    <Border
+    <Viewbox>
+        <Border
+            Height="424"
+            Width="510"
             Margin="5,5,5,5"
             Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent"
@@ -19,7 +21,7 @@
             CornerRadius="8,8,8,8"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <!--<Border.Effect>
+            <!--<Border.Effect>
             <DropShadowEffect BlurRadius="20" 
                               Color="Gray" 
                               Opacity="0.3" 
@@ -27,9 +29,9 @@
                               Direction="0"></DropShadowEffect>
         </Border.Effect>-->
 
-        <Grid x:Name="Root" Background="Transparent" Margin="-1,0,-1,0">
+            <Grid x:Name="Root" Background="Transparent">
 
-            <Button 
+                <Button 
                     Style="{DynamicResource CloseButtonStyle}" 
                     Name="TitleButton" 
                     Foreground="Black" 
@@ -40,11 +42,11 @@
                     FontSize="20" 
                     FontWeight="Light" 
                     Margin="20,10,362,0" VerticalAlignment="Top">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Width="290" Background="Transparent">
-                            <Grid>
-                                <Image Name="SlideUp_Image" 
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Width="290" Background="Transparent">
+                                <Grid>
+                                    <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
                                        Source="/GltfInstaller;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
@@ -53,23 +55,23 @@
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
                                        Margin="2,5,0,5"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers >
-                            <Trigger Property="IsDefaulted" Value="True">
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers >
+                                <Trigger Property="IsDefaulted" Value="True">
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-            <Button
+                <Button
                     Style="{DynamicResource CloseButtonStyle}"
                     Margin="332,376,13,0"
                     Background="Transparent"
@@ -78,21 +80,21 @@
                     FontSize="12"     
                     Foreground="{DynamicResource MainGray}"
                     VerticalAlignment="Top" Height="20">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="243*"/>
-                                    <ColumnDefinition Width="47*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="243*"/>
+                                        <ColumnDefinition Width="47*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
                                     Text="Made with       by e-verse" 
                                     Margin="0,1,5,-1"
                                     FontWeight="Bold" Grid.ColumnSpan="2">
-                                </TextBlock>
+                                    </TextBlock>
 
-                                <Image Name="heartImage" 
+                                    <Image Name="heartImage" 
                                        Visibility="Visible" 
                                        Source="/GltfInstaller;component/Resources/Heart.png"
                                        HorizontalAlignment="Left"
@@ -101,32 +103,32 @@
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
                                        Margin="63,0,0,3" RenderTransformOrigin="0.5,0.5">
-                                    <Image.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform ScaleY="1"/>
-                                            <SkewTransform/>
-                                            <RotateTransform/>
-                                            <TranslateTransform/>
-                                        </TransformGroup>
-                                    </Image.RenderTransform>
-                                </Image>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers >
-                            <Trigger Property="IsDefaulted" Value="True">
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+                                        <Image.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleY="1"/>
+                                                <SkewTransform/>
+                                                <RotateTransform/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Image.RenderTransform>
+                                    </Image>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers >
+                                <Trigger Property="IsDefaulted" Value="True">
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-            <TextBlock
+                <TextBlock
                     x:Name="DialogDescription"
                     Margin="34,112,34,188"
                     Background="Transparent"
@@ -137,9 +139,9 @@
                     LineHeight="20"
                     TextWrapping="WrapWithOverflow">
                     [ExitDialogDescription]
-            </TextBlock>
+                </TextBlock>
 
-            <!--<Label
+                <!--<Label
                 x:Name="DialogNextProjects1"
                 Margin="38,180,34,200"
                 Background="Transparent"
@@ -156,7 +158,7 @@
                 Content="projects?"
                 HorizontalContentAlignment="Center"></Label>-->
 
-            <Button
+                <Button
                     Style="{DynamicResource CloseButtonStyle}"
                     Margin="183,241,189,0"
                     Background="Transparent"
@@ -165,20 +167,20 @@
                     FontSize="12"     
                     Foreground="{DynamicResource MainGray}"
                     VerticalAlignment="Top" Height="26">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
-                            <Grid Margin="0,0,0,-4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="243*"/>
-                                    <ColumnDefinition Width="47*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                                <Grid Margin="0,0,0,-4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="243*"/>
+                                        <ColumnDefinition Width="47*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
                                     Text="Drop us a line" 
                                     Margin="31,0,11,13"
                                     FontWeight="Bold" Grid.ColumnSpan="2">
-                                </TextBlock>
-                                <Path
+                                    </TextBlock>
+                                    <Path
                             x:Name="Cross"
                           Data="M 0 0 L 80 0 M 70 10 L 80 0 L 70 -10"
                           Stretch="Fill"
@@ -190,40 +192,40 @@
                           VerticalAlignment="Bottom" 
                            Height="12" Grid.ColumnSpan="2"/>
 
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers >
-                            <Trigger Property="IsDefaulted" Value="True">
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers >
+                                <Trigger Property="IsDefaulted" Value="True">
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
 
-            </Button>
+                </Button>
 
-            <Button Style="{DynamicResource MainButtonStyle}" 
+                <Button Style="{DynamicResource MainButtonStyle}" 
                     x:Name="GoExit"
                     Content="Finish"
                     MinWidth="73" 
                     Margin="181,302,181,0" 
                     VerticalAlignment="Top">
-            </Button>
+                </Button>
 
-            <Button 
+                <Button 
                    Style="{DynamicResource TabCloseButtonStyle}"
                    Name="Cancel"
                    VerticalAlignment="Top" 
                    Margin="452,13,17,0"/>
 
-        </Grid>
-    </Border>
-
+            </Grid>
+        </Border>
+    </Viewbox>
     <wixsharp:WpfDialog.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -4,7 +4,9 @@ on:
   push:
     # this will cause the action to run on pushes to main
     branches: [ "master" ]
-
+  pull_request:
+    # this will cause the action to run on pushes to main
+    branches: [ "master" ]
 jobs:
 
   build:
@@ -53,9 +55,7 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
       
-    # Change the version inside of the 'InstallScript.iss' file
-    - name: Setting new version to the 'InstallScript.iss' file
-      run: (Get-Content GLTFExporter.Installer/InstallScript.iss) -replace 'AppVersion=1.0.0', 'AppVersion=v${{ steps.gitversion.outputs.majorMinorPatch }}' | Out-File -encoding ASCII GLTFExporter.Installer/InstallScript.iss
+   
         
     # Change the version inside 'App.config' file
     - name: Setting new version to the App.config file
@@ -83,6 +83,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: .\GLTFExporter.Installer\Installer\GTLFExporter.exe
+        asset_path: .\GltfInstaller\glTFExporter.exe
         asset_name: GLTFExporter.exe
         asset_content_type: application/zip
