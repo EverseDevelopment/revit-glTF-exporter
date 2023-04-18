@@ -71,9 +71,9 @@
             this.Close();
         }
 
-        private void Title_Link(object sender, RoutedEventArgs e)
+        private void Leia_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/");
+            System.Diagnostics.Process.Start("https://e-verse.com/leia/");
         }
     }
 }

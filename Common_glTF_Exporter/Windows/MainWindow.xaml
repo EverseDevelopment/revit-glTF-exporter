@@ -33,7 +33,7 @@
         <CommandBinding Command="Open"
                         Executed="OnExportView" />
         <CommandBinding Command="Help"
-                        Executed="Title_Link" />
+                        Executed="Leia_Link" />
     </Window.CommandBindings>
 
     <Border 
@@ -59,7 +59,7 @@
                     Name="TitleButton" 
                     Foreground="Black" 
                     BorderThickness="0" 
-                    Click="Title_Link" 
+                    Click="Leia_Link" 
                     Background="Transparent" 
                     Height="50" 
                     FontSize="20" 

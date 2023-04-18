@@ -32,7 +32,7 @@
                     Name="TitleButton" 
                     Foreground="Black" 
                     BorderThickness="0" 
-                    Click="Title_Link" 
+                    Click="Leia_Link" 
                     Background="Transparent" 
                     Height="50" 
                     FontSize="20" 
