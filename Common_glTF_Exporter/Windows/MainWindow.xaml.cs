@@ -109,6 +109,11 @@
             System.Diagnostics.Process.Start("https://e-verse.com/");
         }
 
+        private void Leia_Link(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://e-verse.com/leia/");
+        }
+
         private void TrueFalseToggles(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.Primitives.ToggleButton button = sender as System.Windows.Controls.Primitives.ToggleButton;
