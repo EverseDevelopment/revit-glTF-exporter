@@ -64,6 +64,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -105,12 +106,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\Images"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\Images\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
-                                if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2023\eversegltfExporter\"
+		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\gltfExporter\"
+		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2023\gltfExporter\Images"
+		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2023\gltfExporter\Images\"
+		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\gltfExporter\"
+                                if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\gltfExporter\"
+		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2023\gltfExporter\"
 		if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2023"
 	</PostBuildEvent>
   </PropertyGroup>
