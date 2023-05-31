@@ -44,6 +44,7 @@ jobs:
       - name: Display GitVersion outputs
         run: |
           echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+          echo "WeightedPreReleaseNumber: ${{ steps.gitversion.outputs.WeightedPreReleaseNumber }}"
           echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"   
           echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"    
 
@@ -73,7 +74,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}-QA
+          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.WeightedPreReleaseNumber}}-b
           release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }} Testing
           draft: false
           prerelease: true
