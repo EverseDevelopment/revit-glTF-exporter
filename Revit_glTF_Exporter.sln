@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GltfInstaller", "GltfInstal
 		{C46F2444-59CD-40B4-9518-D30EC54EA212} = {C46F2444-59CD-40B4-9518-D30EC54EA212}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revit_glTF_Exporter_2024", "Revit_glTF_Exporter_2024\Revit_glTF_Exporter_2024.csproj", "{C7A8980F-6129-4C0B-9CF1-1CB1023197E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,10 @@ Global
 		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A46C67A-90D6-445B-BFAB-3890AD1A6E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7A8980F-6129-4C0B-9CF1-1CB1023197E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7A8980F-6129-4C0B-9CF1-1CB1023197E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7A8980F-6129-4C0B-9CF1-1CB1023197E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7A8980F-6129-4C0B-9CF1-1CB1023197E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,5 +89,6 @@ Global
 		Common_glTF_Exporter\Common_glTF_Exporter.projitems*{829ce9c2-7723-4d1e-813a-c3ab7c6c1d51}*SharedItemsImports = 4
 		Common_glTF_Exporter\Common_glTF_Exporter.projitems*{9ddf0fe0-8b4f-42f9-867e-0e62184406f1}*SharedItemsImports = 4
 		Common_glTF_Exporter\Common_glTF_Exporter.projitems*{c46f2444-59cd-40b4-9518-d30ec54ea212}*SharedItemsImports = 4
+		Common_glTF_Exporter\Common_glTF_Exporter.projitems*{c7a8980f-6129-4c0b-9cf1-1cb1023197e7}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
