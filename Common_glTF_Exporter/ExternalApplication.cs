@@ -13,10 +13,10 @@
     public class ExternalApplication : IExternalApplication
     {
         private static readonly string RIBBONTAB = "e-verse";
-        private static readonly string RIBBONPANEL = "Export";
+        private static readonly string RIBBONPANEL = "Export glTF";
         private static readonly string LEIAURL = @"https://e-verse.com/leia/";
-        private static string pushButtonName = "glTF";
-        private static string pushButtonText = "glTF";
+        private static string pushButtonName = "Leia";
+        private static string pushButtonText = "Leia";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
         private static string buttonIconsFolder = Path.GetDirectoryName(addInPath) + "\\Images\\";
 
