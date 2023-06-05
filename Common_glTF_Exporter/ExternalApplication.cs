@@ -14,7 +14,7 @@
     {
         private static readonly string RIBBONTAB = "e-verse";
         private static readonly string RIBBONPANEL = "Export glTF";
-        private static readonly string LEIAURL = @"https://e-verse.com/leia/";
+        private static readonly string LEIAURL = @"https://e-verse.com/leia-gltf-exporter/";
         private static string pushButtonName = "Leia";
         private static string pushButtonText = "Leia";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
