@@ -8,10 +8,6 @@ on:
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
-  pull_request:
-    # we'll also run this when pull requests to develop are opened
-    branches: [ develop ]
-
 jobs:
   Build:
     # The type of runner that the job will run on
@@ -89,3 +85,4 @@ jobs:
           asset_path: .\GltfInstaller\glTFExporter.exe
           asset_name: GLTFExporter_testing.exe
           asset_content_type: application/zip
+
