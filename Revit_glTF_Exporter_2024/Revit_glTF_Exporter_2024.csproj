@@ -128,14 +128,16 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2024\gltfExporter\"
-if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2024\gltfExporter\Images"
-if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2024\gltfExporter\Images\"
-if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2024\gltfExporter\"
-if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2024\gltfExporter\"
-if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2024\gltfExporter\"
-if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2024"
-	</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug (
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2024\"
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2024\"
+    copy "$(ProjectDir)$(OutputPath)*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2024\"
+    copy "$(ProjectDir)$(OutputPath)*.config" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2024\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2024\"
+)</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

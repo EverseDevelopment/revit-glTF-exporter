@@ -108,14 +108,15 @@
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2021\gltfExporter\"
-		if $(ConfigurationName) == Debug mkdir "$(AppData)\Autodesk\REVIT\Addins\2021\gltfExporter\Images"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)\Images\*" "$(AppData)\Autodesk\REVIT\Addins\2021\gltfExporter\Images\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2021\gltfExporter\"
-                                if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2021\gltfExporter\"
-		if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)*.config" "$(AppData)\Autodesk\REVIT\Addins\2021\gltfExporter\"
-		if $(ConfigurationName) == Debug copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(AppData)\Autodesk\REVIT\Addins\2021"
-	</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug (
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
+    copy "$(ProjectDir)$(OutputPath)*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
+    copy "$(ProjectDir)$(OutputPath)*.config" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>
