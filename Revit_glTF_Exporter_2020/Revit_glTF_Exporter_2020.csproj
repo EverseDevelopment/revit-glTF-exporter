@@ -157,8 +157,10 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
     mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2020\"
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2020\Images\"
     mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
     copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2020\Images\"
     copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
     copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2020\"
     copy "$(ProjectDir)$(OutputPath)*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2020\"
