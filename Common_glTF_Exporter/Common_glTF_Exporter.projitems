@@ -95,6 +95,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="$(MSBuildThisFileDirectory)PackageContents.xml" />
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Black.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -110,7 +111,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Images\gltf.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Revit_glTF_Exporter.addin">
+    <Content Include="$(MSBuildThisFileDirectory)Leia_glTF_Exporter.addin">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -123,7 +124,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)Windows\ProgressBarWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Windows\Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
