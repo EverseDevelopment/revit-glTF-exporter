@@ -57,7 +57,7 @@ jobs:
       - name: Run MSBuild
         id: run-msbuild
         run: |
-          msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release
+          msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release -m
 
       - name: Run tests
         id: run-tests

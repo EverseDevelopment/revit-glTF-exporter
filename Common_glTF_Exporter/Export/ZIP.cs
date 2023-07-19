@@ -33,7 +33,12 @@
                     files.Add(glbFile);
                 }
 
-                // TODO: Validate if there is an existing ZIP
+                // Validate if there is an existing ZIP
+                if (File.Exists(zipFile))
+                {
+                    File.Delete(zipFile);
+                }
+
                 zipAction(zipFile, files);
             }
             finally
@@ -56,6 +61,5 @@
             // Dispose of the object when we are done
             zip.Dispose();
         }
-
     }
 }

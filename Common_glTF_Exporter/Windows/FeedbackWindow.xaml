@@ -37,14 +37,14 @@
                     Height="50" 
                     FontSize="20" 
                     FontWeight="Light" 
-                    Margin="6,4,170,0" VerticalAlignment="Top">
+                    Margin="6,4,145,0" VerticalAlignment="Top">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Width="290" Background="Transparent">
                             <Grid>
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
-                                       Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
+                                       Source="/Leia_glTF_Exporter;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
                                        Width="115" 
                                        SnapsToDevicePixels="True" 
