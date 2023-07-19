@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>Leia_glTF_Exporter</Name>
+		<Assembly>Leia_glTF_Exporter.dll</Assembly>
+		<FullClassName>Revit_glTF_Exporter.ExternalApplication</FullClassName>
+		<Text>Leia_glTF_Exporter</Text>
+		<Description>Leia glTF Exporter</Description>
+		<VisibilityMode>AlwaysVisible</VisibilityMode>
+		<AddInId>
+			3c679028-b7ed-4cd7-9307-0e9760e7ea8f
+		</AddInId>
+		<VendorId>EVRS</VendorId>
+		<VendorDescription>e-verse, www.e-verse.com</VendorDescription>
+	</AddIn>
+</RevitAddIns>

@@ -8,10 +8,6 @@ on:
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
-  pull_request:
-    # we'll also run this when pull requests to develop are opened
-    branches: [ develop ]
-
 jobs:
   Build:
     # The type of runner that the job will run on
@@ -30,12 +26,12 @@ jobs:
       
        # install and calculate the new version with GitVersion  
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7
+        uses: gittools/actions/gitversion/setup@v0
         with:
-          versionSpec: '5.5.0'
+          versionSpec: '5.x'
 
       - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v0.9.7
+        uses: gittools/actions/gitversion/execute@v0
         with:
           useConfigFile: true
           configFilePath: GitVersion.yml
@@ -44,6 +40,7 @@ jobs:
       - name: Display GitVersion outputs
         run: |
           echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+          echo "PreReleaseNumber: ${{ steps.gitversion.outputs.PreReleaseNumber }}"
           echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"   
           echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"    
 
@@ -60,7 +57,7 @@ jobs:
       - name: Run MSBuild
         id: run-msbuild
         run: |
-          msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release
+          msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release -m
 
       - name: Run tests
         id: run-tests
@@ -73,8 +70,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}-QA
-          release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }} Testing
+          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.PreReleaseNumber}}-b
+          release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.PreReleaseNumber}} Testing
           draft: false
           prerelease: true
 
@@ -88,3 +85,4 @@ jobs:
           asset_path: .\GltfInstaller\glTFExporter.exe
           asset_name: GLTFExporter_testing.exe
           asset_content_type: application/zip
+
