@@ -33,7 +33,7 @@
         <CommandBinding Command="Open"
                         Executed="OnExportView" />
         <CommandBinding Command="Help"
-                        Executed="Title_Link" />
+                        Executed="Leia_Link" />
     </Window.CommandBindings>
 
     <Border 
@@ -59,7 +59,7 @@
                     Name="TitleButton" 
                     Foreground="Black" 
                     BorderThickness="0" 
-                    Click="Title_Link" 
+                    Click="Leia_Link" 
                     Background="Transparent" 
                     Height="50" 
                     FontSize="20" 
@@ -71,7 +71,7 @@
                             <Grid>
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
-                                       Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
+                                       Source="/Leia_glTF_Exporter;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
                                        Width="115" 
                                        SnapsToDevicePixels="True" 
@@ -386,13 +386,13 @@
 
                                 <Image Name="heartImage" 
                                        Visibility="Visible" 
-                                       Source="/Revit_glTF_Exporter;component/Resources/Heart.png"
+                                       Source="/Leia_glTF_Exporter;component/Resources/Heart.png"
                                        HorizontalAlignment="Left"
                                        Width="20" 
                                        SnapsToDevicePixels="True" 
                                        RenderOptions.BitmapScalingMode="HighQuality" 
                                        RenderOptions.EdgeMode="Aliased" 
-                                       Margin="66,-1,0,4" RenderTransformOrigin="0.5,0.5">
+                                       Margin="64,-1,0,4" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleY="1"/>

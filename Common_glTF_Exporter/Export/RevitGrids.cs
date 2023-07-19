@@ -28,6 +28,12 @@
                     Grid g = grids[i] as Grid;
                     Line l = g.Curve as Line;
 
+                    // TODO: handle Arc, not only Line
+                    if (l == null)
+                    {
+                        continue;
+                    }
+
                     var origin = l.Origin;
                     var direction = l.Direction;
                     var length = l.Length;

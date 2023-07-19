@@ -265,3 +265,6 @@ __pycache__/
 
 # CircleCI local testing
 process.yml
+GltfInstaller/glTFExporter.exe
+
+GltfInstaller/wix/GltfInstaller.g.wxs

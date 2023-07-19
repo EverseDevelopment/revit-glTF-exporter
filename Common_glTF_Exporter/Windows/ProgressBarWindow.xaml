@@ -32,7 +32,7 @@
                     Name="TitleButton" 
                     Foreground="Black" 
                     BorderThickness="0" 
-                    Click="Title_Link" 
+                    Click="Leia_Link" 
                     Background="Transparent" 
                     Height="50" 
                     FontSize="20" 
@@ -44,7 +44,7 @@
                             <Grid>
                                 <Image Name="SlideUp_Image" 
                                        Visibility="Visible" 
-                                       Source="/Revit_glTF_Exporter;component/Resources/gltf.png"
+                                       Source="/Leia_glTF_Exporter;component/Resources/gltf.png"
                                        HorizontalAlignment="Left"
                                        Width="115" 
                                        SnapsToDevicePixels="True" 
