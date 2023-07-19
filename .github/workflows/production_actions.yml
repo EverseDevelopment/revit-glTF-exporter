@@ -63,7 +63,7 @@ jobs:
         
     # Build the solution on the Release mode
     - name: Build and Publish App
-      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
+      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release -m /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
         
     - name: Create Release
       id: create_release
