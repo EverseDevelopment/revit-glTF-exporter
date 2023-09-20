@@ -4,9 +4,7 @@ on:
   push:
     # this will cause the action to run on pushes to main
     branches: [ "master" ]
-  pull_request:
-    # this will cause the action to run on pushes to main
-    branches: [ "master" ]
+
 jobs:
 
   build:
