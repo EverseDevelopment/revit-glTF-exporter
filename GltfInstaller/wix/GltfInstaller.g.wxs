@@ -6,771 +6,18 @@
 </auto-generated>
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="6fe30b47-2577-43ad-9095-1861ca25889c" Name="Leia glTF exporter" Language="1033" Codepage="Windows-1252" Version="1.0.0.0" UpgradeCode="6fe30b47-2577-43ad-9095-1861ba25889b" Manufacturer="silic">
+  <Product Id="6fe30b47-2577-43ad-9095-1861ca25889c" Name="Leia glTF exporter" Language="1033" Codepage="Windows-1252" Version="1.0.0.0" UpgradeCode="6fe30b47-2577-43ad-9095-1861ba25889b" Manufacturer="PabloD">
     <Package InstallerVersion="200" Compressed="yes" SummaryCodepage="Windows-1252" Languages="1033" />
     <Media Id="1" Cabinet="Leia20glTF20exporter.cab" EmbedCab="yes" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder" Name="AppDataFolder">
         <Directory Id="AppDataFolder.Autodesk" Name="Autodesk">
-          <Directory Id="AppDataFolder.Autodesk.Revit" Name="Revit">
-            <Directory Id="INSTALLDIR" Name="Addins">
-              <Directory Id="INSTALLDIR.2019" Name="2019">
-
-                <Component Id="Component.Revit_glTF_Exporter.addin_2974217233" Guid="6fe30b47-2577-43ad-9095-18610b71e4a4">
-                  <File Id="Revit_glTF_Exporter.addin_2974217233" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
-                  <RemoveFolder Id="INSTALLDIR.2019" On="uninstall" />
-
-                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                  </RegistryKey>
-                </Component>
-
-                <Directory Id="INSTALLDIR.2019.gltfExporter" Name="gltfExporter">
-
-                  <Component Id="Component.DracoWrapper.dll_2684361006" Guid="6fe30b47-2577-43ad-9095-18618e5fb4a0">
-                    <File Id="DracoWrapper.dll_2684361006" Source="..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll" />
-                    <RemoveFolder Id="INSTALLDIR.2019.gltfExporter" On="uninstall" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.dll_3706698467" Guid="6fe30b47-2577-43ad-9095-1861d6015f4b">
-                    <File Id="EntityFramework.dll_3706698467" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.SqlServer.dll_2553245895" Guid="6fe30b47-2577-43ad-9095-186197c1c287">
-                    <File Id="EntityFramework.SqlServer.dll_2553245895" Source="..\Revit_glTF_Exporter_2019\bin\Release\EntityFramework.SqlServer.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Newtonsoft.Json.dll_3902637423" Guid="6fe30b47-2577-43ad-9095-186163564815">
-                    <File Id="Newtonsoft.Json.dll_3902637423" Source="..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll_2629715135" Guid="6fe30b47-2577-43ad-9095-1861775ce18a">
-                    <File Id="Revit_glTF_Exporter.dll_2629715135" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll.config_762735247" Guid="6fe30b47-2577-43ad-9095-1861b4a87f92">
-                    <File Id="Revit_glTF_Exporter.dll.config_762735247" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.dll.config" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_310372759" Guid="6fe30b47-2577-43ad-9095-1861967bb567">
-                    <File Id="Revit_glTF_Exporter.pdb_310372759" Source="..\Revit_glTF_Exporter_2019\bin\Release\Revit_glTF_Exporter.pdb" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.dll_234532718" Guid="6fe30b47-2577-43ad-9095-186188ccf9b1">
-                    <File Id="System.Data.SQLite.dll_234532718" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_2660553139" Guid="6fe30b47-2577-43ad-9095-18616dee2e3b">
-                    <File Id="System.Data.SQLite.EF6.dll_2660553139" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.EF6.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_2966397276" Guid="6fe30b47-2577-43ad-9095-186151092f07">
-                    <File Id="System.Data.SQLite.Linq.dll_2966397276" Source="..\Revit_glTF_Exporter_2019\bin\Release\System.Data.SQLite.Linq.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Directory Id="INSTALLDIR.2019.gltfExporter.Images" Name="Images">
-
-                    <Component Id="Component.gltf.png_865807557" Guid="6fe30b47-2577-43ad-9095-1861d29d6616">
-                      <File Id="gltf.png_865807557" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\gltf.png" />
-                      <RemoveFolder Id="INSTALLDIR.2019.gltfExporter.Images" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.Heart.png_2394191730" Guid="6fe30b47-2577-43ad-9095-18614d35d0d7">
-                      <File Id="Heart.png_2394191730" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\Heart.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.logo.png_3681343745" Guid="6fe30b47-2577-43ad-9095-186126d64880">
-                      <File Id="logo.png_3681343745" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\logo.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2019.gltfExporter.x64" Name="x64">
-
-                    <Component Id="Component.SQLite.Interop.dll_4170655171" Guid="6fe30b47-2577-43ad-9095-1861ab16b4ab">
-                      <File Id="SQLite.Interop.dll_4170655171" Source="..\Revit_glTF_Exporter_2019\bin\Release\x64\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2019.gltfExporter.x64" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2019.gltfExporter.x86" Name="x86">
-
-                    <Component Id="Component.SQLite.Interop.dll_3857273625" Guid="6fe30b47-2577-43ad-9095-1861af1d7c46">
-                      <File Id="SQLite.Interop.dll_3857273625" Source="..\Revit_glTF_Exporter_2019\bin\Release\x86\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2019.gltfExporter.x86" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-                </Directory>
-              </Directory>
-
-              <Directory Id="INSTALLDIR.2020" Name="2020">
-
-                <Component Id="Component.Revit_glTF_Exporter.addin_1670683156" Guid="6fe30b47-2577-43ad-9095-1861ab1ba191">
-                  <File Id="Revit_glTF_Exporter.addin_1670683156" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
-                  <RemoveFolder Id="INSTALLDIR.2020" On="uninstall" />
-
-                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                  </RegistryKey>
-                </Component>
-
-                <Directory Id="INSTALLDIR.2020.gltfExporter" Name="gltfExporter">
-
-                  <Component Id="Component.DracoWrapper.dll_2789463542" Guid="6fe30b47-2577-43ad-9095-1861676ae33d">
-                    <File Id="DracoWrapper.dll_2789463542" Source="..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll" />
-                    <RemoveFolder Id="INSTALLDIR.2020.gltfExporter" On="uninstall" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.dll_3930560719" Guid="6fe30b47-2577-43ad-9095-186119d5ae78">
-                    <File Id="EntityFramework.dll_3930560719" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.SqlServer.dll_940988438" Guid="6fe30b47-2577-43ad-9095-18614bd40f85">
-                    <File Id="EntityFramework.SqlServer.dll_940988438" Source="..\Revit_glTF_Exporter_2020\bin\Release\EntityFramework.SqlServer.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Newtonsoft.Json.dll_4257643699" Guid="6fe30b47-2577-43ad-9095-1861f8a67442">
-                    <File Id="Newtonsoft.Json.dll_4257643699" Source="..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll_3223506599" Guid="6fe30b47-2577-43ad-9095-18610751ddc2">
-                    <File Id="Revit_glTF_Exporter.dll_3223506599" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll.config_4067083133" Guid="6fe30b47-2577-43ad-9095-1861f613b5b8">
-                    <File Id="Revit_glTF_Exporter.dll.config_4067083133" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.dll.config" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_956901839" Guid="6fe30b47-2577-43ad-9095-186142180891">
-                    <File Id="Revit_glTF_Exporter.pdb_956901839" Source="..\Revit_glTF_Exporter_2020\bin\Release\Revit_glTF_Exporter.pdb" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.dll_583455263" Guid="6fe30b47-2577-43ad-9095-1861e5997d4f">
-                    <File Id="System.Data.SQLite.dll_583455263" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_117084067" Guid="6fe30b47-2577-43ad-9095-1861b92b662f">
-                    <File Id="System.Data.SQLite.EF6.dll_117084067" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.EF6.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_4187217148" Guid="6fe30b47-2577-43ad-9095-18611a0b51c3">
-                    <File Id="System.Data.SQLite.Linq.dll_4187217148" Source="..\Revit_glTF_Exporter_2020\bin\Release\System.Data.SQLite.Linq.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Directory Id="INSTALLDIR.2020.gltfExporter.Images" Name="Images">
-
-                    <Component Id="Component.gltf.png_3457432732" Guid="6fe30b47-2577-43ad-9095-1861547db529">
-                      <File Id="gltf.png_3457432732" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\gltf.png" />
-                      <RemoveFolder Id="INSTALLDIR.2020.gltfExporter.Images" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.Heart.png_1216439389" Guid="6fe30b47-2577-43ad-9095-1861525570b6">
-                      <File Id="Heart.png_1216439389" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\Heart.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.logo.png_3472786350" Guid="6fe30b47-2577-43ad-9095-1861f977454c">
-                      <File Id="logo.png_3472786350" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\logo.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2020.gltfExporter.x64" Name="x64">
-
-                    <Component Id="Component.SQLite.Interop.dll_945901458" Guid="6fe30b47-2577-43ad-9095-1861b7423b44">
-                      <File Id="SQLite.Interop.dll_945901458" Source="..\Revit_glTF_Exporter_2020\bin\Release\x64\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2020.gltfExporter.x64" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2020.gltfExporter.x86" Name="x86">
-
-                    <Component Id="Component.SQLite.Interop.dll_3033027207" Guid="6fe30b47-2577-43ad-9095-18611e61c317">
-                      <File Id="SQLite.Interop.dll_3033027207" Source="..\Revit_glTF_Exporter_2020\bin\Release\x86\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2020.gltfExporter.x86" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-                </Directory>
-              </Directory>
-
-              <Directory Id="INSTALLDIR.2021" Name="2021">
-
-                <Component Id="Component.Revit_glTF_Exporter.addin_4203761214" Guid="6fe30b47-2577-43ad-9095-18613a3cbdbb">
-                  <File Id="Revit_glTF_Exporter.addin_4203761214" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
-                  <RemoveFolder Id="INSTALLDIR.2021" On="uninstall" />
-
-                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                  </RegistryKey>
-                </Component>
-
-                <Directory Id="INSTALLDIR.2021.gltfExporter" Name="gltfExporter">
-
-                  <Component Id="Component.DracoWrapper.dll_1355050002" Guid="6fe30b47-2577-43ad-9095-1861838a49e6">
-                    <File Id="DracoWrapper.dll_1355050002" Source="..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll" />
-                    <RemoveFolder Id="INSTALLDIR.2021.gltfExporter" On="uninstall" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.dll_3509405903" Guid="6fe30b47-2577-43ad-9095-1861d3b3587c">
-                    <File Id="EntityFramework.dll_3509405903" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.SqlServer.dll_2628571730" Guid="6fe30b47-2577-43ad-9095-18618c448f2b">
-                    <File Id="EntityFramework.SqlServer.dll_2628571730" Source="..\Revit_glTF_Exporter_2021\bin\Release\EntityFramework.SqlServer.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Newtonsoft.Json.dll_2188595901" Guid="6fe30b47-2577-43ad-9095-1861593193cf">
-                    <File Id="Newtonsoft.Json.dll_2188595901" Source="..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll_1273745461" Guid="6fe30b47-2577-43ad-9095-1861a05e7983">
-                    <File Id="Revit_glTF_Exporter.dll_1273745461" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll.config_3765202868" Guid="6fe30b47-2577-43ad-9095-1861ea3acdcf">
-                    <File Id="Revit_glTF_Exporter.dll.config_3765202868" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.dll.config" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_3540874509" Guid="6fe30b47-2577-43ad-9095-18618ed43be4">
-                    <File Id="Revit_glTF_Exporter.pdb_3540874509" Source="..\Revit_glTF_Exporter_2021\bin\Release\Revit_glTF_Exporter.pdb" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.dll_201813493" Guid="6fe30b47-2577-43ad-9095-18616a173f70">
-                    <File Id="System.Data.SQLite.dll_201813493" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_1638402539" Guid="6fe30b47-2577-43ad-9095-186177524528">
-                    <File Id="System.Data.SQLite.EF6.dll_1638402539" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.EF6.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_2496699970" Guid="6fe30b47-2577-43ad-9095-186167e6f0b3">
-                    <File Id="System.Data.SQLite.Linq.dll_2496699970" Source="..\Revit_glTF_Exporter_2021\bin\Release\System.Data.SQLite.Linq.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Directory Id="INSTALLDIR.2021.gltfExporter.Images" Name="Images">
-
-                    <Component Id="Component.gltf.png_1723191433" Guid="6fe30b47-2577-43ad-9095-1861f9a5ecf4">
-                      <File Id="gltf.png_1723191433" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\gltf.png" />
-                      <RemoveFolder Id="INSTALLDIR.2021.gltfExporter.Images" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.Heart.png_1410232485" Guid="6fe30b47-2577-43ad-9095-18617770b607">
-                      <File Id="Heart.png_1410232485" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\Heart.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.logo.png_4036593753" Guid="6fe30b47-2577-43ad-9095-186195f10914">
-                      <File Id="logo.png_4036593753" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\logo.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2021.gltfExporter.x64" Name="x64">
-
-                    <Component Id="Component.SQLite.Interop.dll_4041785265" Guid="6fe30b47-2577-43ad-9095-18615443ef99">
-                      <File Id="SQLite.Interop.dll_4041785265" Source="..\Revit_glTF_Exporter_2021\bin\Release\x64\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2021.gltfExporter.x64" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2021.gltfExporter.x86" Name="x86">
-
-                    <Component Id="Component.SQLite.Interop.dll_3413827434" Guid="6fe30b47-2577-43ad-9095-1861923ffaf0">
-                      <File Id="SQLite.Interop.dll_3413827434" Source="..\Revit_glTF_Exporter_2021\bin\Release\x86\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2021.gltfExporter.x86" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-                </Directory>
-              </Directory>
-
-              <Directory Id="INSTALLDIR.2022" Name="2022">
-
-                <Component Id="Component.Revit_glTF_Exporter.addin_1519930038" Guid="6fe30b47-2577-43ad-9095-18610d811cd9">
-                  <File Id="Revit_glTF_Exporter.addin_1519930038" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
-                  <RemoveFolder Id="INSTALLDIR.2022" On="uninstall" />
-
-                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                  </RegistryKey>
-                </Component>
-
-                <Directory Id="INSTALLDIR.2022.gltfExporter" Name="gltfExporter">
-
-                  <Component Id="Component.DracoWrapper.dll_891506065" Guid="6fe30b47-2577-43ad-9095-1861bc70c9ba">
-                    <File Id="DracoWrapper.dll_891506065" Source="..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll" />
-                    <RemoveFolder Id="INSTALLDIR.2022.gltfExporter" On="uninstall" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.dll_1875448090" Guid="6fe30b47-2577-43ad-9095-1861d8127a95">
-                    <File Id="EntityFramework.dll_1875448090" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.SqlServer.dll_4227264270" Guid="6fe30b47-2577-43ad-9095-18618193404b">
-                    <File Id="EntityFramework.SqlServer.dll_4227264270" Source="..\Revit_glTF_Exporter_2022\bin\Release\EntityFramework.SqlServer.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Newtonsoft.Json.dll_2504092878" Guid="6fe30b47-2577-43ad-9095-1861de59c392">
-                    <File Id="Newtonsoft.Json.dll_2504092878" Source="..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll_1714836497" Guid="6fe30b47-2577-43ad-9095-1861c8c4cd4a">
-                    <File Id="Revit_glTF_Exporter.dll_1714836497" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll.config_1096422898" Guid="6fe30b47-2577-43ad-9095-18619554332c">
-                    <File Id="Revit_glTF_Exporter.dll.config_1096422898" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.dll.config" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_3219388649" Guid="6fe30b47-2577-43ad-9095-1861b577e906">
-                    <File Id="Revit_glTF_Exporter.pdb_3219388649" Source="..\Revit_glTF_Exporter_2022\bin\Release\Revit_glTF_Exporter.pdb" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.dll_2819707558" Guid="6fe30b47-2577-43ad-9095-1861f9469180">
-                    <File Id="System.Data.SQLite.dll_2819707558" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_211102511" Guid="6fe30b47-2577-43ad-9095-186169247d59">
-                    <File Id="System.Data.SQLite.EF6.dll_211102511" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.EF6.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_3227079814" Guid="6fe30b47-2577-43ad-9095-1861a1cd1c6d">
-                    <File Id="System.Data.SQLite.Linq.dll_3227079814" Source="..\Revit_glTF_Exporter_2022\bin\Release\System.Data.SQLite.Linq.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Directory Id="INSTALLDIR.2022.gltfExporter.Images" Name="Images">
-
-                    <Component Id="Component.gltf.png_17422305" Guid="6fe30b47-2577-43ad-9095-1861e331dbb1">
-                      <File Id="gltf.png_17422305" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\gltf.png" />
-                      <RemoveFolder Id="INSTALLDIR.2022.gltfExporter.Images" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.Heart.png_4280473972" Guid="6fe30b47-2577-43ad-9095-1861b0d08711">
-                      <File Id="Heart.png_4280473972" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\Heart.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.logo.png_954784027" Guid="6fe30b47-2577-43ad-9095-1861e50f6940">
-                      <File Id="logo.png_954784027" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\logo.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2022.gltfExporter.x64" Name="x64">
-
-                    <Component Id="Component.SQLite.Interop.dll_3744651137" Guid="6fe30b47-2577-43ad-9095-1861c3cdac1b">
-                      <File Id="SQLite.Interop.dll_3744651137" Source="..\Revit_glTF_Exporter_2022\bin\Release\x64\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2022.gltfExporter.x64" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2022.gltfExporter.x86" Name="x86">
-
-                    <Component Id="Component.SQLite.Interop.dll_473189472" Guid="6fe30b47-2577-43ad-9095-1861b012cde1">
-                      <File Id="SQLite.Interop.dll_473189472" Source="..\Revit_glTF_Exporter_2022\bin\Release\x86\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2022.gltfExporter.x86" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-                </Directory>
-              </Directory>
-
-              <Directory Id="INSTALLDIR.2023" Name="2023">
-
-                <Component Id="Component.Revit_glTF_Exporter.addin_662580862" Guid="6fe30b47-2577-43ad-9095-186121cce357">
-                  <File Id="Revit_glTF_Exporter.addin_662580862" Source="..\Common_glTF_Exporter\Revit_glTF_Exporter.addin" />
-                  <RemoveFolder Id="INSTALLDIR.2023" On="uninstall" />
-
-                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                  </RegistryKey>
-                </Component>
-
-                <Directory Id="INSTALLDIR.2023.gltfExporter" Name="gltfExporter">
-
-                  <Component Id="Component.DracoWrapper.dll_2486062853" Guid="6fe30b47-2577-43ad-9095-1861031ef7d3">
-                    <File Id="DracoWrapper.dll_2486062853" Source="..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll" />
-                    <RemoveFolder Id="INSTALLDIR.2023.gltfExporter" On="uninstall" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.dll_509948183" Guid="6fe30b47-2577-43ad-9095-18611b0a9dc0">
-                    <File Id="EntityFramework.dll_509948183" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.EntityFramework.SqlServer.dll_3028946528" Guid="6fe30b47-2577-43ad-9095-186185203caa">
-                    <File Id="EntityFramework.SqlServer.dll_3028946528" Source="..\Revit_glTF_Exporter_2023\bin\Release\EntityFramework.SqlServer.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Newtonsoft.Json.dll_2086389547" Guid="6fe30b47-2577-43ad-9095-18616efce2c5">
-                    <File Id="Newtonsoft.Json.dll_2086389547" Source="..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll_377477003" Guid="6fe30b47-2577-43ad-9095-1861592511c7">
-                    <File Id="Revit_glTF_Exporter.dll_377477003" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.dll.config_51808737" Guid="6fe30b47-2577-43ad-9095-1861c90d2943">
-                    <File Id="Revit_glTF_Exporter.dll.config_51808737" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.dll.config" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.Revit_glTF_Exporter.pdb_3408755811" Guid="6fe30b47-2577-43ad-9095-186151c8108d">
-                    <File Id="Revit_glTF_Exporter.pdb_3408755811" Source="..\Revit_glTF_Exporter_2023\bin\Release\Revit_glTF_Exporter.pdb" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.dll_3658980421" Guid="6fe30b47-2577-43ad-9095-1861b64e9067">
-                    <File Id="System.Data.SQLite.dll_3658980421" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.EF6.dll_1963875251" Guid="6fe30b47-2577-43ad-9095-1861a308b54a">
-                    <File Id="System.Data.SQLite.EF6.dll_1963875251" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.EF6.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Component Id="Component.System.Data.SQLite.Linq.dll_2190804282" Guid="6fe30b47-2577-43ad-9095-1861749db595">
-                    <File Id="System.Data.SQLite.Linq.dll_2190804282" Source="..\Revit_glTF_Exporter_2023\bin\Release\System.Data.SQLite.Linq.dll" />
-
-                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                    </RegistryKey>
-                  </Component>
-
-                  <Directory Id="INSTALLDIR.2023.gltfExporter.Images" Name="Images">
-
-                    <Component Id="Component.gltf.png_2545434570" Guid="6fe30b47-2577-43ad-9095-18615965822c">
-                      <File Id="gltf.png_2545434570" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\gltf.png" />
-                      <RemoveFolder Id="INSTALLDIR.2023.gltfExporter.Images" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.Heart.png_2036346976" Guid="6fe30b47-2577-43ad-9095-18611567a2a6">
-                      <File Id="Heart.png_2036346976" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\Heart.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                    <Component Id="Component.logo.png_2001897280" Guid="6fe30b47-2577-43ad-9095-1861377cf313">
-                      <File Id="logo.png_2001897280" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\logo.png" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2023.gltfExporter.x64" Name="x64">
-
-                    <Component Id="Component.SQLite.Interop.dll_1681294704" Guid="6fe30b47-2577-43ad-9095-1861c6b56bf4">
-                      <File Id="SQLite.Interop.dll_1681294704" Source="..\Revit_glTF_Exporter_2023\bin\Release\x64\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2023.gltfExporter.x64" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-
-                  <Directory Id="INSTALLDIR.2023.gltfExporter.x86" Name="x86">
-
-                    <Component Id="Component.SQLite.Interop.dll_1045838018" Guid="6fe30b47-2577-43ad-9095-18617d1adef1">
-                      <File Id="SQLite.Interop.dll_1045838018" Source="..\Revit_glTF_Exporter_2023\bin\Release\x86\SQLite.Interop.dll" />
-                      <RemoveFolder Id="INSTALLDIR.2023.gltfExporter.x86" On="uninstall" />
-
-                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
-                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
-                      </RegistryKey>
-                    </Component>
-
-                  </Directory>
-                </Directory>
-              </Directory>
-
-              <Component Id="INSTALLDIR" Guid="6fe30b47-2577-43ad-9095-18616542ed73">
+          <Directory Id="AppDataFolder.Autodesk.ApplicationPlugins" Name="ApplicationPlugins">
+            <Directory Id="INSTALLDIR" Name="gltfExporter.bundle">
+
+              <Component Id="Component.PackageContents.xml_3906039909" Guid="6fe30b47-2577-43ad-9095-18610aede570">
+                <File Id="PackageContents.xml_3906039909" Source="..\Common_glTF_Exporter\PackageContents.xml" />
                 <RemoveFolder Id="INSTALLDIR" On="uninstall" />
 
                 <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -778,10 +25,904 @@
                 </RegistryKey>
               </Component>
 
+              <Directory Id="INSTALLDIR.Contents" Name="Contents">
+                <Directory Id="INSTALLDIR.Contents.2019" Name="2019">
+
+                  <Component Id="Component.Leia_glTF_Exporter.addin_2358512490" Guid="6fe30b47-2577-43ad-9095-18613e2be979">
+                    <File Id="Leia_glTF_Exporter.addin_2358512490" Source="..\Common_glTF_Exporter\Leia_glTF_Exporter.addin" />
+                    <RemoveFolder Id="INSTALLDIR.Contents.2019" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.DracoWrapper.dll_425889862" Guid="6fe30b47-2577-43ad-9095-1861541f1a8f">
+                    <File Id="DracoWrapper.dll_425889862" Source="..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll_3534239304" Guid="6fe30b47-2577-43ad-9095-18619276f613">
+                    <File Id="Leia_glTF_Exporter.dll_3534239304" Source="..\Revit_glTF_Exporter_2019\bin\Release\Leia_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll.config_692292763" Guid="6fe30b47-2577-43ad-9095-18612d3c0f29">
+                    <File Id="Leia_glTF_Exporter.dll.config_692292763" Source="..\Revit_glTF_Exporter_2019\bin\Release\Leia_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.pdb_391753086" Guid="6fe30b47-2577-43ad-9095-1861242dd7ee">
+                    <File Id="Leia_glTF_Exporter.pdb_391753086" Source="..\Revit_glTF_Exporter_2019\bin\Release\Leia_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.msvcp140.dll_1942060037" Guid="6fe30b47-2577-43ad-9095-1861cdcd47a1">
+                    <File Id="msvcp140.dll_1942060037" Source="..\Revit_glTF_Exporter_2019\bin\Release\msvcp140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_3638178838" Guid="6fe30b47-2577-43ad-9095-1861b75ccc31">
+                    <File Id="Newtonsoft.Json.dll_3638178838" Source="..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.ucrtbase.dll_57495234" Guid="6fe30b47-2577-43ad-9095-1861e4fd6bac">
+                    <File Id="ucrtbase.dll_57495234" Source="..\Revit_glTF_Exporter_2019\bin\Release\ucrtbase.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140.dll_1583743127" Guid="6fe30b47-2577-43ad-9095-1861c3b7048a">
+                    <File Id="vcruntime140.dll_1583743127" Source="..\Revit_glTF_Exporter_2019\bin\Release\vcruntime140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140_1.dll_2330037764" Guid="6fe30b47-2577-43ad-9095-1861e73d10ad">
+                    <File Id="vcruntime140_1.dll_2330037764" Source="..\Revit_glTF_Exporter_2019\bin\Release\vcruntime140_1.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.Contents.2019.Images" Name="Images">
+
+                    <Component Id="Component.e2dverse2disologo.png_2773034079" Guid="6fe30b47-2577-43ad-9095-1861a75463d0">
+                      <File Id="e2dverse2disologo.png_2773034079" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2019.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.e2dverse2dlogo2d1.png_1928057851" Guid="6fe30b47-2577-43ad-9095-1861c0ad71b3">
+                      <File Id="e2dverse2dlogo2d1.png_1928057851" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\e-verse-logo-1.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.gltf.png_2233558056" Guid="6fe30b47-2577-43ad-9095-18613ab0145c">
+                      <File Id="gltf.png_2233558056" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\gltf.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_314248931" Guid="6fe30b47-2577-43ad-9095-186105b03f5a">
+                      <File Id="Heart.png_314248931" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_314761612" Guid="6fe30b47-2577-43ad-9095-1861b8dede5a">
+                      <File Id="logo.png_314761612" Source="..\Revit_glTF_Exporter_2019\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.Contents.2019.Resources" Name="Resources">
+
+                    <Component Id="Component.e2dverse2disologo.png_4291984308" Guid="6fe30b47-2577-43ad-9095-186137ecf0d0">
+                      <File Id="e2dverse2disologo.png_4291984308" Source="..\Revit_glTF_Exporter_2019\bin\Release\Resources\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2019.Resources" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+                </Directory>
+
+                <Directory Id="INSTALLDIR.Contents.2020" Name="2020">
+
+                  <Component Id="Component.Leia_glTF_Exporter.addin_2054593593" Guid="6fe30b47-2577-43ad-9095-1861d246ee10">
+                    <File Id="Leia_glTF_Exporter.addin_2054593593" Source="..\Common_glTF_Exporter\Leia_glTF_Exporter.addin" />
+                    <RemoveFolder Id="INSTALLDIR.Contents.2020" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.DracoWrapper.dll_55001683" Guid="6fe30b47-2577-43ad-9095-1861381d94c6">
+                    <File Id="DracoWrapper.dll_55001683" Source="..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll_3008026628" Guid="6fe30b47-2577-43ad-9095-186112421b95">
+                    <File Id="Leia_glTF_Exporter.dll_3008026628" Source="..\Revit_glTF_Exporter_2020\bin\Release\Leia_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll.config_3033808064" Guid="6fe30b47-2577-43ad-9095-18612cf4247e">
+                    <File Id="Leia_glTF_Exporter.dll.config_3033808064" Source="..\Revit_glTF_Exporter_2020\bin\Release\Leia_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.pdb_2735586270" Guid="6fe30b47-2577-43ad-9095-1861dbb13c79">
+                    <File Id="Leia_glTF_Exporter.pdb_2735586270" Source="..\Revit_glTF_Exporter_2020\bin\Release\Leia_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.msvcp140.dll_1697131724" Guid="6fe30b47-2577-43ad-9095-186165b53d7d">
+                    <File Id="msvcp140.dll_1697131724" Source="..\Revit_glTF_Exporter_2020\bin\Release\msvcp140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_3582201253" Guid="6fe30b47-2577-43ad-9095-186187ef7f08">
+                    <File Id="Newtonsoft.Json.dll_3582201253" Source="..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.ucrtbase.dll_1511973774" Guid="6fe30b47-2577-43ad-9095-1861b0971f8a">
+                    <File Id="ucrtbase.dll_1511973774" Source="..\Revit_glTF_Exporter_2020\bin\Release\ucrtbase.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140.dll_4264011732" Guid="6fe30b47-2577-43ad-9095-18610a1fa2fc">
+                    <File Id="vcruntime140.dll_4264011732" Source="..\Revit_glTF_Exporter_2020\bin\Release\vcruntime140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140_1.dll_3288116896" Guid="6fe30b47-2577-43ad-9095-1861c7af7629">
+                    <File Id="vcruntime140_1.dll_3288116896" Source="..\Revit_glTF_Exporter_2020\bin\Release\vcruntime140_1.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.Contents.2020.Images" Name="Images">
+
+                    <Component Id="Component.e2dverse2disologo.png_2143003723" Guid="6fe30b47-2577-43ad-9095-1861972cef57">
+                      <File Id="e2dverse2disologo.png_2143003723" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2020.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.e2dverse2dlogo2d1.png_3814709319" Guid="6fe30b47-2577-43ad-9095-1861e8df77fb">
+                      <File Id="e2dverse2dlogo2d1.png_3814709319" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\e-verse-logo-1.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.gltf.png_1140894358" Guid="6fe30b47-2577-43ad-9095-18613772b37b">
+                      <File Id="gltf.png_1140894358" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\gltf.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_3785042368" Guid="6fe30b47-2577-43ad-9095-1861d1eb23a2">
+                      <File Id="Heart.png_3785042368" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_45336756" Guid="6fe30b47-2577-43ad-9095-186126f2b7bd">
+                      <File Id="logo.png_45336756" Source="..\Revit_glTF_Exporter_2020\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.Contents.2020.Resources" Name="Resources">
+
+                    <Component Id="Component.e2dverse2disologo.png_3981553499" Guid="6fe30b47-2577-43ad-9095-18613bb8c25e">
+                      <File Id="e2dverse2disologo.png_3981553499" Source="..\Revit_glTF_Exporter_2020\bin\Release\Resources\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2020.Resources" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+                </Directory>
+
+                <Directory Id="INSTALLDIR.Contents.2021" Name="2021">
+
+                  <Component Id="Component.Leia_glTF_Exporter.addin_3371610085" Guid="6fe30b47-2577-43ad-9095-1861ef0c5d4d">
+                    <File Id="Leia_glTF_Exporter.addin_3371610085" Source="..\Common_glTF_Exporter\Leia_glTF_Exporter.addin" />
+                    <RemoveFolder Id="INSTALLDIR.Contents.2021" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.DracoWrapper.dll_779242705" Guid="6fe30b47-2577-43ad-9095-1861c06be2eb">
+                    <File Id="DracoWrapper.dll_779242705" Source="..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll_2028526144" Guid="6fe30b47-2577-43ad-9095-18619d8ebec7">
+                    <File Id="Leia_glTF_Exporter.dll_2028526144" Source="..\Revit_glTF_Exporter_2021\bin\Release\Leia_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll.config_917407501" Guid="6fe30b47-2577-43ad-9095-1861dc94d4e6">
+                    <File Id="Leia_glTF_Exporter.dll.config_917407501" Source="..\Revit_glTF_Exporter_2021\bin\Release\Leia_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.pdb_1756085794" Guid="6fe30b47-2577-43ad-9095-18617f166a29">
+                    <File Id="Leia_glTF_Exporter.pdb_1756085794" Source="..\Revit_glTF_Exporter_2021\bin\Release\Leia_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.msvcp140.dll_1001562076" Guid="6fe30b47-2577-43ad-9095-18616318bdc4">
+                    <File Id="msvcp140.dll_1001562076" Source="..\Revit_glTF_Exporter_2021\bin\Release\msvcp140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_696356431" Guid="6fe30b47-2577-43ad-9095-18619b0dd3fb">
+                    <File Id="Newtonsoft.Json.dll_696356431" Source="..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.ucrtbase.dll_250566302" Guid="6fe30b47-2577-43ad-9095-1861a191ddaa">
+                    <File Id="ucrtbase.dll_250566302" Source="..\Revit_glTF_Exporter_2021\bin\Release\ucrtbase.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140.dll_1907001723" Guid="6fe30b47-2577-43ad-9095-1861d9a9bd58">
+                    <File Id="vcruntime140.dll_1907001723" Source="..\Revit_glTF_Exporter_2021\bin\Release\vcruntime140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140_1.dll_2824848839" Guid="6fe30b47-2577-43ad-9095-18619d6bd797">
+                    <File Id="vcruntime140_1.dll_2824848839" Source="..\Revit_glTF_Exporter_2021\bin\Release\vcruntime140_1.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.Contents.2021.Images" Name="Images">
+
+                    <Component Id="Component.e2dverse2disologo.png_1000935175" Guid="6fe30b47-2577-43ad-9095-1861eb0b3280">
+                      <File Id="e2dverse2disologo.png_1000935175" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2021.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.e2dverse2dlogo2d1.png_2870690443" Guid="6fe30b47-2577-43ad-9095-1861e53f4f95">
+                      <File Id="e2dverse2dlogo2d1.png_2870690443" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\e-verse-logo-1.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.gltf.png_2362252559" Guid="6fe30b47-2577-43ad-9095-1861d92585b0">
+                      <File Id="gltf.png_2362252559" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\gltf.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_3963723010" Guid="6fe30b47-2577-43ad-9095-186100afeb2b">
+                      <File Id="Heart.png_3963723010" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_531381627" Guid="6fe30b47-2577-43ad-9095-186147df8acd">
+                      <File Id="logo.png_531381627" Source="..\Revit_glTF_Exporter_2021\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.Contents.2021.Resources" Name="Resources">
+
+                    <Component Id="Component.e2dverse2disologo.png_3327246126" Guid="6fe30b47-2577-43ad-9095-1861a2d98f07">
+                      <File Id="e2dverse2disologo.png_3327246126" Source="..\Revit_glTF_Exporter_2021\bin\Release\Resources\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2021.Resources" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+                </Directory>
+
+                <Directory Id="INSTALLDIR.Contents.2022" Name="2022">
+
+                  <Component Id="Component.Leia_glTF_Exporter.addin_3058279523" Guid="6fe30b47-2577-43ad-9095-1861d6dd6776">
+                    <File Id="Leia_glTF_Exporter.addin_3058279523" Source="..\Common_glTF_Exporter\Leia_glTF_Exporter.addin" />
+                    <RemoveFolder Id="INSTALLDIR.Contents.2022" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.DracoWrapper.dll_3204735414" Guid="6fe30b47-2577-43ad-9095-18619d21d055">
+                    <File Id="DracoWrapper.dll_3204735414" Source="..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll_778538419" Guid="6fe30b47-2577-43ad-9095-18615e24ff92">
+                    <File Id="Leia_glTF_Exporter.dll_778538419" Source="..\Revit_glTF_Exporter_2022\bin\Release\Leia_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll.config_2630330435" Guid="6fe30b47-2577-43ad-9095-1861c3cb85b3">
+                    <File Id="Leia_glTF_Exporter.dll.config_2630330435" Source="..\Revit_glTF_Exporter_2022\bin\Release\Leia_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.pdb_506098065" Guid="6fe30b47-2577-43ad-9095-186125aafa33">
+                    <File Id="Leia_glTF_Exporter.pdb_506098065" Source="..\Revit_glTF_Exporter_2022\bin\Release\Leia_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.msvcp140.dll_336475283" Guid="6fe30b47-2577-43ad-9095-1861d4562e72">
+                    <File Id="msvcp140.dll_336475283" Source="..\Revit_glTF_Exporter_2022\bin\Release\msvcp140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_194465601" Guid="6fe30b47-2577-43ad-9095-18611af2e52b">
+                    <File Id="Newtonsoft.Json.dll_194465601" Source="..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.ucrtbase.dll_604792405" Guid="6fe30b47-2577-43ad-9095-186144b8ed27">
+                    <File Id="ucrtbase.dll_604792405" Source="..\Revit_glTF_Exporter_2022\bin\Release\ucrtbase.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140.dll_1233013308" Guid="6fe30b47-2577-43ad-9095-186150ae3507">
+                    <File Id="vcruntime140.dll_1233013308" Source="..\Revit_glTF_Exporter_2022\bin\Release\vcruntime140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140_1.dll_1781247625" Guid="6fe30b47-2577-43ad-9095-1861aaa451db">
+                    <File Id="vcruntime140_1.dll_1781247625" Source="..\Revit_glTF_Exporter_2022\bin\Release\vcruntime140_1.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.Contents.2022.Images" Name="Images">
+
+                    <Component Id="Component.e2dverse2disologo.png_3264345980" Guid="6fe30b47-2577-43ad-9095-1861eafce95f">
+                      <File Id="e2dverse2disologo.png_3264345980" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2022.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.e2dverse2dlogo2d1.png_516697044" Guid="6fe30b47-2577-43ad-9095-1861fb201b2e">
+                      <File Id="e2dverse2dlogo2d1.png_516697044" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\e-verse-logo-1.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.gltf.png_1803772325" Guid="6fe30b47-2577-43ad-9095-18611198b808">
+                      <File Id="gltf.png_1803772325" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\gltf.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_745005262" Guid="6fe30b47-2577-43ad-9095-1861827d8ed5">
+                      <File Id="Heart.png_745005262" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_985038722" Guid="6fe30b47-2577-43ad-9095-1861c4b23e62">
+                      <File Id="logo.png_985038722" Source="..\Revit_glTF_Exporter_2022\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.Contents.2022.Resources" Name="Resources">
+
+                    <Component Id="Component.e2dverse2disologo.png_3972126666" Guid="6fe30b47-2577-43ad-9095-18619f8c3f65">
+                      <File Id="e2dverse2disologo.png_3972126666" Source="..\Revit_glTF_Exporter_2022\bin\Release\Resources\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2022.Resources" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+                </Directory>
+
+                <Directory Id="INSTALLDIR.Contents.2023" Name="2023">
+
+                  <Component Id="Component.Leia_glTF_Exporter.addin_455011286" Guid="6fe30b47-2577-43ad-9095-18614d85441e">
+                    <File Id="Leia_glTF_Exporter.addin_455011286" Source="..\Common_glTF_Exporter\Leia_glTF_Exporter.addin" />
+                    <RemoveFolder Id="INSTALLDIR.Contents.2023" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.DracoWrapper.dll_1310276099" Guid="6fe30b47-2577-43ad-9095-186173d8b7f8">
+                    <File Id="DracoWrapper.dll_1310276099" Source="..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll_3087794482" Guid="6fe30b47-2577-43ad-9095-186139bdaeb0">
+                    <File Id="Leia_glTF_Exporter.dll_3087794482" Source="..\Revit_glTF_Exporter_2023\bin\Release\Leia_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll.config_1371179955" Guid="6fe30b47-2577-43ad-9095-18614ae57fa7">
+                    <File Id="Leia_glTF_Exporter.dll.config_1371179955" Source="..\Revit_glTF_Exporter_2023\bin\Release\Leia_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.pdb_2815354128" Guid="6fe30b47-2577-43ad-9095-186144319d9a">
+                    <File Id="Leia_glTF_Exporter.pdb_2815354128" Source="..\Revit_glTF_Exporter_2023\bin\Release\Leia_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.msvcp140.dll_1851812361" Guid="6fe30b47-2577-43ad-9095-1861437167b4">
+                    <File Id="msvcp140.dll_1851812361" Source="..\Revit_glTF_Exporter_2023\bin\Release\msvcp140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_2592123108" Guid="6fe30b47-2577-43ad-9095-1861858a1ff6">
+                    <File Id="Newtonsoft.Json.dll_2592123108" Source="..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.ucrtbase.dll_1841343563" Guid="6fe30b47-2577-43ad-9095-1861a1e82bd9">
+                    <File Id="ucrtbase.dll_1841343563" Source="..\Revit_glTF_Exporter_2023\bin\Release\ucrtbase.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140.dll_3930280796" Guid="6fe30b47-2577-43ad-9095-18615c4cf2dc">
+                    <File Id="vcruntime140.dll_3930280796" Source="..\Revit_glTF_Exporter_2023\bin\Release\vcruntime140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140_1.dll_873581333" Guid="6fe30b47-2577-43ad-9095-18611a9249b3">
+                    <File Id="vcruntime140_1.dll_873581333" Source="..\Revit_glTF_Exporter_2023\bin\Release\vcruntime140_1.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.Contents.2023.Images" Name="Images">
+
+                    <Component Id="Component.e2dverse2disologo.png_2131765017" Guid="6fe30b47-2577-43ad-9095-18619c331e8a">
+                      <File Id="e2dverse2disologo.png_2131765017" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2023.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.e2dverse2dlogo2d1.png_3736230583" Guid="6fe30b47-2577-43ad-9095-1861a8b6b684">
+                      <File Id="e2dverse2dlogo2d1.png_3736230583" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\e-verse-logo-1.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.gltf.png_2305649074" Guid="6fe30b47-2577-43ad-9095-18611061d85c">
+                      <File Id="gltf.png_2305649074" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\gltf.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_723380443" Guid="6fe30b47-2577-43ad-9095-18618a26b32c">
+                      <File Id="Heart.png_723380443" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_1547471264" Guid="6fe30b47-2577-43ad-9095-1861bfe5ddce">
+                      <File Id="logo.png_1547471264" Source="..\Revit_glTF_Exporter_2023\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.Contents.2023.Resources" Name="Resources">
+
+                    <Component Id="Component.e2dverse2disologo.png_1923205865" Guid="6fe30b47-2577-43ad-9095-18611c4f24d2">
+                      <File Id="e2dverse2disologo.png_1923205865" Source="..\Revit_glTF_Exporter_2023\bin\Release\Resources\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2023.Resources" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+                </Directory>
+
+                <Directory Id="INSTALLDIR.Contents.2024" Name="2024">
+
+                  <Component Id="Component.Leia_glTF_Exporter.addin_3672523282" Guid="6fe30b47-2577-43ad-9095-18619c318f41">
+                    <File Id="Leia_glTF_Exporter.addin_3672523282" Source="..\Common_glTF_Exporter\Leia_glTF_Exporter.addin" />
+                    <RemoveFolder Id="INSTALLDIR.Contents.2024" On="uninstall" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.AdWindows.dll_712366452" Guid="6fe30b47-2577-43ad-9095-18611b91d2f6">
+                    <File Id="AdWindows.dll_712366452" Source="..\Revit_glTF_Exporter_2024\bin\Release\AdWindows.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.DracoWrapper.dll_3725442903" Guid="6fe30b47-2577-43ad-9095-18619e279f70">
+                    <File Id="DracoWrapper.dll_3725442903" Source="..\Revit_glTF_Exporter_2024\bin\Release\DracoWrapper.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll_2388224015" Guid="6fe30b47-2577-43ad-9095-1861b0d9607c">
+                    <File Id="Leia_glTF_Exporter.dll_2388224015" Source="..\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.dll.config_4197240379" Guid="6fe30b47-2577-43ad-9095-18617be6bb20">
+                    <File Id="Leia_glTF_Exporter.dll.config_4197240379" Source="..\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.dll.config" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Leia_glTF_Exporter.pdb_2115783669" Guid="6fe30b47-2577-43ad-9095-18616f3c659e">
+                    <File Id="Leia_glTF_Exporter.pdb_2115783669" Source="..\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.pdb" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.msvcp140.dll_1604953065" Guid="6fe30b47-2577-43ad-9095-1861168e8397">
+                    <File Id="msvcp140.dll_1604953065" Source="..\Revit_glTF_Exporter_2024\bin\Release\msvcp140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.Newtonsoft.Json.dll_2370636140" Guid="6fe30b47-2577-43ad-9095-1861307793ea">
+                    <File Id="Newtonsoft.Json.dll_2370636140" Source="..\Revit_glTF_Exporter_2024\bin\Release\Newtonsoft.Json.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.RevitAPI.dll_3932631152" Guid="6fe30b47-2577-43ad-9095-1861a43bd36d">
+                    <File Id="RevitAPI.dll_3932631152" Source="..\Revit_glTF_Exporter_2024\bin\Release\RevitAPI.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.RevitAPIUI.dll_3327420966" Guid="6fe30b47-2577-43ad-9095-1861d80facfa">
+                    <File Id="RevitAPIUI.dll_3327420966" Source="..\Revit_glTF_Exporter_2024\bin\Release\RevitAPIUI.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.ucrtbase.dll_1924650668" Guid="6fe30b47-2577-43ad-9095-1861b869188a">
+                    <File Id="ucrtbase.dll_1924650668" Source="..\Revit_glTF_Exporter_2024\bin\Release\ucrtbase.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.UIFramework.dll_1647498577" Guid="6fe30b47-2577-43ad-9095-1861c7cf21de">
+                    <File Id="UIFramework.dll_1647498577" Source="..\Revit_glTF_Exporter_2024\bin\Release\UIFramework.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140.dll_679452693" Guid="6fe30b47-2577-43ad-9095-18619b58df09">
+                    <File Id="vcruntime140.dll_679452693" Source="..\Revit_glTF_Exporter_2024\bin\Release\vcruntime140.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Component Id="Component.vcruntime140_1.dll_684966224" Guid="6fe30b47-2577-43ad-9095-1861e09f8007">
+                    <File Id="vcruntime140_1.dll_684966224" Source="..\Revit_glTF_Exporter_2024\bin\Release\vcruntime140_1.dll" />
+
+                    <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                      <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                    </RegistryKey>
+                  </Component>
+
+                  <Directory Id="INSTALLDIR.Contents.2024.Images" Name="Images">
+
+                    <Component Id="Component.e2dverse2disologo.png_366687877" Guid="6fe30b47-2577-43ad-9095-18612f72a4a2">
+                      <File Id="e2dverse2disologo.png_366687877" Source="..\Revit_glTF_Exporter_2024\bin\Release\Images\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2024.Images" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.e2dverse2dlogo2d1.png_1625123665" Guid="6fe30b47-2577-43ad-9095-1861317443d3">
+                      <File Id="e2dverse2dlogo2d1.png_1625123665" Source="..\Revit_glTF_Exporter_2024\bin\Release\Images\e-verse-logo-1.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.gltf.png_127620255" Guid="6fe30b47-2577-43ad-9095-1861850916c7">
+                      <File Id="gltf.png_127620255" Source="..\Revit_glTF_Exporter_2024\bin\Release\Images\gltf.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.Heart.png_2182993104" Guid="6fe30b47-2577-43ad-9095-18616a04a037">
+                      <File Id="Heart.png_2182993104" Source="..\Revit_glTF_Exporter_2024\bin\Release\Images\Heart.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                    <Component Id="Component.logo.png_2250011723" Guid="6fe30b47-2577-43ad-9095-1861f9511088">
+                      <File Id="logo.png_2250011723" Source="..\Revit_glTF_Exporter_2024\bin\Release\Images\logo.png" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+
+                  <Directory Id="INSTALLDIR.Contents.2024.Resources" Name="Resources">
+
+                    <Component Id="Component.e2dverse2disologo.png_803100889" Guid="6fe30b47-2577-43ad-9095-186130d44dac">
+                      <File Id="e2dverse2disologo.png_803100889" Source="..\Revit_glTF_Exporter_2024\bin\Release\Resources\e-verse-isologo.png" />
+                      <RemoveFolder Id="INSTALLDIR.Contents.2024.Resources" On="uninstall" />
+
+                      <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                        <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                      </RegistryKey>
+                    </Component>
+
+                  </Directory>
+                </Directory>
+
+                <Component Id="INSTALLDIR.Contents" Guid="6fe30b47-2577-43ad-9095-1861ae595374">
+                  <RemoveFolder Id="INSTALLDIR.Contents" On="uninstall" />
+
+                  <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                    <RegistryValue Value="0" Type="string" KeyPath="yes" />
+                  </RegistryKey>
+                </Component>
+
+              </Directory>
             </Directory>
 
-            <Component Id="AppDataFolder.Autodesk.Revit" Guid="6fe30b47-2577-43ad-9095-1861d9dd1207">
-              <RemoveFolder Id="AppDataFolder.Autodesk.Revit" On="uninstall" />
+            <Component Id="AppDataFolder.Autodesk.ApplicationPlugins" Guid="6fe30b47-2577-43ad-9095-1861d1652283">
+              <RemoveFolder Id="AppDataFolder.Autodesk.ApplicationPlugins" On="uninstall" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
                 <RegistryValue Value="0" Type="string" KeyPath="yes" />
@@ -827,89 +968,110 @@
     <Property Id="WixSharp_ModifyDialogs" Value="GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.MaintenanceTypeDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.FeaturesDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.ProgressDialog&#xA;GltfInstaller, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|GltfInstaller.ExitDialog" />
 
     <Feature Id="Complete" Title="Complete" Absent="allow" Level="1">
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_2974217233" />
-      <ComponentRef Id="Component.DracoWrapper.dll_2684361006" />
-      <ComponentRef Id="Component.EntityFramework.dll_3706698467" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_2553245895" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_3902637423" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_2629715135" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_762735247" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_310372759" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_234532718" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_2660553139" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_2966397276" />
-      <ComponentRef Id="Component.gltf.png_865807557" />
-      <ComponentRef Id="Component.Heart.png_2394191730" />
-      <ComponentRef Id="Component.logo.png_3681343745" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_4170655171" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_3857273625" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1670683156" />
-      <ComponentRef Id="Component.DracoWrapper.dll_2789463542" />
-      <ComponentRef Id="Component.EntityFramework.dll_3930560719" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_940988438" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_4257643699" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_3223506599" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_4067083133" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_956901839" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_583455263" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_117084067" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_4187217148" />
-      <ComponentRef Id="Component.gltf.png_3457432732" />
-      <ComponentRef Id="Component.Heart.png_1216439389" />
-      <ComponentRef Id="Component.logo.png_3472786350" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_945901458" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_3033027207" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_4203761214" />
-      <ComponentRef Id="Component.DracoWrapper.dll_1355050002" />
-      <ComponentRef Id="Component.EntityFramework.dll_3509405903" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_2628571730" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_2188595901" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_1273745461" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_3765202868" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_3540874509" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_201813493" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_1638402539" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_2496699970" />
-      <ComponentRef Id="Component.gltf.png_1723191433" />
-      <ComponentRef Id="Component.Heart.png_1410232485" />
-      <ComponentRef Id="Component.logo.png_4036593753" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_4041785265" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_3413827434" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_1519930038" />
-      <ComponentRef Id="Component.DracoWrapper.dll_891506065" />
-      <ComponentRef Id="Component.EntityFramework.dll_1875448090" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_4227264270" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_2504092878" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_1714836497" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_1096422898" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_3219388649" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_2819707558" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_211102511" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_3227079814" />
-      <ComponentRef Id="Component.gltf.png_17422305" />
-      <ComponentRef Id="Component.Heart.png_4280473972" />
-      <ComponentRef Id="Component.logo.png_954784027" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_3744651137" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_473189472" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.addin_662580862" />
-      <ComponentRef Id="Component.DracoWrapper.dll_2486062853" />
-      <ComponentRef Id="Component.EntityFramework.dll_509948183" />
-      <ComponentRef Id="Component.EntityFramework.SqlServer.dll_3028946528" />
-      <ComponentRef Id="Component.Newtonsoft.Json.dll_2086389547" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll_377477003" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.dll.config_51808737" />
-      <ComponentRef Id="Component.Revit_glTF_Exporter.pdb_3408755811" />
-      <ComponentRef Id="Component.System.Data.SQLite.dll_3658980421" />
-      <ComponentRef Id="Component.System.Data.SQLite.EF6.dll_1963875251" />
-      <ComponentRef Id="Component.System.Data.SQLite.Linq.dll_2190804282" />
-      <ComponentRef Id="Component.gltf.png_2545434570" />
-      <ComponentRef Id="Component.Heart.png_2036346976" />
-      <ComponentRef Id="Component.logo.png_2001897280" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_1681294704" />
-      <ComponentRef Id="Component.SQLite.Interop.dll_1045838018" />
+      <ComponentRef Id="Component.PackageContents.xml_3906039909" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.addin_2358512490" />
+      <ComponentRef Id="Component.DracoWrapper.dll_425889862" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll_3534239304" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll.config_692292763" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.pdb_391753086" />
+      <ComponentRef Id="Component.msvcp140.dll_1942060037" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_3638178838" />
+      <ComponentRef Id="Component.ucrtbase.dll_57495234" />
+      <ComponentRef Id="Component.vcruntime140.dll_1583743127" />
+      <ComponentRef Id="Component.vcruntime140_1.dll_2330037764" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_2773034079" />
+      <ComponentRef Id="Component.e2dverse2dlogo2d1.png_1928057851" />
+      <ComponentRef Id="Component.gltf.png_2233558056" />
+      <ComponentRef Id="Component.Heart.png_314248931" />
+      <ComponentRef Id="Component.logo.png_314761612" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_4291984308" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.addin_2054593593" />
+      <ComponentRef Id="Component.DracoWrapper.dll_55001683" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll_3008026628" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll.config_3033808064" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.pdb_2735586270" />
+      <ComponentRef Id="Component.msvcp140.dll_1697131724" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_3582201253" />
+      <ComponentRef Id="Component.ucrtbase.dll_1511973774" />
+      <ComponentRef Id="Component.vcruntime140.dll_4264011732" />
+      <ComponentRef Id="Component.vcruntime140_1.dll_3288116896" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_2143003723" />
+      <ComponentRef Id="Component.e2dverse2dlogo2d1.png_3814709319" />
+      <ComponentRef Id="Component.gltf.png_1140894358" />
+      <ComponentRef Id="Component.Heart.png_3785042368" />
+      <ComponentRef Id="Component.logo.png_45336756" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_3981553499" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.addin_3371610085" />
+      <ComponentRef Id="Component.DracoWrapper.dll_779242705" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll_2028526144" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll.config_917407501" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.pdb_1756085794" />
+      <ComponentRef Id="Component.msvcp140.dll_1001562076" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_696356431" />
+      <ComponentRef Id="Component.ucrtbase.dll_250566302" />
+      <ComponentRef Id="Component.vcruntime140.dll_1907001723" />
+      <ComponentRef Id="Component.vcruntime140_1.dll_2824848839" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_1000935175" />
+      <ComponentRef Id="Component.e2dverse2dlogo2d1.png_2870690443" />
+      <ComponentRef Id="Component.gltf.png_2362252559" />
+      <ComponentRef Id="Component.Heart.png_3963723010" />
+      <ComponentRef Id="Component.logo.png_531381627" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_3327246126" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.addin_3058279523" />
+      <ComponentRef Id="Component.DracoWrapper.dll_3204735414" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll_778538419" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll.config_2630330435" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.pdb_506098065" />
+      <ComponentRef Id="Component.msvcp140.dll_336475283" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_194465601" />
+      <ComponentRef Id="Component.ucrtbase.dll_604792405" />
+      <ComponentRef Id="Component.vcruntime140.dll_1233013308" />
+      <ComponentRef Id="Component.vcruntime140_1.dll_1781247625" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_3264345980" />
+      <ComponentRef Id="Component.e2dverse2dlogo2d1.png_516697044" />
+      <ComponentRef Id="Component.gltf.png_1803772325" />
+      <ComponentRef Id="Component.Heart.png_745005262" />
+      <ComponentRef Id="Component.logo.png_985038722" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_3972126666" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.addin_455011286" />
+      <ComponentRef Id="Component.DracoWrapper.dll_1310276099" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll_3087794482" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll.config_1371179955" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.pdb_2815354128" />
+      <ComponentRef Id="Component.msvcp140.dll_1851812361" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_2592123108" />
+      <ComponentRef Id="Component.ucrtbase.dll_1841343563" />
+      <ComponentRef Id="Component.vcruntime140.dll_3930280796" />
+      <ComponentRef Id="Component.vcruntime140_1.dll_873581333" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_2131765017" />
+      <ComponentRef Id="Component.e2dverse2dlogo2d1.png_3736230583" />
+      <ComponentRef Id="Component.gltf.png_2305649074" />
+      <ComponentRef Id="Component.Heart.png_723380443" />
+      <ComponentRef Id="Component.logo.png_1547471264" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_1923205865" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.addin_3672523282" />
+      <ComponentRef Id="Component.AdWindows.dll_712366452" />
+      <ComponentRef Id="Component.DracoWrapper.dll_3725442903" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll_2388224015" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.dll.config_4197240379" />
+      <ComponentRef Id="Component.Leia_glTF_Exporter.pdb_2115783669" />
+      <ComponentRef Id="Component.msvcp140.dll_1604953065" />
+      <ComponentRef Id="Component.Newtonsoft.Json.dll_2370636140" />
+      <ComponentRef Id="Component.RevitAPI.dll_3932631152" />
+      <ComponentRef Id="Component.RevitAPIUI.dll_3327420966" />
+      <ComponentRef Id="Component.ucrtbase.dll_1924650668" />
+      <ComponentRef Id="Component.UIFramework.dll_1647498577" />
+      <ComponentRef Id="Component.vcruntime140.dll_679452693" />
+      <ComponentRef Id="Component.vcruntime140_1.dll_684966224" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_366687877" />
+      <ComponentRef Id="Component.e2dverse2dlogo2d1.png_1625123665" />
+      <ComponentRef Id="Component.gltf.png_127620255" />
+      <ComponentRef Id="Component.Heart.png_2182993104" />
+      <ComponentRef Id="Component.logo.png_2250011723" />
+      <ComponentRef Id="Component.e2dverse2disologo.png_803100889" />
       <ComponentRef Id="AppDataFolder.Autodesk" />
-      <ComponentRef Id="AppDataFolder.Autodesk.Revit" />
-      <ComponentRef Id="INSTALLDIR" />
+      <ComponentRef Id="AppDataFolder.Autodesk.ApplicationPlugins" />
+      <ComponentRef Id="INSTALLDIR.Contents" />
     </Feature>
 
     <InstallExecuteSequence>

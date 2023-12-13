@@ -89,6 +89,32 @@
 
             panel.AddItem(pushDataButton);
 
+            // look for XXXXXX RibbonPanel, or create it if not already created
+            RibbonPanel panelAbout = null;
+            foreach (RibbonPanel existingPanel in application.GetRibbonPanels())
+            {
+                if (existingPanel.Name.Equals("About"))
+                {
+                    // existingPanel.AddSeparator();
+                    panelAbout = existingPanel;
+                    break;
+                }
+            }
+
+            if (panelAbout == null)
+            {
+                panelAbout = application.CreateRibbonPanel(RIBBONTAB, "About");
+            }
+
+
+            PushButtonData pushDataButtonAbout = new PushButtonData("About us", "About us", addInPath, "Revit_glTF_Exporter.AboutUs");
+            pushDataButtonAbout.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "e-verse-isologo.png"), UriKind.Absolute));
+            pushDataButtonAbout.ToolTip = "About e-verse";
+            pushDataButtonAbout.SetContextualHelp(contexHelp);
+            pushDataButtonAbout.LongDescription = "Know more about us and our tools";
+
+            panelAbout.AddItem(pushDataButtonAbout);
+
             return Result.Succeeded;
         }
     }

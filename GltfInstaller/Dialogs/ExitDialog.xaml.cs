@@ -109,12 +109,12 @@ namespace GltfInstaller
         {
             if (Shell.UserInterrupted || Shell.Log.Contains("User canceled installation."))
             {
-                DialogDescription.Text = "Hola1";
+                DialogDescription.Text = "Installation canceled by user";
                 //DialogDescription.Text = "[UserExitDescription1]";
             }
             else if (Shell.ErrorDetected)
             {
-                DialogDescription.Text = "Hola";
+                DialogDescription.Text = "Mmm, something wrong happen, contact us!";
                 //DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
             }
 
