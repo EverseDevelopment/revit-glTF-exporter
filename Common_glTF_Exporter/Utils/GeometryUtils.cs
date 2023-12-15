@@ -31,14 +31,28 @@
         /// <returns>The GeometryElement.</returns>
         public static GeometryElement GetGeometryElement(Document doc, Element element)
         {
-            Options opt = new Options
+            GeometryElement result;
+            try
             {
-                ComputeReferences = true,
-                View = doc.ActiveView,
-            };
+                Options opt = new Options
+                {
+                    ComputeReferences = true,
+                    View = doc.ActiveView,
+                };
+                result = element.get_Geometry(opt);
+            }
+            catch
+            {
+                Options opt = new Options
+                {
+                    ComputeReferences = true,
+                };
+                result = element.get_Geometry(opt);
+            }
 
-            return element.get_Geometry(opt);
+            return result;
         }
+
 
         public static XYZ GetNormal(MeshTriangle triangle)
         {
