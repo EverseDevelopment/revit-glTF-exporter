@@ -210,10 +210,10 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
-            if (linkTransformation == null || !isLink)
+            if (linkTransformation == null && !isLink)
             {
                 ProgressBarWindow.ViewModel.ProgressBarValue++;
-            }   
+            }
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
@@ -397,15 +397,9 @@ namespace Revit_glTF_Exporter
         public RenderNodeAction OnInstanceBegin(InstanceNode node)
         {
             var transform = node.GetTransform();
-            if (!isLink)
-            {
+
                 var transformationMutiply = CurrentTransform.Multiply(transform);
                 transformStack.Push(transformationMutiply);
-            }
-            else
-            {
-                transformStack.Push(CurrentTransform);
-            }
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
@@ -442,11 +436,11 @@ namespace Revit_glTF_Exporter
         public RenderNodeAction OnLinkBegin(LinkNode node)
         {
             isLink = true;
-            linkOriginalTranformation = CurrentTransform;
-
+            
             documents.Add(node.GetDocument());
 
             transformStack.Push(CurrentTransform.Multiply(linkTransformation));
+            linkOriginalTranformation = new Transform(CurrentTransform);
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
@@ -505,7 +499,15 @@ namespace Revit_glTF_Exporter
                     triangle.get_Vertex(2)
                     };
 
-                    List<XYZ> ptsTransformed = pts.Select(p => linkOriginalTranformation.OfPoint(p)).ToList();
+                    List<XYZ> ptsTransformed = new List<XYZ>();
+                    if(isLink)
+                    {
+                        ptsTransformed = pts.Select(p => linkOriginalTranformation.OfPoint(p)).ToList();
+                    }
+                    else
+                    {
+                        ptsTransformed = pts;
+                    }
 
                     GLTFExportUtils.AddVerticesAndFaces(currentVertices.CurrentItem, currentGeometry.CurrentItem, ptsTransformed);
 
