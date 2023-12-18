@@ -40,15 +40,15 @@
             return gl_mat;
         }
 
-        public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, MeshTriangle triangle)
+        public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, List<XYZ> pts)
         {
-            var idx = vertex.AddVertex(new PointIntObject(triangle.get_Vertex(0)));
+            var idx = vertex.AddVertex(new PointIntObject(pts[0]));
             geometryDataObject.Faces.Add(idx);
 
-            var idx1 = vertex.AddVertex(new PointIntObject(triangle.get_Vertex(1)));
+            var idx1 = vertex.AddVertex(new PointIntObject(pts[1]));
             geometryDataObject.Faces.Add(idx1);
 
-            var idx2 = vertex.AddVertex(new PointIntObject(triangle.get_Vertex(2)));
+            var idx2 = vertex.AddVertex(new PointIntObject(pts[2]));
             geometryDataObject.Faces.Add(idx2);
         }
 
