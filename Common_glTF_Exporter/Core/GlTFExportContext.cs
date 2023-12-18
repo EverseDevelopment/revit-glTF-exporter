@@ -197,8 +197,6 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
-            linkTransformation = (element as RevitLinkInstance)?.GetTransform();
-
             if (nodes.Contains(element.UniqueId))
             {
                 // Duplicate element, skip adding.
@@ -206,8 +204,16 @@ namespace Revit_glTF_Exporter
                 return RenderNodeAction.Skip;
             }
 
+            linkTransformation = (element as RevitLinkInstance)?.GetTransform();
+
             if (linkTransformation == null)
-                ProgressBarWindow.ViewModel.ProgressBarValue++;
+            {
+                if (!element.IsHidden(view) && 
+                    view.IsElementVisibleInTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate, elementId))
+                {
+                    ProgressBarWindow.ViewModel.ProgressBarValue++;
+                }
+            }    
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
