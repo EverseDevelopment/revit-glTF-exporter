@@ -210,7 +210,7 @@ namespace Revit_glTF_Exporter
 
             linkTransformation = (element as RevitLinkInstance)?.GetTransform();
 
-            if (linkTransformation == null && !isLink)
+            if (!isLink)
             {
                 if (!element.IsHidden(view) && 
                     view.IsElementVisibleInTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate, elementId))
@@ -243,14 +243,22 @@ namespace Revit_glTF_Exporter
 
             // Reset _currentGeometry for new element
             if (currentGeometry == null)
+            {
                 currentGeometry = new IndexedDictionary<GeometryDataObject>();
+            } 
             else
+            {
                 currentGeometry.Reset();
+            }
 
             if (currentVertices == null)
+            {
                 currentVertices = new IndexedDictionary<VertexLookupIntObject>();
+            }
             else
+            {
                 currentVertices.Reset();
+            }
 
             return RenderNodeAction.Proceed;
         }
@@ -383,7 +391,10 @@ namespace Revit_glTF_Exporter
 
                 if (preferences.materials)
                 {
-                    primitive.material = materials.GetIndexFromUUID(material_key);
+                    if (materials.Contains(material_key))
+                    {
+                        primitive.material = materials.GetIndexFromUUID(material_key);
+                    }
                 }
 
                 meshes.CurrentItem.primitives.Add(primitive);
@@ -402,8 +413,8 @@ namespace Revit_glTF_Exporter
         {
             var transform = node.GetTransform();
 
-                var transformationMutiply = CurrentTransform.Multiply(transform);
-                transformStack.Push(transformationMutiply);
+            var transformationMutiply = CurrentTransform.Multiply(transform);
+            transformStack.Push(transformationMutiply);
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
