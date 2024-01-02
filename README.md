@@ -1,5 +1,9 @@
 # Revit glTF exporter
 
+[<img src="https://github.com/EverseDevelopment/revit-glTF-exporter/blob/develop/Common_glTF_Exporter/Images/ScreenshotRevit.png" width="443" height="237.5">]
+<br/>
+
+
 This addin allow you can export glTF out of Revit</h3>
 <br/>
 
@@ -19,7 +23,7 @@ If you appreciate the work put into this free add-in, please give a review on th
 You are done! 
 
 ## Current Version
-glTF exporter is currently built against Revit 2019,2020,2021,2022 and 2023
+glTF exporter is currently built against Revit 2019,2020,2021,2022,2023 and 2024
 
 ## Contributors
 This package is primarily managed by [E-verse](https://www.e-verse.co/) and by [People Like You™](https://github.com/EverseDevelopment/revit-glTF-exporter/pulse).
@@ -36,6 +40,6 @@ We are an international mix of AEC professionals, product designers, and softwar
 
 <p align="center" width="100%">
     <a href="https://www.e-verse.com/">
-    <img src="https://github.com/EverseDevelopment/Ductulator/blob/main/Resources/e-verse_logo_no%20slogan.jpg" width="732" height="271" align="center">
+    <img src="https://s3.amazonaws.com/everse.assets/e-verse_logo_no+slogan.jpg" width="732" height="271" align="center">
     </a>
 </p>

@@ -89,7 +89,7 @@
             #endif
 
             Thread.Sleep(500);
-            ProgressBarWindow.ViewModel.ProgressBarValue++;
+            ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ProgressBarWindow.ViewModel.Action = "Accept";
         }
