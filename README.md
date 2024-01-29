@@ -1,6 +1,6 @@
 # Revit glTF exporter
 
-[<img src="https://github.com/EverseDevelopment/revit-glTF-exporter/blob/develop/Common_glTF_Exporter/Images/ScreenshotRevit.png" width="443" height="237.5">](https://github.com/EverseDevelopment/revit-glTF-exporter/wiki)
+[<img src="https://s3.amazonaws.com/everse.assets/GithubReadme/ScreenshotRevit.png" width="443" height="237.5">](https://github.com/EverseDevelopment/revit-glTF-exporter/wiki)
 <br/>
 
 
@@ -32,7 +32,7 @@ This package is primarily managed by [E-verse](https://www.e-verse.co/) and by [
 If you're interested in contributing to glTF exporter, just submit a [pull request](https://github.com/EverseDevelopment/revit-glTF-exporter/pulls) or a [feature request](https://github.com/EverseDevelopment/revit-glTF-exporter/issues) .
 
 ## Installation
-Looking to get the revit-glTF-exporter add-in?  Check out [Autodesk app store](https://apps.autodesk.com/RVT/en/Detail/Index?id=6272106374266176068&appLang=en&os=Win64).
+Looking to get the revit-glTF-exporter add-in?  Check out [Autodesk app store](https://apps.autodesk.com/RVT/es/Detail/Index?id=492952120634946986&appLang=en&os=Win64).
 
 ## About us ##
 
@@ -40,6 +40,6 @@ We are an international mix of AEC professionals, product designers, and softwar
 
 <p align="center" width="100%">
     <a href="https://www.e-verse.com/">
-    <img src="https://s3.amazonaws.com/everse.assets/e-verse_logo_no+slogan.jpg" width="732" height="271" align="center">
+    <img src="https://s3.amazonaws.com/everse.assets/GithubReadme/e-verse_logo_no+slogan.jpg" align="center">
     </a>
 </p>
