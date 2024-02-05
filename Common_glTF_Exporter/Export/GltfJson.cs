@@ -45,6 +45,7 @@ namespace Common_glTF_Exporter.Export
                 model,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
+
             if (!preferences.batchId)
             {
                 serializedModel = serializedModel.Replace(",\"_BATCHID\":0", string.Empty);

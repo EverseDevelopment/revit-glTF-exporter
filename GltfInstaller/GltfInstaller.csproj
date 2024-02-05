@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net451</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace("-", "_"))</RootNamespace>
 		<AssemblyName>GltfInstaller</AssemblyName>
 	</PropertyGroup>

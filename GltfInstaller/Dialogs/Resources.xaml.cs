@@ -1,4 +1,4 @@
-﻿namespace Ductulator
+﻿namespace Revit_glTF_Exporter
 {
     using System.Windows;
 

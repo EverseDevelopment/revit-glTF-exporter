@@ -344,14 +344,19 @@
                                  Width="66"
                                  Click="RadioButtonClick"/>-->
             <RadioButton x:Name="Draco" 
-                                 Content="DRACO" 
+                                 Content="Draco" 
                                  HorizontalAlignment="Left" 
                                  VerticalAlignment="Top"
-                                 Click="RadioButtonClick" Margin="234,517,0,0"/>
+                                 Click="RadioButtonClick" Margin="152,517,0,0"/>
+            <RadioButton x:Name="Meshopt" 
+                     Content="MeshOpt" 
+                     HorizontalAlignment="Left" 
+                     VerticalAlignment="Top"
+                     Click="RadioButtonClick" Margin="225,517,0,0"/>
             <RadioButton x:Name="ZIP" 
                                  Content="ZIP" 
-                                 HorizontalAlignment="Center" 
-                                 Margin="0,517,0,0" 
+                                 HorizontalAlignment="Left" 
+                                 Margin="87,517,0,0" 
                                  VerticalAlignment="Top"
                                  Click="RadioButtonClick"/>
 

@@ -22,6 +22,7 @@
                     Draco.Compress(preferences);
                     break;
                 case CompressionEnum.Meshopt:
+                    MeshOpt.Compress(preferences);
                     break;
                 default:
                     break;

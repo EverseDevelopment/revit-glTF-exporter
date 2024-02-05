@@ -1,4 +1,4 @@
-﻿namespace Revit_glTF_Exporter.Model
+﻿namespace Common_glTF_Exporter.Model
 {
     using System.Collections.Generic;
     using System.Linq;

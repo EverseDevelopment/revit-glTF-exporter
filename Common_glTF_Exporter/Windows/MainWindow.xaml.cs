@@ -84,11 +84,12 @@
 
             #if REVIT2019
             exporter.Export(exportView);
-            #else
+#else
             exporter.Export(exportView as View);
-            #endif
+#endif
 
             Thread.Sleep(500);
+            ProgressBarWindow.ViewModel.ProgressBarValue = elementsInView.Count + 1;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ProgressBarWindow.ViewModel.Action = "Accept";
