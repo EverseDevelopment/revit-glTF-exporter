@@ -1,4 +1,4 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.IO;
