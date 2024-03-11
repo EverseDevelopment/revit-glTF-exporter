@@ -108,8 +108,19 @@
   <Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug (
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\Images\"
+    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\Images\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    copy "$(ProjectDir)$(OutputPath)*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    copy "$(ProjectDir)$(OutputPath)*.config" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+)
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Other properties -->

@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\MeshOpt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Payload.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\RevitGridParametersObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\RevitGrids.cs" />
@@ -48,10 +49,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelRotation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DirectoryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Version\DownloadFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Version\InternetConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Version\LatestVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Version\RunLocalFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Version\VersionValidate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\AboutUsWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\FeedbackWindow.xaml.cs">
       <DependentUpon>FeedbackWindow.xaml</DependentUpon>
@@ -89,6 +96,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ProgressBarWindowViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\UnitsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ViewModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\VersionWindow.xaml.cs">
+      <DependentUpon>VersionWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Images\e-verse-isologo.png">
@@ -144,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Windows\VersionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,6 +5,7 @@
     using System.Windows.Media.Imaging;
     using Autodesk.Revit.UI;
     using Autodesk.Windows;
+    using Autodesk.Revit.DB;
     using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 
     /// <summary>
@@ -19,6 +20,13 @@
         private static string pushButtonText = "Leia";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
         private static string buttonIconsFolder = Path.GetDirectoryName(addInPath) + "\\Images\\";
+        internal Document Document { get; set; }
+        public static UIApplication UiApp { get; private set; }
+
+        /// <summary>
+        /// Indicates if the version was validated
+        /// </summary>
+        private bool versionAlreadyValidated = false;
 
         /// <summary>
         /// Creates a new Ribbon tab in the Revit UI.
@@ -53,6 +61,9 @@
         /// <returns>Result.</returns>
         public Result OnStartup(UIControlledApplication application)
         {
+            // -- Events Subscription
+            application.ViewActivated += Application_ViewActivated;
+
             try
             {
                 CreateRibbonTab(application, RIBBONTAB);
@@ -116,6 +127,19 @@
             panelAbout.AddItem(pushDataButtonAbout);
 
             return Result.Succeeded;
+        }
+
+        private void Application_ViewActivated(object sender, Autodesk.Revit.UI.Events.ViewActivatedEventArgs e)
+        {
+            Document = e.Document;
+
+            #pragma warning disable CS4014
+            if (!versionAlreadyValidated)
+            {
+                VersionValidation.Run();
+                versionAlreadyValidated = !versionAlreadyValidated;
+            }
+            #pragma warning restore CS4014
         }
     }
 }

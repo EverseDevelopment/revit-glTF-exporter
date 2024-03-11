@@ -1,6 +1,6 @@
 # Revit glTF exporter
 
-[<img src="https://s3.amazonaws.com/everse.assets/GithubReadme/ScreenshotRevit.png" width="443" height="237.5">](https://github.com/EverseDevelopment/revit-glTF-exporter/wiki)
+[<img src="https://s3.amazonaws.com/everse.assets/GithubReadme/ScreenshotRevit.png">](https://github.com/EverseDevelopment/revit-glTF-exporter/wiki)
 <br/>
 
 

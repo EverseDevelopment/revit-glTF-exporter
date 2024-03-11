@@ -47,9 +47,9 @@
         {
             System.Diagnostics.Process.Start("https://e-verse.com/contact/");
         }
-        private void Leia_Link(object sender, RoutedEventArgs e)
+        private void everse_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/leia/");
+            System.Diagnostics.Process.Start("https://e-verse.com/");
         }
     }
 }
