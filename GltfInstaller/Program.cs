@@ -75,7 +75,7 @@ namespace GltfInstaller
                                            .Add<GltfInstaller.ProgressDialog>()
                                            .Add<GltfInstaller.ExitDialog>();
 
-            // Set MajorUpgrade to automatically uninstall old versions
+            // Set majorUpgrade to automatically uninstall old versions
             project.MajorUpgrade = new MajorUpgrade
             {
                 AllowDowngrades = false,
