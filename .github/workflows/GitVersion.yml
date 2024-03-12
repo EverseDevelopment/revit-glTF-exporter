@@ -1,4 +1,0 @@
-mode: Mainline
-increment: Patch
-assembly-versioning-scheme: MajorMinorPatchTag
-tag-prefix: '[vV]'

@@ -44,6 +44,9 @@ jobs:
         echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
         echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
 
+    - name: Append Run Number to Version
+      run: echo "FULL_VERSION=${{ steps.gitversion.outputs.MajorMinorPatch }}.${{ github.run_number }}" >> $GITHUB_ENV
+
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.1
 
@@ -58,12 +61,12 @@ jobs:
 
     - name: Setting new version to the App.config file
       run: |
-        $version = "${{ steps.gitversion.outputs.assemblySemVer }}"
+        $version = "$FULL_VERSION"
         (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"v$version`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
 
     - name: Replace strings in the code
       run: |
-        $version = "${{ steps.gitversion.outputs.assemblySemVer }}"
+        $version = "$FULL_VERSION"
         (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $version | Out-File -encoding ASCII GltfInstaller/Program.cs
 
     - name: Build and Publish App
@@ -75,8 +78,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.gitversion.outputs.assemblySemVer }}
-        release_name: GLTF Exporter v${{ steps.gitversion.outputs.assemblySemVer }}
+        tag_name: v$FULL_VERSION
+        release_name: GLTF Exporter v$FULL_VERSION
         draft: false
         prerelease: false
 
@@ -87,6 +90,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: .\GltfInstaller\Leia - glTF exporter ${{ steps.gitversion.outputs.assemblySemVer }}.msi
-        asset_name: Leia - glTF exporter ${{ steps.gitversion.outputs.assemblySemVer }}.msi
+        asset_path: .\GltfInstaller\Leia - glTF exporter $FULL_VERSION.msi
+        asset_name: Leia - glTF exporter $FULL_VERSION.msi
         asset_content_type: application/zip

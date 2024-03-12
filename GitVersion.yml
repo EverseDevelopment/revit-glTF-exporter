@@ -1,4 +1,4 @@
-#GitVersion.yml
-
-mode: ContinuousDeployment
-next-version: 1.1.1
+mode: Mainline
+increment: Patch
+assembly-versioning-scheme: MajorMinorPatchTag
+tag-prefix: '[vV]'
