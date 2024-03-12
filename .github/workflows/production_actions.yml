@@ -59,16 +59,20 @@ jobs:
     - name: Install WiX Toolset
       run: choco install wixtoolset
 
+    - name: Set environment variable
+      run: echo "test=1.0.0.0" >> $GITHUB_ENV
+
+    - name: Use environment variable
+      run: |
+        echo "The value of the test variable is ${{ env.test }}"
+    
     - name: Setting new version to the App.config file
       run: |
-        $version = "$FULL_VERSION"
-        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"v$version`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"${{ env.test }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
 
     - name: Replace strings in the code
       run: |
-        $version = "$env:FULL_VERSION"
-        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $version | Out-File -encoding ASCII GltfInstaller/Program.cs
-      shell: pwsh
+        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', ${{ env.test }} | Out-File -encoding ASCII GltfInstaller/Program.cs
 
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
@@ -79,8 +83,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v$FULL_VERSION
-        release_name: GLTF Exporter v$FULL_VERSION
+        tag_name: v${{ env.test }}
+        release_name: GLTF Exporter ${{ env.test }}
         draft: false
         prerelease: false
 
@@ -91,6 +95,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: .\GltfInstaller\Leia - glTF exporter $FULL_VERSION.msi
-        asset_name: Leia - glTF exporter $FULL_VERSION.msi
+        asset_path: .\GltfInstaller\Leia - glTF exporter ${{ env.test }}.msi
+        asset_name: Leia - glTF exporter ${{ env.test }}.msi
         asset_content_type: application/zip
