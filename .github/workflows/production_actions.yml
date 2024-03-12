@@ -64,9 +64,7 @@ jobs:
     - name: Replace strings in the code
       run: |
         $version = "${{ steps.gitversion.outputs.assemblySemVer }}"
-        # Add your code replacement commands here, using $version as the new version string
-        # For example:
-        # (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $version | Out-File -encoding ASCII GltfInstaller/Program.cs
+        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $version | Out-File -encoding ASCII GltfInstaller/Program.cs
 
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
@@ -89,6 +87,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: .\GltfInstaller\Leia - glTF exporter $version.msi
-        asset_name: Leia - glTF exporter $version.msi
+        asset_path: .\GltfInstaller\Leia - glTF exporter ${{ steps.gitversion.outputs.assemblySemVer }}.msi
+        asset_name: Leia - glTF exporter ${{ steps.gitversion.outputs.assemblySemVer }}.msi
         asset_content_type: application/zip
