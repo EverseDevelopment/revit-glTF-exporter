@@ -89,6 +89,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: .\GltfInstaller\Leia - glTF exporter $version.msi
-        asset_name: Leia - glTF exporter $version.msi
+        asset_path: .\GltfInstaller\Leia - glTF exporter ${{ steps.gitversion.outputs.assemblySemVer }}.msi
+        asset_name: Leia - glTF exporter ${{ steps.gitversion.outputs.assemblySemVer }}.msi
         asset_content_type: application/zip
