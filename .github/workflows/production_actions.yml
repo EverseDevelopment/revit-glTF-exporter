@@ -2,35 +2,30 @@ name: Deploy to Production
 
 on:
   push:
-    # this will cause the action to run on pushes to main
     branches: [ "master" ]
   pull_request:
-    # this will cause the action to run on pushes to main
     branches: [ "master" ]
-jobs:
 
+jobs:
   build:
-  
-    # The type of runner that the job will run on
-    runs-on: windows-latest 
+    runs-on: windows-latest
     env:
-        Solution_Name: Revit_glTF_Exporter.sln
+      Solution_Name: Revit_glTF_Exporter.sln
     outputs:
-      Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }} 
-      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}   
+      Version: ${{ steps.gitversion.outputs.assemblySemVer }}
+      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-  
+
     - name: Setup .NET Core 3.1
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
 
-    # install and calculate the new version with GitVersion  
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.7
       with:
@@ -41,54 +36,59 @@ jobs:
       with:
         useConfigFile: true
         configFilePath: GitVersion.yml
-        
-      id: gitversion # step id used as reference for output values
+      id: gitversion
+
     - name: Display GitVersion outputs
       run: |
-        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-        echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"   
+        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
         echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
-        
-    # Installing the MSBuild
+
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.1
-    
-    # Install and restore the necessary NuGet packages
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.6
-     
+
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
-      
+
     - name: Install WiX Toolset
       run: choco install wixtoolset
 
-    # Change the version inside 'App.config' file
     - name: Setting new version to the App.config file
-      run: (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="v1.0.0"', 'key="version" value="v${{ steps.gitversion.outputs.majorMinorPatch }}"' | Out-File -encoding ASCII Common_glTF_Exporter/App.config
-        
-    # Build the solution on the Release mode
+      run: |
+        $version = "${{ steps.gitversion.outputs.assemblySemVer }}"
+        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"v$version`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+
+    - name: Replace strings in the code
+      run: |
+        $version = "${{ steps.gitversion.outputs.assemblySemVer }}"
+        # Add your code replacement commands here, using $version as the new version string
+        # For example:
+        # (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $version | Out-File -encoding ASCII GltfInstaller/Program.cs
+
     - name: Build and Publish App
-      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile      
-        
+      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}
-        release_name: GLTF Exporter v${{ steps.gitversion.outputs.majorMinorPatch }}
+        tag_name: ${{ steps.gitversion.outputs.assemblySemVer }}
+        release_name: GLTF Exporter v${{ steps.gitversion.outputs.assemblySemVer }}
         draft: false
         prerelease: false
-    
+
     - name: Upload Release Asset
-      id: upload-release-asset 
+      id: upload-release-asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: .\GltfInstaller\glTFExporter.exe
-        asset_name: GLTFExporter.exe
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: .\GltfInstaller\Leia - glTF exporter $version.msi
+        asset_name: Leia - glTF exporter $version.msi
         asset_content_type: application/zip

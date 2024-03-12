@@ -1,22 +1,21 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Deployment.WindowsInstaller;
 using System;
+using System.Configuration;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Management;
-using System.Security.AccessControl;
 using System.Windows.Forms;
+using System.Windows.Input;
 using WixSharp;
-using WixSharp.Nsis;
 using File = WixSharp.File;
 
 namespace GltfInstaller
 {
     internal class Program
     {
+        public static string versionValue = "3.0.0.0";
         static void Main()
         {
-            var project = new ManagedProject("Leia - glTF exporter",
+            var project = new ManagedProject($"Leia - glTF exporter {versionValue}",
                               new Dir(@"%CommonAppDataFolder%\Autodesk\ApplicationPlugins",
                                   new Dir(@"leia.bundle",
                                   new WixSharp.File(@"..\Common_glTF_Exporter\PackageContents.xml"),
@@ -60,7 +59,7 @@ namespace GltfInstaller
                               );
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
-            project.Version = new Version("3.0.0.0");
+            project.Version = new Version(versionValue);
 
             project.ManagedUI = new ManagedUI();
 
@@ -88,32 +87,10 @@ namespace GltfInstaller
 
             project.Actions = new WixSharp.Action[]
             {
-                new ManagedAction(CustomActions.CheckRevitProcess, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
-                new ManagedAction(CustomActions.RemovePreviousFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed)
+                new ManagedAction(CustomActions.CheckRevitProcess, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed)
             };
 
             var msiFile = project.BuildMsi();
-
-            var bootstrapper = new NsisBootstrapper
-            {
-                Primary = { FileName = msiFile },
-
-                OutputFile = "glTFExporter.exe",
-                IconFile = "Resources\\logo.ico",
-
-                VersionInfo = new VersionInformation("3.0.0.0")
-                {
-                    ProductName = "Leia - glTF exporter",
-                    LegalCopyright = "Copyright e-verse",
-                    FileDescription = "Leia - glTF exporter",
-                    FileVersion = "3.0.0.0",
-                    CompanyName = "e-verse",
-                    InternalName = "setup.exe",
-                    OriginalFilename = "setup.exe"
-                },
-            };
-
-            bootstrapper.Build();
         }
     }
 
@@ -145,46 +122,12 @@ namespace GltfInstaller
                         return ActionResult.Failure;
                     }
                 }
-
-                    string partialProgramName = "Leia"; // Replace with the partial name of the programs you want to uninstall
-
-                    // Query the list of installed programs
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Product WHERE Name LIKE '%" + partialProgramName + "%'");
-                    foreach (ManagementObject obj in searcher.Get())
-                    {
-                        string programName = obj["Name"].ToString();
-
-                        // Uninstall the program
-                        obj.InvokeMethod("Uninstall", null);
-                    }
             }
             catch (Exception ex)
             {
                 session.Log("Error checking Revit process: " + ex.Message);
                 return ActionResult.Failure;
             }
-            return ActionResult.Success;
-        }
-
-
-        [CustomAction]
-        public static ActionResult RemovePreviousFiles(Session session)
-        {
-            string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Autodesk\\ApplicationPlugins\\leia.bundle");
-
-            try
-            {
-                if (Directory.Exists(directoryPath))
-                {
-                    Directory.Delete(directoryPath, true);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-           
             return ActionResult.Success;
         }
     }
