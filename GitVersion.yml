@@ -1,4 +1,4 @@
 mode: Mainline
-increment: Patch
-assembly-versioning-scheme: MajorMinorPatchTag
+increment: None
 tag-prefix: '[vV]'
+continuous-delivery-fallback-tag: ''

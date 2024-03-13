@@ -32,8 +32,18 @@ jobs:
         configFilePath: GitVersion.yml
       id: gitversion
 
-    - name: Append Run Number to Version
-      run: echo "FULL_VERSION=${{ steps.gitversion.outputs.MajorMinorPatch }}.${{ github.run_number }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+    - name: Calculate Version
+      run: |
+        $currentVersion = "${{ steps.gitversion.outputs.Major }}.${{ steps.gitversion.outputs.Minor }}.${{ steps.gitversion.outputs.Patch }}"
+        $runNumber = ${{ github.run_number }}
+        $versionArray = $currentVersion.Split('.')
+        $buildNumber = [int]$versionArray[2] * 10 + $runNumber
+        $newPatch = $buildNumber % 10
+        $newMinor = [int]$versionArray[1] + [Math]::Floor($buildNumber / 10) % 10
+        $newMajor = [int]$versionArray[0] + [Math]::Floor($newMinor / 10)
+        $newMinor = $newMinor % 10
+        $newVersion = "$newMajor.$newMinor.$newPatch"
+        echo "FULL_VERSION=$newVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
 
     - name: Use environment variable
