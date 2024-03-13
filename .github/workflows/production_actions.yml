@@ -38,6 +38,14 @@ jobs:
         configFilePath: GitVersion.yml
       id: gitversion
 
+    - name: Set environment variable
+      run: |
+        echo "VERSION_VARIABLE=1.0.0.0" >> $GITHUB_ENV
+
+    - name: Use environment variable
+      run: |
+        echo "The value of the VERSION_VARIABLE is ${VERSION_VARIABLE}"
+
     - name: Display GitVersion outputs
       run: |
         echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
@@ -58,16 +66,6 @@ jobs:
 
     - name: Install WiX Toolset
       run: choco install wixtoolset
-
-    - name: Set environment variable
-      env:
-        VERSION_VARIABLE: "2.0.0.0"
-
-    - name: Use environment variable
-      run: |
-        echo "The value of the test variable is $env:TEST_VERSION"
-      env:
-        TEST_VERSION: ${{ env.test }}
     
     - name: Setting new version to the App.config file
       run: |
