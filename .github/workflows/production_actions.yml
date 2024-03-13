@@ -9,12 +9,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    env:
-      Solution_Name: Revit_glTF_Exporter.sln
-    outputs:
-      Version: ${{ steps.gitversion.outputs.assemblySemVer }}
-      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -38,22 +32,12 @@ jobs:
         configFilePath: GitVersion.yml
       id: gitversion
 
-    - name: Set environment variable
-      run: |
-        echo "VERSION_VARIABLE=1.0.0.0" >> $GITHUB_ENV
+    - name: Append Run Number to Version
+      run: echo "FULL_VERSION=${{ steps.gitversion.outputs.MajorMinorPatch }}.${{ github.run_number }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      shell: pwsh
 
     - name: Use environment variable
-      run: |
-        echo "The value of the VERSION_VARIABLE is ${VERSION_VARIABLE}"
-
-    - name: Display GitVersion outputs
-      run: |
-        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
-
-    - name: Append Run Number to Version
-      run: echo "FULL_VERSION=${{ steps.gitversion.outputs.MajorMinorPatch }}.${{ github.run_number }}" >> $GITHUB_ENV
+      run: echo "The value of the FULL_VERSION is $env:FULL_VERSION"
 
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.1
@@ -69,11 +53,11 @@ jobs:
     
     - name: Setting new version to the App.config file
       run: |
-        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"$VERSION_VARIABLE`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"$env:FULL_VERSION`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
 
     - name: Replace strings in the code
       run: |
-        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $VERSION_VARIABLE | Out-File -encoding ASCII GltfInstaller/Program.cs
+        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $env:FULL_VERSION | Out-File -encoding ASCII GltfInstaller/Program.cs
 
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
@@ -84,8 +68,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v$$VERSION_VARIABLE
-        release_name: GLTF Exporter $VERSION_VARIABLE
+        tag_name: v${{ env.FULL_VERSION }}
+        release_name: GLTF Exporter v${{ env.FULL_VERSION }}
         draft: false
         prerelease: false
 
@@ -96,6 +80,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: .\GltfInstaller\Leia - glTF exporter $VERSION_VARIABLE.msi
-        asset_name: Leia - glTF exporter $VERSION_VARIABLE.msi
+        asset_path: .\GltfInstaller\Leia - glTF exporter $env:FULL_VERSION.msi
+        asset_name: Leia - glTF exporter $env:FULL_VERSION.msi
         asset_content_type: application/zip
+    
