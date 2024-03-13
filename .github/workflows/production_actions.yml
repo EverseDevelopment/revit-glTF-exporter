@@ -93,4 +93,4 @@ jobs:
 
     - name: Upload file to S3
       run: |
-        aws s3 cp ".\GltfInstaller\Leia - glTF exporter $env:FULL_VERSION.msi" "s3://${{ secrets.EVERSE_INSTALLER_BUCKET_NAME }}/e-verse/LeiaGltfExporter" --debug
+        aws s3 cp ".\GltfInstaller\Leia - glTF exporter $env:FULL_VERSION.msi" "s3://${{ secrets.EVERSE_INSTALLER_BUCKET_NAME }}/e-verse/LeiaGltfExporter/" --debug
