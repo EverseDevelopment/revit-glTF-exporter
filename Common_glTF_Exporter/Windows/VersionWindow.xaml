@@ -15,7 +15,7 @@
                 ShowInTaskbar="False"
                 Title="MessageWindow" 
                 SizeToContent="WidthAndHeight"
-                Style="{DynamicResource CustomWindowStyle}" Width="361" Height="210">
+                Style="{DynamicResource CustomWindowStyle}" Width="415" Height="210">
 
     <Window.InputBindings>
         <KeyBinding Key="Escape"
@@ -66,7 +66,7 @@
                    Name="CloseButton"  
                    Click="Close_Click" 
                    VerticalAlignment="Top" 
-                   Margin="291,10,10,0"></Button>
+                   Margin="0,10,10,0" HorizontalAlignment="Right" Width="20"></Button>
 
             <Label Cursor="Hand" 
                MouseLeftButtonUp="UpdatesNotes_MouseLeftButtonUp"

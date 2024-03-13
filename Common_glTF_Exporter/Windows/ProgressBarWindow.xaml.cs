@@ -25,7 +25,7 @@
         public static ProgressBarWindowViewModel ViewModel { get; set; } = new ProgressBarWindowViewModel();
 
         public static ProgressBarWindow Create(double maxValue, double currentValue, 
-            string message, MainWindow mainWindow)
+            string message, MainWindow mainWindow =  null)
         {
             mainWin = mainWindow;
             var progressBar = new ProgressBarWindow();
@@ -58,7 +58,10 @@
             GLTFExportContext.cancelation = true;
             if (ViewModel.Action == "Accept")
             {
-                mainWin.Close();
+                if (mainWin != null)
+                {
+                    mainWin.Close();
+                }
             }
 
             int numberRuns = int.Parse(SettingsConfig.GetValue("runs"));

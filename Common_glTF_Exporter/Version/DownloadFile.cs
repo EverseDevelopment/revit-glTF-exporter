@@ -4,6 +4,7 @@ using Common_glTF_Exporter.Utils;
 using Revit_glTF_Exporter;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -18,7 +19,9 @@ namespace Common_glTF_Exporter.Version
 
             string version = SettingsConfig.GetValue("version");
             string urlParameters = "?inputVersion=" + version +
-                "&&folderName=" + "LeiaGltfExporter" ;
+                "&&folderName=" + "e-verse/LeiaGltfExporter";
+
+
 
             HttpResponseMessage result = client.GetAsync(urlParameters, HttpCompletionOption.ResponseHeadersRead).Result;
             HttpContent content = result.Content;
@@ -29,8 +32,17 @@ namespace Common_glTF_Exporter.Version
                 return;
             }
 
+            double fileSize = await getFileSize(myContent);
+            if (fileSize == 0)
+            {
+                fileSize =  5;
+            }
+
             string fileLocation = System.IO.Path.Combine(pathFile, installerName);
 
+            ProgressBarWindow progressBar =
+                    ProgressBarWindow.Create(fileSize, 0, "Downloading Installer");
+            
             System.Timers.Timer aTimer = new System.Timers.Timer(500);
 
             // Hook up the Elapsed event for the timer.
@@ -43,11 +55,17 @@ namespace Common_glTF_Exporter.Version
 
                 FileInfo info = new FileInfo(fileLocation);
                 int currentMegas = (int)(info.Length / 1000000);
+                ProgressBarWindow.ViewModel.ProgressBarValue = currentMegas;
             };
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
 
             await DownloadFileAsync(myContent, fileLocation);
+
+            ProgressBarWindow.ViewModel.ProgressBarValue = 100 + 1;
+            ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
+            ProgressBarWindow.ViewModel.Message = "Download Complete!";
+            progressBar.Close();
 
             aTimer.Dispose();  
         }
@@ -69,6 +87,40 @@ namespace Common_glTF_Exporter.Version
                     TaskDialog.Show("Title", $"Failed to download file. Status code: {response.StatusCode}");
                     Console.WriteLine($"Failed to download file. Status code: {response.StatusCode}");
                 }
+            }
+        }
+
+        static async Task<double> getFileSize(string signedUrl)
+        {
+
+            using (HttpClient client = new HttpClient())
+            {
+                // Create a HttpRequestMessage for a HEAD request
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, signedUrl);
+
+                // Send the request
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Get the Content-Length header value
+                    if (response.Headers.TryGetValues("Content-Length", out var values))
+                    {
+                        string contentLength = values.FirstOrDefault();
+                        if (long.TryParse(contentLength, out long fileSizeBytes))
+                        {
+                            double fileSizeMegabytes = fileSizeBytes / 1024.0 / 1024.0;
+                            return fileSizeMegabytes;
+                        }
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+
+                return 0;
+
             }
         }
     }

@@ -67,7 +67,7 @@ jobs:
 
     - name: Replace strings in the code
       run: |
-        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0.0', $env:FULL_VERSION | Out-File -encoding ASCII GltfInstaller/Program.cs
+        (Get-Content GltfInstaller/Program.cs) -replace '0.0.0', $env:FULL_VERSION | Out-File -encoding ASCII GltfInstaller/Program.cs
 
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile

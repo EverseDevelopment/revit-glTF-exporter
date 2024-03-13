@@ -12,7 +12,7 @@ namespace GltfInstaller
 {
     internal class Program
     {
-        public static string versionValue = "0.0.0.0";
+        public static string versionValue = "0.0.0";
         static void Main()
         {
             var project = new ManagedProject($"Leia - glTF exporter {versionValue}",

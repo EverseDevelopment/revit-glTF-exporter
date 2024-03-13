@@ -18,7 +18,7 @@ namespace Revit_glTF_Exporter
 
             string version = SettingsConfig.GetValue("version");
             string urlParameters = "?inputVersion=" + version +
-                "&&folderName=" + "LeiaGltfExporter";
+                "&&folderName=" + "e-verse/LeiaGltfExporter";
 
             HttpResponseMessage result = client.GetAsync(urlParameters, HttpCompletionOption.ResponseHeadersRead).Result;
 
