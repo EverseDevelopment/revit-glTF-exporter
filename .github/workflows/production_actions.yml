@@ -81,6 +81,18 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: .\GltfInstaller\Leia - glTF exporter ${{ env.FULL_VERSION }}.msi
-        asset_name: Leia - glTF exporter ${{ env.FULL_VERSION }}.msi
+        asset_name: Leia-glTF exporter ${{ env.FULL_VERSION }}.msi
         asset_content_type: application/zip
     
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.EVERSE_AWS_S3_BUCKET_SECRET_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.EVERSE_AWS_S3_BUCKET_SECRET_KEY_SECRET }}
+        aws-region: us-east-1
+
+    - name: Upload file to S3
+      run: |
+        aws s3 cp .\GltfInstaller\Leia - glTF exporter $env:FULL_VERSION.msi s3://${{ secrets.EVERSE_INSTALLER_BUCKET_NAME }}/e-verse/LeiaGltfExporter --debug
+
+        
