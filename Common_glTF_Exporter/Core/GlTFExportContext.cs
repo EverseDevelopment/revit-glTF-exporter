@@ -182,7 +182,7 @@ namespace Revit_glTF_Exporter
             FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
                 scenes, nodes, meshes, materials, accessors);
 
-            Compression.Run(preferences);
+            Compression.Run(preferences, ProgressBarWindow.ViewModel);
         }
 
         /// <summary>
@@ -225,13 +225,19 @@ namespace Revit_glTF_Exporter
             // get the extras for this element
             GLTFExtras extras = new GLTFExtras();
 
+
+
             if (preferences.properties)
             {
                 newNode.name = Util.ElementDescription(element);
                 extras.uniqueId = element.UniqueId;
                 extras.parameters = Util.GetElementParameters(element, true);
                 extras.elementCategory = element.Category.Name;
+                #if REVIT2024
+                extras.elementId = element.Id.Value;
+                #else
                 extras.elementId = element.Id.IntegerValue;
+                #endif
             }
 
             newNode.extras = extras;
@@ -366,7 +372,11 @@ namespace Revit_glTF_Exporter
                     bufferViews,
                     kvp.Value,
                     kvp.Key,
+                    #if REVIT2024
+                    elementId.Value,
+                    #else
                     elementId.IntegerValue,
+                    #endif
                     preferences.batchId,
                     preferences.normals);
 

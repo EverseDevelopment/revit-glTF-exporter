@@ -93,7 +93,7 @@
         /// <param name="exportBatchId">exportBatchId.</param>
         /// <param name="exportNormals">exportNormals.</param>
         /// <returns>Returns the GLTFBinaryData object.</returns>
-        public static GLTFBinaryData AddGeometryMeta(List<GLTFBuffer> buffers, List<GLTFAccessor> accessors, List<GLTFBufferView> bufferViews, GeometryDataObject geomData, string name, int elementId, bool exportBatchId, bool exportNormals)
+        public static GLTFBinaryData AddGeometryMeta(List<GLTFBuffer> buffers, List<GLTFAccessor> accessors, List<GLTFBufferView> bufferViews, GeometryDataObject geomData, string name, long elementId, bool exportBatchId, bool exportNormals)
         {
             int byteOffset = 0;
 

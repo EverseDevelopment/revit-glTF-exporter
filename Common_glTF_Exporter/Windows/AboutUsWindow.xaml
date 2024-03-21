@@ -14,7 +14,24 @@
              ShowInTaskbar="True"
              Style="{DynamicResource CustomWindowStyle}">
 
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="Close" />
+        <KeyBinding Gesture="Enter"
+                    Command="Open" />
+        <KeyBinding Gesture="F1"
+                    Command="Help" />
+    </Window.InputBindings>
 
+    <Window.CommandBindings>
+        <CommandBinding Command="Close"
+                        Executed="CancelProcess_Click" />
+        <CommandBinding Command="Open"
+                        Executed="CancelProcess_Click" />
+        <CommandBinding Command="Help"
+                        Executed="everse_Link" />
+    </Window.CommandBindings>
+    
     <Border Background="{DynamicResource BackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 

@@ -15,7 +15,7 @@
 
         public Dictionary<string, string> parameters { get; set; }
 
-        public int elementId { get; set; }
+        public long elementId { get; set; }
 
         public string elementCategory { get; set; }
     }
