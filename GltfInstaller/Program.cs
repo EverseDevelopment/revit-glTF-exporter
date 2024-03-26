@@ -1,7 +1,9 @@
 using Microsoft.Deployment.WindowsInstaller;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Management;
 using System.Threading;
 using System.Windows.Forms;
@@ -112,7 +114,20 @@ namespace GltfInstaller
                         {
                             process.Kill();
                             process.WaitForExit();
-                            Thread.Sleep(2000);
+                        }
+
+                        string basePath = Environment.ExpandEnvironmentVariables("%ProgramData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
+                        List<string> filePaths = new List<string>();
+
+                        for (int year = 2019; year <= 2024; year++)
+                        {
+                            string filePath = $"{basePath}\\{year}\\Leia_glTF_Exporter.dll";
+                            bool overwrittable = WaitForFilesToBeOverwritable(filePath);
+                            if (!overwrittable)
+                            {
+                                MessageBox.Show($"The file Leia_glTF_Exporter.dll {year} is still in use", "Warning");
+                                return ActionResult.Failure;
+                            }
                         }
                     }
                     else if (result == DialogResult.No)
@@ -131,6 +146,38 @@ namespace GltfInstaller
                 return ActionResult.Failure;
             }
             return ActionResult.Success;
+        }
+
+        public static bool WaitForFilesToBeOverwritable(string filePath, int waitTimeMilliseconds = 1000, int maxAttempts = 10)
+        {
+                int attempts = 0;
+                while (IsFileInUse(filePath) && attempts < maxAttempts)
+                {
+                    Thread.Sleep(waitTimeMilliseconds);
+                    attempts++;
+                }
+
+                if (attempts >= maxAttempts)
+                {
+                    return false;
+                }
+
+                return true;
+        }
+
+        public static bool IsFileInUse(string filePath)
+        {
+            try
+            {
+                using (FileStream stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    return false;
+                }
+            }
+            catch (IOException)
+            {
+                return true;
+            }
         }
     }
 }
