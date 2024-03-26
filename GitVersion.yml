@@ -1,4 +1,3 @@
-mode: Mainline
-increment: None
+mode: ContinuousDeployment
 tag-prefix: '[vV]'
-continuous-delivery-fallback-tag: ''
+continuous-delivery-fallback-tag: 'ci'

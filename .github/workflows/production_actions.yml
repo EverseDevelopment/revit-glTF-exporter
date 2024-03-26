@@ -15,7 +15,6 @@ jobs:
       with:
         fetch-depth: 0
 
-
     - name: Setup .NET Core 3.1
       uses: actions/setup-dotnet@v1
       with:
@@ -53,6 +52,18 @@ jobs:
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.1
 
+    - name: Get certificate
+      run: |
+        $url = "${{ secrets.EVERSE_CERTIFICATE_S3_URL }}"
+        $outputFilePath = "credentials.pfx"
+        $apiKey = "${{ secrets.EVERSE_AWS_S3_CERTIFICATE_KEY_ID }}"
+        
+        $headers = @{
+            "x-api-key" = $apiKey
+        }
+
+        Invoke-RestMethod -Uri $url -Headers $headers -OutFile $outputFilePath
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.6
 
@@ -75,12 +86,12 @@ jobs:
 
     - name: Sign MSIs
       run: |
-        $msis = dir -Path .\GltfInstaller\ -Filter "*.msi" -Recurse | %{$_.FullName}
-        foreach ($msi in $msis)
-        {
-          packages\signtool.10.0.17763.132\tools\signtool.exe sign /f "credentials.pfx" /p ${{ secrets.EVERSE_CERTIFICATE_KEY }} /t http://timestamp.digicert.com "$msi"
+        $msis = Get-ChildItem -Path .\GltfInstaller\ -Filter "*.msi" -Recurse | ForEach-Object { $_.FullName }
+        foreach ($msi in $msis) {
+          & "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f "credentials.pfx" /p ${{ secrets.EVERSE_CERTIFICATE_KEY }} /t http://timestamp.digicert.com "$msi"
           Write-Host $msi
         }
+      shell: pwsh
 
     - name: Create Release
       id: create_release
