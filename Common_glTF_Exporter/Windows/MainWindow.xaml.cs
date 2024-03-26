@@ -33,6 +33,8 @@
 
             UpdateForm.Run(this.MainWindow_Border);
             LabelVersion.Update(this.UnitsViewModel);
+
+            Analytics.Send("Open", "Main Window").GetAwaiter();
         }
 
         public static MainWindow MainView { get; set; }
@@ -84,15 +86,17 @@
 
             #if REVIT2019
             exporter.Export(exportView);
-#else
+            #else
             exporter.Export(exportView as View);
-#endif
+            #endif
 
             Thread.Sleep(500);
             ProgressBarWindow.ViewModel.ProgressBarValue = elementsInView.Count + 1;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ProgressBarWindow.ViewModel.Action = "Accept";
+
+            Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
