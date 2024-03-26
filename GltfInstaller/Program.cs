@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.Management;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
 using WixSharp;
@@ -111,6 +112,7 @@ namespace GltfInstaller
                         {
                             process.Kill();
                             process.WaitForExit();
+                            Thread.Sleep(2000);
                         }
                     }
                     else if (result == DialogResult.No)
