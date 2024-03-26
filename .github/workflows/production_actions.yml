@@ -72,6 +72,15 @@ jobs:
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
+    - name: Sign MSIs
+      run: |
+        $msis = dir -Path .\GltfInstaller\ -Filter "*.msi" -Recurse | %{$_.FullName}
+        foreach ($msi in $msis)
+        {
+          packages\signtool.10.0.17763.132\tools\signtool.exe sign /f "credentials.pfx" /p ${{ secrets.EVERSE_CERTIFICATE_KEY }} /t http://timestamp.digicert.com "$msi"
+          Write-Host $msi
+        }
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
