@@ -55,7 +55,7 @@ jobs:
     - name: Get certificate
       run: |
         $url = "${{ secrets.EVERSE_CERTIFICATE_S3_URL }}"
-        $outputFilePath = "credentials.pfx"
+        $outputFilePath = "$GITHUB_WORKSPACE/credentials.pfx"
         $apiKey = "${{ secrets.EVERSE_AWS_S3_CERTIFICATE_KEY_ID }}"
         
         $headers = @{
@@ -63,6 +63,19 @@ jobs:
         }
 
         Invoke-RestMethod -Uri $url -Headers $headers -OutFile $outputFilePath
+
+    - name: define certfificate key
+      run: |
+        echo "CERTIFICATE_KEY=${{ secrets.EVERSE_CERTIFICATE_KEY }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      shell: pwsh
+
+    - name: define certfificate location
+      run: |
+        echo "CERTIFICATE_LOCATION=${{ steps.get-certificate.outputs.outputFilePath }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      shell: pwsh
+
+    - name: Use environment variable
+      run: echo "The value of the CERTIFICATE_LOCATION is $env:CERTIFICATE_LOCATION"
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.6
@@ -92,7 +105,7 @@ jobs:
       run: |
         $msis = Get-ChildItem -Path .\GltfInstaller\ -Filter "*.msi" -Recurse | ForEach-Object { $_.FullName }
         foreach ($msi in $msis) {
-          & "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f "credentials.pfx" /p ${{ secrets.EVERSE_CERTIFICATE_KEY }} /t http://timestamp.digicert.com "$msi"
+          & "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f ${{ env.CERTIFICATE_LOCATION }} /p ${{ secrets.EVERSE_CERTIFICATE_KEY }} /t http://timestamp.digicert.com "$msi"
           Write-Host $msi
         }
       shell: pwsh
