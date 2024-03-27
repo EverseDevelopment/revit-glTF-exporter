@@ -112,7 +112,7 @@
     copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2024\"
 )
 If "%25CI%25"=="true" (
-    "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f $(CERTIFICATE_LOCATION) /p $(EVERSE_CERTIFICATE_KEY) /t http://timestamp.digicert.com ".\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.dll"
+    "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com "$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
