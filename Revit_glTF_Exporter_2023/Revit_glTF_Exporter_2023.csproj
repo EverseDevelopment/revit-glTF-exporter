@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -120,7 +120,9 @@
     copy "$(ProjectDir)$(OutputPath)*.config" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
     copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
 )
-</PostBuildEvent>
+If "%25CI%25"=="true" (
+    "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com "$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll"
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Other properties -->

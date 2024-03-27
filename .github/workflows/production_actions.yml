@@ -71,7 +71,7 @@ jobs:
 
     - name: define certfificate location
       run: |
-        echo "CERTIFICATE_LOCATION=${{ steps.get-certificate.outputs.outputFilePath }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "CERTIFICATE_LOCATION=$GITHUB_WORKSPACE/credentials.pfx" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
 
     - name: Use environment variable
