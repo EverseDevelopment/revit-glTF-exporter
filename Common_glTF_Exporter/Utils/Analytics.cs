@@ -9,10 +9,12 @@ namespace Common_glTF_Exporter.Utils
 {
     public class Analytics
     {
+        private static string apiUrl = "https://expoterAPI";
+        private static HttpClient client = new HttpClient();
         public static async Task Send(string action, string details)
         {
             DateTime currentDate = DateTime.Now;
-            string date = currentDate.ToString("yyyy-MM-dd");
+            string date = currentDate.ToString();
 
             RegionInfo currentRegion = new RegionInfo(CultureInfo.CurrentCulture.Name);
             string location = currentRegion.EnglishName.ToString();
@@ -32,28 +34,27 @@ namespace Common_glTF_Exporter.Utils
                 ""Version"": ""{version}""
             }}";
 
-            string url = "https://us-central1-data-warehouse-320521.cloudfunctions.net/LeiaGltfExporter";
+            try { 
+ 
+                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            using (var client = new HttpClient())
+                 string apiKey = SettingsConfig.GetValue("apikey"); ;
+                 client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+
+                 var response = await client.PostAsync(apiUrl, content);
+
+                 if (response.IsSuccessStatusCode)
+                 {
+                     Console.WriteLine("Request successful");
+                 }
+                 else
+                 {
+                     Console.WriteLine($"Request failed with status code: {response.StatusCode}");
+                 }
+            }
+            catch (Exception ex) 
             {
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                string apiKey = SettingsConfig.GetValue("apikey"); ;
-                client.DefaultRequestHeaders.Add("x-api-key", apiKey);
-
-                var response = await client.PostAsync(url, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine("Request successful");
-                    // Optionally, you can read the response content here
-                    // string responseContent = await response.Content.ReadAsStringAsync();
-                    // Console.WriteLine(responseContent);
-                }
-                else
-                {
-                    Console.WriteLine($"Request failed with status code: {response.StatusCode}");
-                }
+                Console.WriteLine(ex.Message);
             }
         }
 

@@ -115,6 +115,9 @@
     copy "$(ProjectDir)$(OutputPath)*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
     copy "$(ProjectDir)$(OutputPath)*.config" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
     copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2021\"
+)
+If "%25CI%25"=="true" (
+    "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com "$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>

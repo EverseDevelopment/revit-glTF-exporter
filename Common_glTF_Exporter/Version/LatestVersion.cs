@@ -14,32 +14,38 @@ namespace Revit_glTF_Exporter
         public static async Task Get()
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://vxfcsp1qu4.execute-api.us-east-1.amazonaws.com/Prod/CurrentVersion");
+            client.BaseAddress = new Uri("https://APIAutoUpdate");
 
             string version = SettingsConfig.GetValue("version");
             string urlParameters = "?inputVersion=" + version +
                 "&&folderName=" + "e-verse/LeiaGltfExporter";
 
-            HttpResponseMessage result = client.GetAsync(urlParameters, HttpCompletionOption.ResponseHeadersRead).Result;
+            try {
+                HttpResponseMessage result = client.GetAsync(urlParameters, HttpCompletionOption.ResponseHeadersRead).Result;
 
-            if (result.IsSuccessStatusCode)
-            {
-
-                HttpContent content = result.Content;
-                string myContent = await content.ReadAsStringAsync();
-
-                Payload payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Payload>(myContent);
-
-                if (!payload.Update)
+                if (result.IsSuccessStatusCode)
                 {
-                    VersionWindow versionWindow = new VersionWindow(payload.Version);
-                    versionWindow.ShowDialog();
+
+                    HttpContent content = result.Content;
+                    string myContent = await content.ReadAsStringAsync();
+
+                    Payload payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Payload>(myContent);
+
+                    if (!payload.Update)
+                    {
+                        VersionWindow versionWindow = new VersionWindow(payload.Version);
+                        versionWindow.ShowDialog();
+                    }
+
+                    content.Dispose();
                 }
 
-                content.Dispose();
+                client.Dispose();
             }
-
-            client.Dispose();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

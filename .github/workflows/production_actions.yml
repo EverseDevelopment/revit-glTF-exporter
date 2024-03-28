@@ -37,11 +37,9 @@ jobs:
         $currentVersion = "${{ steps.gitversion.outputs.Major }}.${{ steps.gitversion.outputs.Minor }}.${{ steps.gitversion.outputs.Patch }}"
         $runNumber = ${{ github.run_number }}
         $versionArray = $currentVersion.Split('.')
-        $buildNumber = [int]$versionArray[2] * 10 + $runNumber
-        $newPatch = $buildNumber % 10
-        $newMinor = [int]$versionArray[1] + [Math]::Floor($buildNumber / 10) % 10
-        $newMajor = [int]$versionArray[0] + [Math]::Floor($newMinor / 10)
-        $newMinor = $newMinor % 10
+        $newPatch = [int]$versionArray[2] + $runNumber
+        $newMinor = [int]$versionArray[1]
+        $newMajor = [int]$versionArray[0]
         $newVersion = "$newMajor.$newMinor.$newPatch"
         echo "FULL_VERSION=$newVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
@@ -71,11 +69,8 @@ jobs:
 
     - name: define certfificate location
       run: |
-        echo "CERTIFICATE_LOCATION=${{ steps.get-certificate.outputs.outputFilePath }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "CERTIFICATE_LOCATION=$GITHUB_WORKSPACE/credentials.pfx" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
-
-    - name: Use environment variable
-      run: echo "The value of the CERTIFICATE_LOCATION is $env:CERTIFICATE_LOCATION"
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.6
@@ -94,6 +89,18 @@ jobs:
       run: |
         (Get-Content Common_glTF_Exporter/App.config) -replace 'key="apikey" value="[^"]+"', "key=`"apikey`" value=`"${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
 
+    - name: Configuring API URL
+      run: |
+        $apiUrl = "${{ secrets.EVERSE_GLTF_EXPORTER_APIURL }}"
+        (Get-Content Common_glTF_Exporter/Utils/Analytics.cs) -replace 'https://expoterAPI', $apiUrl | Out-File -encoding ASCII Common_glTF_Exporter/Utils/Analytics.cs
+      shell: pwsh
+
+    - name: Configuring AutoUpdate URL
+      run: |
+        $apiAutoUpdate = "${{ secrets.EVERSE_AUTOUPDATE_ADDINS_URL }}"
+        (Get-Content Common_glTF_Exporter/Version/LatestVersion.cs) -replace 'https://APIAutoUpdate', $apiAutoUpdate | Out-File -encoding ASCII Common_glTF_Exporter/Version/LatestVersion.cs
+      shell: pwsh
+    
     - name: Replace strings in the code
       run: |
         (Get-Content GltfInstaller/Program.cs) -replace '0.0.0', $env:FULL_VERSION | Out-File -encoding ASCII GltfInstaller/Program.cs
