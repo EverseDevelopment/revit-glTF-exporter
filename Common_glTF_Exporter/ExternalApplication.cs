@@ -7,6 +7,7 @@
     using Autodesk.Windows;
     using Autodesk.Revit.DB;
     using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
+    using System.Linq;
 
     /// <summary>
     /// External Application.
@@ -64,59 +65,59 @@
             // -- Events Subscription
             application.ViewActivated += Application_ViewActivated;
 
-            try
+            Autodesk.Windows.RibbonControl ribbon = Autodesk.Windows.ComponentManager.Ribbon;
+            Autodesk.Windows.RibbonTab tab =
+                        ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains("e-verse"));
+
+            if (tab == null)
             {
                 CreateRibbonTab(application, RIBBONTAB);
             }
-            catch
-            {
-            }
 
-            RibbonPanel panel = null;
+            tab = ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains("e-verse"));
 
-            // look for XXXXXX RibbonPanel, or create it if not already created
-            foreach (RibbonPanel existingPanel in application.GetRibbonPanels())
-            {
-                if (existingPanel.Name.Equals(RIBBONPANEL))
-                {
-                    // existingPanel.AddSeparator();
-                    panel = existingPanel;
-                    break;
-                }
-            }
-
-            if (panel == null)
-            {
-                panel = application.CreateRibbonPanel(RIBBONTAB, RIBBONPANEL);
-            }
+            Autodesk.Windows.RibbonPanel panel =
+                       tab.Panels.FirstOrDefault(panelLeia => panelLeia.Source.Id.Contains(RIBBONPANEL));
 
             ContextualHelp contexHelp = new ContextualHelp(ContextualHelpType.Url, LEIAURL);
-
-            PushButtonData pushDataButton = new PushButtonData(pushButtonName, pushButtonText, addInPath, "Revit_glTF_Exporter.ExternalCommand");
-            pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "logo.png"), UriKind.Absolute));
-            pushDataButton.SetContextualHelp(contexHelp);
-            pushDataButton.ToolTip = "Export 3D elements to glTF.";
-            pushDataButton.LongDescription = "Export any 3D model to use in the cloud or in any other tools like Unity or Unreal.";
-
-            panel.AddItem(pushDataButton);
-
-            // look for XXXXXX RibbonPanel, or create it if not already created
-            RibbonPanel panelAbout = null;
-            foreach (RibbonPanel existingPanel in application.GetRibbonPanels())
+            if (panel == null)
             {
-                if (existingPanel.Name.Equals("About"))
-                {
-                    // existingPanel.AddSeparator();
-                    panelAbout = existingPanel;
-                    break;
-                }
+                RibbonPanel leiaPanel = application.CreateRibbonPanel(RIBBONTAB, RIBBONPANEL);
+
+                PushButtonData pushDataButton = new PushButtonData(pushButtonName, pushButtonText, addInPath, "Revit_glTF_Exporter.ExternalCommand");
+                pushDataButton.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "logo.png"), UriKind.Absolute));
+                pushDataButton.SetContextualHelp(contexHelp);
+                pushDataButton.ToolTip = "Export 3D elements to glTF.";
+                pushDataButton.LongDescription = "Export any 3D model to use in the cloud or in any other tools like Unity or Unreal.";
+
+                leiaPanel.AddItem(pushDataButton);
             }
 
-            if (panelAbout == null)
+            Autodesk.Windows.RibbonPanel Aboutpanel =
+                       tab.Panels.FirstOrDefault(panelAbout => panelAbout.Source.Id.Contains("About"));
+
+            if (Aboutpanel == null)
             {
-                panelAbout = application.CreateRibbonPanel(RIBBONTAB, "About");
+                createAboutUs(application, contexHelp);
+            }
+            else
+            {
+                //TODO: Add logic for the about button to always be at the end
+                //RibbonItemCollection collctn = Aboutpanel.Source.Items;
+                //foreach (Autodesk.Windows.RibbonItem ri in collctn)
+                //{
+                //    MessageBox.Show(ri.Id, ri.Id);
+                //    Aboutpanel.Source.Items.Remove(ri);
+                //}
+                //createAboutUs(application, contexHelp);
             }
 
+            return Result.Succeeded;
+        }
+
+        private void createAboutUs(UIControlledApplication application, ContextualHelp contexHelp)
+        {
+            RibbonPanel panelAbout = application.CreateRibbonPanel(RIBBONTAB, "About");
 
             PushButtonData pushDataButtonAbout = new PushButtonData("About us", "About us", addInPath, "Revit_glTF_Exporter.AboutUs");
             pushDataButtonAbout.LargeImage = new BitmapImage(new Uri(Path.Combine(buttonIconsFolder, "e-verse-isologo.png"), UriKind.Absolute));
@@ -125,8 +126,6 @@
             pushDataButtonAbout.LongDescription = "Know more about us and our tools";
 
             panelAbout.AddItem(pushDataButtonAbout);
-
-            return Result.Succeeded;
         }
 
         private void Application_ViewActivated(object sender, Autodesk.Revit.UI.Events.ViewActivatedEventArgs e)
