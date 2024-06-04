@@ -18,9 +18,9 @@ namespace Revit_glTF_Exporter
         /// If the given element can't be locked OR can't be hidden, it will returns FALSE.
         /// Otherwise, will returns TRUE.
         /// </returns>
-        public static bool CanBeLockOrHidden(Element element, View view)
+        public static bool CanBeLockOrHidden(Element element, View view, bool rfaFile)
         {
-            if (element.Category.CanAddSubcategory)
+            if (!rfaFile && element.Category.CanAddSubcategory)
             {
                 return true;
             }

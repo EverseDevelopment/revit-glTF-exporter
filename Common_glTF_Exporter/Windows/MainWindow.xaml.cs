@@ -18,9 +18,12 @@
     /// <summary>
     /// Interaction logic for Settings.xaml.
     /// </summary>
+    /// 
     public partial class MainWindow : Window
     {
-        public MainWindow(Document doc, View view)
+
+
+    public MainWindow(Document doc, View view)
         {
             this.UnitsViewModel = new UnitsViewModel();
             this.DataContext = this.UnitsViewModel;
@@ -64,7 +67,9 @@
             Document doc = exportView.Document;
             List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
 
-            if (!elementsInView.Any())
+            bool isRFA = IsDocumentRFA.Check(doc);
+
+            if (!isRFA && !elementsInView.Any())
             {
                 MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
                 return;
@@ -90,13 +95,12 @@
             exporter.Export(exportView as View);
             #endif
 
+            Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();
             Thread.Sleep(500);
             ProgressBarWindow.ViewModel.ProgressBarValue = elementsInView.Count + 1;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ProgressBarWindow.ViewModel.Action = "Accept";
-
-            Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
