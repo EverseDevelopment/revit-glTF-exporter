@@ -1,5 +1,6 @@
 namespace Revit_glTF_Exporter
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.Revit.DB;
@@ -56,6 +57,8 @@ namespace Revit_glTF_Exporter
 
         private View view;
         private Preferences preferences;
+
+        private bool isRFA = Convert.ToBoolean(SettingsConfig.GetValue("isRFA"));
 
         // The following properties are private to this class and used only for intermediate steps of the conversion.
 
@@ -195,7 +198,7 @@ namespace Revit_glTF_Exporter
         {
             element = doc.GetElement(elementId);
 
-            if (!Util.CanBeLockOrHidden(element, view) ||
+            if (!Util.CanBeLockOrHidden(element, view, isRFA) ||
                 (element is Level && !preferences.levels))
             {
                 return RenderNodeAction.Skip;
@@ -336,7 +339,7 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (!Util.CanBeLockOrHidden(element, view))
+            if (!Util.CanBeLockOrHidden(element, view, isRFA))
             {
                 return;
             }

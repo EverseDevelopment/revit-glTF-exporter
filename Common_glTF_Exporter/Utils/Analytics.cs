@@ -10,11 +10,11 @@ namespace Common_glTF_Exporter.Utils
     public class Analytics
     {
         private static string apiUrl = "https://expoterAPI";
-        private static HttpClient client = new HttpClient();
+
         public static async Task Send(string action, string details)
         {
             DateTime currentDate = DateTime.Now;
-            string date = currentDate.ToString();
+            string date = currentDate.ToString("MM/dd/yyyy HH:mm:ss");
 
             RegionInfo currentRegion = new RegionInfo(CultureInfo.CurrentCulture.Name);
             string location = currentRegion.EnglishName.ToString();
@@ -25,39 +25,42 @@ namespace Common_glTF_Exporter.Utils
 
             // Use string interpolation to incorporate variables into the JSON string
             string json = $@"{{
-                ""User"": ""{user}"",
-                ""Location"": ""{location}"",
-                ""Software"": ""{software}"",
-                ""Date"": ""{date}"",
-                ""Action"": ""{action}"",
-                ""Details"": ""{details}"",
-                ""Version"": ""{version}""
-            }}";
+            ""User"": ""{user}"",
+            ""Location"": ""{location}"",
+            ""Software"": ""{software}"",
+            ""Date"": ""{date}"",
+            ""Action"": ""{action}"",
+            ""Details"": ""{details}"",
+            ""Version"": ""{version}""
+        }}";
 
-            try { 
- 
-                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                 string apiKey = SettingsConfig.GetValue("apikey"); ;
-                 client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+                string apiKey = SettingsConfig.GetValue("apikey");
 
-                 var response = await client.PostAsync(apiUrl, content);
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("x-api-key", apiKey);
 
-                 if (response.IsSuccessStatusCode)
-                 {
-                     Console.WriteLine("Request successful");
-                 }
-                 else
-                 {
-                     Console.WriteLine($"Request failed with status code: {response.StatusCode}");
-                 }
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("Request successful");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Request failed with status code: {response.StatusCode}");
+                    }
+                }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
-
     }
 }
 
