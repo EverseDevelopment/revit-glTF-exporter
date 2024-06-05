@@ -62,13 +62,13 @@ namespace GltfInstaller
                               );
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
-            project.ControlPanelInfo.Manufacturer = "e-verse";
+            //project.ControlPanelInfo.Manufacturer = "e-verse";
             project.Version = new Version(versionValue);
 
             project.ManagedUI = new ManagedUI();
 
             project.ControlPanelInfo.ProductIcon = "Resources\\logo.ico";
-
+            
             project.ManagedUI.InstallDialogs.Add<GltfInstaller.WelcomeDialog>()
                                             .Add<GltfInstaller.LicenceDialog>()
                                             .Add<GltfInstaller.ProgressDialog>()
@@ -103,6 +103,7 @@ namespace GltfInstaller
         [CustomAction]
         public static ActionResult CheckRevitProcess(Session session)
         {
+            MessageBox.Show("Test", "Process Test");
             try
             {
                 Process[] processes = Process.GetProcessesByName("Revit");
@@ -144,6 +145,7 @@ namespace GltfInstaller
             catch (Exception ex)
             {
                 session.Log("Error checking Revit process: " + ex.Message);
+                MessageBox.Show("Error", ex.Message);
                 return ActionResult.Failure;
             }
             return ActionResult.Success;
