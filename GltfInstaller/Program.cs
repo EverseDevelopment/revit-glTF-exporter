@@ -62,7 +62,7 @@ namespace GltfInstaller
                               );
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
-            project.ControlPanelInfo.Manufacturer = "e-verse";
+            //project.ControlPanelInfo.Manufacturer = "e-verse";
             project.Version = new Version(versionValue);
 
             project.ManagedUI = new ManagedUI();
