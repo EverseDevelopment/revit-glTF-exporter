@@ -68,7 +68,7 @@ namespace GltfInstaller
             project.ManagedUI = new ManagedUI();
 
             project.ControlPanelInfo.ProductIcon = "Resources\\logo.ico";
-
+            
             project.ManagedUI.InstallDialogs.Add<GltfInstaller.WelcomeDialog>()
                                             .Add<GltfInstaller.LicenceDialog>()
                                             .Add<GltfInstaller.ProgressDialog>()
@@ -144,6 +144,7 @@ namespace GltfInstaller
             catch (Exception ex)
             {
                 session.Log("Error checking Revit process: " + ex.Message);
+                MessageBox.Show("Error", ex.Message);
                 return ActionResult.Failure;
             }
             return ActionResult.Success;
