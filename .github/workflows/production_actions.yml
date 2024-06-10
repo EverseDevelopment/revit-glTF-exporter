@@ -77,9 +77,6 @@ jobs:
 
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
-
-    - name: Install WiX Toolset
-      run: choco install wixtoolset
     
     - name: Setting new version to the App.config file
       run: |
