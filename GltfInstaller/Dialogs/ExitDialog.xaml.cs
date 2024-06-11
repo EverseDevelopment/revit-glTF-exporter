@@ -114,8 +114,8 @@ namespace GltfInstaller
             }
             else if (Shell.ErrorDetected)
             {
-                //DialogDescription.Text = "Mmm, something wrong happen, contact us!";
-                DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
+                DialogDescription.Text = "Mmm, something wrong happen, contact us!";
+                //DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
             }
 
             // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
