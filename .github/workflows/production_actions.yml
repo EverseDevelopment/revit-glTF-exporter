@@ -49,6 +49,14 @@ jobs:
 
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.1
+    
+    - name: Uninstall default WiX Toolset
+      run: |
+        choco uninstall wixtoolset
+
+    - name: Install specific version of WiX Toolset
+      run: |
+        choco install wixtoolset --version=3.11.2
 
     - name: Get certificate
       run: |
@@ -77,14 +85,35 @@ jobs:
 
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
-
-    - name: Install WiX Toolset
-      run: choco install wixtoolset
     
     - name: Setting new version to the App.config file
       run: |
         (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"$env:FULL_VERSION`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
     
+    - name: Setting new version to the AssemblyInfo 2019
+      run: |
+        (Get-Content Revit_glTF_Exporter_2019/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2019/Properties/AssemblyInfo.cs
+    
+    - name: Setting new version to the AssemblyInfo 2020
+      run: |
+        (Get-Content Revit_glTF_Exporter_2020/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2020/Properties/AssemblyInfo.cs
+
+    - name: Setting new version to the AssemblyInfo 2021
+      run: |
+        (Get-Content Revit_glTF_Exporter_2021/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2021/Properties/AssemblyInfo.cs
+
+    - name: Setting new version to the AssemblyInfo 2022
+      run: |
+        (Get-Content Revit_glTF_Exporter_2022/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2022/Properties/AssemblyInfo.cs
+
+    - name: Setting new version to the AssemblyInfo 2023
+      run: |
+        (Get-Content Revit_glTF_Exporter_2023/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2023/Properties/AssemblyInfo.cs
+
+    - name: Setting new version to the AssemblyInfo 2024
+      run: |
+        (Get-Content Revit_glTF_Exporter_2024/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2024/Properties/AssemblyInfo.cs
+
     - name: Configuring Key
       run: |
         (Get-Content Common_glTF_Exporter/App.config) -replace 'key="apikey" value="[^"]+"', "key=`"apikey`" value=`"${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
