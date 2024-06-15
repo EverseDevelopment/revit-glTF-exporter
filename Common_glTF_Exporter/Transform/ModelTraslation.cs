@@ -7,24 +7,35 @@
 
     public static class ModelTraslation
     {
-        public static List<float> GetPointToRelocate(Document doc, double scale, bool flip)
+        public static List<float> GetPointToRelocate(Document doc, double scale, Preferences preferences, bool isRfa)
         {
-            Preferences preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
-
+            
             if (preferences.relocateTo0)
             {
-                var elementsOnActiveView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
-                var bb = Util.GetElementsBoundingBox(doc.ActiveView, elementsOnActiveView);
-
-                double pointX = -scale * ((bb.Min.X + bb.Max.X) / 2);
-                double pointy = -scale * ((bb.Min.Z + bb.Max.Z) / 2);
-                double pointz = -scale * ((bb.Min.Y + bb.Max.Y) / 2);
-                if (flip)
+                List<Element> elementsOnActiveView = new List<Element>();
+                if (isRfa)
                 {
+                    elementsOnActiveView = Collectors.AllVisibleElementsByViewRfa(doc, doc.ActiveView);
+                }
+                else
+                {
+                    elementsOnActiveView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
+                }
+
+                var bb = Util.GetElementsBoundingBox(doc.ActiveView, elementsOnActiveView);
+                
+                if (preferences.flipAxis)
+                {
+                    double pointX = -scale * ((bb.Min.X + bb.Max.X) / 2);
+                    double pointy = -scale * bb.Min.Z;
+                    double pointz = -scale * ((bb.Min.Y + bb.Max.Y) / 2);
                     return new List<float> { (float)pointX, (float)pointy, -(float)pointz };
                 }
                 else
                 {
+                    double pointX = -scale * ((bb.Min.X + bb.Max.X) / 2);
+                    double pointy = -scale * ((bb.Min.Z + bb.Max.Z) / 2);
+                    double pointz = -scale * bb.Min.Y;
                     return new List<float> { (float)pointX, (float)pointz, (float)pointy };
                 }
             }

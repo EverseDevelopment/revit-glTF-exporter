@@ -154,7 +154,8 @@ namespace Revit_glTF_Exporter
             rootNode.name = "rootNode";
             rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
             rootNode.scale = ModelScale.Get(preferences);
-            rootNode.translation = ModelTraslation.GetPointToRelocate(doc, rootNode.scale[0], preferences.flipAxis);
+            rootNode.translation = ModelTraslation.GetPointToRelocate(doc, rootNode.scale[0], 
+                preferences, isRFA);
             rootNode.children = new List<int>();
 
             nodes.AddOrUpdateCurrent("rootNode", rootNode);

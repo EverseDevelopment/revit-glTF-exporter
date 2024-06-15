@@ -29,5 +29,17 @@
                .ToList();
             }
         }
+
+        public static List<Element> AllVisibleElementsByViewRfa(Document doc, View view)
+        {
+            using (var collector = new FilteredElementCollector(doc, view.Id))
+            {
+                return collector.WhereElementIsNotElementType()
+               .ToElements()
+               .Cast<Element>()
+               .Where(e => e.CanBeHidden(doc.ActiveView))
+               .ToList();
+            }
+        }
     }
 }
