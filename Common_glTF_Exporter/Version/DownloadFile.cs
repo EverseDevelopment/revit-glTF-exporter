@@ -84,7 +84,7 @@ namespace Common_glTF_Exporter.Version
                 }
                 else
                 {
-                    TaskDialog.Show("Title", $"Failed to download file. Status code: {response.StatusCode}");
+                    Autodesk.Revit.UI.TaskDialog.Show("Title", $"Failed to download file. Status code: {response.StatusCode}");
                     Console.WriteLine($"Failed to download file. Status code: {response.StatusCode}");
                 }
             }
