@@ -38,4 +38,9 @@
         <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2024" SeriesMax="R2024" />
         <ComponentEntry AppName="Leia_glTF_Exporter" Version="1.0.0" ModuleName="./Contents/2024/Leia_glTF_Exporter.addin" AppDescription="Leia glTF Exporter Add-in" />
     </Components>
+
+	<Components Description="2025 parts">
+		<RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2025" SeriesMax="R2025" />
+		<ComponentEntry AppName="Leia_glTF_Exporter" Version="1.0.0" ModuleName="./Contents/2025/Leia_glTF_Exporter.addin" AppDescription="Leia glTF Exporter Add-in" />
+	</Components>
 </ApplicationPackage>
