@@ -1,0 +1,110 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Leia_glTF_Exporter</AssemblyName>
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+	  <DebugSymbols>true</DebugSymbols>
+	  <DebugType>portable</DebugType>
+	  <Optimize>false</Optimize>
+	  <OutputPath>bin\Debug\</OutputPath>
+	  <DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+	  <ErrorReport>prompt</ErrorReport>
+	  <WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType>none</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+	  <DebugType>none</DebugType>
+	  <Optimize>true</Optimize>
+	  <OutputPath>bin\Release\</OutputPath>
+	  <DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+	  <ErrorReport>prompt</ErrorReport>
+	  <WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+		<DebugType>none</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="Resources\e-verse-isologo.png" />
+		<None Remove="Resources\e-verse-logo-1.png" />
+		<None Remove="Resources\gltf.png" />
+		<None Remove="Resources\Heart.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2025.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="DracoWrapper">
+	    <HintPath>..\..\..\..\Users\User\Desktop\DracoWrapper.dll</HintPath>
+	    <EmbedInteropTypes>False</EmbedInteropTypes>
+	    <Private>True</Private>
+	  </Reference>
+	  <Reference Include="MeshOpt">
+	    <HintPath>..\..\..\..\Users\User\Desktop\MeshOpt.dll</HintPath>
+	    <Private>True</Private>
+	    <EmbedInteropTypes>False</EmbedInteropTypes>
+	  </Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="DracoWrapper.dll" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\e-verse-isologo.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\e-verse-logo-1.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\gltf.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Heart.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
+	<Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
+</Project>

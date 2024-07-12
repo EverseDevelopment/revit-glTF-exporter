@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\MeshOpt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\LoadContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Payload.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\RevitGridParametersObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Compression.cs" />

@@ -1,9 +1,8 @@
-﻿using Common_glTF_Exporter.Windows.MainWindow;
-using dracowrapper;
-using System;
-using System.Collections.Generic;
+﻿using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Windows.MainWindow;
 using System.IO;
-using System.Text;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -30,10 +29,33 @@ namespace Common_glTF_Exporter.Export
                 files.Add(fileToCompress);
             }
 
+            #if REVIT2025
+
+            var loadContext = new NonCollectibleAssemblyLoadContext();
+
+            string programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string meshOptPath = Path.Combine(programDataPath, "Autodesk", "ApplicationPlugins", "leia.bundle", "Contents", "2025", "MeshOpt.dll");
+            Assembly mixedModeAssembly = loadContext.LoadFromAssemblyPath(meshOptPath);
+            MethodInfo defaultSettings = mixedModeAssembly.GetType("Gltf.GltfSettings").GetMethod("defaults");
+
+            var settings = defaultSettings.Invoke(null, null);
+            MethodInfo gltfpack = mixedModeAssembly.GetType("Gltf.GltfPack").GetMethod("gltfpack");
+            object[] parameters = new object[4];
+            parameters[0] = fileToCompress;
+            parameters[1] = fileToCompressTemp;
+            parameters[2] = "report.txt";
+            parameters[3] = settings;
+
+            gltfpack.Invoke(null, parameters);
+
+            #else
+
             Gltf.GltfSettings settings = Gltf.GltfSettings.defaults();
 
             Gltf.GltfPack.gltfpack(fileToCompress,
                 fileToCompressTemp, "report.txt", settings);
+
+            #endif
 
             files.ForEach(x => File.Delete(x));
             File.Move(fileToCompressTemp, fileToCompress);

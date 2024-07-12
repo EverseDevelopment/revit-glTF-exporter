@@ -100,7 +100,22 @@ namespace GltfInstaller
                                                 new FilePermission("Everyone", GenericPermission.All)),
                                             new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Newtonsoft.Json.dll",
                                                 new FilePermission("Everyone", GenericPermission.All)),
-                                            new Files(@"..\Revit_glTF_Exporter_2024\bin\Release\*.png")))))
+                                            new Files(@"..\Revit_glTF_Exporter_2024\bin\Release\*.png")),
+                                         new Dir(@"2025",
+                                            new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
+                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\Leia_glTF_Exporter.dll.config",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\Leia_glTF_Exporter.dll",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\DracoWrapper.dll",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\MeshOpt.dll",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\Newtonsoft.Json.dll",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\Leia_glTF_Exporter.deps.json",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new Files(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\*.png")))))
                               );
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
