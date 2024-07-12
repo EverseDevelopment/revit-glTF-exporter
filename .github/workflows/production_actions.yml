@@ -20,6 +20,11 @@ jobs:
       with:
         dotnet-version: 3.1.x
 
+    - name: Setup .NET Core 8.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.0.x
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.7
       with:
@@ -113,6 +118,10 @@ jobs:
     - name: Setting new version to the AssemblyInfo 2024
       run: |
         (Get-Content Revit_glTF_Exporter_2024/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2024/Properties/AssemblyInfo.cs
+
+    - name: Setting new version to the AssemblyInfo 2025
+      run: |
+        (Get-Content Revit_glTF_Exporter_2025/Revit_glTF_Exporter_2025.csproj) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2025/Revit_glTF_Exporter_2025.csproj
 
     - name: Configuring Key
       run: |

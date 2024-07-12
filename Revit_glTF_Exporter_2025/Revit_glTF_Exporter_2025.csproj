@@ -12,6 +12,14 @@
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
+	<PropertyGroup>
+  		<AssemblyTitle>Revit_glTF_Exporter_2025</AssemblyTitle>
+  		<AssemblyDescription></AssemblyDescription>
+  		<AssemblyCompany>e-verse</AssemblyCompany>
+  		<AssemblyProduct>Revit_glTF_Exporter_2025</AssemblyProduct>
+  		<AssemblyVersion>1.0.0</AssemblyVersion>
+  		<FileVersion>1.0.0</FileVersion>
+	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
@@ -107,4 +115,7 @@
 		</Resource>
 	</ItemGroup>
 	<Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="If &quot;%25CI%25&quot;==&quot;true&quot; (&#xD;&#xA;    &quot;C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe&quot; sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com &quot;$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll&quot;&#xD;&#xA;)" />
+	</Target>
 </Project>
