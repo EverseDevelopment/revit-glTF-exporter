@@ -236,7 +236,10 @@ namespace Revit_glTF_Exporter
                 newNode.name = Util.ElementDescription(element);
                 extras.uniqueId = element.UniqueId;
                 extras.parameters = Util.GetElementParameters(element, true);
-                extras.elementCategory = element.Category.Name;
+                if (element.Category != null)
+                {
+                    extras.elementCategory = element.Category.Name;
+                }  
                 #if REVIT2024
                 extras.elementId = element.Id.Value;
                 #else
