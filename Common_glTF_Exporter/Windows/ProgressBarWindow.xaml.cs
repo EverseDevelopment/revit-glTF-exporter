@@ -76,7 +76,7 @@
 
         private void Leia_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/leia/");
+            Hyperlink.Run("https://e-verse.com/leia/");
         }
     }
 }

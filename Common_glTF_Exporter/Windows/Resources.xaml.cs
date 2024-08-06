@@ -1,6 +1,8 @@
 ﻿namespace Revit_glTF_Exporter
 {
     using System.Windows;
+    using Common_glTF_Exporter;
+    using Common_glTF_Exporter.Utils;
 
     /// <summary>
     /// Resources.
@@ -9,12 +11,12 @@
     {
         private void EngworksLink(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/");
+            Hyperlink.Run(Links.everseWebsite);
         }
 
         private void AddInLink(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com");
+            Hyperlink.Run("https://e-verse.com");
         }
     }
 }

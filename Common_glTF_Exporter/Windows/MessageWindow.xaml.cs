@@ -1,19 +1,9 @@
 ﻿namespace Revit_glTF_Exporter
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Forms;
     using System.Windows.Input;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
+    using Common_glTF_Exporter;
     using Common_glTF_Exporter.Utils;
-    using Common_glTF_Exporter.ViewModel;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using View = Autodesk.Revit.DB.View;
 
     /// <summary>
     /// Interaction logic for Settings.xaml.
@@ -50,7 +40,7 @@
 
         private void Title_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/");
+            Hyperlink.Run(Links.everseWebsite);
         }
     }
 }

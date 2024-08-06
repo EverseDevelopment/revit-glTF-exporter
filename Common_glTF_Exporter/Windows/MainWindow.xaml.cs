@@ -10,6 +10,7 @@
     using System.Windows.Input;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
+    using Common_glTF_Exporter;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
     using Common_glTF_Exporter.Windows.MainWindow;
@@ -115,12 +116,12 @@
 
         private void Title_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/");
+            Hyperlink.Run(Links.everseWebsite);
         }
 
         private void Leia_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://apps.autodesk.com/RVT/es/Detail/Index?id=492952120634946986&appLang=en&os=Win64");
+            Hyperlink.Run("https://apps.autodesk.com/RVT/es/Detail/Index?id=492952120634946986&appLang=en&os=Win64");
         }
 
         private void TrueFalseToggles(object sender, RoutedEventArgs e)

@@ -48,7 +48,7 @@ namespace Revit_glTF_Exporter
 
         private void Version_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.notion.site/Leia-version-4-4-724-0c53931c9cc04ea3ae143af10bfbbc8a");
+            Hyperlink.Run("https://e-verse.notion.site/Leia-version-4-4-724-0c53931c9cc04ea3ae143af10bfbbc8a");
         }
 
         private void UpdatesNotes_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

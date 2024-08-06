@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Common_glTF_Exporter.Utils;
 
 namespace Common_glTF_Exporter.Version
 {
@@ -8,7 +9,7 @@ namespace Common_glTF_Exporter.Version
         {
             if (File.Exists(pathFile))
             {
-                System.Diagnostics.Process.Start(pathFile);
+                Hyperlink.Run(pathFile);
             }
         }
     }

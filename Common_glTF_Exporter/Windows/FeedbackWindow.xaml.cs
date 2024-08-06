@@ -5,6 +5,7 @@
     using System.Windows.Input;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
+    using Common_glTF_Exporter;
 
     /// <summary>
     /// Feedback Window.
@@ -45,11 +46,11 @@
 
         private void Title_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/contact/");
+            Hyperlink.Run(Links.contactLink);
         }
         private void Leia_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://e-verse.com/leia/");
+            Hyperlink.Run("https://e-verse.com/leia/");
         }
     }
 }

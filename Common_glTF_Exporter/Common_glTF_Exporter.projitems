@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\MeshOpt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Links.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\LoadContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Payload.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\RevitGridParametersObject.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Analytics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DirectoryUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Hyperlink.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\IsDocumentRFA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
@@ -62,7 +64,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Version\LatestVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\RunLocalFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\VersionValidate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\AboutUsWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\AboutUsWindow.xaml.cs">
+      <DependentUpon>AboutUsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Windows\FeedbackWindow.xaml.cs">
       <DependentUpon>FeedbackWindow.xaml</DependentUpon>
     </Compile>
@@ -138,8 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Windows\AboutUsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Windows\FeedbackWindow.xaml">
       <SubType>Designer</SubType>
