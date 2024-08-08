@@ -14,7 +14,7 @@ namespace Common_glTF_Exporter.Transform
             }
             else
             {
-                return new List<double> { 0, 0, 0, 0};
+                return new List<double> { 0, 0, 0, 1};
             }
         }
     }

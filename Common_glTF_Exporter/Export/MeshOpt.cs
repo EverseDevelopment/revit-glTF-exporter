@@ -3,6 +3,8 @@ using Common_glTF_Exporter.Windows.MainWindow;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using Autodesk.Revit.DB;
+using System;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -55,10 +57,18 @@ namespace Common_glTF_Exporter.Export
             Gltf.GltfPack.gltfpack(fileToCompress,
                 fileToCompressTemp, "report.txt", settings);
 
-            #endif
+#endif
 
-            files.ForEach(x => File.Delete(x));
-            File.Move(fileToCompressTemp, fileToCompress);
+            if (File.Exists(fileToCompressTemp))
+            {
+                files.ForEach(x => File.Delete(x));
+                File.Move(fileToCompressTemp, fileToCompress);
+            }
+            else
+            {
+                Console.WriteLine("The Compression didn't work");
+            }
+            
 
             if (preferences.format == FormatEnum.gltf)
             {

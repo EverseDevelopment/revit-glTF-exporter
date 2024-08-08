@@ -1,5 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Utils
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.Revit.DB;
@@ -122,7 +123,7 @@
             return bufferData;
         }
 
-        public static void AddNormals(Preferences preferences, Transform transform, PolymeshTopology polymesh, List<double> normals)
+        public static void AddNormals(Transform transform, PolymeshTopology polymesh, List<double> normals)
         {
             IList<XYZ> polymeshNormals = polymesh.GetNormals();
 

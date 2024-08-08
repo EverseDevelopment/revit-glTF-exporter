@@ -316,7 +316,7 @@ namespace Revit_glTF_Exporter
 
             if (preferences.normals)
             {
-                GLTFExportUtils.AddNormals(preferences, CurrentTransform, polymesh, currentGeometry.CurrentItem.Normals);
+                GLTFExportUtils.AddNormals(CurrentTransform, polymesh, currentGeometry.CurrentItem.Normals);
             }
         }
 
@@ -331,6 +331,8 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
+            element = doc.GetElement(elementId);
+
             if (currentVertices == null || !currentVertices.List.Any())
             {
                 return;
@@ -343,7 +345,7 @@ namespace Revit_glTF_Exporter
                 return;
             }
 
-            if (!Util.CanBeLockOrHidden(element, view, isRFA))
+            if (!Util.CanBeLockOrHidden(element, view, isRFA) || element is RevitLinkInstance)
             {
                 return;
             }
