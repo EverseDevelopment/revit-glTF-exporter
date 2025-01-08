@@ -226,14 +226,12 @@ namespace Revit_glTF_Exporter
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
 
-            // get the extras for this element
-            GLTFExtras extras = new GLTFExtras();
-
-
+            newNode.name = Util.ElementDescription(element);
 
             if (preferences.properties)
             {
-                newNode.name = Util.ElementDescription(element);
+                // get the extras for this element
+                GLTFExtras extras = new GLTFExtras();
                 extras.uniqueId = element.UniqueId;
                 extras.parameters = Util.GetElementParameters(element, true);
                 if (element.Category != null)
@@ -245,9 +243,11 @@ namespace Revit_glTF_Exporter
                 #else
                 extras.elementId = element.Id.IntegerValue;
                 #endif
-            }
 
-            newNode.extras = extras;
+                newNode.extras = extras;
+            }
+            
+
 
             nodes.AddOrUpdateCurrent(element.UniqueId, newNode);
 
