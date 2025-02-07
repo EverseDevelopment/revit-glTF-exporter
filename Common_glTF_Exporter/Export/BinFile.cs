@@ -18,7 +18,7 @@
             bool exportNormals, bool exportBatchId)
         {
             using (FileStream f = File.Create(filename))
-            using (var writer = new BinaryWriter(new BufferedStream(f), Encoding.Default))
+            using (var writer = new BinaryWriter(new BufferedStream(f), Encoding.UTF8))
             {
                 foreach (var bin in binaryFileData)
                 {

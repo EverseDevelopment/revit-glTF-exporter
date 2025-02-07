@@ -18,7 +18,7 @@ namespace Common_glTF_Exporter.Export
                 json = json.PadRight(json.Length + missingNumbers);
             }
 
-            glbJson.ChunkData = Encoding.ASCII.GetBytes(json);
+            glbJson.ChunkData = Encoding.UTF8.GetBytes(json);
             glbJson.Length = BitConverter.GetBytes(Convert.ToUInt32(glbJson.ChunkData.Length));
 
             byte[] result = new byte[] { };
