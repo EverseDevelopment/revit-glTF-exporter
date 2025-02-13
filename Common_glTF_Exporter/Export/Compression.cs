@@ -11,20 +11,20 @@
         /// Run compression.
         /// </summary>
         /// <param name="preferences">preferences.</param>
-        public static void Run(Preferences preferences, Common_glTF_Exporter.ViewModel.ProgressBarWindowViewModel progressBar)
+        public static void Run(Preferences preferences, Common_glTF_Exporter.ViewModel.ProgressBarWindowViewModel progressBar, bool isDebug = false)
         {
             switch (preferences.compression)
             {
                 case CompressionEnum.ZIP:
-                    progressBar.Message = "Compressing to ZIP";
+                    if (!isDebug) progressBar.Message = "Compressing to ZIP";
                     ZIP.Compress(preferences);
                     break;
                 case CompressionEnum.Draco:
-                    progressBar.Message = "Compressing to Draco";
+                    if (!isDebug) progressBar.Message = "Compressing to Draco";
                     Draco.Compress(preferences);
                     break;
                 case CompressionEnum.Meshopt:
-                    progressBar.Message = "Compressing to MeshOpt";
+                    if (!isDebug) progressBar.Message = "Compressing to MeshOpt";
                     MeshOpt.Compress(preferences);
                     break;
                 default:
