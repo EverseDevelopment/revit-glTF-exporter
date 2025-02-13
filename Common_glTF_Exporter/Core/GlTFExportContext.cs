@@ -47,6 +47,9 @@ namespace Revit_glTF_Exporter
         }
 
         private bool skipElementFlag = false;
+
+        private readonly bool isDebug;
+
         private Element element;
 
         public Transform linkTransformation { get; private set; }
@@ -86,11 +89,12 @@ namespace Revit_glTF_Exporter
         /// </summary>
         List<Document> documents = new List<Document>();
 
-        public GLTFExportContext(Document doc)
+        public GLTFExportContext(Document doc, bool isDebug = false)
         {
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             documents.Add(doc);
             view = doc.ActiveView;
+            this.isDebug = isDebug;
         }
 
         // The following properties are the root elements of the glTF format spec. They will be serialized into the final *.gltf file.
@@ -186,7 +190,7 @@ namespace Revit_glTF_Exporter
             FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
                 scenes, nodes, meshes, materials, accessors);
 
-            Compression.Run(preferences, ProgressBarWindow.ViewModel);
+            Compression.Run(preferences, ProgressBarWindow.ViewModel, isDebug);
         }
 
         /// <summary>
@@ -214,7 +218,7 @@ namespace Revit_glTF_Exporter
 
             linkTransformation = (element as RevitLinkInstance)?.GetTransform();
 
-            if (!isLink)
+            if (!isLink && !isDebug)
             {
                 if (!element.IsHidden(view) && 
                     view.IsElementVisibleInTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate, elementId))
