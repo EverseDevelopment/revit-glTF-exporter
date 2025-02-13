@@ -159,7 +159,7 @@
                     {
                         foreach (var normal in polymesh.GetNormals())
                         {
-                            var newNormal = normal;
+                            var newNormal = transform.OfVector(normal);
 
                             for (int j = 0; j < 3; j++)
                             {
