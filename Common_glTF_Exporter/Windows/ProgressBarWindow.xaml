@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="232"
+             Height="262"
              Width="308"
              ResizeMode="NoResize"
              Topmost="True"
@@ -27,44 +27,13 @@
         <Grid Margin="0"
               Background="Transparent">
 
-            <Button 
-                    Style="{DynamicResource CloseButtonStyle}" 
-                    Name="TitleButton" 
-                    Foreground="Black" 
-                    BorderThickness="0" 
-                    Click="Leia_Link" 
+            <Button Style="{DynamicResource MainTitleButtonStyle}"
                     Background="Transparent" 
-                    Height="50" 
-                    FontSize="20" 
-                    FontWeight="Light" 
-                    Margin="6,4,164,0" VerticalAlignment="Top">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Width="290" Background="Transparent">
-                            <Grid>
-                                <Image Name="SlideUp_Image" 
-                                       Visibility="Visible" 
-                                       Source="/Leia_glTF_Exporter;component/Resources/gltf.png"
-                                       HorizontalAlignment="Left"
-                                       Width="115" 
-                                       SnapsToDevicePixels="True" 
-                                       RenderOptions.BitmapScalingMode="HighQuality" 
-                                       RenderOptions.EdgeMode="Aliased" 
-                                       Margin="2,5,0,5"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers >
-                            <Trigger Property="IsDefaulted" Value="True">
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
+                    BorderBrush="Transparent" 
+                    Click="Leia_Link" 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="10,10,0,0" Height="44" Width="149"  >
             </Button>
 
             <Line Stroke="{DynamicResource MainGray}"
@@ -87,13 +56,18 @@
                        TextWrapping="Wrap" 
                        Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" 
                        TextAlignment="Center"
-                       Foreground="Black" 
-                       HorizontalAlignment="Center" Width="266" Margin="0,66,0,0" Height="26" VerticalAlignment="Top"/>
+                       Foreground="{DynamicResource MainGray}" 
+                       HorizontalAlignment="Center" 
+                       Width="266" 
+                       Margin="0,86,0,0" 
+                       Height="26" 
+                       VerticalAlignment="Top"/>
             <Button  
                    Style="{DynamicResource TabCloseButtonStyle}"
                    Name="CloseButton"  
                    Click="CancelProcess_Click" 
-                   VerticalAlignment="Top" Margin="266,18,10,0"/>
+                   VerticalAlignment="Top" 
+                Margin="266,18,10,0"/>
 
             <ProgressBar Style="{DynamicResource ProgressBarStyle}" 
                     Name="ProgressBar"
@@ -101,7 +75,7 @@
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                        
                     Maximum="{Binding Path=ProgressBarMax}"
                     Value="{Binding Path=ProgressBarGraphicValue}"
-                    Margin="30,124,32,0" 
+                    Margin="30,144,32,0" 
                     Height="11" 
                     VerticalAlignment="Top"/>
 
@@ -109,8 +83,13 @@
                        TextWrapping="Wrap" 
                        Text="{Binding Path=ProgressBarPercentage, StringFormat={}{0:0}%}" 
                        TextAlignment="Center"
-                       Foreground="Black" 
-                       HorizontalAlignment="Left" Width="50" Margin="126,99,0,0" Height="18" VerticalAlignment="Top"/>
+                       Foreground="{DynamicResource MainGray}"  
+                       HorizontalAlignment="Left" 
+                       Width="50" 
+                       Margin="126,119,0,0" 
+                       Height="18" 
+                       VerticalAlignment="Top"/>
+            
             <Button Content="{Binding Action, UpdateSourceTrigger=PropertyChanged}" 
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Style="{DynamicResource MainButtonStyle}"

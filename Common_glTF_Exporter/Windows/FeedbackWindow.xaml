@@ -26,45 +26,14 @@
 
         <Grid
               Background="Transparent" Margin="9,0,9,9">
-
-            <Button 
-                    Style="{DynamicResource CloseButtonStyle}" 
-                    Name="TitleButton" 
-                    Foreground="Black" 
-                    BorderThickness="0" 
-                    Click="Leia_Link" 
+            
+            <Button Style="{DynamicResource MainTitleButtonStyle}"
                     Background="Transparent" 
-                    Height="50" 
-                    FontSize="20" 
-                    FontWeight="Light" 
-                    Margin="6,4,145,0" VerticalAlignment="Top">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Width="290" Background="Transparent">
-                            <Grid>
-                                <Image Name="SlideUp_Image" 
-                                       Visibility="Visible" 
-                                       Source="/Leia_glTF_Exporter;component/Resources/gltf.png"
-                                       HorizontalAlignment="Left"
-                                       Width="115" 
-                                       SnapsToDevicePixels="True" 
-                                       RenderOptions.BitmapScalingMode="HighQuality" 
-                                       RenderOptions.EdgeMode="Aliased" 
-                                       Margin="2,5,0,5"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers >
-                            <Trigger Property="IsDefaulted" Value="True">
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.5"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity"  TargetName="border" Value="0.2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
+                    BorderBrush="Transparent" 
+                    Click="Leia_Link" 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="10,10,0,0" Height="44" Width="149"  >
             </Button>
 
             <Line Stroke="{DynamicResource MainGray}"
@@ -146,7 +115,7 @@
                         TextWrapping="Wrap" 
                         Text="How do you like this addin so far?" 
                         TextAlignment="Center"
-                        Foreground="Black" 
+                        Foreground="{DynamicResource MainGray}" 
                         HorizontalAlignment="Center" 
                         Width="222" 
                         Margin="0,71,0,0" 
@@ -157,7 +126,7 @@
                         TextWrapping="Wrap" 
                         Text="Let us know what you want to see next." 
                         TextAlignment="Center"
-                        Foreground="Black" 
+                        Foreground="{DynamicResource MainGray}" 
                         HorizontalAlignment="Center" 
                         Width="222" 
                         Height="18" 
