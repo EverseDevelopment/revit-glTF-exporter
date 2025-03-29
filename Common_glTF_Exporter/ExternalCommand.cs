@@ -68,7 +68,7 @@
                 }
 
                 var programDataLocation = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                var appSettingsFile = string.Concat(programDataLocation, "\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents\\2025\\Leia_glTF_Exporter.dll.config");
+                var appSettingsFile = Path.Combine(programDataLocation, "Autodesk", "ApplicationPlugins", "leia.bundle", "Contents", "2025", "Leia_glTF_Exporter.dll.config");
 
                 if (!File.Exists(appSettingsFile))
                 {

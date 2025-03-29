@@ -14,7 +14,7 @@
 #if REVIT2025
         
         private static string programDataLocation = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-        private static string appSettingsFile = string.Concat(programDataLocation, "\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents\\2025\\Leia_glTF_Exporter.dll.config");
+        private static string appSettingsFile = Path.Combine(programDataLocation, "Autodesk", "ApplicationPlugins", "leia.bundle", "Contents", "2025", "Leia_glTF_Exporter.dll.config");
 
         public static string GetValue(string key)
         {
