@@ -72,12 +72,6 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Remove="Resources\e-verse-isologo.png" />
-		<None Remove="Resources\e-verse-logo-1.png" />
-		<None Remove="Resources\gltf.png" />
-		<None Remove="Resources\Heart.png" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -101,18 +95,7 @@
 		<EmbeddedResource Include="DracoWrapper.dll" />
 	</ItemGroup>
 	<ItemGroup>
-		<Resource Include="Resources\e-verse-isologo.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
-		<Resource Include="Resources\e-verse-logo-1.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
-		<Resource Include="Resources\gltf.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
-		<Resource Include="Resources\Heart.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
+	  <Folder Include="Resources\" />
 	</ItemGroup>
 	<Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

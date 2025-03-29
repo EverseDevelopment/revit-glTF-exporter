@@ -8,12 +8,14 @@
     using System.Windows.Controls;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using Autodesk.Internal.Windows;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using Theme = Common_glTF_Exporter.Utils.Theme;
     using View = Autodesk.Revit.DB.View;
 
     /// <summary>
@@ -37,6 +39,8 @@
 
             UpdateForm.Run(this.MainWindow_Border);
             LabelVersion.Update(this.UnitsViewModel);
+
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
 
             Analytics.Send("Open", "Main Window").GetAwaiter();
         }

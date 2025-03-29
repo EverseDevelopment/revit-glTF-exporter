@@ -16,6 +16,7 @@
             this.InitializeComponent();
             MainView = this;
             this.DataContext = this;
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
         }
 
         public static MainWindow mainWin;

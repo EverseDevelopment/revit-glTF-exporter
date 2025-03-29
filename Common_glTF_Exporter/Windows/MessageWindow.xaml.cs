@@ -13,6 +13,7 @@
         public MessageWindow()
         {
             this.InitializeComponent();
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
         }
 
         public static void Show(string title, string message)

@@ -59,6 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Theme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\InternetConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\LatestVersion.cs" />
@@ -108,18 +109,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Images\e-verse-isologo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Images\e-verse-logo-1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Images\Heart.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Images\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="$(MSBuildThisFileDirectory)PackageContents.xml" />
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Black.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -133,9 +122,6 @@
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Content Include="$(MSBuildThisFileDirectory)Images\gltf.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="$(MSBuildThisFileDirectory)Leia_glTF_Exporter.addin">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
