@@ -15,6 +15,7 @@
 
     <SolidColorBrush x:Key="HoverGray" Color="#e8e8e8"/>
     <SolidColorBrush x:Key="BackgroundColor" Color="#e8e3df"/>
+    <SolidColorBrush x:Key="SecondaryBackgroundColor" Color="#e8e3df"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     
     <!--Main Colours-->
@@ -119,7 +120,7 @@
         <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
         <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
-        <Setter Property="Height"  Value="20"/>
+        <Setter Property="Height"  Value="25"/>
     </Style>
 
 

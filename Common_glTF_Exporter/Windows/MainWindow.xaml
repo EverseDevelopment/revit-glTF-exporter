@@ -11,7 +11,7 @@
              Background="{x:Null}"
              mc:Ignorable="d" 
              Width="350" 
-             Height="760"
+             Height="770"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -90,7 +90,9 @@
                   Opacity="0.5"
                   StrokeThickness="4"
                   VerticalAlignment="Top"
-                  Margin="-9,55,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
+                  Margin="-9,55,-9,0" 
+                  RenderTransformOrigin="0.5,0.5" 
+                  Height="2">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1"/>
@@ -338,10 +340,10 @@
 
             <Button Content="Export" 
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="0,580,0,0"
+                    Margin="0,00,0,50"
                     Click="OnExportView"
                     Width="152"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"/>
 
             <Button Style="{DynamicResource CloseButtonStyle}"
