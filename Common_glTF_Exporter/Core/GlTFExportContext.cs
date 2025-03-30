@@ -67,6 +67,10 @@ namespace Revit_glTF_Exporter
         /// </summary>
         private GLTFNode rootNode;
 
+        private GLTFNode currentNode;
+
+        private Element currentElement;
+
         /// <summary>
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
         /// processed, keyed by material. This is re-initialized on each new element.
@@ -225,8 +229,8 @@ namespace Revit_glTF_Exporter
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
-
             newNode.name = Util.ElementDescription(element);
+            currentElement = element;
 
             if (preferences.properties)
             {
@@ -246,13 +250,8 @@ namespace Revit_glTF_Exporter
 
                 newNode.extras = extras;
             }
-            
 
-
-            nodes.AddOrUpdateCurrent(element.UniqueId, newNode);
-
-            // add the index of this node to our root node children array
-            rootNode.children.Add(nodes.CurrentIndex);
+            currentNode = newNode;
 
             // Reset _currentGeometry for new element
             if (currentGeometry == null)
@@ -299,7 +298,7 @@ namespace Revit_glTF_Exporter
         /// <param name="polymesh">PolymeshTopology.</param>
         public void OnPolymesh(PolymeshTopology polymesh)
         {
-            GLTFExportUtils.AddOrUpdateCurrentItem(nodes, currentGeometry, currentVertices, materials);
+            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
 
             // populate current vertices vertex data and current geometry faces data
             IList<XYZ> pts = polymesh.GetPoints();
@@ -349,6 +348,10 @@ namespace Revit_glTF_Exporter
             {
                 return;
             }
+
+
+            nodes.AddOrUpdateCurrent(element.UniqueId, currentNode);
+            rootNode.children.Add(nodes.CurrentIndex);
 
             // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives
             // on mesh)
@@ -517,7 +520,7 @@ namespace Revit_glTF_Exporter
 
                 MaterialUtils.SetMaterial(doc, preferences, mesh, materials, true);
 
-                GLTFExportUtils.AddOrUpdateCurrentItem(nodes, currentGeometry, currentVertices, materials);
+                GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
 
                 for (int i = 0; i < triangles; i++)
                 {

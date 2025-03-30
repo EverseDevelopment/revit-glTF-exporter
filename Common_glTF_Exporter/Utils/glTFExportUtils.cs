@@ -56,13 +56,13 @@
         const string UNDERSCORE = "_";
 
         public static void AddOrUpdateCurrentItem(
-            IndexedDictionary<GLTFNode> nodes,
+            Element element,
             IndexedDictionary<GeometryDataObject> geomDataObj,
             IndexedDictionary<VertexLookupIntObject> vertexIntObj,
             IndexedDictionary<GLTFMaterial> materials)
         {
             // Add new "_current" entries if vertex_key is unique
-            string vertex_key = string.Concat(nodes.CurrentKey, UNDERSCORE, materials.CurrentKey);
+            string vertex_key = string.Concat(element.UniqueId, UNDERSCORE, materials.CurrentKey);
             geomDataObj.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
             vertexIntObj.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
         }

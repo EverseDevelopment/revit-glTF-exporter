@@ -14,6 +14,7 @@ namespace Common_glTF_Exporter.Export
         public static void Create(Preferences preferences, List<GLTFBinaryData> binaryFileData, string json)
         {
             byte[] jsonChunk = GlbJsonInfo.Get(json);
+            int lenggg = jsonChunk.Length;
             byte[] binChunk = GlbBinInfo.Get(binaryFileData, preferences.normals, preferences.batchId);
             byte[] headerChunk = GlbHeaderInfo.Get(jsonChunk, binChunk);
 
