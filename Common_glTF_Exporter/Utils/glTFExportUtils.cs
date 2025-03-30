@@ -135,18 +135,16 @@
                     {
                         List<XYZ> normalPoints = new List<XYZ>
                         {
-                            transform.OfVector(polymeshNormals[facet.V1]),
-                            transform.OfVector(polymeshNormals[facet.V2]),
-                            transform.OfVector(polymeshNormals[facet.V3]),
+                            transform.OfVector(polymeshNormals[facet.V1]).Normalize(),
+                            transform.OfVector(polymeshNormals[facet.V2]).Normalize(),
+                            transform.OfVector(polymeshNormals[facet.V3]).Normalize(),
                         };
 
                         foreach (var normalPoint in normalPoints)
                         {
-                            XYZ newNormalPoint = normalPoint;
-
-                            normals.Add(newNormalPoint.X);
-                            normals.Add(newNormalPoint.Y);
-                            normals.Add(newNormalPoint.Z);
+                            normals.Add(normalPoint.X);
+                            normals.Add(normalPoint.Y);
+                            normals.Add(normalPoint.Z);
                         }
                     }
 
@@ -159,7 +157,7 @@
                     {
                         foreach (var normal in polymesh.GetNormals())
                         {
-                            var newNormal = normal;
+                            var newNormal = transform.OfVector(normal).Normalize();
 
                             for (int j = 0; j < 3; j++)
                             {
@@ -177,7 +175,7 @@
                 {
                     foreach (XYZ normal in polymeshNormals)
                     {
-                        var newNormal = transform.OfVector(normal);
+                        var newNormal = transform.OfVector(normal).Normalize();
 
                         normals.Add(newNormal.X);
                         normals.Add(newNormal.Y);

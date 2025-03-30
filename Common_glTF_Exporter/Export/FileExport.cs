@@ -36,7 +36,8 @@ namespace Common_glTF_Exporter.Export
                 bufferViews, accessors, preferences);
 
                 string gltfName = string.Concat(preferences.path, GLTF);
-                File.WriteAllText(gltfName, gltfJson, Encoding.UTF8);
+                var utf8WithoutBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+                File.WriteAllText(gltfName, gltfJson, utf8WithoutBom);
             }
             else
             {
