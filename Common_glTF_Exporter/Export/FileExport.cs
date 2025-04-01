@@ -24,7 +24,9 @@ namespace Common_glTF_Exporter.Export
             IndexedDictionary<GLTFNode> nodes,
             IndexedDictionary<GLTFMesh> meshes,
             IndexedDictionary<GLTFMaterial> materials,
-            List<GLTFAccessor> accessors)
+            List<GLTFAccessor> accessors,
+            List<GLTFTexture> textures,
+            List<GLTFImage> images)
         {
             if (preferences.format == FormatEnum.gltf)
             {
@@ -33,7 +35,7 @@ namespace Common_glTF_Exporter.Export
                 BinFile.Create(fileDirectory, binaryFileData, preferences.normals, preferences.batchId);
 
                 string gltfJson = GltfJson.Get(scenes, nodes.List, meshes.List, materials.List, buffers,
-                bufferViews, accessors, preferences);
+                bufferViews, accessors, textures, images, preferences);
 
                 string gltfName = string.Concat(preferences.path, GLTF);
                 var utf8WithoutBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
@@ -44,11 +46,10 @@ namespace Common_glTF_Exporter.Export
                 BufferConfig.Run(bufferViews, buffers, preferences);
 
                 string gltfJson = GltfJson.Get(scenes, nodes.List, meshes.List, materials.List, buffers,
-                bufferViews, accessors, preferences);
+                bufferViews, accessors, textures, images, preferences);
 
                 GlbFile.Create(preferences, binaryFileData, gltfJson);
             }
-
         }
     }
 }

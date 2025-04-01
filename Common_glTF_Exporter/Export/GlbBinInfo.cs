@@ -30,6 +30,15 @@ namespace Common_glTF_Exporter.Export
                     }
                 }
 
+                if (bin.uvBuffer != null && bin.uvBuffer.Count > 0)
+                {
+                    foreach (var uv in bin.uvBuffer)
+                    {
+                        List<byte> uvBytes = BitConverter.GetBytes((float)uv).ToList();
+                        binData.AddRange(uvBytes);
+                    }
+                }
+
                 if (exportBatchId)
                 {
                     foreach (var batchId in bin.batchIdBuffer)

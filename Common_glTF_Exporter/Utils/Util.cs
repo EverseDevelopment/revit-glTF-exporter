@@ -303,6 +303,25 @@ namespace Revit_glTF_Exporter
             return parametersDictionary;
         }
 
+        public static float[] GetVec2MinMax(List<float> vec2List)
+        {
+            float minU = float.MaxValue, minV = float.MaxValue;
+            float maxU = float.MinValue, maxV = float.MinValue;
+
+            for (int i = 0; i < vec2List.Count; i += 2)
+            {
+                float u = vec2List[i];
+                float v = vec2List[i + 1];
+
+                if (u < minU) minU = u;
+                if (u > maxU) maxU = u;
+                if (v < minV) minV = v;
+                if (v > maxV) maxV = v;
+            }
+
+            return new float[] { minU, maxU, minV, maxV };
+        }
+
         private static string GetParameterValue(Parameter parameter)
         {
             if (parameter.StorageType == StorageType.String)

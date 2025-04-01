@@ -136,5 +136,57 @@
             bufferData.batchIdAccessorIndex = accessors.Count - 1;
             return byteOffset + batchIdsView.byteLength;
         }
+
+        public static int ExportUVs(
+               int bufferIdx,
+               int byteOffset,
+               GeometryDataObject geomData,
+               GLTFBinaryData bufferData,
+               List<GLTFBufferView> bufferViews,
+               List<GLTFAccessor> accessors)
+        {
+            const string VEC2_STR = "VEC2";
+            const string TEXCOORD_STR = "TEXCOORD_0";
+
+            // Convert UVs to float buffer (U, V per entry)
+            foreach (var uv in geomData.Uvs)
+            {
+                bufferData.uvBuffer.Add((float)uv.U);
+                bufferData.uvBuffer.Add((float)uv.V);
+            }
+
+            int elementsPerUV = 2;
+            int bytesPerUVElement = 4;
+            int bytesPerUV = elementsPerUV * bytesPerUVElement;
+            int uvCount = geomData.Uvs.Count;
+            int sizeOfUVView = uvCount * bytesPerUV;
+
+            // Create UV buffer view
+            GLTFBufferView uvBufferView = new GLTFBufferView(bufferIdx, byteOffset, sizeOfUVView, Targets.ARRAY_BUFFER, string.Empty);
+            bufferViews.Add(uvBufferView);
+            int uvBufferViewIdx = bufferViews.Count - 1;
+
+            // Min/max for VEC2 accessors (optional, but good practice)
+            float[] uvMinMax = Util.GetVec2MinMax(bufferData.uvBuffer);
+            var max = new List<float> { uvMinMax[1], uvMinMax[3] };
+            var min = new List<float> { uvMinMax[0], uvMinMax[2] };
+
+            // Create UV accessor
+            GLTFAccessor uvAccessor = new GLTFAccessor(
+                uvBufferViewIdx,
+                0,
+                ComponentType.FLOAT,
+                uvCount,
+                VEC2_STR,
+                max,
+                min,
+                TEXCOORD_STR);
+
+            accessors.Add(uvAccessor);
+            bufferData.uvAccessorIndex = accessors.Count - 1;
+
+            return byteOffset + uvBufferView.byteLength;
+        }
+
     }
 }

@@ -20,6 +20,8 @@ namespace Common_glTF_Exporter.Export
             List<GLTFBuffer> buffers,
             List<GLTFBufferView> bufferViews,
             List<GLTFAccessor> accessors,
+            List<GLTFTexture> textures,
+            List<GLTFImage> images,
             Preferences preferences)
         {
             // Package the properties into a serializable container
@@ -34,6 +36,16 @@ namespace Common_glTF_Exporter.Export
             if (materials.Any())
             {
                 model.materials = materials;
+            }
+
+            if (textures.Any())
+            {
+                model.textures = textures;
+            }
+
+            if (images.Any())
+            {
+                model.images = images;
             }
 
             model.buffers = buffers;

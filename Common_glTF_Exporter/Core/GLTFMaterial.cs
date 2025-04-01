@@ -20,5 +20,11 @@
         public GLTFPBR pbrMetallicRoughness { get; set; }
 
         public bool doubleSided { get; set; }
+
+        // Texture properties
+        public GLTFTexture normalTexture { get; set; }
+        public GLTFTexture occlusionTexture { get; set; }
+        public GLTFTexture emissiveTexture { get; set; }
+        public List<float> emissiveFactor { get; set; }
     }
 }

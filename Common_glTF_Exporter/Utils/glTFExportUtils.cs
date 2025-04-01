@@ -113,12 +113,19 @@
                 byteOffset = GLTFBinaryDataUtils.ExportNormals(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
             }
 
+            if (geomData.Uvs != null && geomData.Uvs.Count > 0)
+            {
+                byteOffset = GLTFBinaryDataUtils.ExportUVs(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
+            }
+
             if (exportBatchId)
             {
                 byteOffset = GLTFBinaryDataUtils.ExportBatchId(bufferIdx, byteOffset, sizeOfVec3View, elementsPerVertex, elementId, geomData, bufferData, bufferViews, accessors);
             }
 
             byteOffset = GLTFBinaryDataUtils.ExportFaces(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
+
+            buffer.byteLength = byteOffset;
 
             return bufferData;
         }

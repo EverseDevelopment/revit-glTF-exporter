@@ -41,5 +41,7 @@ namespace Revit_glTF_Exporter
         public List<GLTFBufferView> bufferViews;
         public List<GLTFAccessor> accessors;
         public List<GLTFMaterial> materials;
+        public List<GLTFTexture> textures;
+        public List<GLTFImage> images;
     }
 }

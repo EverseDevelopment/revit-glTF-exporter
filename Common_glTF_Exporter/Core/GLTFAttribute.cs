@@ -24,5 +24,10 @@
         /// Gets or sets the index of the accessor for batchId data.
         /// </summary>
         public int _BATCHID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the index of the UV Coordinates of the material's textures.
+        /// </summary>
+        public int TEXCOORD_0 { get; set; }
     }
 }

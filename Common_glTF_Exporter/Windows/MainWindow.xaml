@@ -10,8 +10,8 @@
              AllowsTransparency="True"
              Background="{x:Null}"
              mc:Ignorable="d" 
-             Width="350" 
-             Height="770"
+             Width="380" 
+             Height="870"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -103,239 +103,255 @@
                 </Line.RenderTransform>
             </Line>
 
+            <StackPanel Orientation="Vertical" 
+             Margin="0,70,0,0" 
+             HorizontalAlignment="Left" 
+             VerticalAlignment="Top">
 
-            <Label  
+                <!--Format Section-->
+                <Label  
                     Style="{DynamicResource TitleLabels}"
-                    HorizontalAlignment="Left" 
-                    Margin="0,74,0,0" 
-                    VerticalAlignment="Top"
+                    Margin="{DynamicResource DefaultMargin}"
                     Content="Format"/>
 
-            <Grid>
-                <RadioButton x:Name="gltf" 
-                                 Grid.Column="0" 
+                <StackPanel Orientation="Horizontal" 
+                        Margin="{DynamicResource DefaultMargin}">
+
+                    <RadioButton x:Name="gltf" 
                                  Content="glTF" 
-                                 HorizontalAlignment="Left" 
-                                 Margin="0,117,0,0"
-                                 Click="RadioButtonFormatClick" 
-                                 RenderTransformOrigin="0.5,0.5" 
-                                 Height="14" 
-                                 VerticalAlignment="Top">
-                </RadioButton>
-                <RadioButton x:Name="glb" 
+                                 Click="RadioButtonFormatClick"
+                                 Margin="{DynamicResource RadioButtonMargin}">
+                    </RadioButton>
+
+                    <RadioButton x:Name="glb" 
                                  Content="glb" 
-                                 HorizontalAlignment="Left" 
-                                 Margin="90,117,0,0"
-                                 Click="RadioButtonFormatClick" 
-                                 RenderTransformOrigin="0.15,0.625" 
-                                 Width="60" 
-                                 Height="14" 
-                                 VerticalAlignment="Top"/>
-            </Grid>
+                                 Click="RadioButtonFormatClick"/>
+                </StackPanel>
 
-            <Line Style="{DynamicResource DashedLine}"
-                  Margin="0,148,0,0"/>
+                <Line Style="{DynamicResource DashedLine}"
+                      Margin="{DynamicResource LinesMargin}"/>
 
-            <Label   
-                    Style="{DynamicResource TitleLabels}"      
-                    HorizontalAlignment="Left" 
-                    Margin="0,152,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Visualization"/>
+                <!--Visualization Section-->
+                <Label Style="{DynamicResource TitleLabels}"      
+                       Margin="{DynamicResource DefaultMargin}"
+                       Content="Transform"/>
 
+                <StackPanel Orientation="Horizontal" 
+                            Margin="{DynamicResource DefaultMargin}"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top">
 
-            <ToggleButton
-              x:Name="materials"
-              Margin="0,199,0,0"
-              Style="{DynamicResource SwitchTypeToggleButton}" 
-              VerticalAlignment="Top"
-              HorizontalAlignment="Left"
-              Click="TrueFalseToggles"
-              ToolTip="Add or remove materiales from export">
-            </ToggleButton>
+                    <!--<ToggleButton x:Name="materials"
+                                  Margin="0,0,0,0"
+                                  Style="{DynamicResource SwitchTypeToggleButton}" 
+                                  Click="TrueFalseToggles"
+                                  ToolTip="Add or remove materiales from export"/>
 
-            <Label
-                Style="{DynamicResource SecondaryLabel}"
-                HorizontalAlignment="Left" 
-                Margin="53,191,0,0" 
-                VerticalAlignment="Top"
-                Content="Export Materials" 
-                Width="96"/>
+                    <Label Style="{DynamicResource SecondaryLabel}"
+                           HorizontalAlignment="Left" 
+                           Margin="{DynamicResource SeparationToggles}"
+                           VerticalAlignment="Top"
+                           Content="Export Materials" 
+                           Width="{DynamicResource SeparationOptionToggle}"/>-->
 
-            <ToggleButton
-                x:Name="flipAxis"
-                Margin="166,199,0,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Click="TrueFalseToggles"
-                ToolTip="Rotate axis of the model 90 degress"/>
+                    <ToggleButton x:Name="flipAxis"
+                                  Margin="0,0,0,0"
+                                  Style="{DynamicResource SwitchTypeToggleButton}" 
+                                  Click="TrueFalseToggles"      
+                                  ToolTip="Rotate axis of the model 90 degress"/>
 
-            <Label  
-                    Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="210,191,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Flip YZ-Axys" 
-                    Width="86"/>
-            
-            <ToggleButton
-                x:Name="normals"
-                Margin="0,230,0,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Click="TrueFalseToggles"
-                ToolTip="Export mesh normals"/>
-            
-            <Label  Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="53,222,0,0"  
-                    VerticalAlignment="Top"
-                    Content="Export Normals" 
-                    Width="96"/>
-            
-            <ToggleButton
-                x:Name="relocateTo0"
-                Margin="166,230,0,0"
-                Style="{DynamicResource SwitchTypeToggleButton}" 
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Click="TrueFalseToggles"
-                ToolTip="Move the center of the model to 0,0,0"/>
-            
-            <Label  Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="210,222,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Relocate to 0" 
-                    Width="86"/>
-            
-            <ComboBox  x:Name="units" 
-                       ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
-                       SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                       DisplayMemberPath="Label" 
-                       Margin="77,311,17,0" 
-                       Height="30" 
-                       VerticalAlignment="Top"/>
-            <Label         
-                    Style="{DynamicResource TitleLabels}"
-                    HorizontalAlignment="Left" 
-                    Margin="0,276,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Units"/>
-            
-            <Line Style="{DynamicResource DashedLine}"
-                  Margin="0,270,0,0"/>
-            
-            <Label      
-                        Style="{DynamicResource SecondaryLabel}"
+                    <Label  Style="{DynamicResource SecondaryLabel}"
+                            HorizontalAlignment="Left" 
+                            Margin="{DynamicResource SeparationToggles}"
+                            VerticalAlignment="Top"
+                            Content="Flip YZ-Axys"/>
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" 
+                            Margin="{DynamicResource DefaultMargin}"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top">
+
+                    <ToggleButton x:Name="normals"
+                                Margin="0,0,0,0"
+                                Style="{DynamicResource SwitchTypeToggleButton}" 
+                                Click="TrueFalseToggles"
+                                ToolTip="Export mesh normals"/>
+
+                    <Label  Style="{DynamicResource SecondaryLabel}"
+                            Margin="{DynamicResource SeparationToggles}" 
+                            Content="Export Normals" 
+                            Width="{DynamicResource SeparationOptionToggle}"/>
+
+                    <ToggleButton x:Name="relocateTo0"
+                                  Margin="0,0,0,0"
+                                  Style="{DynamicResource SwitchTypeToggleButton}" 
+                                  Click="TrueFalseToggles"
+                                  ToolTip="Move the center of the model to 0,0,0"/>
+
+                    <Label  Style="{DynamicResource SecondaryLabel}"
+                            Margin="{DynamicResource SeparationToggles}" 
+                            Content="Relocate to 0" 
+                            Width="86"/>
+
+                </StackPanel>
+
+                <Line Style="{DynamicResource DashedLine}"
+                      Margin="{DynamicResource LinesMargin}"/>
+
+                <Label Style="{DynamicResource TitleLabels}"      
+                       Margin="{DynamicResource DefaultMargin}"
+                       Content="Materials"/>
+
+                <StackPanel Orientation="Horizontal" 
+                        Margin="{DynamicResource DefaultMargin}"
                         HorizontalAlignment="Left" 
-                        Margin="0,314,0,0" 
-                        Content="Export unit:"
-                        VerticalAlignment="Top" >
-            </Label>
+                        VerticalAlignment="Top">
+                    
+                    <RadioButton x:Name="Textures" 
+                             Content="Textures" 
+                             Click="RadioButtonMaterialsClick" 
+                             Margin="{DynamicResource RadioButtonMargin}"/>
+                    
+                    <RadioButton x:Name="Materials" 
+                             Content="Materials" 
+                             Click="RadioButtonMaterialsClick" 
+                             Margin="{DynamicResource RadioButtonMargin}"/>
+                    
+                    <RadioButton x:Name="NoMaterials" 
+                             Content="None" 
+                             Click="RadioButtonMaterialsClick"/>
 
-            <Label         
+                </StackPanel>
+                
+
+                <Line Style="{DynamicResource DashedLine}"
+                      Margin="{DynamicResource LinesMargin}"/>
+                
+
+                <Label Style="{DynamicResource TitleLabels}"
+                       Margin="{DynamicResource DefaultMargin}"
+                       Content="Units"/>
+
+                <StackPanel Orientation="Horizontal" 
+                            Margin="{DynamicResource DefaultMargin}"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top">
+
+                    <Label Style="{DynamicResource SecondaryLabel}"
+                           HorizontalAlignment="Left" 
+                           Margin="0,0,30,0" 
+                           Content="Export unit:"
+                           VerticalAlignment="Top" />
+
+                    <ComboBox  x:Name="units" 
+                               ItemsSource="{Binding Units, UpdateSourceTrigger=PropertyChanged}" 
+                               SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                               DisplayMemberPath="Label" 
+                               Height="28" 
+                               Width="180"/>
+
+                </StackPanel>
+
+                <Line Style="{DynamicResource DashedLine}"
+                      Margin="{DynamicResource LinesMargin}"/>
+
+                <Label         
                     Style="{DynamicResource TitleLabels}"
                     HorizontalAlignment="Left" 
-                    Margin="0,364,0,0" 
+                    Margin="{DynamicResource DefaultMargin}"
                     VerticalAlignment="Top"
                     Content="Data"
                     Width="46"/>
-            
-            <Line Style="{DynamicResource DashedLine}"
-                  Margin="0,360,0,0"/>
-            
-            <ToggleButton x:Name="levels"
-                          Margin="166,411,0,0"
-                          Style="{DynamicResource SwitchTypeToggleButton}" 
-                          VerticalAlignment="Top"
-                          HorizontalAlignment="Left"
-                          Click="TrueFalseToggles"
-                          ToolTip="Export Revit levels"/>
-            
-            <Label  Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="210,405,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Export Levels" 
-                    Width="96"/>
 
-            <ToggleButton x:Name="grids"
-                          Margin="166,442,0,0"
-                          Style="{DynamicResource SwitchTypeToggleButton}"
-                          VerticalAlignment="Top"
-                          HorizontalAlignment="Left"
-                          Click="TrueFalseToggles"
-                          ToolTip="Export Revit grids"/>
+                <StackPanel Orientation="Horizontal" 
+                            Margin="{DynamicResource DefaultMargin}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top">
 
-            <Label Style="{DynamicResource SecondaryLabel}"
-                   HorizontalAlignment="Left" 
-                   Margin="210,436,0,0" 
-                   Height="24" 
-                   VerticalAlignment="Top"
-                   Content="Export Grids" 
-                   Width="96"/>
-            
-            <ToggleButton x:Name="batchId"
-                          Margin="0,411,0,0"
+                    <ToggleButton x:Name="batchId"
+                          Margin="0,0,0,0"
                           Style="{DynamicResource SwitchTypeToggleButton}" 
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
                           Click="TrueFalseToggles"
                           ToolTip="Export Revit batchId"/>
-            
-            <Label  Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="53,405,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Export BatchId" 
-                    Width="96"/>
-            
-            <ToggleButton x:Name="properties"
-                          Margin="0,442,0,0"
-                          Style="{DynamicResource SwitchTypeToggleButton}" 
-                          VerticalAlignment="Top"
-                          HorizontalAlignment="Left"
-                          Click="TrueFalseToggles"
-                          ToolTip="Export all the properties from each element"/>
-            
-            <Label  Style="{DynamicResource SecondaryLabel}"
-                    HorizontalAlignment="Left" 
-                    Margin="53,436,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Export Prop" 
-                    Width="68"/>
-            
-            <Label  Style="{DynamicResource TitleLabels}"
-                    HorizontalAlignment="Left" 
-                    Margin="0,482,0,0" 
-                    VerticalAlignment="Top"
-                    Content="Compression" />
 
-            <Line Style="{DynamicResource DashedLine}"
-                  Margin="0,470,0,0"/>
+                    <Label  Style="{DynamicResource SecondaryLabel}"
+                            Margin="{DynamicResource SeparationToggles}"
+                            Content="Export BatchId" 
+                            Width="{DynamicResource SeparationOptionToggle}"/>
 
-            <StackPanel Orientation="Horizontal" 
-                        Margin="0,527,0,0" 
+                    <ToggleButton x:Name="levels"
+                                  Margin="0,0,0,0"
+                                  Style="{DynamicResource SwitchTypeToggleButton}" 
+                                  Click="TrueFalseToggles"
+                                  ToolTip="Export Revit levels"/>
+
+                    <Label  Style="{DynamicResource SecondaryLabel}"
+                            Margin="{DynamicResource SeparationToggles}"
+                            Content="Export Levels" 
+                            Width="96"/>
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" 
+                            Margin="{DynamicResource DefaultMargin}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top">
+
+                    <ToggleButton x:Name="properties"
+                            Margin="0,0,0,0"
+                            Style="{DynamicResource SwitchTypeToggleButton}" 
+                            Click="TrueFalseToggles"
+                            ToolTip="Export all the properties from each element"/>
+
+                    <Label  Style="{DynamicResource SecondaryLabel}"
+                            Margin="{DynamicResource SeparationToggles}"
+                            Content="Export Prop" 
+                            Width="{DynamicResource SeparationOptionToggle}"/>
+
+                    <ToggleButton x:Name="grids"
+                                  Margin="0,0,0,0"
+                                  Style="{DynamicResource SwitchTypeToggleButton}"
+                                  Click="TrueFalseToggles"
+                                  ToolTip="Export Revit grids"/>
+
+                    <Label Style="{DynamicResource SecondaryLabel}"
+                           Margin="{DynamicResource SeparationToggles}"
+                           Height="24" 
+                           Content="Export Grids" 
+                           Width="96"/>
+
+                </StackPanel>
+
+                <Line Style="{DynamicResource DashedLine}"
+                      Margin="{DynamicResource LinesMargin}"/>
+
+                <Label  Style="{DynamicResource TitleLabels}"
+                        Content="Compression" 
+                        Margin="{DynamicResource DefaultMargin}"/>
+
+                <StackPanel Orientation="Horizontal" 
+                        Margin="{DynamicResource DefaultMargin}"
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Top">
-                <RadioButton x:Name="None" 
+                    <RadioButton x:Name="None" 
                              Content="None" 
                              Click="RadioButtonClick" 
-                             Margin="0,0,30,0"/>
-                <RadioButton x:Name="ZIP" 
+                             Margin="{DynamicResource RadioButtonMargin}"/>
+                    <RadioButton x:Name="ZIP" 
                              Content="ZIP" 
                              Click="RadioButtonClick" 
-                             Margin="0,0,30,0"/>
-                <RadioButton x:Name="Draco" 
+                             Margin="{DynamicResource RadioButtonMargin}"/>
+                    <RadioButton x:Name="Draco" 
                              Content="Draco" 
                              Click="RadioButtonClick" 
-                             Margin="0,0,30,0"/>
-                <RadioButton x:Name="Meshopt" 
+                             Margin="{DynamicResource RadioButtonMargin}"/>
+                    <RadioButton x:Name="Meshopt" 
                              Content="MeshOpt" 
                              Click="RadioButtonClick"/>
+                </StackPanel>
+
             </StackPanel>
 
             <Button Content="Export" 

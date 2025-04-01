@@ -35,6 +35,14 @@
                         }
                     }
 
+                    if (bin.uvBuffer != null && bin.uvBuffer.Count > 0)
+                    {
+                        for (int i = 0; i < bin.uvBuffer.Count; i++)
+                        {
+                            writer.Write((float)bin.uvBuffer[i]);
+                        }
+                    }
+
                     if (exportBatchId)
                     {
                         for (int i = 0; i < bin.batchIdBuffer.Count; i++)

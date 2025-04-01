@@ -9,6 +9,7 @@
     <Import_RootNamespace>Common_glTF_Exporter</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFPBR.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFExtras.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFAccessor.cs" />
@@ -20,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMesh.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFTextureInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />

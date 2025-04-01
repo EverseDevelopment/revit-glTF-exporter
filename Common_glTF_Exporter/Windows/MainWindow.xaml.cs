@@ -12,6 +12,7 @@
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter;
+    using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
     using Common_glTF_Exporter.Windows.MainWindow;
@@ -142,6 +143,14 @@
             SettingsConfig.SetValue(key, value);
         }
 
+        private void RadioButtonMaterialsClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
+            string value = button.Name;
+            string key = "materials";
+            SettingsConfig.SetValue(key, value);
+        }
+        
         private void RadioButtonFormatClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;

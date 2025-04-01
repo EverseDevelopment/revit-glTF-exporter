@@ -26,7 +26,14 @@
     <!--Corner Radius of small Elements-->
     <CornerRadius x:Key="borderRadius" BottomLeft="5" BottomRight="5" TopLeft="5" TopRight="5"/>
     <!--Corner Radius of Large Elements-->
-    
+
+    <Thickness x:Key="DefaultMargin">0,0,0,10</Thickness>
+    <Thickness x:Key="LinesMargin">0,10,0,10</Thickness>
+    <Thickness x:Key="RadioButtonMargin">0,0,35,0</Thickness>
+    <Thickness x:Key="SeparationToggles">15,0,0,0</Thickness>
+    <System:Double x:Key="SeparationOptionToggle">120</System:Double>
+
+
     <CornerRadius x:Key="borderRadiusLarge" BottomLeft="10" BottomRight="10" TopLeft="10" TopRight="10"/>
     <System:Double x:Key="SecondaryFontSize">12</System:Double>
     <System:Double x:Key="MainFontSize">15</System:Double>

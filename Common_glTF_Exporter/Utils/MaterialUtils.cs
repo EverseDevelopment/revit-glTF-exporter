@@ -27,7 +27,7 @@
 
             Material material = MaterialUtils.GetMeshMaterial(doc, mesh);
 
-            if (preferences.materials)
+            if (preferences.materials == MaterialsEnum.materials)
             {
                 if (material == null)
                 {

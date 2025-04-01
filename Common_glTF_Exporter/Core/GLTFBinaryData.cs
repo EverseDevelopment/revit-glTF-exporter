@@ -27,5 +27,8 @@
         public int batchIdAccessorIndex { get; set; }
 
         public string name { get; set; }
+
+        public List<float> uvBuffer { get; set; } = new List<float>();
+        public int uvAccessorIndex { get; set; } = -1;
     }
 }
