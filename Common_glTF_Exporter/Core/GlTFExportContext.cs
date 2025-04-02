@@ -451,7 +451,7 @@
 
                 primitive.indices = elementBinary.indexAccessorIndex;
 
-                if (preferences.materials == MaterialsEnum.materials)
+                if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
                 {
                     if (materials.Contains(material_key))
                     {
