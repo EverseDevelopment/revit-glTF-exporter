@@ -94,7 +94,13 @@
         /// <param name="exportBatchId">exportBatchId.</param>
         /// <param name="exportNormals">exportNormals.</param>
         /// <returns>Returns the GLTFBinaryData object.</returns>
-        public static GLTFBinaryData AddGeometryMeta(List<GLTFBuffer> buffers, List<GLTFAccessor> accessors, List<GLTFBufferView> bufferViews, GeometryDataObject geomData, string name, long elementId, bool exportBatchId, bool exportNormals)
+        public static GLTFBinaryData AddGeometryMeta(List<GLTFBuffer> buffers, 
+            List<GLTFAccessor> accessors, 
+            List<GLTFBufferView> bufferViews, 
+            GeometryDataObject geomData, 
+            string name, 
+            long elementId, 
+            Preferences preferences)
         {
             int byteOffset = 0;
 
@@ -108,17 +114,17 @@
 
             byteOffset = GLTFBinaryDataUtils.ExportVertices(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors, out int sizeOfVec3View, out int elementsPerVertex);
 
-            if (exportNormals)
+            if (preferences.normals)
             {
                 byteOffset = GLTFBinaryDataUtils.ExportNormals(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
             }
 
-            if (geomData.Uvs != null && geomData.Uvs.Count > 0)
+            if (preferences.materials == MaterialsEnum.textures)
             {
                 byteOffset = GLTFBinaryDataUtils.ExportUVs(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
             }
 
-            if (exportBatchId)
+            if (preferences.batchId)
             {
                 byteOffset = GLTFBinaryDataUtils.ExportBatchId(bufferIdx, byteOffset, sizeOfVec3View, elementsPerVertex, elementId, geomData, bufferData, bufferViews, accessors);
             }

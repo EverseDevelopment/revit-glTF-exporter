@@ -38,14 +38,17 @@ namespace Common_glTF_Exporter.Export
                 model.materials = materials;
             }
 
-            if (textures.Any())
+            if (preferences.materials == MaterialsEnum.textures)
             {
-                model.textures = textures;
-            }
+                if (textures.Any())
+                {
+                    model.textures = textures;
+                }
 
-            if (images.Any())
-            {
-                model.images = images;
+                if (images.Any())
+                {
+                    model.images = images;
+                }
             }
 
             model.buffers = buffers;
@@ -66,6 +69,11 @@ namespace Common_glTF_Exporter.Export
             if (!preferences.normals)
             {
                 serializedModel = serializedModel.Replace(",\"NORMAL\":0", string.Empty);
+            }
+
+            if (preferences.materials != MaterialsEnum.textures)
+            {
+                serializedModel = serializedModel.Replace(",\"TEXCOORD_0\":0", string.Empty);
             }
 
             return serializedModel;

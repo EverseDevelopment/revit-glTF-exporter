@@ -145,7 +145,7 @@
             #pragma warning restore CS4014
         }
 
-        private BitmapSource CreateLogo(string logoPath, double size = 32)
+        private BitmapSource CreateLogo(string logoPath, double size = 25)
         {
             Geometry pathGeometry = PathGeometry.Parse(logoPath);
             Rect bounds = pathGeometry.Bounds;

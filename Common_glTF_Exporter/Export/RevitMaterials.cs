@@ -6,6 +6,7 @@
     using Autodesk.Revit.DB;
     using Autodesk.Revit.DB.Visual;
     using Common_glTF_Exporter.Core;
+    using Common_glTF_Exporter.Windows.MainWindow;
     using Revit_glTF_Exporter;
 
     public static class RevitMaterials
@@ -29,7 +30,12 @@
         /// <param name="materials">Materials.</param>
         /// <param name="textures">Textures list.</param>
         /// <param name="images">Images list.</param>
-        public static void Export(MaterialNode node, Document doc, ref IndexedDictionary<GLTFMaterial> materials, List<GLTFTexture> textures, List<GLTFImage> images)
+        public static void Export(MaterialNode node, 
+            Document doc, 
+            ref IndexedDictionary<GLTFMaterial> materials, 
+            List<GLTFTexture> textures, 
+            List<GLTFImage> images,
+            Preferences preferences)
         {
             ElementId id = node.MaterialId;
             GLTFMaterial gl_mat = new GLTFMaterial();
@@ -60,8 +66,8 @@
                 GLTFPBR pbr = new GLTFPBR();
                 SetMaterialsProperties(node, opacity, ref pbr, ref gl_mat);
 
-                // Extract and set texture if available
-                if (material != null)
+
+                if (material != null && preferences.materials == MaterialsEnum.textures)
                 {
                     ExtractAndSetTexture(material, doc, ref gl_mat, textures, images);
                 }

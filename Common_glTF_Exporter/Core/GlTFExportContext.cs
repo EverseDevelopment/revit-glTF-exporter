@@ -294,9 +294,9 @@
         /// <param name="node">Material node.</param>
         public void OnMaterial(MaterialNode node)
         {
-            if (preferences.materials == MaterialsEnum.materials)
+            if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                RevitMaterials.Export(node, doc, ref materials, textures, images);
+                RevitMaterials.Export(node, doc, ref materials, textures, images, preferences);
             }
         }
 
@@ -322,25 +322,29 @@
                     int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(vertex));
                     currentGeometry.CurrentItem.Faces.Add(vertexIndex);
 
-                    // ✅ Compute UV from face
-                    if (currentFace != null)
+
+                    if (preferences.materials == MaterialsEnum.textures)
                     {
-                        IntersectionResult projection = currentFace.Project(vertex);
-                        if (projection != null)
+                        // ✅ Compute UV from face
+                        if (currentFace != null)
                         {
-                            UV uv = projection.UVPoint;
-                            currentGeometry.CurrentItem.Uvs.Add(uv);
+                            IntersectionResult projection = currentFace.Project(vertex);
+                            if (projection != null)
+                            {
+                                UV uv = projection.UVPoint;
+                                currentGeometry.CurrentItem.Uvs.Add(uv);
+                            }
+                            else
+                            {
+                                // Fallback: use dummy UVs if projection fails
+                                currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
+                            }
                         }
                         else
                         {
-                            // Fallback: use dummy UVs if projection fails
+                            // If no face is available (shouldn't happen), add dummy UV
                             currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
                         }
-                    }
-                    else
-                    {
-                        // If no face is available (shouldn't happen), add dummy UV
-                        currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
                     }
                 }
             }
@@ -350,7 +354,6 @@
                 GLTFExportUtils.AddNormals(CurrentTransform, polymesh, currentGeometry.CurrentItem.Normals);
             }
         }
-
 
         const char UNDERSCORE = '_';
 
@@ -422,8 +425,7 @@
                     #else
                     elementId.IntegerValue,
                     #endif
-                    preferences.batchId,
-                    preferences.normals);
+                    preferences);
 
                 binaryFileData.Add(elementBinary);
 
@@ -442,7 +444,7 @@
                     primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 }
 
-                if (elementBinary.uvAccessorIndex != -1)
+                if (elementBinary.uvAccessorIndex != -1 && preferences.materials == MaterialsEnum.textures)
                 {
                     primitive.attributes.TEXCOORD_0 = elementBinary.uvAccessorIndex;
                 }          

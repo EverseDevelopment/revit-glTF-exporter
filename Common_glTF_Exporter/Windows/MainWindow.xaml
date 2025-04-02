@@ -209,17 +209,17 @@
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Top">
                     
-                    <RadioButton x:Name="Textures" 
+                    <RadioButton x:Name="textures" 
                              Content="Textures" 
                              Click="RadioButtonMaterialsClick" 
                              Margin="{DynamicResource RadioButtonMargin}"/>
                     
-                    <RadioButton x:Name="Materials" 
+                    <RadioButton x:Name="materials" 
                              Content="Materials" 
                              Click="RadioButtonMaterialsClick" 
                              Margin="{DynamicResource RadioButtonMargin}"/>
                     
-                    <RadioButton x:Name="NoMaterials" 
+                    <RadioButton x:Name="nonematerials" 
                              Content="None" 
                              Click="RadioButtonMaterialsClick"/>
 
@@ -335,21 +335,26 @@
                         Margin="{DynamicResource DefaultMargin}"
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Top">
+                    
                     <RadioButton x:Name="None" 
                              Content="None" 
                              Click="RadioButtonClick" 
                              Margin="{DynamicResource RadioButtonMargin}"/>
+                    
                     <RadioButton x:Name="ZIP" 
                              Content="ZIP" 
                              Click="RadioButtonClick" 
                              Margin="{DynamicResource RadioButtonMargin}"/>
+                    
                     <RadioButton x:Name="Draco" 
                              Content="Draco" 
                              Click="RadioButtonClick" 
                              Margin="{DynamicResource RadioButtonMargin}"/>
+                    
                     <RadioButton x:Name="Meshopt" 
                              Content="MeshOpt" 
                              Click="RadioButtonClick"/>
+                    
                 </StackPanel>
 
             </StackPanel>

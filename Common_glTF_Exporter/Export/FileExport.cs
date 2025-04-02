@@ -32,7 +32,7 @@ namespace Common_glTF_Exporter.Export
             {
                 BufferConfig.Run(bufferViews, buffers, preferences);
                 string fileDirectory = string.Concat(preferences.path, BIN);
-                BinFile.Create(fileDirectory, binaryFileData, preferences.normals, preferences.batchId);
+                BinFile.Create(fileDirectory, binaryFileData, preferences);
 
                 string gltfJson = GltfJson.Get(scenes, nodes.List, meshes.List, materials.List, buffers,
                 bufferViews, accessors, textures, images, preferences);

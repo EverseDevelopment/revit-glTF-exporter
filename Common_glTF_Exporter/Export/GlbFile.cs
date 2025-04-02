@@ -15,7 +15,7 @@ namespace Common_glTF_Exporter.Export
         {
             byte[] jsonChunk = GlbJsonInfo.Get(json);
             int lenggg = jsonChunk.Length;
-            byte[] binChunk = GlbBinInfo.Get(binaryFileData, preferences.normals, preferences.batchId);
+            byte[] binChunk = GlbBinInfo.Get(binaryFileData, preferences);
             byte[] headerChunk = GlbHeaderInfo.Get(jsonChunk, binChunk);
 
             string fileDirectory = string.Concat(preferences.path, ".glb");

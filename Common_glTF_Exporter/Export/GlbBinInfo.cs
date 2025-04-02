@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Windows.MainWindow;
 
 namespace Common_glTF_Exporter.Export
 {
     public static class GlbBinInfo
     {
-        public static byte[] Get(List<GLTFBinaryData> binaryFileData, bool exportNormals, bool exportBatchId)
+        public static byte[] Get(List<GLTFBinaryData> binaryFileData, Preferences preferences)
         {
             List<byte> binData = new List<byte>();
 
@@ -21,7 +22,7 @@ namespace Common_glTF_Exporter.Export
                     binData.AddRange(vertex);
                 }
 
-                if (exportNormals)
+                if (preferences.normals)
                 {
                     foreach (var normal in bin.normalBuffer)
                     {
@@ -30,16 +31,19 @@ namespace Common_glTF_Exporter.Export
                     }
                 }
 
-                if (bin.uvBuffer != null && bin.uvBuffer.Count > 0)
+                if (preferences.materials == MaterialsEnum.textures)
                 {
-                    foreach (var uv in bin.uvBuffer)
+                    if (bin.uvBuffer != null && bin.uvBuffer.Count > 0)
                     {
-                        List<byte> uvBytes = BitConverter.GetBytes((float)uv).ToList();
-                        binData.AddRange(uvBytes);
+                        foreach (var uv in bin.uvBuffer)
+                        {
+                            List<byte> uvBytes = BitConverter.GetBytes((float)uv).ToList();
+                            binData.AddRange(uvBytes);
+                        }
                     }
                 }
 
-                if (exportBatchId)
+                if (preferences.batchId)
                 {
                     foreach (var batchId in bin.batchIdBuffer)
                     {

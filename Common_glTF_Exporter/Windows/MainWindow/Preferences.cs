@@ -20,7 +20,7 @@
     {
         textures,
         materials,
-        none
+        nonematerials
     }
 
     public class Preferences
