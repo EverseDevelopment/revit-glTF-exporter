@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autodesk.Revit.DB.Visual;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Windows.MainWindow;
@@ -33,6 +34,11 @@ namespace Common_glTF_Exporter.Export
 
                 if (preferences.materials == MaterialsEnum.textures)
                 {
+                    if (bin.byteData != null)
+                    {
+                        binData.AddRange(bin.byteData);
+                    }
+
                     if (bin.uvBuffer != null && bin.uvBuffer.Count > 0)
                     {
                         foreach (var uv in bin.uvBuffer)

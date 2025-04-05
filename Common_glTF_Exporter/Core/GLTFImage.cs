@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Common_glTF_Exporter.Core
 {
     /// <summary>
@@ -6,14 +8,13 @@ namespace Common_glTF_Exporter.Core
     /// </summary>
     public class GLTFImage
     {
-        /// <summary>
-        /// The uri of the image
-        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string uri { get; set; }
 
-        /// <summary>
-        /// The image's MIME type
-        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? bufferView { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string mimeType { get; set; }
     }
 } 

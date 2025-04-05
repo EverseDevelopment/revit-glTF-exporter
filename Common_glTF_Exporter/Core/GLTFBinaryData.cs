@@ -30,5 +30,7 @@
 
         public List<float> uvBuffer { get; set; } = new List<float>();
         public int uvAccessorIndex { get; set; } = -1;
+
+        public byte[] byteData { get; set; } = null;
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Core
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -18,16 +19,19 @@
         /// <summary>
         /// Gets or sets the index of the accessor for normal data.
         /// </summary>
-        public int NORMAL { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? NORMAL { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the accessor for batchId data.
         /// </summary>
-        public int _BATCHID { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? _BATCHID { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the UV Coordinates of the material's textures.
         /// </summary>
-        public int TEXCOORD_0 { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? TEXCOORD_0 { get; set; }
     }
 }

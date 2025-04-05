@@ -9,6 +9,7 @@ namespace Revit_glTF_Exporter
     /// </summary>
     public enum Targets
     {
+        NONE = 0,
         ARRAY_BUFFER = 34962, // signals vertex data
         ELEMENT_ARRAY_BUFFER = 34963, // signals index or face data
     }

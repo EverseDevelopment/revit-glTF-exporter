@@ -1,5 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Export
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
@@ -36,9 +37,13 @@
                         }
                     }
 
-
                     if (preferences.materials == MaterialsEnum.textures)
                     {
+                        if (bin.byteData != null)
+                        {
+                           writer.Write((byte[])bin.byteData);
+                        }
+
                         if (bin.uvBuffer != null && bin.uvBuffer.Count > 0)
                         {
                             for (int i = 0; i < bin.uvBuffer.Count; i++)
@@ -47,7 +52,6 @@
                             }
                         }
                     }
-
 
                     if (preferences.batchId)
                     {

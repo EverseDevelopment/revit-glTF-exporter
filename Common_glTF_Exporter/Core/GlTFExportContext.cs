@@ -20,6 +20,8 @@
         public static bool cancelation { get; set; } = false;
 
         private Face currentFace;
+        private GLTFMaterial currentMaterial;
+
 
         /// <summary>
         /// Gets a stateful, uuid indexable list for all nodes in the export.
@@ -296,7 +298,7 @@
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                RevitMaterials.Export(node, doc, ref materials, textures, images, preferences);
+                currentMaterial = RevitMaterials.Export(node, doc, ref materials, preferences);
             }
         }
 
@@ -322,8 +324,8 @@
                     int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(vertex));
                     currentGeometry.CurrentItem.Faces.Add(vertexIndex);
 
-
-                    if (preferences.materials == MaterialsEnum.textures)
+                  
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.pbrMetallicRoughness?.baseColorTexture != null)
                     {
                         // ✅ Compute UV from face
                         if (currentFace != null)
@@ -414,6 +416,9 @@
             // Convert _currentGeometry objects into glTFMeshPrimitives
             foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
             {
+                string material_key = kvp.Key.Split(UNDERSCORE)[1];
+                GLTFMaterial mat = materials.GetElement(material_key);
+
                 GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
                     buffers,
                     accessors,
@@ -425,11 +430,14 @@
                     #else
                     elementId.IntegerValue,
                     #endif
-                    preferences);
+                    preferences,
+                    mat,
+                    images,
+                    textures);
 
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split(UNDERSCORE)[1];
+                
                 GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
@@ -443,8 +451,10 @@
                 {
                     primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 }
-
-                if (elementBinary.uvAccessorIndex != -1 && preferences.materials == MaterialsEnum.textures)
+       
+                if (elementBinary.uvAccessorIndex != -1 && 
+                    preferences.materials == MaterialsEnum.textures && 
+                    mat.pbrMetallicRoughness?.baseColorTexture != null)
                 {
                     primitive.attributes.TEXCOORD_0 = elementBinary.uvAccessorIndex;
                 }          
