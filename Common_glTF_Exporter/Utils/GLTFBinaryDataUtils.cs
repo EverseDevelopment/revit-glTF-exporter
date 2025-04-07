@@ -204,64 +204,65 @@
                 return byteOffset;
             }
 
-            byte[] imageBytes = File.ReadAllBytes(material.EmbeddedTexturePath);
-            string mimeType = GetMimeType(material.EmbeddedTexturePath);
-
-            if (imageBytes != null)
+            if (material.pbrMetallicRoughness.baseColorTexture.index == -1)
             {
-                if (bufferData.byteData == null)
+                byte[] imageBytes = File.ReadAllBytes(material.EmbeddedTexturePath);
+                string mimeType = GetMimeType(material.EmbeddedTexturePath);
+
+                if (imageBytes != null)
                 {
-                    bufferData.byteData = imageBytes;
+                    if (bufferData.byteData == null)
+                    {
+                        bufferData.byteData = imageBytes;
+                    }
+                    else
+                    {
+                        byte[] combined = new byte[bufferData.byteData.Length + imageBytes.Length];
+                        Buffer.BlockCopy(bufferData.byteData, 0, combined, 0, bufferData.byteData.Length);
+                        Buffer.BlockCopy(imageBytes, 0, combined, bufferData.byteData.Length, imageBytes.Length);
+                        bufferData.byteData = combined;
+                    }
                 }
-                else
+
+                int currentLenght = imageBytes.Length;
+                int alignment = 4;
+                int padding = (alignment - (currentLenght % alignment)) % alignment;
+
+                if (padding != 0)
                 {
-                    byte[] combined = new byte[bufferData.byteData.Length + imageBytes.Length];
-                    Buffer.BlockCopy(bufferData.byteData, 0, combined, 0, bufferData.byteData.Length);
-                    Buffer.BlockCopy(imageBytes, 0, combined, bufferData.byteData.Length, imageBytes.Length);
-                    bufferData.byteData = combined;
+                    currentLenght = currentLenght + padding;
+
+                    byte[] newArray = bufferData.byteData.Concat(new byte[padding]).ToArray();
+                    bufferData.byteData = newArray;
                 }
-            }
 
-            int currentLenght = imageBytes.Length;
-            int alignment = 4;
-            int padding = (alignment - (currentLenght % alignment)) % alignment;
+                GLTFBufferView ImageBufferView = new GLTFBufferView(bufferIdx, byteOffset, currentLenght, Targets.NONE, string.Empty);
 
-            if (padding != 0)
-            {
-                currentLenght = currentLenght + padding;
+                bufferViews.Add(ImageBufferView);
+                int bufferViewIndex = bufferViews.Count - 1;
 
-                byte[] newArray = bufferData.byteData.Concat(new byte[padding]).ToArray();
-                bufferData.byteData = newArray;
-            }
+                var image = new GLTFImage
+                {
+                    bufferView = bufferViewIndex,
+                    mimeType = mimeType
+                };
 
-            GLTFBufferView ImageBufferView = new GLTFBufferView(bufferIdx, byteOffset, currentLenght, Targets.NONE, string.Empty);
+                images.Add(image);
+                int imageIndex = images.Count - 1;
 
-            bufferViews.Add(ImageBufferView);
-            int bufferViewIndex = bufferViews.Count - 1;
-
-            var image = new GLTFImage
-            {
-                bufferView = bufferViewIndex,
-                mimeType = mimeType
-            };
-            images.Add(image);
-            int imageIndex = images.Count - 1;
-
-            var texture = new GLTFTexture
-            {
-                source = imageIndex
-            };
-            textures.Add(texture);
-            int textureIndex = textures.Count - 1;
-
-            if (material.pbrMetallicRoughness?.baseColorTexture != null)
-            {
+                var texture = new GLTFTexture
+                {
+                    source = imageIndex
+                };
+                textures.Add(texture);
+                int textureIndex = textures.Count - 1;
                 material.pbrMetallicRoughness.baseColorTexture.index = textureIndex;
+                return byteOffset + ImageBufferView.byteLength;
             }
-
-
-
-            return byteOffset + ImageBufferView.byteLength;
+            else
+            {
+                return byteOffset;
+            }
         }
 
 

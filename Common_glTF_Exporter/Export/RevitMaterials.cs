@@ -25,7 +25,6 @@
         /// Export Revit materials.
         /// </summary>
         public static GLTFMaterial Export(MaterialNode node,
-            Document doc,
             ref IndexedDictionary<GLTFMaterial> materials,
             Preferences preferences)
         {
@@ -33,6 +32,7 @@
             GLTFMaterial gl_mat = new GLTFMaterial();
             float opacity = ONEINTVALUE - (float)node.Transparency;
 
+            Document doc = ExternalApplication.RevitCollectorService.GetDocument();
 
             if (id != ElementId.InvalidElementId)
             {
@@ -75,7 +75,7 @@
 
                         gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
                         {
-                            index = 0, // This will be correctly updated in `AddGeometryMeta`
+                            index = -1, // This will be correctly updated in `AddGeometryMeta`
                             extensions = new GLTFTextureExtensions
                             {
                                 TextureTransform = new GLTFTextureTransform

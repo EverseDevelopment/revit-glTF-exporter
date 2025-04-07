@@ -25,13 +25,14 @@
     /// 
     public partial class MainWindow : Window
     {
+        private Document doc;
 
-
-    public MainWindow(Document doc, View view)
+        public MainWindow(View view)
         {
             this.UnitsViewModel = new UnitsViewModel();
             this.DataContext = this.UnitsViewModel;
             MainView = this;
+            doc = ExternalApplication.RevitCollectorService.GetDocument();
 
             this.InitializeComponent();
 
@@ -70,7 +71,6 @@
             SettingsConfig.SetValue("path", directory);
             SettingsConfig.SetValue("fileName", nameOnly);
 
-            Document doc = exportView.Document;
             List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
 
             bool isRFA = IsDocumentRFA.Check(doc);

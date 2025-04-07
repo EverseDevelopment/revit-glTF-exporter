@@ -51,6 +51,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\RevitCollectorService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\UIApplicationExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelRotation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Analytics.cs" />

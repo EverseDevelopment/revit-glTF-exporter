@@ -298,7 +298,7 @@
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                currentMaterial = RevitMaterials.Export(node, doc, ref materials, preferences);
+                currentMaterial = RevitMaterials.Export(node, ref materials, preferences);
             }
         }
 
