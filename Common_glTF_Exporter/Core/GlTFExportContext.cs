@@ -334,7 +334,8 @@
                             if (projection != null)
                             {
                                 UV uv = projection.UVPoint;
-                                currentGeometry.CurrentItem.Uvs.Add(uv);
+                                UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
+                                currentGeometry.CurrentItem.Uvs.Add(uvInMeters);
                             }
                             else
                             {

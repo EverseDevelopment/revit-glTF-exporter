@@ -35,6 +35,7 @@ namespace Revit_glTF_Exporter
     public struct GLTF
     {
         public GLTFVersion asset;
+        public List<string> extensionsUsed;
         public List<GLTFScene> scenes;
         public List<GLTFNode> nodes;
         public List<GLTFMesh> meshes;

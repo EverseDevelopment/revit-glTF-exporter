@@ -24,7 +24,7 @@ namespace Common_glTF_Exporter.Export
             List<GLTFImage> images,
             Preferences preferences)
         {
-            // Package the properties into a serializable container
+
             GLTF model = new GLTF
             {
                 asset = new GLTFVersion(),
@@ -32,6 +32,11 @@ namespace Common_glTF_Exporter.Export
                 nodes = nodes,
                 meshes = meshes,
             };
+
+            if (preferences.materials == MaterialsEnum.textures)
+            {
+                model.extensionsUsed = new List<string> { "KHR_texture_transform" };
+            }
 
             if (materials.Any())
             {

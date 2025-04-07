@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Windows.Forms;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.DB.Visual;
     using Common_glTF_Exporter.Core;
@@ -40,10 +41,10 @@
 
                 if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
                 {
-                     material = doc.GetElement(node.MaterialId) as Material;
-                     gl_mat.name = material.Name;
-                     uniqueId = material.UniqueId;
-                     MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
+                    material = doc.GetElement(node.MaterialId) as Material;
+                    gl_mat.name = material.Name;
+                    uniqueId = material.UniqueId;
+                    MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
                 }
                 else
                 {
@@ -60,16 +61,30 @@
                 // Instead of embedding the image now, just store the path for future export
                 if (material != null && preferences.materials == MaterialsEnum.textures)
                 {
-                    string texturePath = TryGetTexturePath(material, doc);
+
+                    Asset connectedAsset = TryGetConnectedAsset(material, doc);
+                    string texturePath = TryGetTexturePath(connectedAsset);
+
+
                     if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
                     {
                         gl_mat.EmbeddedTexturePath = texturePath;
-                    }
 
-                    gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
-                    {
-                        index = 0 // This will be correctly updated in `AddGeometryMeta`
-                    };
+                        float scaleX = GetScale(connectedAsset, "texture_RealWorldScaleX");
+                        float scaleY = GetScale(connectedAsset, "texture_RealWorldScaleY");
+
+                        gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
+                        {
+                            index = 0, // This will be correctly updated in `AddGeometryMeta`
+                            extensions = new GLTFTextureExtensions
+                            {
+                                TextureTransform = new GLTFTextureTransform
+                                {
+                                    scale = new float[] { 1f / scaleX, 1f / scaleY } // Or whatever scale fits your model's original UVs
+                                }
+                            }
+                        };
+                    }
                 }
 
                 materials.AddOrUpdateCurrentMaterial(uniqueId, gl_mat, false);
@@ -99,50 +114,68 @@
         /// <summary>
         /// Extracts the texture path from the material’s AppearanceAsset, if present.
         /// </summary>
-        private static string TryGetTexturePath(Material material, Document doc)
+        private static Asset TryGetConnectedAsset(Material material, Document doc)
         {
-            try
+            ElementId appearanceId = material.AppearanceAssetId;
+            if (appearanceId == ElementId.InvalidElementId)
+                return null;
+
+            var appearanceElem = doc.GetElement(appearanceId) as AppearanceAssetElement;
+            if (appearanceElem == null)
+                return null;
+
+            Asset theAsset = appearanceElem.GetRenderingAsset();
+            AssetProperty prop = theAsset.FindByName("opaque_albedo");
+
+            if (prop != null && prop.NumberOfConnectedProperties > 0)
             {
-                ElementId appearanceId = material.AppearanceAssetId;
-                if (appearanceId == ElementId.InvalidElementId)
-                    return null;
-
-                var appearanceElem = doc.GetElement(appearanceId) as AppearanceAssetElement;
-                if (appearanceElem == null)
-                    return null;
-
-                Asset theAsset = appearanceElem.GetRenderingAsset();
-                AssetProperty prop = theAsset.FindByName("opaque_albedo");
-
-                if (prop != null && prop.NumberOfConnectedProperties > 0)
-                {
-                    var connectedAsset = prop.GetSingleConnectedAsset();
-                    var bitmapPathProp = connectedAsset.FindByName("unifiedbitmap_Bitmap") as AssetPropertyString;
-
-                    if (bitmapPathProp != null)
-                    {
-                        string texturePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
-
-                        if (!Path.IsPathRooted(texturePath))
-                        {
-                            string materialsPath = Path.Combine(
-                                Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles),
-                                @"Autodesk Shared\Materials\Textures\");
-                            texturePath = Path.Combine(materialsPath, texturePath);
-                        }
-
-                        return texturePath;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error extracting texture path from material {material.Name}: {ex.Message}");
+                Asset connectedAsset = prop.GetSingleConnectedAsset();
+                return connectedAsset;
             }
 
             return null;
         }
+
+        private static string TryGetTexturePath(Asset connectedAsset)
+        {
+            if(connectedAsset != null)
+            {
+                var bitmapPathProp = connectedAsset.FindByName("unifiedbitmap_Bitmap") as AssetPropertyString;
+
+                if (bitmapPathProp != null)
+                {
+                    string texturePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
+
+                    if (!Path.IsPathRooted(texturePath))
+                    {
+                        string materialsPath = Path.Combine(
+                            Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles),
+                            @"Autodesk Shared\Materials\Textures\");
+                        texturePath = Path.Combine(materialsPath, texturePath);
+                    }
+
+                    return texturePath;
+                }
+            }
+
+            return null;
+        }
+
+        private static float GetScale(Asset connectedAsset, string textureName)
+        {
+            AssetPropertyDistance scale = connectedAsset.FindByName(textureName) as AssetPropertyDistance;
+
+            if (scale != null)
+            {
+                return (float)scale.Value;
+            }
+
+            return 1;
+        }
     }
+
+
+
 
     public class MaterialCacheDTO
     {
