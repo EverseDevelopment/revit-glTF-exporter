@@ -31,7 +31,7 @@ namespace Common_glTF_Exporter.Export
                 files.Add(fileToCompress);
             }
 
-            #if REVIT2025
+            #if REVIT2025 || REVIT2026
 
             var loadContext = new NonCollectibleAssemblyLoadContext();
 
@@ -50,7 +50,7 @@ namespace Common_glTF_Exporter.Export
 
             gltfpack.Invoke(null, parameters);
 
-            #else
+#else
 
             Gltf.GltfSettings settings = Gltf.GltfSettings.defaults();
 
