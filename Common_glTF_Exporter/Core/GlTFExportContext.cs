@@ -257,8 +257,8 @@
                 if (element.Category != null)
                 {
                     extras.elementCategory = element.Category.Name;
-                }  
-                #if REVIT2024
+                }
+                #if REVIT2024 || REVIT2025 || REVIT2026
                 extras.elementId = element.Id.Value;
                 #else
                 extras.elementId = element.Id.IntegerValue;
@@ -429,7 +429,7 @@
                     bufferViews,
                     kvp.Value,
                     kvp.Key,
-                    #if REVIT2024
+                    #if REVIT2024 || REVIT2025 || REVIT2026
                     elementId.Value,
                     #else
                     elementId.IntegerValue,

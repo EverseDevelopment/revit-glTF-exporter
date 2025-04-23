@@ -194,7 +194,11 @@ namespace Revit_glTF_Exporter
             }
 
             ElementDescriptionStrBuilder.Append(LessSignStr);
+            #if REVIT2026
+            ElementDescriptionStrBuilder.Append(e.Id.Value);
+            #else
             ElementDescriptionStrBuilder.Append(e.Id.IntegerValue);
+            #endif
             ElementDescriptionStrBuilder.Append(SpaceStr);
             ElementDescriptionStrBuilder.Append(e.Name);
             ElementDescriptionStrBuilder.Append(GreaterSignStr);
