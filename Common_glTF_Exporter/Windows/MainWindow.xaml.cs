@@ -98,7 +98,7 @@
             #if REVIT2019
             exporter.Export(exportView);
             #else
-            exporter.Export(exportView as View);
+           exporter.Export(exportView as View);
             #endif
 
             Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();

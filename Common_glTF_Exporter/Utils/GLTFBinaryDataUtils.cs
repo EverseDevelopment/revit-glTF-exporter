@@ -150,6 +150,13 @@
             const string VEC2_STR = "VEC2";
             const string TEXCOORD_STR = "TEXCOORD_0";
 
+            int uvCount = geomData.Uvs.Count;
+
+            if (uvCount == 0)
+            {
+                string tet = "Dsdsdsd";
+            }
+
             // Convert UVs to float buffer (U, V per entry)
             foreach (var uv in geomData.Uvs)
             {
@@ -160,7 +167,8 @@
             int elementsPerUV = 2;
             int bytesPerUVElement = 4;
             int bytesPerUV = elementsPerUV * bytesPerUVElement;
-            int uvCount = geomData.Uvs.Count;
+
+
             int sizeOfUVView = uvCount * bytesPerUV;
 
             // Create UV buffer view

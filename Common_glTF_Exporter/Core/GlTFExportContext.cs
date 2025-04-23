@@ -201,9 +201,12 @@
                 RevitGrids.Export(doc, ref nodes, ref rootNode, preferences);
             }
 
-            FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
-                scenes, nodes, meshes, materials, accessors, textures, images);
-            Compression.Run(preferences, ProgressBarWindow.ViewModel);
+            if (bufferViews.Count != 0)
+            {
+                FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
+                    scenes, nodes, meshes, materials, accessors, textures, images);
+                Compression.Run(preferences, ProgressBarWindow.ViewModel);
+            }
         }
 
         /// <summary>
