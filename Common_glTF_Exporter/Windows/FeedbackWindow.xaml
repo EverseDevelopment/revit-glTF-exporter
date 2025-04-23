@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="266"
-             Width="337"
+             Height="335"
+             Width="357"
              ResizeMode="NoResize"
              Topmost="True"
              ShowInTaskbar="True"
@@ -25,7 +25,7 @@
         </Border.Effect>
 
         <Grid
-              Background="Transparent" Margin="9,0,9,9">
+              Background="Transparent" Margin="20">
             
             <Button Style="{DynamicResource MainTitleButtonStyle}"
                     Background="Transparent" 
@@ -33,7 +33,7 @@
                     Click="Leia_Link" 
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Margin="10,10,0,0" Height="44" Width="149"  >
+                    Margin="0,0,0,0" Height="44" Width="149"  >
             </Button>
 
             <Line Stroke="{DynamicResource MainGray}"
@@ -41,7 +41,7 @@
                   Opacity="0.5"
                   StrokeThickness="4"
                   VerticalAlignment="Top"
-                  Margin="-9,59,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
+                  Margin="-9,55,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1"/>
@@ -55,24 +55,25 @@
 
             <Button
                     Style="{DynamicResource CloseButtonStyle}"
-                    Margin="76,128,89,0"
+                    Margin="0,150,0,0"
                     Background="Transparent"
                     Click="Title_Link"
                     FontWeight="Light"
-                    FontSize="12"     
+                    FontSize="12"
+                    HorizontalAlignment="Center"
                     Foreground="{DynamicResource MainGray}"
                     VerticalAlignment="Top" Height="26">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
-                            <Grid Margin="0,0,0,-4">
+                            <Grid Margin="0,0,0,-6">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="243*"/>
                                     <ColumnDefinition Width="47*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Text="Drop us a line" 
-                                    Margin="31,0,11,13"
+                                    Margin="0,0,0,13"
                                     FontWeight="Bold" Grid.ColumnSpan="2">
                                 </TextBlock>
                                 <Path
@@ -81,7 +82,7 @@
                           Stretch="Fill"
                           Stroke="{DynamicResource MainGray}"
                           StrokeThickness="1" 
-                          Margin="31,0,0,0" 
+                          Margin="0,0,0,0" 
                           Width="78" 
                           HorizontalAlignment="Left" 
                           VerticalAlignment="Bottom" 
@@ -108,7 +109,8 @@
                    Style="{DynamicResource TabCloseButtonStyle}"
                    Name="CloseButton"  
                    Click="CancelProcess_Click" 
-                   VerticalAlignment="Top" Margin="259,21,10,0"/>
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Top"/>
 
 
             <TextBlock
@@ -118,7 +120,7 @@
                         Foreground="{DynamicResource MainGray}" 
                         HorizontalAlignment="Center" 
                         Width="222" 
-                        Margin="0,71,0,0" 
+                        Margin="0,91,0,0" 
                         Height="18" 
                         VerticalAlignment="Top" 
                         RenderTransformOrigin="0.16,0.487"/>
@@ -131,12 +133,14 @@
                         Width="222" 
                         Height="18" 
                         VerticalAlignment="Top" 
-                        RenderTransformOrigin="0.16,0.487" Margin="0,89,0,0"/>
+                        RenderTransformOrigin="0.16,0.487" Margin="0,109,0,0"/>
+            
             <Button Content="Cancel" 
                     Style="{DynamicResource MainButtonStyle}"
                     Width="129"
-                    Margin="80,179,80,0"
-                    Click="CancelProcess_Click" Height="20" VerticalAlignment="Top"/>
+                    Click="CancelProcess_Click" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"/>
         </Grid>
     </Border>
 

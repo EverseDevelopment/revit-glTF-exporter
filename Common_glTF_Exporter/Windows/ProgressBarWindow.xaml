@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              WindowStartupLocation="CenterScreen"
              Title="Exporting process in progress..." 
-             Height="262"
+             Height="300"
              Width="308"
              ResizeMode="NoResize"
              Topmost="True"
@@ -15,7 +15,7 @@
              Style="{DynamicResource CustomWindowStyle}">
 
 
-    <Border Background="{DynamicResource BackgroundColor}"
+    <Border Background="{DynamicResource SecondaryBackgroundColor}"
             BorderBrush="Transparent" 
             BorderThickness="1,1,1,1" 
             CornerRadius="8,8,8,8"
@@ -24,7 +24,7 @@
             <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" Direction="0"></DropShadowEffect>
         </Border.Effect>
 
-        <Grid Margin="0"
+        <Grid Margin="20"
               Background="Transparent">
 
             <Button Style="{DynamicResource MainTitleButtonStyle}"
@@ -33,7 +33,7 @@
                     Click="Leia_Link" 
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Margin="10,10,0,0" Height="44" Width="149"  >
+                    Margin="0,0,0,0" Height="44" Width="149"  >
             </Button>
 
             <Line Stroke="{DynamicResource MainGray}"
@@ -41,7 +41,7 @@
                   Opacity="0.5"
                   StrokeThickness="4"
                   VerticalAlignment="Top"
-                  Margin="0,59,0,0" RenderTransformOrigin="0.5,0.5" Height="2">
+                  Margin="-9,55,-9,0" RenderTransformOrigin="0.5,0.5" Height="2">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1"/>
@@ -66,8 +66,8 @@
                    Style="{DynamicResource TabCloseButtonStyle}"
                    Name="CloseButton"  
                    Click="CancelProcess_Click" 
-                   VerticalAlignment="Top" 
-                Margin="266,18,10,0"/>
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Right"/>
 
             <ProgressBar Style="{DynamicResource ProgressBarStyle}" 
                     Name="ProgressBar"
@@ -75,8 +75,10 @@
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                        
                     Maximum="{Binding Path=ProgressBarMax}"
                     Value="{Binding Path=ProgressBarGraphicValue}"
-                    Margin="30,144,32,0" 
-                    Height="11" 
+                    Margin="0,144,0,0" 
+                    Height="11"
+                         Width="200"
+                         HorizontalAlignment="Center"
                     VerticalAlignment="Top"/>
 
             <TextBlock DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -84,18 +86,19 @@
                        Text="{Binding Path=ProgressBarPercentage, StringFormat={}{0:0}%}" 
                        TextAlignment="Center"
                        Foreground="{DynamicResource MainGray}"  
-                       HorizontalAlignment="Left" 
+                       HorizontalAlignment="Center" 
                        Width="50" 
-                       Margin="126,119,0,0" 
+                       Margin="0,120,0,0" 
                        Height="18" 
                        VerticalAlignment="Top"/>
             
             <Button Content="{Binding Action, UpdateSourceTrigger=PropertyChanged}" 
                     DataContext="{Binding ViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Style="{DynamicResource MainButtonStyle}"
-                    Margin="80,0,86,16"
-                    Click="CancelProcess_Click"  
-                    VerticalAlignment="Bottom"/>
+                    Click="CancelProcess_Click"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Width="150"/>
         </Grid>
     </Border>
 

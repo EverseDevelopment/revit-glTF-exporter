@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Model;
@@ -48,6 +49,7 @@
 
         public static int ExportVertices(int bufferIdx, int byteOffset, GeometryDataObject geomData, GLTFBinaryData bufferData, List<GLTFBufferView> bufferViews, List<GLTFAccessor> accessors, out int sizeOfVec3View, out int elementsPerVertex)
         {
+
             for (int i = 0; i < geomData.Vertices.Count; i++)
             {
                 bufferData.vertexBuffer.Add(Convert.ToSingle(geomData.Vertices[i]));
@@ -135,6 +137,159 @@
             accessors.Add(batchIdAccessor);
             bufferData.batchIdAccessorIndex = accessors.Count - 1;
             return byteOffset + batchIdsView.byteLength;
+        }
+
+        public static int ExportUVs(
+               int bufferIdx,
+               int byteOffset,
+               GeometryDataObject geomData,
+               GLTFBinaryData bufferData,
+               List<GLTFBufferView> bufferViews,
+               List<GLTFAccessor> accessors)
+        {
+            const string VEC2_STR = "VEC2";
+            const string TEXCOORD_STR = "TEXCOORD_0";
+
+            int uvCount = geomData.Uvs.Count;
+
+            // Convert UVs to float buffer (U, V per entry)
+            foreach (var uv in geomData.Uvs)
+            {
+                bufferData.uvBuffer.Add((float)uv.U);
+                bufferData.uvBuffer.Add((float)uv.V);
+            }
+
+            int elementsPerUV = 2;
+            int bytesPerUVElement = 4;
+            int bytesPerUV = elementsPerUV * bytesPerUVElement;
+
+
+            int sizeOfUVView = uvCount * bytesPerUV;
+
+            // Create UV buffer view
+            GLTFBufferView uvBufferView = new GLTFBufferView(bufferIdx, byteOffset, sizeOfUVView, Targets.ARRAY_BUFFER, string.Empty);
+            bufferViews.Add(uvBufferView);
+            int uvBufferViewIdx = bufferViews.Count - 1;
+
+            // Min/max for VEC2 accessors (optional, but good practice)
+            float[] uvMinMax = Util.GetVec2MinMax(bufferData.uvBuffer);
+            var max = new List<float> { uvMinMax[1], uvMinMax[3] };
+            var min = new List<float> { uvMinMax[0], uvMinMax[2] };
+
+            // Create UV accessor
+            GLTFAccessor uvAccessor = new GLTFAccessor(
+                uvBufferViewIdx,
+                0,
+                ComponentType.FLOAT,
+                uvCount,
+                VEC2_STR,
+                max,
+                min,
+                TEXCOORD_STR);
+
+            accessors.Add(uvAccessor);
+            bufferData.uvAccessorIndex = accessors.Count - 1;
+
+            return byteOffset + uvBufferView.byteLength;
+        }
+
+        public static int ExportImageBuffer(
+            int bufferIdx,
+            int byteOffset,
+            GLTFMaterial material,
+            List<GLTFImage> images,
+            List<GLTFTexture> textures,
+            GLTFBinaryData bufferData,
+            List<GLTFBufferView> bufferViews)
+        {
+            if (material.EmbeddedTexturePath == null)
+            {
+                return byteOffset;
+            }
+
+            if (material.pbrMetallicRoughness.baseColorTexture.index == -1)
+            {
+                byte[] imageBytes = File.ReadAllBytes(material.EmbeddedTexturePath);
+                string mimeType = GetMimeType(material.EmbeddedTexturePath);
+
+                if (imageBytes != null)
+                {
+                    if (bufferData.byteData == null)
+                    {
+                        bufferData.byteData = imageBytes;
+                    }
+                    else
+                    {
+                        byte[] combined = new byte[bufferData.byteData.Length + imageBytes.Length];
+                        Buffer.BlockCopy(bufferData.byteData, 0, combined, 0, bufferData.byteData.Length);
+                        Buffer.BlockCopy(imageBytes, 0, combined, bufferData.byteData.Length, imageBytes.Length);
+                        bufferData.byteData = combined;
+                    }
+                }
+
+                int currentLenght = imageBytes.Length;
+                int alignment = 4;
+                int padding = (alignment - (currentLenght % alignment)) % alignment;
+
+                if (padding != 0)
+                {
+                    currentLenght = currentLenght + padding;
+
+                    byte[] newArray = bufferData.byteData.Concat(new byte[padding]).ToArray();
+                    bufferData.byteData = newArray;
+                }
+
+                GLTFBufferView ImageBufferView = new GLTFBufferView(bufferIdx, byteOffset, currentLenght, Targets.NONE, string.Empty);
+
+                bufferViews.Add(ImageBufferView);
+                int bufferViewIndex = bufferViews.Count - 1;
+
+                var image = new GLTFImage
+                {
+                    bufferView = bufferViewIndex,
+                    mimeType = mimeType
+                };
+
+                images.Add(image);
+                int imageIndex = images.Count - 1;
+
+                var texture = new GLTFTexture
+                {
+                    source = imageIndex
+                };
+                textures.Add(texture);
+                int textureIndex = textures.Count - 1;
+                material.pbrMetallicRoughness.baseColorTexture.index = textureIndex;
+                return byteOffset + ImageBufferView.byteLength;
+            }
+            else
+            {
+                return byteOffset;
+            }
+        }
+
+
+
+
+        private static string GetMimeType(string path)
+        {
+            string extension = System.IO.Path.GetExtension(path).ToLower();
+            switch (extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+                case ".png":
+                    return "image/png";
+                case ".bmp":
+                    return "image/bmp";
+                case ".gif":
+                    return "image/gif";
+                case ".webp":
+                    return "image/webp";
+                default:
+                    return "image/png"; // Default to PNG if unknown
+            }
         }
     }
 }

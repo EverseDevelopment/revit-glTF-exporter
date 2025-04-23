@@ -31,7 +31,8 @@ namespace Common_glTF_Exporter.Utils
                 { "SecondaryGray",  "#ffffff"},
                 { "HoverGray", "#465162" },
                 { "WhiteColour", "#18263c"},
-                { "AuxiliaryGray", "#667075"}
+                { "AuxiliaryGray", "#667075"},
+                { "SecondaryBackgroundColor", "#515a6c"}
         };
 
             foreach (var entry in colorMappings)

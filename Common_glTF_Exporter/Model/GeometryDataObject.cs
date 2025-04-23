@@ -1,5 +1,6 @@
 ﻿namespace Common_glTF_Exporter.Model
 {
+    using Autodesk.Revit.DB;
     using System.Collections.Generic;
 
     /// <summary>
@@ -11,8 +12,9 @@
 
         public List<double> Normals { get; set; } = new List<double>();
 
-        public List<double> Uvs { get; set; } = new List<double>();
+        public List<UV> Uvs { get; set; } = new List<UV>();
 
         public List<int> Faces { get; set; } = new List<int>();
+
     }
 }

@@ -30,6 +30,13 @@
                     preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
                 }
 
+                if (property.PropertyType == typeof(MaterialsEnum))
+                {
+                    string result = SettingsConfig.GetValue(propertyName).ToString();
+                    Enum.TryParse(result, out MaterialsEnum unitStatus);
+                    preferenceType.GetProperty(propertyName).SetValue(preferences, unitStatus);
+                }
+
                 if (property.PropertyType == typeof(FormatEnum))
                 {
                     string result = SettingsConfig.GetValue(propertyName).ToString();

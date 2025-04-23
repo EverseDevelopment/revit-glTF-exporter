@@ -10,12 +10,14 @@
     using System.Linq;
     using System.Windows.Media;
     using System.Windows;
+    using Common_glTF_Exporter.Service;
 
     /// <summary>
     /// External Application.
     /// </summary>
     public class ExternalApplication : IExternalApplication
     {
+        public static RevitCollectorService RevitCollectorService;
         private static readonly string RIBBONTAB = "e-verse";
         private static readonly string RIBBONPANEL = "Export glTF";
         private static readonly string LEIAURL = @"https://e-verse.com/leia-gltf-exporter/";
@@ -23,6 +25,7 @@
         private static string pushButtonText = "Leia";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
         private static string buttonIconsFolder = Path.GetDirectoryName(addInPath) + "\\Images\\";
+
         internal Document Document { get; set; }
         public static UIApplication UiApp { get; private set; }
 
@@ -64,6 +67,8 @@
         /// <returns>Result.</returns>
         public Result OnStartup(UIControlledApplication application)
         {
+            RevitCollectorService = new RevitCollectorService(application.GetUIApplication());
+
             // -- Events Subscription
             application.ViewActivated += Application_ViewActivated;
 
@@ -145,7 +150,7 @@
             #pragma warning restore CS4014
         }
 
-        private BitmapSource CreateLogo(string logoPath, double size = 32)
+        private BitmapSource CreateLogo(string logoPath, double size = 25)
         {
             Geometry pathGeometry = PathGeometry.Parse(logoPath);
             Rect bounds = pathGeometry.Bounds;
