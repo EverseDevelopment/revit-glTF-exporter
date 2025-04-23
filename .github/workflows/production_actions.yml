@@ -123,6 +123,10 @@ jobs:
       run: |
         (Get-Content Revit_glTF_Exporter_2025/Revit_glTF_Exporter_2025.csproj) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2025/Revit_glTF_Exporter_2025.csproj
 
+    - name: Setting new version to the AssemblyInfo 2026
+      run: |
+        (Get-Content Revit_glTF_Exporter_2026/Revit_glTF_Exporter_2026.csproj) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2026/Revit_glTF_Exporter_2026.csproj
+
     - name: Setting versions in PackageContents
       run: |
         (Get-Content Common_glTF_Exporter/PackageContents.xml) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Common_glTF_Exporter/PackageContents.xml
