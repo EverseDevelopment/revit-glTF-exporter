@@ -152,11 +152,6 @@
 
             int uvCount = geomData.Uvs.Count;
 
-            if (uvCount == 0)
-            {
-                string tet = "Dsdsdsd";
-            }
-
             // Convert UVs to float buffer (U, V per entry)
             foreach (var uv in geomData.Uvs)
             {
