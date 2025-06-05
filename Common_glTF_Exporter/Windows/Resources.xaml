@@ -11,9 +11,11 @@
     <SolidColorBrush x:Key="MainGray" Color="#18263c"/>
     <SolidColorBrush x:Key="SecondaryGray" Color="#8d8d8d"/>
     <SolidColorBrush x:Key="AuxiliaryGray" Color="#a5b6bf"/>
+    <SolidColorBrush x:Key="WhiteColour" Color="#ffffff"/>
 
     <SolidColorBrush x:Key="HoverGray" Color="#e8e8e8"/>
     <SolidColorBrush x:Key="BackgroundColor" Color="#e8e3df"/>
+    <SolidColorBrush x:Key="SecondaryBackgroundColor" Color="#e8e3df"/>
     <SolidColorBrush x:Key="WindowForeColor" Color="Transparent"/>
     
     <!--Main Colours-->
@@ -24,7 +26,14 @@
     <!--Corner Radius of small Elements-->
     <CornerRadius x:Key="borderRadius" BottomLeft="5" BottomRight="5" TopLeft="5" TopRight="5"/>
     <!--Corner Radius of Large Elements-->
-    
+
+    <Thickness x:Key="DefaultMargin">0,0,0,10</Thickness>
+    <Thickness x:Key="LinesMargin">0,10,0,10</Thickness>
+    <Thickness x:Key="RadioButtonMargin">0,0,35,0</Thickness>
+    <Thickness x:Key="SeparationToggles">15,0,0,0</Thickness>
+    <System:Double x:Key="SeparationOptionToggle">120</System:Double>
+
+
     <CornerRadius x:Key="borderRadiusLarge" BottomLeft="10" BottomRight="10" TopLeft="10" TopRight="10"/>
     <System:Double x:Key="SecondaryFontSize">12</System:Double>
     <System:Double x:Key="MainFontSize">15</System:Double>
@@ -113,12 +122,12 @@
         <Setter Property="Template" Value="{StaticResource MainButtonStyleTemplate}"/>
         <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="14px"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="{DynamicResource WhiteColour}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
         <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
-        <Setter Property="Height"  Value="20"/>
+        <Setter Property="Height"  Value="25"/>
     </Style>
 
 
@@ -184,7 +193,7 @@
         <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
         <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
-        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainGray}"/>
         <Setter Property="FontWeight"  Value="Light"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Height" Value="24"/>
@@ -195,7 +204,7 @@
         <Setter Property="Template" Value="{StaticResource LabelsTemplate}"/>
         <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="{StaticResource MainFontSize}"/>
-        <Setter Property="Foreground" Value="{StaticResource WindowButtonColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource WindowButtonColor}"/>
         <Setter Property="FontWeight"  Value="DemiBold"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Height" Value="31"/>
@@ -228,7 +237,7 @@
         <Setter Property="Template" Value="{StaticResource CloseButtonStyleTemplate}"/>
         <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainGray}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
         <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
@@ -585,8 +594,8 @@
                         <Border x:Name="TextBorder"
                             CornerRadius="15,15,15,15"
                             BorderThickness="1"
-                            Background="{StaticResource BackgroundColor}"
-                            BorderBrush="{StaticResource SecondaryGray}">
+                            Background="{DynamicResource BackgroundColor}"
+                            BorderBrush="{DynamicResource SecondaryGray}">
                             <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
 
@@ -617,7 +626,7 @@
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Center" 
                               Data="M 0 0 L 6 6 L 12 0" 
-                              Stroke="{StaticResource SecondaryGray}"
+                              Stroke="{DynamicResource SecondaryGray}"
                               StrokeThickness="1"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -632,7 +641,7 @@
                                     Value="M 0 6 L 6 0 L 12 6"/>
                             <Setter TargetName="Arrow" 
                                     Property="Stroke" 
-                                    Value="{StaticResource WindowButtonColor}"/>
+                                    Value="{DynamicResource WindowButtonColor}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="gd" 
@@ -646,7 +655,7 @@
     </Style>
 
     <Style  x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
-        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainGray}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -696,8 +705,8 @@
                                     x:Name="DropDownBorder"
                                     BorderThickness="1"
                                     CornerRadius="{StaticResource borderRadius}"
-                                    Background="{StaticResource BackgroundColor}"
-                                    BorderBrush="{StaticResource BackgroundColor}">
+                                    Background="{DynamicResource BackgroundColor}"
+                                    BorderBrush="{DynamicResource BackgroundColor}">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="9" 
                                                           Color="Gray" 
@@ -724,7 +733,7 @@
 
     <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="true"/>
-        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainGray}"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -738,7 +747,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverGray}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource HoverGray}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="Red"/>
@@ -895,16 +904,16 @@
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="BackgroundBorder" 
                                     Property="Background"
-                                    Value="{StaticResource ToggleButtonFalseBackground}" />
+                                    Value="{DynamicResource ToggleButtonFalseBackground}" />
                             <Setter TargetName="BackgroundEllipse2" 
                                     Property="Fill"
-                                    Value="{StaticResource ToggleButtonFalseBackground}" />
+                                    Value="{DynamicResource ToggleButtonFalseBackground}" />
                             <Setter TargetName="BackgroundEllipse1" 
                                     Property="Fill"
-                                    Value="{StaticResource ToggleButtonFalseBackground}" />
+                                    Value="{DynamicResource ToggleButtonFalseBackground}" />
                             <Setter TargetName="ForegroundEllipse" 
                                     Property="Fill"
-                                    Value="#18263c" />
+                                    Value="{DynamicResource MainGray}" />
                             <Setter TargetName="AnimationSizeBorder" 
                                     Property="Width" 
                                     Value="0" />
@@ -937,7 +946,7 @@
 
     <Style x:Key="{x:Type RadioButton}"
        TargetType="{x:Type RadioButton}">
-        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainGray}"/>
         <Setter Property="FontSize" Value="{StaticResource SecondaryFontSize}"/>
         <Setter Property="FontFamily" Value="{StaticResource NeuzeitGrotesk}"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
@@ -951,10 +960,10 @@
                                   Height="13">
                                 <Ellipse x:Name="Border"
                                         StrokeThickness="0.4"
-                                        Stroke="{StaticResource MainGray}"
-                                        Fill="{StaticResource BackgroundColor}"/>
+                                        Stroke="{DynamicResource MainGray}"
+                                        Fill="{DynamicResource BackgroundColor}"/>
                                 <Ellipse x:Name="CheckMark"
-                                        Fill="{StaticResource BackgroundColor}"
+                                        Fill="{DynamicResource BackgroundColor}"
                                          Width="6"
                                          Height="6">
                                 </Ellipse>
@@ -968,12 +977,12 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Fill" TargetName="Border" Value="{StaticResource HoverGray}"/>
-                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource HoverGray}"/>
+                            <Setter Property="Fill" TargetName="Border" Value="{DynamicResource HoverGray}"/>
+                            <Setter Property="Fill" TargetName="CheckMark" Value="{DynamicResource HoverGray}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Fill" TargetName="CheckMark" Value="{StaticResource WindowButtonColor}"/>
-                            <Setter Property="Stroke" TargetName="Border" Value="{StaticResource WindowButtonColor}"/>
+                            <Setter Property="Fill" TargetName="CheckMark" Value="{DynamicResource WindowButtonColor}"/>
+                            <Setter Property="Stroke" TargetName="Border" Value="{DynamicResource WindowButtonColor}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                     
@@ -1276,7 +1285,7 @@
                           Grid.Column="1"
                           Data="M0,0 L4,4 M0,4 L4,0"
                           Stretch="Fill"
-                          Stroke="{StaticResource MainGray}"
+                          Stroke="{DynamicResource MainGray}"
                           StrokeThickness="1"/>
 
             </Grid>
@@ -1294,7 +1303,7 @@
                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Border>
             <Ellipse x:Name="circleBorder"
-                             Stroke="{StaticResource MainGray}"
+                             Stroke="{DynamicResource MainGray}"
                              StrokeThickness="1" 
                              Fill="Transparent">
             </Ellipse>
@@ -1332,12 +1341,210 @@
     </ControlTemplate>
 
     <Style x:Key="TabCloseButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{StaticResource MainGray}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainGray}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Width" Value="20"/>
         <Setter Property="Height" Value="20"/>
         <Setter Property="Template" Value="{StaticResource CLoseButtomTemp}"/>
     </Style>
+
+    <!-- Main Title Button -->
+    <ControlTemplate x:Key="MainTitleButtonTemp" TargetType="{x:Type Button}">
+        <Grid Background="Transparent">
+            <Viewbox Stretch="UniformToFill" Margin="0">
+                <Canvas Width="800" Height="600" Background="Transparent">
+
+                    <Path x:Name="LeiaImage"
+                      Style="{DynamicResource LeiaLogoImage}"
+                      Canvas.Left="0"
+                      Canvas.Top="0"/>
+
+                    <Path x:Name="LeiaText"
+                      Style="{DynamicResource LeiaLogoText}"
+                      Canvas.Left="150" 
+                        Canvas.Top="-40"/>
+                </Canvas>
+            </Viewbox>
+
+            <!-- Clickable transparent surface -->
+            <Rectangle x:Name="ClickSurface"
+                   Fill="Transparent"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"/>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Opacity" TargetName="LeiaImage" Value="0.5"/>
+                <Setter Property="Opacity" TargetName="LeiaText" Value="0.5"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Opacity" TargetName="LeiaImage" Value="0.3"/>
+                <Setter Property="Opacity" TargetName="LeiaText" Value="0.3"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Opacity" TargetName="LeiaImage" Value="0.25"/>
+                <Setter Property="Opacity" TargetName="LeiaText" Value="0.25"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <Style x:Key="MainTitleButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="Aqua"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Template" Value="{DynamicResource MainTitleButtonTemp}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Panel.ZIndex" Value="1"/>
+    </Style>
+
+
+    <!-- Everse Title Button -->
+    <ControlTemplate x:Key="everseTitleButtonTemp" TargetType="{x:Type Button}">
+        <Grid Background="Transparent">
+            <Viewbox Stretch="UniformToFill" Margin="0">
+                <Canvas Width="500" Height="8000" Background="Transparent">
+
+                    <Path x:Name="everseIsoLogo"
+                      Style="{DynamicResource IsoLogoEverse}"
+                      Canvas.Left="0"
+                      Canvas.Top="0"/>
+
+                    <Path x:Name="EverseText"
+                      Style="{DynamicResource LogoEverseText}"
+                      Canvas.Left="70" 
+                        Canvas.Top="-10"/>
+                </Canvas>
+            </Viewbox>
+
+            <!-- Clickable transparent surface -->
+            <Rectangle x:Name="ClickSurface"
+                   Fill="Transparent"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"/>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Opacity" TargetName="everseIsoLogo" Value="0.5"/>
+                <Setter Property="Opacity" TargetName="EverseText" Value="0.5"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Opacity" TargetName="everseIsoLogo" Value="0.3"/>
+                <Setter Property="Opacity" TargetName="EverseText" Value="0.3"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Opacity" TargetName="everseIsoLogo" Value="0.25"/>
+                <Setter Property="Opacity" TargetName="EverseText" Value="0.25"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <Style x:Key="everseTitleButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="Aqua"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Template" Value="{DynamicResource everseTitleButtonTemp}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Panel.ZIndex" Value="1"/>
+    </Style>
     
+
+    <Style x:Key="HeartLogo" TargetType="{x:Type Path}">
+        <Setter Property="Fill" Value="{DynamicResource WindowButtonColor}" />
+        <Setter Property="Data">
+            <Setter.Value>
+                <PathGeometry Figures="m1034.4 660.74-401.58 376.97c-18.469 17.344-47.25 17.344-65.719 
+                              0l-401.48-376.97c-225.66-200.16-55.922-530.53 192.42-510.61 108.28 0.75 
+                              199.4 102.09 241.97 179.39 42.609-77.297 133.69-178.64 241.97-179.39 
+                              248.34-19.922 418.08 310.45 192.42 510.61z" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LeiaLogoText" TargetType="{x:Type Path}">
+        <Setter Property="Fill" Value="{DynamicResource MainGray}" />
+        <Setter Property="Data">
+            <Setter.Value>
+                <PathGeometry Figures="M117.7 137c0 26.3-0.1 52.6 0.1 78.9c0 3.8-0.8 5.1-4.9 5c-9.8-0.3-19.6-0.2-29.5-0.1c-2.8 0-4.1-0.3-4.1-3.7  
+                              c0.1-53.4 0.1-106.8 0-160.2c0-3.4 1.3-3.7 4.1-3.7c10 0.1 20 0.2 30 0c3.6-0.1 4.4 1 4.4 4.5C117.7 84.1 117.7 110.5 117.7 137z
+                              M286.7 162.3c0-17.8 0.1-35.6-0.1-53.4c0-3.5 0.9-4.6 4.4-4.5c9.8 0.2 19.7 0.2 29.5 0c3.3-0.1 4.6 0.6 4.6 4.3  
+                              c-0.1 36-0.1 71.9 0 107.9c0 3.2-0.8 4.3-4.2 4.2c-10-0.2-20-0.3-30 0c-3.7 0.1-4.3-1.2-4.3-4.6  C286.7 198.3 286.7 
+                              180.3 286.7 162.3z
+                              M305.2 91.2c-11.8-0.3-20.1-9.2-19.7-21.1c0.3-11.6 9.5-20.2 21.2-19.8c11.8 0.4 20 9.3 19.7 21.3  
+                              C326.2 83.1 317.1 91.5 305.2 91.2z
+                              M480.7 108.1c0-2.9-0.9-3.7-3.7-3.6c-8.2 0.2-16.3 0.1-24.5 0.1c-9.9 0-9.9 0-10.2 10c0 0.3-0.2 0.6-0.5 1.2
+                              c-22.6-19.1-48.8-20.9-70.4-4.9c-23.4 17.4-30.3 46.7-22.3 74c13.7 46.9 69.5 49.9 91.1 25.2c0.5-0.6 1.2-1.2 2.2-0.5 
+                              c0 2.3 0.2 4.6 0 6.9c-0.3 3.1 0.5 4.4 4 4.3c10.2-0.3 20.3-0.2 30.5 0c3.1 0.1 4-0.8 3.9-3.9C480.6 180.6 480.6 144.4
+                              480.7 108.1z   M422.9 193.4c-15.7 5.6-32.3-5.2-35.3-23.1c-1.1-6.5-0.8-12.9 1.2-19.2c4.2-13.2 15.5-20.4 29.6-19.1c12.4
+                              1.2 22.7 12.1 24 25.4  c0.2 1.8 0.2 3.6 0.3 5C442.7 177 434.9 189.1 422.9 193.4z
+                              M261.7 170.9c3.7 0 4.9-0.8 4.8-4.6c-0.3-13-2.6-25.4-9.3-36.8c-14.6-24.6-45.5-35.7-75.6-26.8 
+                              c-39.7 11.8-50.2 51.3-38.6 83.5c9.1 25 34.3 40.2 63.6 38.8c24.4-1.1 42.4-12.9 54.5-34c1.3-2.2 1.8-3.5-1.7-4.3 
+                              c-9.7-2.2-19.3-4.9-28.9-7.5c-2-0.5-3.2-0.1-4.5 1.7c-7.8 10.6-22.3 13.6-34.4 7.5c-7.1-3.6-11.4-9.3-13.1-17.6c2.1
+                              0 3.9 0 5.7 0  C210.1 170.8 235.9 170.7 261.7 170.9z M179.2 146.5c2.7-7 7.3-11.6 14.7-13.7c13.6-3.7 26.9 1.2 31.6 
+                              12.1c2.1 4.9 1.9 5.2-3.3 5.3  c-6.7 0-13.3 0-20 0c-6.8 0-13.6-0.1-20.5 0.1C178.6 150.3 178.1 149.4 179.2 146.5z" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="LeiaLogoImage" TargetType="{x:Type Path}">
+        <Setter Property="Fill" Value="{DynamicResource WindowButtonColor}" />
+        <Setter Property="Data">
+            <Setter.Value>
+                <PathGeometry Figures=" M168.7 80.5V33.2l-25-14.1l-20.2 12.5l-41.3-24L57.3 21.7v24.1L15.9 69.8V98l19.3 11.6v0.8v47.4L60 171.8 
+                              l22.1-12.5l41.4 24.1l24.9-14.1v-24.1l41.4-24.1V94L168.7 80.5z M181.5 95.2L124 129.4l-37.1-20.7l16.9-9.5l20.3 11.6L146.5 97
+                              l0-22.6l19.1 10.7L181.5 95.2z M38.6 79.7L24 71.5l33.3-19.3v17.1L38.6 79.7z M106.6 71L106.6 71L106.6 71L81.2 55.7L62.8 66.1V49
+                              v-3V28l58 32.5v42l-14.2-8.1V71.8 M163.1 39.6v37.8l-16.6-9.3l0-19.1L163.1 39.6z M126.3 60.5l14.7-8.4l0 41.8l-14.7 9V60.5z  
+                              M81.1 62.1l15.3 9.2L61 92.3l-16.7-9.4L81.1 62.1z M63.3 97.4L101.1 75v19.4l-22.1 12.5v26.3l18.3 10.4l-18.8 11.5l-15.1 8.5V97.4z
+                              M84.4 130v-16.4l36.8 20.6v16.7L84.4 130z M102.7 146.7l18.6 10.6v18.4L87.4 156L102.7 146.7z M143.8 25.5l16.5 9.3l-16.4 9.3 
+                              l-15.1-9.3L143.8 25.5z M120 36l18.4 11.3l-14.9 8.4L65.6 23.3L82.1 14L120 36z M21.4 94.9V76.4l13.7 7.7v19L21.4 94.9z M40.6 
+                              110.4  v-3.9V87.2l17.1 9.6v67.4l-17.1-9.7V110.4z M126.8 175.2v-17.9l16.1-9v17.8L126.8 175.2z M145.8 140.3L126.8 
+                              151v-16.8l57.5-34.2v18  L145.8 140.3z" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="IsoLogoEverse" TargetType="{x:Type Path}">
+        <Setter Property="Fill" Value="{DynamicResource WindowButtonColor}" />
+        <Setter Property="Data">
+            <Setter.Value>
+                <PathGeometry Figures="M60.6 10.7H42.3l-0.2 0c0 0 0 0 0 0l0 0H14.7c-6.9 0.6-10 7.6-7 12.8l17.1 30l0 0l4.9 8.5 
+                              c2.9 5.2 10.9 6.2 14.6 0.3l2.7-4.6c0.8-1.4 0.8-3 0-4.4l-4.1-7.1l-8.6-15.1c-0.2-0.4-0.3-0.7-0.4-1.2c-0.2-0.6-0.2-1.2-0.1-1.8 
+                              c0-0.1 0-0.2 0-0.3c0.2-1.6 1.4-3.1 3-3.8c2.2-1 5 0.1 6.2 2.2l7.7 13.5c1.7 3 6 3 7.7 0L68 23.6C71.3 17.9 67.2 10.7 60.6 10.7z" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LogoEverseText" TargetType="{x:Type Path}">
+        <Setter Property="Fill" Value="{DynamicResource MainGray}" />
+        <Setter Property="Data">
+            <Setter.Value>
+                <PathGeometry Figures="M11.7 49.4v-0.2c0-14.6 10.4-26.1 25.2-26.1c17.3 0 25.2 12.7 25.2 27.3c0 1.1 0 2.4-0.1 3.6H28.6 
+                              c1.4 5.4 5.4 8.2 10.8 8.2c4.2 0 7.5-1.6 11.1-5.1l9.7 8c-4.8 6.1-11.7 10.2-21.7 10.2C22.7 75.4 11.7 64.9 
+                              11.7 49.4z M45.6 45.1  C45 39.5 41.8 36 37 36c-4.6 0-7.8 3.6-8.7 9.1H45.6z
+                              M68.5 37.6h30.3V53H68.5V37.6z
+                              M102 24.2h18.5l9.6 29.2l9.6-29.2h18.2L138 74.5h-16L102 24.2z
+                              M158.5 49.4v-0.2c0-14.6 10.4-26.1 25.2-26.1c17.3 0 25.2 12.7 25.2 27.3c0 1.1 0 2.4-0.1 3.6h-33.4  c1.4 5.4 5.4 8.2
+                              10.8 8.2c4.2 0 7.5-1.6 11.1-5.1l9.7 8c-4.8 6.1-11.7 10.2-21.7 10.2C169.6 75.4 158.5 64.9 158.5 49.4z   
+                              M192.5 45.1c-0.6-5.5-3.9-9.1-8.7-9.1c-4.6 0-7.8 3.6-8.7 9.1H192.5z
+                              M216.4 24.2H234v10.1c2.9-6.8 7.5-11.3 15.8-10.9v18.5h-1.5c-9.1 0-14.3 5.3-14.3 16.8v15.5h-17.5V24.2z
+                              M252.2 67.9l6.6-10.6c5.7 3.8 12 5.7 17.2 5.7c3 0 4.4-0.9 4.4-2.7v-0.2c0-1.9-2.8-2.8-8-4.2 
+                              c-9.9-2.6-17.7-5.9-17.7-16v-0.2c0-10.6 8.5-16.5 20-16.5c7.3 0 14.9 2.1 20.6 5.8l-6 11.1c-5.2-2.9-10.8-4.6-14.8-4.6 
+                              c-2.7 0-4.1 1-4.1 2.4v0.2c0 1.9 2.9 2.9 8.1 4.4c9.9 2.8 17.7 6.2 17.7 15.9v0.2c0 11-8.2 16.7-20.4 16.7 
+                              C267.4 75.3 259.1 72.9 252.2 67.9z
+                              M301.4 49.4v-0.2c0-14.6 10.4-26.1 25.2-26.1c17.3 0 25.2 12.7 25.2 27.3c0 1.1 0 2.4-0.1 3.6h-33.4 
+                              c1.4 5.4 5.4 8.2 10.8 8.2c4.2 0 7.5-1.6 11.1-5.1l9.7 8c-4.8 6.1-11.7 10.2-21.7 10.2C312.5 75.4 301.4 64.9 301.4 49.4z 
+                              M335.4 45.1c-0.6-5.5-3.9-9.1-8.7-9.1c-4.6 0-7.8 3.6-8.7 9.1H335.4z" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary> 

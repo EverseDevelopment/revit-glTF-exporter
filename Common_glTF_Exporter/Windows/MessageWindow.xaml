@@ -55,7 +55,7 @@
                        TextWrapping="Wrap" 
                        LineStackingStrategy="BlockLineHeight" 
                        LineHeight="20"
-                       Foreground="Black"
+                       Foreground="{DynamicResource MainGray}"
                        FontSize="15"
                        TextAlignment="Center"
                        VerticalAlignment="Center">

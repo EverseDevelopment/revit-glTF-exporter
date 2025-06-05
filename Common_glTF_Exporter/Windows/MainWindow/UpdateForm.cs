@@ -70,6 +70,14 @@
                     }
 
                     break;
+                case "MaterialsEnum":
+                    var radioButtonMaterials = controls.Values.OfType<System.Windows.Controls.RadioButton>().FirstOrDefault(t => t.Name.Equals(preferenceType.GetProperty(property.Name).GetValue(preferences).ToString()));
+                    if (radioButtonMaterials != null)
+                    {
+                        radioButtonMaterials.IsChecked = true;
+                    }
+
+                    break;
                 case "Int32":
                     var slider = controls[property.Name] as Slider;
                     if (slider != null)

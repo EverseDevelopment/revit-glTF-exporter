@@ -13,10 +13,10 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<PropertyGroup>
-  		<AssemblyTitle>Revit_glTF_Exporter_2025</AssemblyTitle>
+  		<AssemblyTitle>Revit_glTF_Exporter_2026</AssemblyTitle>
   		<AssemblyDescription></AssemblyDescription>
   		<AssemblyCompany>e-verse</AssemblyCompany>
-  		<AssemblyProduct>Revit_glTF_Exporter_2025</AssemblyProduct>
+  		<AssemblyProduct>Revit_glTF_Exporter_2026</AssemblyProduct>
   		<AssemblyVersion>1.0.0</AssemblyVersion>
   		<FileVersion>1.0.0</FileVersion>
 	</PropertyGroup>
@@ -25,7 +25,7 @@
 		<DebugType>portable</DebugType>
 		<Optimize>false</Optimize>
 		<OutputPath>bin\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2026</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -34,7 +34,7 @@
 	  <DebugType>portable</DebugType>
 	  <Optimize>false</Optimize>
 	  <OutputPath>bin\Debug\</OutputPath>
-	  <DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+	  <DefineConstants>TRACE;DEBUG;REVIT2026</DefineConstants>
 	  <ErrorReport>prompt</ErrorReport>
 	  <WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -43,7 +43,7 @@
 		<DebugType>portable</DebugType>
 		<Optimize>false</Optimize>
 		<OutputPath>bin\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2026</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -51,7 +51,7 @@
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
 		<OutputPath>bin\Release\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2026</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -59,7 +59,7 @@
 	  <DebugType>none</DebugType>
 	  <Optimize>true</Optimize>
 	  <OutputPath>bin\Release\</OutputPath>
-	  <DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+	  <DefineConstants>TRACE;DEBUG;REVIT2026</DefineConstants>
 	  <ErrorReport>prompt</ErrorReport>
 	  <WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -67,7 +67,7 @@
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
 		<OutputPath>bin\Release\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2026</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -75,7 +75,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2025.0.0" />
+		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2026.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
 		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
 	</ItemGroup>

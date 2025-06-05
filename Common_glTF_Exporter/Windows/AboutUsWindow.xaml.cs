@@ -16,6 +16,7 @@
         {
             this.InitializeComponent();
             this.DataContext = this;
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)

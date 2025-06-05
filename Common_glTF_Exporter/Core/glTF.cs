@@ -9,6 +9,7 @@ namespace Revit_glTF_Exporter
     /// </summary>
     public enum Targets
     {
+        NONE = 0,
         ARRAY_BUFFER = 34962, // signals vertex data
         ELEMENT_ARRAY_BUFFER = 34963, // signals index or face data
     }
@@ -34,6 +35,7 @@ namespace Revit_glTF_Exporter
     public struct GLTF
     {
         public GLTFVersion asset;
+        public List<string> extensionsUsed;
         public List<GLTFScene> scenes;
         public List<GLTFNode> nodes;
         public List<GLTFMesh> meshes;
@@ -41,5 +43,7 @@ namespace Revit_glTF_Exporter
         public List<GLTFBufferView> bufferViews;
         public List<GLTFAccessor> accessors;
         public List<GLTFMaterial> materials;
+        public List<GLTFTexture> textures;
+        public List<GLTFImage> images;
     }
 }

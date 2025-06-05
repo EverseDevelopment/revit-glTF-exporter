@@ -22,6 +22,7 @@ namespace Revit_glTF_Exporter
             _fileVersion = fileVersion;
             InitializeComponent();
             labelMessage.Text = labelMessage.Text + fileVersion + " is Ready";
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
         }
 
         private async void Button_ClickAsync(object sender, RoutedEventArgs e)

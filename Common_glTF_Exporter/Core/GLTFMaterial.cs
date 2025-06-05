@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Newtonsoft.Json;
     using Revit_glTF_Exporter;
 
     /// <summary>
@@ -20,5 +21,13 @@
         public GLTFPBR pbrMetallicRoughness { get; set; }
 
         public bool doubleSided { get; set; }
+
+        public GLTFTexture normalTexture { get; set; }
+        public GLTFTexture occlusionTexture { get; set; }
+        public GLTFTexture emissiveTexture { get; set; }
+        public List<float> emissiveFactor { get; set; }
+
+        [JsonIgnore]
+        public string EmbeddedTexturePath { get; set; } = null;
     }
 }

@@ -9,6 +9,7 @@
     <Import_RootNamespace>Common_glTF_Exporter</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFPBR.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFExtras.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFAccessor.cs" />
@@ -20,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMesh.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFTextureInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
@@ -49,6 +51,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\RevitCollectorService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\UIApplicationExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelRotation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Analytics.cs" />
@@ -59,6 +63,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Theme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\InternetConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\LatestVersion.cs" />
@@ -108,18 +113,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Images\e-verse-isologo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Images\e-verse-logo-1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Images\Heart.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Images\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="$(MSBuildThisFileDirectory)PackageContents.xml" />
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Black.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -133,9 +126,6 @@
     <Resource Include="$(MSBuildThisFileDirectory)Fonts\NeuzeitGrotesk-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Content Include="$(MSBuildThisFileDirectory)Images\gltf.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="$(MSBuildThisFileDirectory)Leia_glTF_Exporter.addin">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>

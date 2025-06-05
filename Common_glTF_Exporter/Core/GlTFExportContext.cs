@@ -1,15 +1,15 @@
-namespace Revit_glTF_Exporter
+﻿namespace Common_glTF_Exporter.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.Revit.DB;
-    using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Export;
     using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Transform;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using Revit_glTF_Exporter;
     using Transform = Autodesk.Revit.DB.Transform;
 
     /// <summary>
@@ -18,6 +18,10 @@ namespace Revit_glTF_Exporter
     public class GLTFExportContext : IExportContext
     {
         public static bool cancelation { get; set; } = false;
+
+        private Face currentFace;
+        private GLTFMaterial currentMaterial;
+
 
         /// <summary>
         /// Gets a stateful, uuid indexable list for all nodes in the export.
@@ -29,22 +33,17 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
 
-        private Document doc
-        {
-            get
-            {
-                if (documents.Count == 1)
-                {
-                    // normal document
-                    return documents[0];
-                }
-                else
-                {
-                    // link document
-                    return documents[1];
-                }
-            }
-        }
+        /// <summary>
+        /// Gets a list of all textures in the export.
+        /// </summary>
+        public List<GLTFTexture> textures { get; } = new List<GLTFTexture>();
+
+        /// <summary>
+        /// Gets a list of all images in the export.
+        /// </summary>
+        public List<GLTFImage> images { get; } = new List<GLTFImage>();
+
+        private Document Currentdocument;
 
         private bool skipElementFlag = false;
         private Element element;
@@ -67,6 +66,10 @@ namespace Revit_glTF_Exporter
         /// </summary>
         private GLTFNode rootNode;
 
+        private GLTFNode currentNode;
+
+        private Element currentElement;
+
         /// <summary>
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
         /// processed, keyed by material. This is re-initialized on each new element.
@@ -81,15 +84,10 @@ namespace Revit_glTF_Exporter
 
         private Stack<Transform> transformStack = new Stack<Transform>();
 
-        /// <summary>
-        /// container for the documents
-        /// </summary>
-        List<Document> documents = new List<Document>();
-
         public GLTFExportContext(Document doc)
         {
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
-            documents.Add(doc);
+            Currentdocument = doc;
             view = doc.ActiveView;
         }
 
@@ -154,7 +152,7 @@ namespace Revit_glTF_Exporter
             rootNode.name = "rootNode";
             rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
             rootNode.scale = ModelScale.Get(preferences);
-            rootNode.translation = ModelTraslation.GetPointToRelocate(doc, rootNode.scale[0], 
+            rootNode.translation = ModelTraslation.GetPointToRelocate(Currentdocument, rootNode.scale[0], 
                 preferences, isRFA);
             rootNode.children = new List<int>();
 
@@ -180,13 +178,15 @@ namespace Revit_glTF_Exporter
 
             if (preferences.grids)
             {
-                RevitGrids.Export(doc, ref nodes, ref rootNode, preferences);
+                RevitGrids.Export(Currentdocument, ref nodes, ref rootNode, preferences);
             }
 
-            FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
-                scenes, nodes, meshes, materials, accessors);
-
-            Compression.Run(preferences, ProgressBarWindow.ViewModel);
+            if (bufferViews.Count != 0)
+            {
+                FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
+                    scenes, nodes, meshes, materials, accessors, textures, images);
+                Compression.Run(preferences, ProgressBarWindow.ViewModel);
+            }
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Revit_glTF_Exporter
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            element = doc.GetElement(elementId);
+            element = Currentdocument.GetElement(elementId);
 
             if (!Util.CanBeLockOrHidden(element, view, isRFA) ||
                 (element is Level && !preferences.levels))
@@ -225,8 +225,8 @@ namespace Revit_glTF_Exporter
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
-
             newNode.name = Util.ElementDescription(element);
+            currentElement = element;
 
             if (preferences.properties)
             {
@@ -237,8 +237,8 @@ namespace Revit_glTF_Exporter
                 if (element.Category != null)
                 {
                     extras.elementCategory = element.Category.Name;
-                }  
-                #if REVIT2024
+                }
+                #if REVIT2024 || REVIT2025 || REVIT2026
                 extras.elementId = element.Id.Value;
                 #else
                 extras.elementId = element.Id.IntegerValue;
@@ -246,13 +246,8 @@ namespace Revit_glTF_Exporter
 
                 newNode.extras = extras;
             }
-            
 
-
-            nodes.AddOrUpdateCurrent(element.UniqueId, newNode);
-
-            // add the index of this node to our root node children array
-            rootNode.children.Add(nodes.CurrentIndex);
+            currentNode = newNode;
 
             // Reset _currentGeometry for new element
             if (currentGeometry == null)
@@ -284,9 +279,9 @@ namespace Revit_glTF_Exporter
         /// <param name="node">Material node.</param>
         public void OnMaterial(MaterialNode node)
         {
-            if (preferences.materials)
+            if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                RevitMaterials.Export(node, doc, ref materials);
+                currentMaterial = RevitMaterials.Export(node, ref materials, preferences, Currentdocument);
             }
         }
 
@@ -299,9 +294,8 @@ namespace Revit_glTF_Exporter
         /// <param name="polymesh">PolymeshTopology.</param>
         public void OnPolymesh(PolymeshTopology polymesh)
         {
-            GLTFExportUtils.AddOrUpdateCurrentItem(nodes, currentGeometry, currentVertices, materials);
+            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
 
-            // populate current vertices vertex data and current geometry faces data
             IList<XYZ> pts = polymesh.GetPoints();
             pts = pts.Select(p => CurrentTransform.OfPoint(p)).ToList();
 
@@ -309,8 +303,34 @@ namespace Revit_glTF_Exporter
             {
                 foreach (int index in facet.GetVertices())
                 {
-                    int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(pts[index]));
+                    XYZ vertex = pts[index];
+                    int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(vertex));
                     currentGeometry.CurrentItem.Faces.Add(vertexIndex);
+     
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
+                    {
+                        // ✅ Compute UV from face
+                        if (currentFace != null)
+                        {
+                            IntersectionResult projection = currentFace.Project(vertex);
+                            if (projection != null)
+                            {
+                                UV uv = projection.UVPoint;
+                                UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
+                                currentGeometry.CurrentItem.Uvs.Add(uvInMeters);
+                            }
+                            else
+                            {
+                                // Fallback: use dummy UVs if projection fails
+                                currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
+                            }
+                        }
+                        else
+                        {
+                            // If no face is available (shouldn't happen), add dummy UV
+                            currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
+                        }
+                    }
                 }
             }
 
@@ -331,7 +351,7 @@ namespace Revit_glTF_Exporter
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            element = doc.GetElement(elementId);
+            element = Currentdocument.GetElement(elementId);
 
             if (currentVertices == null || !currentVertices.List.Any())
             {
@@ -349,6 +369,9 @@ namespace Revit_glTF_Exporter
             {
                 return;
             }
+
+            nodes.AddOrUpdateCurrent(element.UniqueId, currentNode);
+            rootNode.children.Add(nodes.CurrentIndex);
 
             // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives
             // on mesh)
@@ -375,23 +398,59 @@ namespace Revit_glTF_Exporter
             // Convert _currentGeometry objects into glTFMeshPrimitives
             foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
             {
+                string material_key = kvp.Key.Split(UNDERSCORE)[1];
+                GLTFMaterial mat;
+                if (material_key == "")
+                {
+                   mat = currentMaterial;
+                }
+                else
+                {
+                    bool hasValidUVs = kvp.Value.Uvs.Count != 0;
+                    GLTFMaterial currentMat = materials.GetElement(material_key);
+
+                    int vertexCount = kvp.Value.Vertices.Count / 3;
+                    if (!hasValidUVs)
+                    {
+                        
+                        for (int i = 0; i < vertexCount; i++)
+                        {
+                            kvp.Value.Uvs.Add(new UV(0, 0));
+                        }
+                    }
+
+                    if (vertexCount != kvp.Value.Uvs.Count)
+                    {
+                        int difference = vertexCount - kvp.Value.Uvs.Count;
+                        for (int i = 0; i < difference; i++)
+                        {
+                            kvp.Value.Uvs.Add(new UV(0, 0));
+                        }
+                    }
+
+                    mat = currentMat;
+
+                }
+
                 GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
                     buffers,
                     accessors,
                     bufferViews,
                     kvp.Value,
                     kvp.Key,
-                    #if REVIT2024
+                    #if REVIT2024 || REVIT2025 || REVIT2026
                     elementId.Value,
                     #else
                     elementId.IntegerValue,
                     #endif
-                    preferences.batchId,
-                    preferences.normals);
+                    preferences,
+                    mat,
+                    images,
+                    textures);
 
                 binaryFileData.Add(elementBinary);
 
-                string material_key = kvp.Key.Split(UNDERSCORE)[1];
+                
                 GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
@@ -405,10 +464,17 @@ namespace Revit_glTF_Exporter
                 {
                     primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 }
+       
+                if (elementBinary.uvAccessorIndex != -1 && 
+                    preferences.materials == MaterialsEnum.textures && 
+                    mat.EmbeddedTexturePath != null)
+                {
+                    primitive.attributes.TEXCOORD_0 = elementBinary.uvAccessorIndex;
+                }          
 
                 primitive.indices = elementBinary.indexAccessorIndex;
 
-                if (preferences.materials)
+                if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
                 {
                     if (materials.Contains(material_key))
                     {
@@ -470,8 +536,8 @@ namespace Revit_glTF_Exporter
         public RenderNodeAction OnLinkBegin(LinkNode node)
         {
             isLink = true;
-            
-            documents.Add(node.GetDocument());
+
+            Currentdocument = node.GetDocument();
 
             transformStack.Push(CurrentTransform.Multiply(linkTransformation));
             linkOriginalTranformation = new Transform(CurrentTransform);
@@ -486,7 +552,7 @@ namespace Revit_glTF_Exporter
             // Note: This method is invoked even for instances that were skipped.
             transformStack.Pop();
 
-            documents.RemoveAt(1); // remove the item added in OnLinkBegin
+            Currentdocument = ExternalApplication.RevitCollectorService.GetDocument();
         }
 
         public RenderNodeAction Begin(FaceNode node)
@@ -496,12 +562,12 @@ namespace Revit_glTF_Exporter
 
         public void OnFaceEnd(FaceNode node)
         {
-            // This method is invoked only if the custom exporter was set to include faces.
+            currentFace = null;
         }
 
         public void OnRPC(RPCNode node)
         {
-            var meshes = GeometryUtils.GetMeshes(doc, element);
+            var meshes = GeometryUtils.GetMeshes(Currentdocument, element);
             if (!meshes.Any())
             {
                 return;
@@ -515,9 +581,9 @@ namespace Revit_glTF_Exporter
                     continue;
                 }
 
-                MaterialUtils.SetMaterial(doc, preferences, mesh, materials, true);
+                MaterialUtils.SetMaterial(Currentdocument, preferences, mesh, materials, true);
 
-                GLTFExportUtils.AddOrUpdateCurrentItem(nodes, currentGeometry, currentVertices, materials);
+                GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
 
                 for (int i = 0; i < triangles; i++)
                 {
@@ -560,6 +626,7 @@ namespace Revit_glTF_Exporter
 
         public RenderNodeAction OnFaceBegin(FaceNode node)
         {
+            currentFace = node.GetFace();
             return RenderNodeAction.Proceed;
         }
     }

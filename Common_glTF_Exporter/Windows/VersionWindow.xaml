@@ -55,7 +55,7 @@
                        TextWrapping="Wrap" 
                        LineStackingStrategy="BlockLineHeight" 
                        LineHeight="20"
-                       Foreground="Black"
+                       Foreground="{DynamicResource MainGray}"
                        FontSize="15"
                        TextAlignment="Center"
                        VerticalAlignment="Center">
@@ -75,11 +75,14 @@
                     Click="Version_Link"
                     FontWeight="Light"
                     FontSize="12"     
-                    Foreground="Black"
-                    VerticalAlignment="Top" Height="22">
+                    Foreground="{DynamicResource MainGray}"
+                    VerticalAlignment="Top" 
+                    Height="22">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"  Background="Transparent" Margin="0,0,3,0">
+                        <Border x:Name="border"  
+                                Background="Transparent"
+                                Margin="0,0,3,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="243*"/>
@@ -89,7 +92,8 @@
                                     Text="Check What's New" 
                                     Margin="4,1,0,-1"
                                     FontWeight="Light"
-                                    TextDecorations="Underline" Grid.ColumnSpan="2"/>
+                                    TextDecorations="Underline" 
+                                    Grid.ColumnSpan="2"/>
 
                             </Grid>
                         </Border>

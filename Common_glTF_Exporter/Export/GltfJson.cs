@@ -20,9 +20,11 @@ namespace Common_glTF_Exporter.Export
             List<GLTFBuffer> buffers,
             List<GLTFBufferView> bufferViews,
             List<GLTFAccessor> accessors,
+            List<GLTFTexture> textures,
+            List<GLTFImage> images,
             Preferences preferences)
         {
-            // Package the properties into a serializable container
+
             GLTF model = new GLTF
             {
                 asset = new GLTFVersion(),
@@ -31,9 +33,27 @@ namespace Common_glTF_Exporter.Export
                 meshes = meshes,
             };
 
+            if (preferences.materials == MaterialsEnum.textures)
+            {
+                model.extensionsUsed = new List<string> { "KHR_texture_transform" };
+            }
+
             if (materials.Any())
             {
                 model.materials = materials;
+            }
+
+            if (preferences.materials == MaterialsEnum.textures)
+            {
+                if (textures.Any())
+                {
+                    model.textures = textures;
+                }
+
+                if (images.Any())
+                {
+                    model.images = images;
+                }
             }
 
             model.buffers = buffers;
@@ -44,17 +64,6 @@ namespace Common_glTF_Exporter.Export
             string serializedModel = JsonConvert.SerializeObject(
                 model,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-
-            if (!preferences.batchId)
-            {
-                serializedModel = serializedModel.Replace(",\"_BATCHID\":0", string.Empty);
-            }
-
-            if (!preferences.normals)
-            {
-                serializedModel = serializedModel.Replace(",\"NORMAL\":0", string.Empty);
-            }
 
             return serializedModel;
         }

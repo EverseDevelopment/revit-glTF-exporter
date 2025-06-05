@@ -16,9 +16,16 @@
         glb,
     }
 
+    public enum MaterialsEnum
+    {
+        textures,
+        materials,
+        nonematerials
+    }
+
     public class Preferences
     {
-        public bool materials { get; set; }
+        public MaterialsEnum materials { get; set; }
 
         public FormatEnum format { get; set; }
 

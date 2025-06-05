@@ -9,5 +9,9 @@
         public float metallicFactor { get; set; }
 
         public float roughnessFactor { get; set; }
+
+        // Texture properties
+        public GLTFTextureInfo baseColorTexture { get; set; }
+        public GLTFTexture metallicRoughnessTexture { get; set; }
     }
 }
