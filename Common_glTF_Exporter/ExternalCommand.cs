@@ -31,7 +31,7 @@
                     return Result.Succeeded;
                 }
 
-                MainWindow mainWindow = new MainWindow(doc, view);
+                MainWindow mainWindow = new MainWindow(view);
                 mainWindow.ShowDialog();
 
                 return Result.Succeeded;

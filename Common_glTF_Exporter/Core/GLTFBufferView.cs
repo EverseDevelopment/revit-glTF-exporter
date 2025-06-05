@@ -1,10 +1,11 @@
 ﻿namespace Common_glTF_Exporter.Core
 {
+    using Newtonsoft.Json;
     using Revit_glTF_Exporter;
 
     /// <summary>
-    /// A reference to a subsection of a buffer containing either vector or scalar data
-    /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#buffers-and-buffer-views.
+    /// A reference to a subsection of a buffer containing either vector or scalar data.
+    /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#buffers-and-buffer-views
     /// </summary>
     public class GLTFBufferView
     {
@@ -17,29 +18,38 @@
             this.name = name;
         }
 
-        /// <summary>
-        /// Gets or sets the index of the buffer.
-        /// </summary>
+        [JsonProperty("buffer")]
         public int buffer { get; set; }
 
-        /// <summary>
-        /// Gets or sets the offset into the buffer in bytes.
-        /// </summary>
+        [JsonProperty("byteOffset")]
         public int byteOffset { get; set; }
 
-        /// <summary>
-        /// Gets or sets the length of the bufferView in bytes.
-        /// </summary>
+        [JsonProperty("byteLength")]
         public int byteLength { get; set; }
 
-        /// <summary>
-        /// Gets or sets the target that the GPU buffer should be bound to.
-        /// </summary>
+        [JsonIgnore] // Ignore the raw enum field so we can customize serialization
         public Targets target { get; set; }
 
-        /// <summary>
-        /// Gets or sets a user defined name for this view.
-        /// </summary>
+        [JsonProperty("target")]
+        public int? TargetValue
+        {
+            get
+            {
+                if (target == Targets.ARRAY_BUFFER)
+                    return 34962;
+                else if (target == Targets.ELEMENT_ARRAY_BUFFER)
+                    return 34963;
+                else
+                    return null;
+            }
+        }
+
+        public bool ShouldSerializeTargetValue()
+        {
+            return TargetValue != null;
+        }
+
+        [JsonProperty("name")]
         public string name { get; set; }
     }
 }

@@ -11,7 +11,7 @@
 
     public static class SettingsConfig
     {
-#if REVIT2025
+#if REVIT2025 || REVIT2026
         
         private static string programDataLocation = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
         private static string appSettingsFile = string.Concat(programDataLocation, "\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents\\2025\\Leia_glTF_Exporter.dll.config");

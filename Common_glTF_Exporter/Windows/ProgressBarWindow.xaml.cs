@@ -5,6 +5,7 @@
     using System.Windows.Input;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
+    using Common_glTF_Exporter.Core;
 
     /// <summary>
     /// Progress Bar Window.
@@ -16,6 +17,7 @@
             this.InitializeComponent();
             MainView = this;
             this.DataContext = this;
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
         }
 
         public static MainWindow mainWin;

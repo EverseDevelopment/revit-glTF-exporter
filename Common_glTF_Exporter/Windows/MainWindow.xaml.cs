@@ -8,12 +8,15 @@
     using System.Windows.Controls;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using Autodesk.Internal.Windows;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Common_glTF_Exporter;
+    using Common_glTF_Exporter.Core;
     using Common_glTF_Exporter.Utils;
     using Common_glTF_Exporter.ViewModel;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using Theme = Common_glTF_Exporter.Utils.Theme;
     using View = Autodesk.Revit.DB.View;
 
     /// <summary>
@@ -22,13 +25,14 @@
     /// 
     public partial class MainWindow : Window
     {
+        private Document doc;
 
-
-    public MainWindow(Document doc, View view)
+        public MainWindow(View view)
         {
             this.UnitsViewModel = new UnitsViewModel();
             this.DataContext = this.UnitsViewModel;
             MainView = this;
+            doc = ExternalApplication.RevitCollectorService.GetDocument();
 
             this.InitializeComponent();
 
@@ -37,6 +41,8 @@
 
             UpdateForm.Run(this.MainWindow_Border);
             LabelVersion.Update(this.UnitsViewModel);
+
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
 
             Analytics.Send("Open", "Main Window").GetAwaiter();
         }
@@ -65,7 +71,6 @@
             SettingsConfig.SetValue("path", directory);
             SettingsConfig.SetValue("fileName", nameOnly);
 
-            Document doc = exportView.Document;
             List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
 
             bool isRFA = IsDocumentRFA.Check(doc);
@@ -93,7 +98,7 @@
             #if REVIT2019
             exporter.Export(exportView);
             #else
-            exporter.Export(exportView as View);
+           exporter.Export(exportView as View);
             #endif
 
             Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();
@@ -138,6 +143,14 @@
             SettingsConfig.SetValue(key, value);
         }
 
+        private void RadioButtonMaterialsClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;
+            string value = button.Name;
+            string key = "materials";
+            SettingsConfig.SetValue(key, value);
+        }
+        
         private void RadioButtonFormatClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.RadioButton button = sender as System.Windows.Controls.RadioButton;

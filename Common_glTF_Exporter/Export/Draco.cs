@@ -32,7 +32,7 @@ namespace Common_glTF_Exporter.Export
                 files.Add(fileToCompress);
             }
 
-            #if REVIT2025
+            #if REVIT2025 || REVIT2026
 
             var loadContext = new NonCollectibleAssemblyLoadContext();
 
@@ -62,7 +62,7 @@ namespace Common_glTF_Exporter.Export
             var encodeSceneToFileMethod = gltfEncoderType.GetMethod("EncodeSceneToFile");
             encodeSceneToFileMethod.Invoke(gltfEncoderInstance, new object[] { scene, fileToCompressTemp });
 
-            #else
+#else
 
             var decoder = new GltfDecoder();
             var res = decoder.DecodeFromFileToScene(fileToCompress);
