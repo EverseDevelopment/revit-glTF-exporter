@@ -77,14 +77,17 @@ namespace Common_glTF_Exporter.Export
                         float scaleX = GetScale(connectedAsset, "texture_RealWorldScaleX");
                         float scaleY = GetScale(connectedAsset, "texture_RealWorldScaleY");
 
+                        float rotation = GetRotationRadians(connectedAsset);
+
                         gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
                         {
-                            index = -1, // This will be correctly updated in `AddGeometryMeta`
+                            index = -1,
                             extensions = new GLTFTextureExtensions
                             {
                                 TextureTransform = new GLTFTextureTransform
                                 {
-                                    scale = new float[] { 1f / scaleX, 1f / scaleY } // Or whatever scale fits your model's original UVs
+                                    scale = new float[] { 1f / scaleX, 1f / scaleY },
+                                    rotation = rotation
                                 }
                             }
                         };
@@ -130,6 +133,7 @@ namespace Common_glTF_Exporter.Export
 
         /// <summary>
         /// Extracts the texture path from the material’s AppearanceAsset, if present.
+        /// Tries "opaque_albedo" first, then iterates over all properties to find a connected asset.
         /// </summary>
         private static Asset TryGetConnectedAsset(Material material, Document doc)
         {
@@ -142,12 +146,26 @@ namespace Common_glTF_Exporter.Export
                 return null;
 
             Asset theAsset = appearanceElem.GetRenderingAsset();
-            AssetProperty prop = theAsset.FindByName("opaque_albedo");
 
+            // First try "opaque_albedo"
+            AssetProperty prop = theAsset.FindByName("opaque_albedo");
             if (prop != null && prop.NumberOfConnectedProperties > 0)
             {
                 Asset connectedAsset = prop.GetSingleConnectedAsset();
-                return connectedAsset;
+                if (connectedAsset != null)
+                    return connectedAsset;
+            }
+
+            // Fallback: search all properties for first connected asset
+            for (int i = 0; i < theAsset.Size; i++)
+            {
+                var ap = theAsset[i];
+                if (ap.NumberOfConnectedProperties == 1)
+                {
+                    var connectedAsset = ap.GetSingleConnectedAsset();
+                    if (connectedAsset != null)
+                        return connectedAsset;
+                }
             }
 
             return null;
@@ -159,7 +177,7 @@ namespace Common_glTF_Exporter.Export
             {
                 var bitmapPathProp = connectedAsset.FindByName("unifiedbitmap_Bitmap") as AssetPropertyString;
 
-                if (bitmapPathProp != null)
+                if (bitmapPathProp != null && !string.IsNullOrEmpty(bitmapPathProp.Value))
                 {
                     string texturePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
 
@@ -188,6 +206,20 @@ namespace Common_glTF_Exporter.Export
             }
 
             return 1;
+        }
+
+        private static float GetRotationRadians(Asset connectedAsset)
+        {
+            // In Revit, rotation is usually in degrees
+            AssetPropertyDouble rotation = connectedAsset.FindByName("texture_WAngle") as AssetPropertyDouble;
+
+            if (rotation != null)
+            {
+                // Convert degrees to radians for glTF
+                return (float)(rotation.Value * Math.PI / 180.0);
+            }
+
+            return 0f;
         }
     }
 

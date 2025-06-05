@@ -11,7 +11,7 @@
              Background="{x:Null}"
              mc:Ignorable="d" 
              Width="380" 
-             Height="870"
+             Height="890"
              Title="glTF Exporter Settings"
              ResizeMode="NoResize"
              Topmost="True"
@@ -215,7 +215,7 @@
                              Margin="{DynamicResource RadioButtonMargin}"/>
                     
                     <RadioButton x:Name="materials" 
-                             Content="Materials" 
+                             Content="Colors" 
                              Click="RadioButtonMaterialsClick" 
                              Margin="{DynamicResource RadioButtonMargin}"/>
                     

@@ -43,22 +43,7 @@
         /// </summary>
         public List<GLTFImage> images { get; } = new List<GLTFImage>();
 
-        private Document doc
-        {
-            get
-            {
-                if (documents.Count == 1)
-                {
-                    // normal document
-                    return documents[0];
-                }
-                else
-                {
-                    // link document
-                    return documents[1];
-                }
-            }
-        }
+        private Document Currentdocument;
 
         private bool skipElementFlag = false;
         private Element element;
@@ -99,15 +84,10 @@
 
         private Stack<Transform> transformStack = new Stack<Transform>();
 
-        /// <summary>
-        /// container for the documents
-        /// </summary>
-        List<Document> documents = new List<Document>();
-
         public GLTFExportContext(Document doc)
         {
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
-            documents.Add(doc);
+            Currentdocument = doc;
             view = doc.ActiveView;
         }
 
@@ -172,7 +152,7 @@
             rootNode.name = "rootNode";
             rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
             rootNode.scale = ModelScale.Get(preferences);
-            rootNode.translation = ModelTraslation.GetPointToRelocate(doc, rootNode.scale[0], 
+            rootNode.translation = ModelTraslation.GetPointToRelocate(Currentdocument, rootNode.scale[0], 
                 preferences, isRFA);
             rootNode.children = new List<int>();
 
@@ -198,7 +178,7 @@
 
             if (preferences.grids)
             {
-                RevitGrids.Export(doc, ref nodes, ref rootNode, preferences);
+                RevitGrids.Export(Currentdocument, ref nodes, ref rootNode, preferences);
             }
 
             if (bufferViews.Count != 0)
@@ -217,7 +197,7 @@
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            element = doc.GetElement(elementId);
+            element = Currentdocument.GetElement(elementId);
 
             if (!Util.CanBeLockOrHidden(element, view, isRFA) ||
                 (element is Level && !preferences.levels))
@@ -301,7 +281,7 @@
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                currentMaterial = RevitMaterials.Export(node, ref materials, preferences, doc);
+                currentMaterial = RevitMaterials.Export(node, ref materials, preferences, Currentdocument);
             }
         }
 
@@ -326,9 +306,8 @@
                     XYZ vertex = pts[index];
                     int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(vertex));
                     currentGeometry.CurrentItem.Faces.Add(vertexIndex);
-
-                  
-                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.pbrMetallicRoughness?.baseColorTexture != null)
+     
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
                     {
                         // ✅ Compute UV from face
                         if (currentFace != null)
@@ -372,7 +351,7 @@
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            element = doc.GetElement(elementId);
+            element = Currentdocument.GetElement(elementId);
 
             if (currentVertices == null || !currentVertices.List.Any())
             {
@@ -430,21 +409,27 @@
                     bool hasValidUVs = kvp.Value.Uvs.Count != 0;
                     GLTFMaterial currentMat = materials.GetElement(material_key);
 
-                    if (currentMat.EmbeddedTexturePath == null)
+                    int vertexCount = kvp.Value.Vertices.Count / 3;
+                    if (!hasValidUVs)
                     {
-                        mat = currentMat;
-                    }
-                    else
-                    {
-                        if (hasValidUVs)
+                        
+                        for (int i = 0; i < vertexCount; i++)
                         {
-                            mat = currentMat;
-                        }
-                        else
-                        {
-                            mat = RevitMaterials.CloneWithoutTexture(materials.GetElement(material_key));
+                            kvp.Value.Uvs.Add(new UV(0, 0));
                         }
                     }
+
+                    if (vertexCount != kvp.Value.Uvs.Count)
+                    {
+                        int difference = vertexCount - kvp.Value.Uvs.Count;
+                        for (int i = 0; i < difference; i++)
+                        {
+                            kvp.Value.Uvs.Add(new UV(0, 0));
+                        }
+                    }
+
+                    mat = currentMat;
+
                 }
 
                 GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
@@ -482,7 +467,7 @@
        
                 if (elementBinary.uvAccessorIndex != -1 && 
                     preferences.materials == MaterialsEnum.textures && 
-                    mat.pbrMetallicRoughness?.baseColorTexture != null)
+                    mat.EmbeddedTexturePath != null)
                 {
                     primitive.attributes.TEXCOORD_0 = elementBinary.uvAccessorIndex;
                 }          
@@ -551,8 +536,8 @@
         public RenderNodeAction OnLinkBegin(LinkNode node)
         {
             isLink = true;
-            
-            documents.Add(node.GetDocument());
+
+            Currentdocument = node.GetDocument();
 
             transformStack.Push(CurrentTransform.Multiply(linkTransformation));
             linkOriginalTranformation = new Transform(CurrentTransform);
@@ -567,7 +552,7 @@
             // Note: This method is invoked even for instances that were skipped.
             transformStack.Pop();
 
-            documents.RemoveAt(1); // remove the item added in OnLinkBegin
+            Currentdocument = ExternalApplication.RevitCollectorService.GetDocument();
         }
 
         public RenderNodeAction Begin(FaceNode node)
@@ -582,7 +567,7 @@
 
         public void OnRPC(RPCNode node)
         {
-            var meshes = GeometryUtils.GetMeshes(doc, element);
+            var meshes = GeometryUtils.GetMeshes(Currentdocument, element);
             if (!meshes.Any())
             {
                 return;
@@ -596,7 +581,7 @@
                     continue;
                 }
 
-                MaterialUtils.SetMaterial(doc, preferences, mesh, materials, true);
+                MaterialUtils.SetMaterial(Currentdocument, preferences, mesh, materials, true);
 
                 GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
 
