@@ -1,4 +1,4 @@
-﻿namespace Common_glTF_Exporter.Export
+namespace Common_glTF_Exporter.Export
 {
     using System;
     using System.Collections.Generic;
@@ -26,13 +26,11 @@
         /// </summary>
         public static GLTFMaterial Export(MaterialNode node,
             ref IndexedDictionary<GLTFMaterial> materials,
-            Preferences preferences)
+            Preferences preferences, Document doc)
         {
             ElementId id = node.MaterialId;
             GLTFMaterial gl_mat = new GLTFMaterial();
             float opacity = ONEINTVALUE - (float)node.Transparency;
-
-            Document doc = ExternalApplication.RevitCollectorService.GetDocument();
 
             if (id != ElementId.InvalidElementId)
             {
@@ -42,6 +40,12 @@
                 if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
                 {
                     material = doc.GetElement(node.MaterialId) as Material;
+
+                    if (material == null)
+                    {
+                        return gl_mat;
+                    }
+
                     gl_mat.name = material.Name;
                     uniqueId = material.UniqueId;
                     MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
@@ -89,6 +93,19 @@
 
                 materials.AddOrUpdateCurrentMaterial(uniqueId, gl_mat, false);
             }
+
+            return gl_mat;
+        }
+
+        public static GLTFMaterial CloneWithoutTexture(GLTFMaterial original)
+        {
+            GLTFMaterial gl_mat = new GLTFMaterial();
+            gl_mat.name = original.name;
+            gl_mat.pbrMetallicRoughness = original.pbrMetallicRoughness;
+            gl_mat.pbrMetallicRoughness.baseColorTexture = null;
+            gl_mat.EmbeddedTexturePath = null;
+            gl_mat.alphaMode =  original.alphaMode;
+            gl_mat.alphaCutoff = original.alphaCutoff;
 
             return gl_mat;
         }

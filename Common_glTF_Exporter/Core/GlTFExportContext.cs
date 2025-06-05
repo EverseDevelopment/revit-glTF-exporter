@@ -301,7 +301,7 @@
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                currentMaterial = RevitMaterials.Export(node, ref materials, preferences);
+                currentMaterial = RevitMaterials.Export(node, ref materials, preferences, doc);
             }
         }
 
@@ -391,7 +391,6 @@
                 return;
             }
 
-
             nodes.AddOrUpdateCurrent(element.UniqueId, currentNode);
             rootNode.children.Add(nodes.CurrentIndex);
 
@@ -421,7 +420,32 @@
             foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
             {
                 string material_key = kvp.Key.Split(UNDERSCORE)[1];
-                GLTFMaterial mat = materials.GetElement(material_key);
+                GLTFMaterial mat;
+                if (material_key == "")
+                {
+                   mat = currentMaterial;
+                }
+                else
+                {
+                    bool hasValidUVs = kvp.Value.Uvs.Count != 0;
+                    GLTFMaterial currentMat = materials.GetElement(material_key);
+
+                    if (currentMat.EmbeddedTexturePath == null)
+                    {
+                        mat = currentMat;
+                    }
+                    else
+                    {
+                        if (hasValidUVs)
+                        {
+                            mat = currentMat;
+                        }
+                        else
+                        {
+                            mat = RevitMaterials.CloneWithoutTexture(materials.GetElement(material_key));
+                        }
+                    }
+                }
 
                 GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
                     buffers,

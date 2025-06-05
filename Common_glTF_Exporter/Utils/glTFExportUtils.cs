@@ -126,7 +126,7 @@
             }  
 
             if (preferences.materials == MaterialsEnum.textures &&
-                material.pbrMetallicRoughness?.baseColorTexture != null)
+                material.pbrMetallicRoughness?.baseColorTexture != null && geomData.Uvs.Count != 0)
             {
                 byteOffset = GLTFBinaryDataUtils.ExportImageBuffer(bufferIdx, byteOffset, material, images, textures, bufferData, bufferViews);
                 byteOffset = GLTFBinaryDataUtils.ExportUVs(bufferIdx, byteOffset, geomData, bufferData, bufferViews, accessors);
