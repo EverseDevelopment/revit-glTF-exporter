@@ -100,19 +100,6 @@ namespace Common_glTF_Exporter.Export
             return gl_mat;
         }
 
-        public static GLTFMaterial CloneWithoutTexture(GLTFMaterial original)
-        {
-            GLTFMaterial gl_mat = new GLTFMaterial();
-            gl_mat.name = original.name;
-            gl_mat.pbrMetallicRoughness = original.pbrMetallicRoughness;
-            gl_mat.pbrMetallicRoughness.baseColorTexture = null;
-            gl_mat.EmbeddedTexturePath = null;
-            gl_mat.alphaMode =  original.alphaMode;
-            gl_mat.alphaCutoff = original.alphaCutoff;
-
-            return gl_mat;
-        }
-
         private static void SetMaterialsProperties(MaterialNode node, float opacity, ref GLTFPBR pbr, ref GLTFMaterial gl_mat)
         {
             pbr.baseColorFactor = new List<float>(4)
