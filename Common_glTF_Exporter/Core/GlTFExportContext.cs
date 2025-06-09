@@ -19,8 +19,7 @@
     {
         public static bool cancelation { get; set; } = false;
 
-        private Face currentFace;
-        private GLTFMaterial currentMaterial;
+
 
 
         /// <summary>
@@ -43,10 +42,7 @@
         /// </summary>
         public List<GLTFImage> images { get; } = new List<GLTFImage>();
 
-        private Document Currentdocument;
 
-        private bool skipElementFlag = false;
-        private Element element;
 
         public Transform linkTransformation { get; private set; }
 
@@ -66,9 +62,11 @@
         /// </summary>
         private GLTFNode rootNode;
 
+        private Document Currentdocument;
         private GLTFNode currentNode;
-
         private Element currentElement;
+        private Face currentFace;
+        private GLTFMaterial currentMaterial;
 
         /// <summary>
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
@@ -86,12 +84,9 @@
 
         public GLTFExportContext(Document doc)
         {
-            preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
             Currentdocument = doc;
             view = doc.ActiveView;
         }
-
-        // The following properties are the root elements of the glTF format spec. They will be serialized into the final *.gltf file.
 
         /// <summary>
         /// Gets a list of root nodes defining scenes.
@@ -144,6 +139,8 @@
         /// <returns>TRUE if starded.</returns>
         public bool Start()
         {
+            preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
+
             cancelation = false;
             transformStack.Push(Transform.Identity);
 
@@ -162,6 +159,9 @@
             GLTFScene defaultScene = new GLTFScene();
             defaultScene.nodes.Add(0);
             scenes.Add(defaultScene);
+
+            currentGeometry = new IndexedDictionary<GeometryDataObject>();
+            currentVertices = new IndexedDictionary<VertexLookupIntObject>();
 
             return true;
         }
@@ -197,26 +197,32 @@
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            element = Currentdocument.GetElement(elementId);
+            currentElement = Currentdocument.GetElement(elementId);
 
-            if (!Util.CanBeLockOrHidden(element, view, isRFA) ||
-                (element is Level && !preferences.levels))
+            if (currentElement == null)
             {
+                currentElement = null;
                 return RenderNodeAction.Skip;
             }
 
-            if (nodes.Contains(element.UniqueId))
+            if (!Util.CanBeLockOrHidden(currentElement, view, isRFA) ||
+                (currentElement is Level && !preferences.levels))
             {
-                // Duplicate element, skip adding.
-                skipElementFlag = true;
+                currentElement = null;
                 return RenderNodeAction.Skip;
             }
 
-            linkTransformation = (element as RevitLinkInstance)?.GetTransform();
+            if (nodes.Contains(currentElement.UniqueId))
+            {
+                currentElement = null;
+                return RenderNodeAction.Skip;
+            }
+
+            linkTransformation = (currentElement as RevitLinkInstance)?.GetTransform();
 
             if (!isLink)
             {
-                if (!element.IsHidden(view) && 
+                if (!currentElement.IsHidden(view) && 
                     view.IsElementVisibleInTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate, elementId))
                 {
                     ProgressBarWindow.ViewModel.ProgressBarValue++;
@@ -225,48 +231,30 @@
 
             // create a new node for the element
             GLTFNode newNode = new GLTFNode();
-            newNode.name = Util.ElementDescription(element);
-            currentElement = element;
+            newNode.name = Util.ElementDescription(currentElement);
 
             if (preferences.properties)
             {
                 // get the extras for this element
                 GLTFExtras extras = new GLTFExtras();
-                extras.uniqueId = element.UniqueId;
-                extras.parameters = Util.GetElementParameters(element, true);
-                if (element.Category != null)
+                extras.uniqueId = currentElement.UniqueId;
+                extras.parameters = Util.GetElementParameters(currentElement, true);
+                if (currentElement.Category != null)
                 {
-                    extras.elementCategory = element.Category.Name;
+                    extras.elementCategory = currentElement.Category.Name;
                 }
                 #if REVIT2024 || REVIT2025 || REVIT2026
-                extras.elementId = element.Id.Value;
+                extras.elementId = currentElement.Id.Value;
                 #else
-                extras.elementId = element.Id.IntegerValue;
+                extras.elementId = currentElement.Id.IntegerValue;
                 #endif
 
                 newNode.extras = extras;
             }
 
             currentNode = newNode;
-
-            // Reset _currentGeometry for new element
-            if (currentGeometry == null)
-            {
-                currentGeometry = new IndexedDictionary<GeometryDataObject>();
-            } 
-            else
-            {
-                currentGeometry.Reset();
-            }
-
-            if (currentVertices == null)
-            {
-                currentVertices = new IndexedDictionary<VertexLookupIntObject>();
-            }
-            else
-            {
-                currentVertices.Reset();
-            }
+            currentGeometry.Reset();
+            currentVertices.Reset();
 
             return RenderNodeAction.Proceed;
         }
@@ -351,34 +339,30 @@
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            element = Currentdocument.GetElement(elementId);
+            if (currentElement == null)
+            {        
+                return;
+            }
 
             if (currentVertices == null || !currentVertices.List.Any())
             {
                 return;
             }
 
-            if (skipElementFlag)
-            {
-                // Duplicate element, skip.
-                skipElementFlag = false;
-                return;
-            }
-
-            if (!Util.CanBeLockOrHidden(element, view, isRFA) || element is RevitLinkInstance)
+            if (!Util.CanBeLockOrHidden(currentElement, view, isRFA) || currentElement is RevitLinkInstance)
             {
                 return;
             }
 
-            nodes.AddOrUpdateCurrent(element.UniqueId, currentNode);
+            nodes.AddOrUpdateCurrent(currentElement.UniqueId, currentNode);
             rootNode.children.Add(nodes.CurrentIndex);
 
             // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives
             // on mesh)
             GLTFMesh newMesh = new GLTFMesh();
-            newMesh.name = element.Name;
+            newMesh.name = currentElement.Name;
             newMesh.primitives = new List<GLTFMeshPrimitive>();
-            meshes.AddOrUpdateCurrent(element.UniqueId, newMesh);
+            meshes.AddOrUpdateCurrent(currentElement.UniqueId, newMesh);
 
             // add the index of this mesh to the current node.
             nodes.CurrentItem.mesh = meshes.CurrentIndex;
@@ -483,9 +467,11 @@
                 }
 
                 meshes.CurrentItem.primitives.Add(primitive);
-
-                meshes.CurrentItem.name = element.Name;
+                meshes.CurrentItem.name = currentElement.Name;
             }
+
+            currentElement = null;
+            currentNode = null;
         }
 
         /// <summary>
@@ -560,14 +546,9 @@
             return RenderNodeAction.Proceed;
         }
 
-        public void OnFaceEnd(FaceNode node)
-        {
-            currentFace = null;
-        }
-
         public void OnRPC(RPCNode node)
         {
-            var meshes = GeometryUtils.GetMeshes(Currentdocument, element);
+            var meshes = GeometryUtils.GetMeshes(Currentdocument, currentElement);
             if (!meshes.Any())
             {
                 return;
@@ -628,6 +609,10 @@
         {
             currentFace = node.GetFace();
             return RenderNodeAction.Proceed;
+        }
+        public void OnFaceEnd(FaceNode node)
+        {
+            currentFace = null;
         }
     }
 }
