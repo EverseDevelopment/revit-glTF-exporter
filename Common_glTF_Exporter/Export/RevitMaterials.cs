@@ -34,7 +34,6 @@ namespace Common_glTF_Exporter.Export
 
             if (id != ElementId.InvalidElementId)
             {
-                string uniqueId;
                 Material material = null;
 
                 if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
@@ -47,14 +46,14 @@ namespace Common_glTF_Exporter.Export
                     }
 
                     gl_mat.name = material.Name;
-                    uniqueId = material.UniqueId;
+                    gl_mat.UniqueId = material.UniqueId;
                     MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
                 }
                 else
                 {
                     var elementData = MaterialNameContainer[node.MaterialId];
                     gl_mat.name = elementData.MaterialName;
-                    uniqueId = elementData.UniqueId;
+                    gl_mat.UniqueId = elementData.UniqueId;
                     material = doc.GetElement(node.MaterialId) as Material;
                 }
 
@@ -93,8 +92,26 @@ namespace Common_glTF_Exporter.Export
                         };
                     }
                 }
+            }
+            else 
+            {
+                gl_mat.name = "default";
+                gl_mat.UniqueId = Guid.NewGuid().ToString();
+                GLTFPBR pbr = new GLTFPBR();
+                pbr.baseColorFactor = new List<float>(4)
+                {
+                    1,
+                    1,
+                    1,
+                    opacity
+                };
 
-                materials.AddOrUpdateCurrentMaterial(uniqueId, gl_mat, false);
+                pbr.metallicFactor = 0f;
+                pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
+                gl_mat.pbrMetallicRoughness = pbr;
+
+                gl_mat.alphaMode = opacity != 1 ? BLEND : OPAQUE;
+                gl_mat.alphaCutoff = null;
             }
 
             return gl_mat;

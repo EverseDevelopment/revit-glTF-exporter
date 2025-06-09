@@ -25,6 +25,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EportUtils\ElementValidations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EportUtils\GLTFNodeActions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Draco.cs" />

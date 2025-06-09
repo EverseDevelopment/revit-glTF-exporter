@@ -29,5 +29,7 @@
 
         [JsonIgnore]
         public string EmbeddedTexturePath { get; set; } = null;
+        [JsonIgnore]
+        public string UniqueId { get; set; } = null;
     }
 }
