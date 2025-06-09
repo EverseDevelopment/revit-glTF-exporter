@@ -53,10 +53,6 @@
         private View view;
         private Preferences preferences;
 
-        private bool isRFA = Convert.ToBoolean(SettingsConfig.GetValue("isRFA"));
-
-        // The following properties are private to this class and used only for intermediate steps of the conversion.
-
         /// <summary>
         /// Reference to the rootNode to add children.
         /// </summary>
