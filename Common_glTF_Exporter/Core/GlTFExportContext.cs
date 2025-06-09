@@ -149,8 +149,8 @@
             rootNode.name = "rootNode";
             rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
             rootNode.scale = ModelScale.Get(preferences);
-            rootNode.translation = ModelTraslation.GetPointToRelocate(Currentdocument, rootNode.scale[0], 
-                preferences, isRFA);
+            rootNode.translation = ModelTraslation.GetPointToRelocate(Currentdocument, 
+                rootNode.scale[0], preferences);
             rootNode.children = new List<int>();
 
             nodes.AddOrUpdateCurrent("rootNode", rootNode);
@@ -205,7 +205,7 @@
                 return RenderNodeAction.Skip;
             }
 
-            if (!Util.CanBeLockOrHidden(currentElement, view, isRFA) ||
+            if (!Util.CanBeLockOrHidden(currentElement, view, Currentdocument.IsFamilyDocument) ||
                 (currentElement is Level && !preferences.levels))
             {
                 currentElement = null;
@@ -349,7 +349,7 @@
                 return;
             }
 
-            if (!Util.CanBeLockOrHidden(currentElement, view, isRFA) || currentElement is RevitLinkInstance)
+            if (!Util.CanBeLockOrHidden(currentElement, view, Currentdocument.IsFamilyDocument) || currentElement is RevitLinkInstance)
             {
                 return;
             }

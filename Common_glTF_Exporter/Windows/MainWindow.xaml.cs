@@ -73,9 +73,7 @@
 
             List<Element> elementsInView = Collectors.AllVisibleElementsByView(doc, doc.ActiveView);
 
-            bool isRFA = IsDocumentRFA.Check(doc);
-
-            if (!isRFA && !elementsInView.Any())
+            if (!doc.IsFamilyDocument && !elementsInView.Any())
             {
                 MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
                 return;

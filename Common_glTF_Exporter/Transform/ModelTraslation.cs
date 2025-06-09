@@ -7,13 +7,13 @@
 
     public static class ModelTraslation
     {
-        public static List<float> GetPointToRelocate(Document doc, double scale, Preferences preferences, bool isRfa)
+        public static List<float> GetPointToRelocate(Document doc, double scale, Preferences preferences)
         {
             
             if (preferences.relocateTo0)
             {
                 List<Element> elementsOnActiveView = new List<Element>();
-                if (isRfa)
+                if (doc.IsFamilyDocument)
                 {
                     elementsOnActiveView = Collectors.AllVisibleElementsByViewRfa(doc, doc.ActiveView);
                 }
