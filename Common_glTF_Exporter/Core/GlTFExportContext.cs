@@ -216,8 +216,6 @@
             foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
             {
                 string material_key = kvp.Key.Split(UNDERSCORE)[1];
-                
-                bool hasValidUVs = kvp.Value.Uvs.Count != 0;
                 GLTFMaterial mat = materials.GetElement(material_key);
 
                 GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
