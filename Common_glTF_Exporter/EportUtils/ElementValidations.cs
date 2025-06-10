@@ -39,13 +39,19 @@ namespace Common_glTF_Exporter.EportUtils
 
         public static bool ShouldOmitElement(Element currentElement, 
             IndexedDictionary<VertexLookupIntObject> currentVertices, 
-            View currentView, Document currentDocument, ElementId elemId)
+            Autodesk.Revit.DB.View currentView, Document currentDocument, ElementId elemId)
         {
             if (currentElement == null)
                 return true;
 
+            #if REVIT2026
+            if (currentElement.Id.Value != elemId.Value)
+                return true;
+            #else
             if (currentElement.Id.IntegerValue != elemId.IntegerValue)
                 return true;
+            #endif
+
 
             if (currentVertices == null || !currentVertices.List.Any())
                 return true;
