@@ -12,6 +12,7 @@
     using Revit_glTF_Exporter;
     using Transform = Autodesk.Revit.DB.Transform;
     using Common_glTF_Exporter.EportUtils;
+    using System.Windows.Media.Media3D;
 
     /// <summary>
     /// GLTF Export Content class.
@@ -181,8 +182,8 @@
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            if(ElementValidations.ShouldOmitElement(currentElement, 
-                currentVertices, currentView, currentDocument))
+            if (ElementValidations.ShouldOmitElement(currentElement,
+                currentVertices, currentView, currentDocument, elementId))
             {
                 return;
             }
@@ -284,8 +285,15 @@
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
             {
-                ///TODO Create default material once and reuseit
-                currentMaterial = RevitMaterials.Export(node, ref materials, preferences, currentDocument);
+                if (node.MaterialId == ElementId.InvalidElementId)
+                {
+                    currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
+                }
+                else 
+                {
+                    currentMaterial = RevitMaterials.Export(node, ref materials, preferences, currentDocument);
+                }
+
                 materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
             }
         }
@@ -299,7 +307,7 @@
         /// <param name="polymesh">PolymeshTopology.</param>
         public void OnPolymesh(PolymeshTopology polymesh)
         {
-            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
+            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
 
             IList<XYZ> pts = polymesh.GetPoints();
             pts = pts.Select(p => CurrentTransform.OfPoint(p)).ToList();
@@ -431,9 +439,11 @@
                     continue;
                 }
 
-                MaterialUtils.SetMaterial(currentDocument, preferences, mesh, materials, true);
+                currentMaterial = MaterialUtils.GetGltfMeshMaterial(currentDocument, preferences, mesh, materials, true);
 
-                GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
+                materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, true);
+
+                GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
 
                 for (int i = 0; i < triangles; i++)
                 {

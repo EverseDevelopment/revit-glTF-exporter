@@ -39,9 +39,12 @@ namespace Common_glTF_Exporter.EportUtils
 
         public static bool ShouldOmitElement(Element currentElement, 
             IndexedDictionary<VertexLookupIntObject> currentVertices, 
-            View currentView, Document currentDocument)
+            View currentView, Document currentDocument, ElementId elemId)
         {
             if (currentElement == null)
+                return true;
+
+            if (currentElement.Id.IntegerValue != elemId.IntegerValue)
                 return true;
 
             if (currentVertices == null || !currentVertices.List.Any())

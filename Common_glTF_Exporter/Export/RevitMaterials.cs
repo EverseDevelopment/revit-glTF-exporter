@@ -32,8 +32,6 @@ namespace Common_glTF_Exporter.Export
             GLTFMaterial gl_mat = new GLTFMaterial();
             float opacity = ONEINTVALUE - (float)node.Transparency;
 
-            if (id != ElementId.InvalidElementId)
-            {
                 Material material = null;
 
                 if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
@@ -92,27 +90,6 @@ namespace Common_glTF_Exporter.Export
                         };
                     }
                 }
-            }
-            else 
-            {
-                gl_mat.name = "default";
-                gl_mat.UniqueId = Guid.NewGuid().ToString();
-                GLTFPBR pbr = new GLTFPBR();
-                pbr.baseColorFactor = new List<float>(4)
-                {
-                    1,
-                    1,
-                    1,
-                    opacity
-                };
-
-                pbr.metallicFactor = 0f;
-                pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
-                gl_mat.pbrMetallicRoughness = pbr;
-
-                gl_mat.alphaMode = opacity != 1 ? BLEND : OPAQUE;
-                gl_mat.alphaCutoff = null;
-            }
 
             return gl_mat;
         }
