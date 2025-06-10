@@ -5,39 +5,65 @@ on:
     branches: [ develop ]
 
 jobs:
-  Build:
-    # The type of runner that the job will run on
+  build:
     runs-on: windows-latest
-    env:
-        Solution_Name: Revit_glTF_Exporter.sln
-    outputs:
-      Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }} 
-      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}   
-      
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-      - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild@v1.0.2
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.5
+    - name: Setup .NET Core 8.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.0.x
 
-      - name: Restore nuGet packages
-        run: nuget restore Revit_glTF_Exporter.sln 
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.1
+    
+    - name: Uninstall default WiX Toolset
+      run: |
+        choco uninstall wixtoolset
 
-      - name: Run MSBuild
-        id: run-msbuild
-        run: |
-          msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release -m
+    - name: Install specific version of WiX Toolset
+      run: |
+        choco install wixtoolset --version=3.11.2
 
-      - name: Run tests
-        id: run-tests
-        run: |
-          dotnet test
-          
-     
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.6
 
+    - name: Restore NuGet Packages
+      run: nuget restore Revit_glTF_Exporter.sln
+
+    - name: Setting versions in PackageContents
+      run: |
+        (Get-Content Common_glTF_Exporter/PackageContents.xml) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Common_glTF_Exporter/PackageContents.xml
+
+    - name: Configuring Key
+      run: |
+        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="apikey" value="[^"]+"', "key=`"apikey`" value=`"${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+
+    - name: Configuring API URL
+      run: |
+        $apiUrl = "${{ secrets.EVERSE_GLTF_EXPORTER_APIURL }}"
+        (Get-Content Common_glTF_Exporter/Utils/Analytics.cs) -replace 'https://expoterAPI', $apiUrl | Out-File -encoding ASCII Common_glTF_Exporter/Utils/Analytics.cs
+      shell: pwsh
+
+    - name: Configuring AutoUpdate URL
+      run: |
+        $apiAutoUpdate = "${{ secrets.EVERSE_AUTOUPDATE_ADDINS_URL }}"
+        (Get-Content Common_glTF_Exporter/Version/LatestVersion.cs) -replace 'https://APIAutoUpdate', $apiAutoUpdate | Out-File -encoding ASCII Common_glTF_Exporter/Version/LatestVersion.cs
+      shell: pwsh
+
+    - name: Build and Publish App
+      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+
+
+
+
+    
