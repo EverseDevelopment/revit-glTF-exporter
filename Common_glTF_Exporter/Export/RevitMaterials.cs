@@ -32,9 +32,6 @@ namespace Common_glTF_Exporter.Export
             GLTFMaterial gl_mat = new GLTFMaterial();
             float opacity = ONEINTVALUE - (float)node.Transparency;
 
-            if (id != ElementId.InvalidElementId)
-            {
-                string uniqueId;
                 Material material = null;
 
                 if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
@@ -47,14 +44,14 @@ namespace Common_glTF_Exporter.Export
                     }
 
                     gl_mat.name = material.Name;
-                    uniqueId = material.UniqueId;
+                    gl_mat.UniqueId = material.UniqueId;
                     MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
                 }
                 else
                 {
                     var elementData = MaterialNameContainer[node.MaterialId];
                     gl_mat.name = elementData.MaterialName;
-                    uniqueId = elementData.UniqueId;
+                    gl_mat.UniqueId = elementData.UniqueId;
                     material = doc.GetElement(node.MaterialId) as Material;
                 }
 
@@ -93,9 +90,6 @@ namespace Common_glTF_Exporter.Export
                         };
                     }
                 }
-
-                materials.AddOrUpdateCurrentMaterial(uniqueId, gl_mat, false);
-            }
 
             return gl_mat;
         }

@@ -12,45 +12,49 @@
         public class GLTFExportUtils
         {
             const int DEF_COLOR = 250;
-            const string DEF_MATERIAL_NAME = "default";
+            const string DEF_MATERIAL_NAME = "default"; 
+            const string DEF_UNIQUEL_ID = "8a3c94b3-d9e2-4e57-9189-f9bb6a9a54a4";
 
-            public static GLTFMaterial GetGLTFMaterial(List<GLTFMaterial> gltfMaterials, Material material, bool doubleSided)
+            public static GLTFMaterial GetGLTFMaterial(IndexedDictionary<GLTFMaterial> gltfMaterials, double opacity, bool doubleSided)
             {
-                // search for an already existing material
-                var m = gltfMaterials.FirstOrDefault(x =>
-                x.pbrMetallicRoughness.baseColorFactor[0] == material.Color.Red &&
-                x.pbrMetallicRoughness.baseColorFactor[1] == material.Color.Green &&
-                x.pbrMetallicRoughness.baseColorFactor[2] == material.Color.Blue && x.doubleSided == doubleSided);
 
-                return m != null ? m : GLTFExportUtils.CreateGLTFMaterial(DEF_MATERIAL_NAME, 0, new Color(DEF_COLOR, DEF_COLOR, DEF_COLOR), doubleSided);
+                if (gltfMaterials.Dict.ContainsKey(DEF_UNIQUEL_ID))
+                {
+                    return gltfMaterials.GetElement(DEF_UNIQUEL_ID);
+                }
+                else
+                {
+                    return (CreateDefaultGLTFMaterial((int)opacity, doubleSided));
+                }
             }
 
-            public static GLTFMaterial CreateGLTFMaterial(string materialName, int materialOpacity, Color color, bool doubleSided)
+            public static GLTFMaterial CreateDefaultGLTFMaterial(int materialOpacity, bool doubleSided)
             {
-                // construct the material
                 GLTFMaterial gl_mat = new GLTFMaterial();
                 gl_mat.doubleSided = doubleSided;
                 float opacity = 1 - (float)materialOpacity;
-                gl_mat.name = materialName;
+                gl_mat.name = DEF_MATERIAL_NAME;
                 GLTFPBR pbr = new GLTFPBR();
-                pbr.baseColorFactor = new List<float>(4) { color.Red / 255f, color.Green / 255f, color.Blue / 255f, opacity };
+                pbr.baseColorFactor = new List<float>(4) { 1f, 1f, 1f, opacity };
                 pbr.metallicFactor = 0f;
                 pbr.roughnessFactor = 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
+                gl_mat.UniqueId = DEF_UNIQUEL_ID;
 
                 return gl_mat;
             }
 
-            public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, List<XYZ> pts)
+            public static void AddVerticesAndFaces(
+                VertexLookupIntObject vertexLookup,
+                GeometryDataObject geometryDataObject,
+                List<XYZ> pts)
             {
-                var idx = vertex.AddVertex(new PointIntObject(pts[0]));
-                geometryDataObject.Faces.Add(idx);
-
-                var idx1 = vertex.AddVertex(new PointIntObject(pts[1]));
-                geometryDataObject.Faces.Add(idx1);
-
-                var idx2 = vertex.AddVertex(new PointIntObject(pts[2]));
-                geometryDataObject.Faces.Add(idx2);
+                foreach (var pt in pts)
+                {
+                    var point = new PointIntObject(pt);
+                    var index = vertexLookup.AddVertexAndFlatten(point, geometryDataObject.Vertices);
+                    geometryDataObject.Faces.Add(index);
+                }
             }
 
             const string UNDERSCORE = "_";
@@ -59,10 +63,10 @@
                 Element element,
                 IndexedDictionary<GeometryDataObject> geomDataObj,
                 IndexedDictionary<VertexLookupIntObject> vertexIntObj,
-                IndexedDictionary<GLTFMaterial> materials)
+                GLTFMaterial material)
             {
                 // Add new "_current" entries if vertex_key is unique
-                string vertex_key = string.Concat(element.UniqueId, UNDERSCORE, materials.CurrentKey);
+                string vertex_key = string.Concat(element.UniqueId, UNDERSCORE, material.UniqueId);
                 geomDataObj.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());
                 vertexIntObj.AddOrUpdateCurrent(vertex_key, new VertexLookupIntObject());
             }
