@@ -191,26 +191,13 @@
             nodes.AddOrUpdateCurrent(currentElement.UniqueId, currentNode);
             rootNode.children.Add(nodes.CurrentIndex);
 
-            // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives
-            // on mesh)
-            GLTFMesh newMesh = new GLTFMesh();
-            newMesh.name = currentElement.Name;
-            newMesh.primitives = new List<GLTFMeshPrimitive>();
-            meshes.AddOrUpdateCurrent(currentElement.UniqueId, newMesh);
-
-            nodes.CurrentItem.mesh = meshes.CurrentIndex;
-
-            // Add vertex data to _currentGeometry for each geometry/material pairing
-            foreach (KeyValuePair<string, VertexLookupIntObject> kvp in currentVertices.Dict)
+            GLTFMesh newMesh = new GLTFMesh
             {
-                var vertices = currentGeometry.GetElement(kvp.Key).Vertices;
-                foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
-                {
-                    vertices.Add(p.Key.X);
-                    vertices.Add(p.Key.Y);
-                    vertices.Add(p.Key.Z);
-                }
-            }
+                name = currentElement.Name,
+                primitives = new List<GLTFMeshPrimitive>()
+            };
+            meshes.AddOrUpdateCurrent(currentElement.UniqueId, newMesh);
+            nodes.CurrentItem.mesh = meshes.CurrentIndex;
 
             // Convert _currentGeometry objects into glTFMeshPrimitives
             foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
@@ -307,47 +294,38 @@
         {
             GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
 
+            var geomItem = currentGeometry.CurrentItem;
+            var vertItem = currentVertices.CurrentItem;
+
             IList<XYZ> pts = polymesh.GetPoints();
-            pts = pts.Select(p => CurrentTransform.OfPoint(p)).ToList();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                pts[i] = CurrentTransform.OfPoint(pts[i]);
+            }
 
             foreach (PolymeshFacet facet in polymesh.GetFacets())
             {
                 foreach (int index in facet.GetVertices())
                 {
                     XYZ vertex = pts[index];
-                    int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(vertex));
-                    currentGeometry.CurrentItem.Faces.Add(vertexIndex);
-     
+                    int vertexIndex = vertItem.AddVertexAndFlatten(new PointIntObject(vertex), geomItem.Vertices);
+                    geomItem.Faces.Add(vertexIndex);
+
                     if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
                     {
-                        if (currentFace != null)
-                        {
-                            IntersectionResult projection = currentFace.Project(vertex);
-                            if (projection != null)
-                            {
-                                UV uv = projection.UVPoint;
-                                UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
-                                currentGeometry.CurrentItem.Uvs.Add(uvInMeters);
-                            }
-                            else
-                            {
-                                currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
-                            }
-                        }
-                        else
-                        {
-                            // TODO: Check if this happens in any situation
-                            currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
-                        }
+                        UV uv = currentFace?.Project(vertex)?.UVPoint ?? new UV(0, 0);
+                        UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
+                        geomItem.Uvs.Add(uvInMeters);
                     }
                 }
             }
 
             if (preferences.normals)
             {
-                GLTFExportUtils.AddNormals(CurrentTransform, polymesh, currentGeometry.CurrentItem.Normals);
+                GLTFExportUtils.AddNormals(CurrentTransform, polymesh, geomItem.Normals);
             }
         }
+
 
         /// <summary>
         /// This is called when family instances are encountered, immediately after OnElementBegin.

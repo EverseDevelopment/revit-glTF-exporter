@@ -44,16 +44,17 @@
                 return gl_mat;
             }
 
-            public static void AddVerticesAndFaces(VertexLookupIntObject vertex, GeometryDataObject geometryDataObject, List<XYZ> pts)
+            public static void AddVerticesAndFaces(
+                VertexLookupIntObject vertexLookup,
+                GeometryDataObject geometryDataObject,
+                List<XYZ> pts)
             {
-                var idx = vertex.AddVertex(new PointIntObject(pts[0]));
-                geometryDataObject.Faces.Add(idx);
-
-                var idx1 = vertex.AddVertex(new PointIntObject(pts[1]));
-                geometryDataObject.Faces.Add(idx1);
-
-                var idx2 = vertex.AddVertex(new PointIntObject(pts[2]));
-                geometryDataObject.Faces.Add(idx2);
+                foreach (var pt in pts)
+                {
+                    var point = new PointIntObject(pt);
+                    var index = vertexLookup.AddVertexAndFlatten(point, geometryDataObject.Vertices);
+                    geometryDataObject.Faces.Add(index);
+                }
             }
 
             const string UNDERSCORE = "_";
