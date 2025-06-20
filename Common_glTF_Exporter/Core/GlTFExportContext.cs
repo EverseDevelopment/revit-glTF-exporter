@@ -11,6 +11,8 @@
     using Common_glTF_Exporter.Windows.MainWindow;
     using Revit_glTF_Exporter;
     using Transform = Autodesk.Revit.DB.Transform;
+    using Common_glTF_Exporter.EportUtils;
+    using System.Windows.Media.Media3D;
 
     /// <summary>
     /// GLTF Export Content class.
@@ -19,56 +21,21 @@
     {
         public static bool cancelation { get; set; } = false;
 
-        private Face currentFace;
-        private GLTFMaterial currentMaterial;
-
-
-        /// <summary>
-        /// Gets a stateful, uuid indexable list for all nodes in the export.
-        /// </summary>
-        public IndexedDictionary<GLTFNode> nodes = new IndexedDictionary<GLTFNode>();
-
-        /// <summary>
-        /// Gets a stateful, uuid indexable list for all materials in the export.
-        /// </summary>
-        public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
-
-        /// <summary>
-        /// Gets a list of all textures in the export.
-        /// </summary>
-        public List<GLTFTexture> textures { get; } = new List<GLTFTexture>();
-
-        /// <summary>
-        /// Gets a list of all images in the export.
-        /// </summary>
-        public List<GLTFImage> images { get; } = new List<GLTFImage>();
-
-        private Document Currentdocument;
-
-        private bool skipElementFlag = false;
-        private Element element;
-
         public Transform linkTransformation { get; private set; }
 
         public Transform linkOriginalTranformation { get; private set; }
 
         public bool isLink { get; private set; }
 
-        private View view;
         private Preferences preferences;
 
-        private bool isRFA = Convert.ToBoolean(SettingsConfig.GetValue("isRFA"));
-
-        // The following properties are private to this class and used only for intermediate steps of the conversion.
-
-        /// <summary>
-        /// Reference to the rootNode to add children.
-        /// </summary>
-        private GLTFNode rootNode;
-
+        private Document currentDocument;
+        private View currentView;
         private GLTFNode currentNode;
-
         private Element currentElement;
+        private Face currentFace;
+        private GLTFMaterial currentMaterial;
+        private Stack<Transform> transformStack = new Stack<Transform>();
 
         /// <summary>
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
@@ -82,52 +49,21 @@
         /// </summary>
         private IndexedDictionary<VertexLookupIntObject> currentVertices;
 
-        private Stack<Transform> transformStack = new Stack<Transform>();
-
-        public GLTFExportContext(Document doc)
-        {
-            preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
-            Currentdocument = doc;
-            view = doc.ActiveView;
-        }
-
-        // The following properties are the root elements of the glTF format spec. They will be serialized into the final *.gltf file.
-
         /// <summary>
-        /// Gets a list of root nodes defining scenes.
+        /// Reference to the rootNode to add children.
         /// </summary>
+        private GLTFNode rootNode;
+
+        public IndexedDictionary<GLTFNode> nodes = new IndexedDictionary<GLTFNode>();
+
+        public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
+        public List<GLTFTexture> textures { get; } = new List<GLTFTexture>();
+        public List<GLTFImage> images { get; } = new List<GLTFImage>();
         public List<GLTFScene> scenes { get; } = new List<GLTFScene>();
-
-        /// <summary>
-        /// Gets a stateful, uuid indexable list for all meshes in the export.
-        /// </summary>
-        /// <value>
-        /// A stateful, uuid indexable list for all meshes in the export.
-        /// </value>
         public IndexedDictionary<GLTFMesh> meshes { get; } = new IndexedDictionary<GLTFMesh>();
-
-        /// <summary>
-        /// Gets a list of all buffers referencing the binary file data.
-        /// </summary>
-        /// <value>
-        /// A list of all buffers referencing the binary file data.
-        /// </value>
         public List<GLTFBuffer> buffers { get; } = new List<GLTFBuffer>();
-
-        /// <summary>
-        /// Gets a list of all BufferViews referencing the buffers.
-        /// </summary>
         public List<GLTFBufferView> bufferViews { get; } = new List<GLTFBufferView>();
-
-        /// <summary>
-        /// Gets a list of all Accessors referencing the BufferViews.
-        /// </summary>
         public List<GLTFAccessor> accessors { get; } = new List<GLTFAccessor>();
-
-        /// <summary>
-        /// Gets the container for the vertex/face/normal information that will be serialized into a binary
-        /// format for the final *.bin files.
-        /// </summary>
         public List<GLTFBinaryData> binaryFileData { get; } = new List<GLTFBinaryData>();
 
         private Transform CurrentTransform
@@ -138,12 +74,20 @@
             }
         }
 
+        public GLTFExportContext(Document doc)
+        {
+            currentDocument = doc;
+            currentView = doc.ActiveView;
+        }
+
         /// <summary>
         /// Runs once at beginning of export.
         /// </summary>
         /// <returns>TRUE if starded.</returns>
         public bool Start()
         {
+            preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
+
             cancelation = false;
             transformStack.Push(Transform.Identity);
 
@@ -152,8 +96,8 @@
             rootNode.name = "rootNode";
             rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
             rootNode.scale = ModelScale.Get(preferences);
-            rootNode.translation = ModelTraslation.GetPointToRelocate(Currentdocument, rootNode.scale[0], 
-                preferences, isRFA);
+            rootNode.translation = ModelTraslation.GetPointToRelocate(currentDocument, 
+                rootNode.scale[0], preferences);
             rootNode.children = new List<int>();
 
             nodes.AddOrUpdateCurrent("rootNode", rootNode);
@@ -162,6 +106,9 @@
             GLTFScene defaultScene = new GLTFScene();
             defaultScene.nodes.Add(0);
             scenes.Add(defaultScene);
+
+            currentGeometry = new IndexedDictionary<GeometryDataObject>();
+            currentVertices = new IndexedDictionary<VertexLookupIntObject>();
 
             return true;
         }
@@ -178,7 +125,7 @@
 
             if (preferences.grids)
             {
-                RevitGrids.Export(Currentdocument, ref nodes, ref rootNode, preferences);
+                RevitGrids.Export(currentDocument, ref nodes, ref rootNode, preferences);
             }
 
             if (bufferViews.Count != 0)
@@ -197,147 +144,31 @@
         /// <returns>RenderNodeAction.</returns>
         public RenderNodeAction OnElementBegin(ElementId elementId)
         {
-            element = Currentdocument.GetElement(elementId);
+            currentElement = currentDocument.GetElement(elementId);
 
-            if (!Util.CanBeLockOrHidden(element, view, isRFA) ||
-                (element is Level && !preferences.levels))
+            if (ElementValidations.ShouldSkipElement(currentElement, currentView, currentDocument, preferences, nodes))
             {
+                currentElement = null;
                 return RenderNodeAction.Skip;
             }
 
-            if (nodes.Contains(element.UniqueId))
-            {
-                // Duplicate element, skip adding.
-                skipElementFlag = true;
-                return RenderNodeAction.Skip;
-            }
-
-            linkTransformation = (element as RevitLinkInstance)?.GetTransform();
+            linkTransformation = (currentElement as RevitLinkInstance)?.GetTransform();
 
             if (!isLink)
             {
-                if (!element.IsHidden(view) && 
-                    view.IsElementVisibleInTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate, elementId))
+                if (!currentElement.IsHidden(currentView) &&
+                    currentView.IsElementVisibleInTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate, 
+                    elementId))
                 {
                     ProgressBarWindow.ViewModel.ProgressBarValue++;
                 }
             }
 
-            // create a new node for the element
-            GLTFNode newNode = new GLTFNode();
-            newNode.name = Util.ElementDescription(element);
-            currentElement = element;
-
-            if (preferences.properties)
-            {
-                // get the extras for this element
-                GLTFExtras extras = new GLTFExtras();
-                extras.uniqueId = element.UniqueId;
-                extras.parameters = Util.GetElementParameters(element, true);
-                if (element.Category != null)
-                {
-                    extras.elementCategory = element.Category.Name;
-                }
-                #if REVIT2024 || REVIT2025 || REVIT2026
-                extras.elementId = element.Id.Value;
-                #else
-                extras.elementId = element.Id.IntegerValue;
-                #endif
-
-                newNode.extras = extras;
-            }
-
-            currentNode = newNode;
-
-            // Reset _currentGeometry for new element
-            if (currentGeometry == null)
-            {
-                currentGeometry = new IndexedDictionary<GeometryDataObject>();
-            } 
-            else
-            {
-                currentGeometry.Reset();
-            }
-
-            if (currentVertices == null)
-            {
-                currentVertices = new IndexedDictionary<VertexLookupIntObject>();
-            }
-            else
-            {
-                currentVertices.Reset();
-            }
+            currentNode = GLTFNodeActions.CreateGLTFNodeFromElement(currentElement, preferences);
+            currentGeometry.Reset();
+            currentVertices.Reset();
 
             return RenderNodeAction.Proceed;
-        }
-
-        /// <summary>
-        /// Runs every time, and immediately prior to, a mesh being processed (OnPolymesh). It
-        /// supplies the material for the mesh, and we use this to create a new material in our
-        /// material container, or switch the current material if it already exists.
-        /// </summary>
-        /// <param name="node">Material node.</param>
-        public void OnMaterial(MaterialNode node)
-        {
-            if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
-            {
-                currentMaterial = RevitMaterials.Export(node, ref materials, preferences, Currentdocument);
-            }
-        }
-
-        /// <summary>
-        /// Runs for every polymesh being processed. Typically this is a single face of an element's
-        /// mesh. Here we populate the data into our "_current" variables (geometry and vertices)
-        /// keyed on the element/material combination (this is important because within a single
-        /// element, materials can be changed and repeated in unknown order).
-        /// </summary>
-        /// <param name="polymesh">PolymeshTopology.</param>
-        public void OnPolymesh(PolymeshTopology polymesh)
-        {
-            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
-
-            IList<XYZ> pts = polymesh.GetPoints();
-            pts = pts.Select(p => CurrentTransform.OfPoint(p)).ToList();
-
-            foreach (PolymeshFacet facet in polymesh.GetFacets())
-            {
-                foreach (int index in facet.GetVertices())
-                {
-                    XYZ vertex = pts[index];
-                    int vertexIndex = currentVertices.CurrentItem.AddVertex(new PointIntObject(vertex));
-                    currentGeometry.CurrentItem.Faces.Add(vertexIndex);
-     
-                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
-                    {
-                        // ✅ Compute UV from face
-                        if (currentFace != null)
-                        {
-                            IntersectionResult projection = currentFace.Project(vertex);
-                            if (projection != null)
-                            {
-                                UV uv = projection.UVPoint;
-                                UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
-                                currentGeometry.CurrentItem.Uvs.Add(uvInMeters);
-                            }
-                            else
-                            {
-                                // Fallback: use dummy UVs if projection fails
-                                currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
-                            }
-                        }
-                        else
-                        {
-                            // If no face is available (shouldn't happen), add dummy UV
-                            currentGeometry.CurrentItem.Uvs.Add(new UV(0, 0));
-                        }
-                    }
-                }
-            }
-
-            if (preferences.normals)
-            {
-                GLTFExportUtils.AddNormals(CurrentTransform, polymesh, currentGeometry.CurrentItem.Normals);
-            }
         }
 
         const char UNDERSCORE = '_';
@@ -351,86 +182,28 @@
         /// <param name="elementId">Element Id.</param>
         public void OnElementEnd(ElementId elementId)
         {
-            element = Currentdocument.GetElement(elementId);
-
-            if (currentVertices == null || !currentVertices.List.Any())
+            if (ElementValidations.ShouldOmitElement(currentElement,
+                currentVertices, currentView, currentDocument, elementId))
             {
                 return;
             }
 
-            if (skipElementFlag)
-            {
-                // Duplicate element, skip.
-                skipElementFlag = false;
-                return;
-            }
-
-            if (!Util.CanBeLockOrHidden(element, view, isRFA) || element is RevitLinkInstance)
-            {
-                return;
-            }
-
-            nodes.AddOrUpdateCurrent(element.UniqueId, currentNode);
+            nodes.AddOrUpdateCurrent(currentElement.UniqueId, currentNode);
             rootNode.children.Add(nodes.CurrentIndex);
 
-            // create a new mesh for the node (we're assuming 1 mesh per node w/ multiple primitives
-            // on mesh)
-            GLTFMesh newMesh = new GLTFMesh();
-            newMesh.name = element.Name;
-            newMesh.primitives = new List<GLTFMeshPrimitive>();
-            meshes.AddOrUpdateCurrent(element.UniqueId, newMesh);
-
-            // add the index of this mesh to the current node.
-            nodes.CurrentItem.mesh = meshes.CurrentIndex;
-
-            // Add vertex data to _currentGeometry for each geometry/material pairing
-            foreach (KeyValuePair<string, VertexLookupIntObject> kvp in currentVertices.Dict)
+            GLTFMesh newMesh = new GLTFMesh
             {
-                var vertices = currentGeometry.GetElement(kvp.Key).Vertices;
-                foreach (KeyValuePair<PointIntObject, int> p in kvp.Value)
-                {
-                    vertices.Add(p.Key.X);
-                    vertices.Add(p.Key.Y);
-                    vertices.Add(p.Key.Z);
-                }
-            }
+                name = currentElement.Name,
+                primitives = new List<GLTFMeshPrimitive>()
+            };
+            meshes.AddOrUpdateCurrent(currentElement.UniqueId, newMesh);
+            nodes.CurrentItem.mesh = meshes.CurrentIndex;
 
             // Convert _currentGeometry objects into glTFMeshPrimitives
             foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
             {
                 string material_key = kvp.Key.Split(UNDERSCORE)[1];
-                GLTFMaterial mat;
-                if (material_key == "")
-                {
-                   mat = currentMaterial;
-                }
-                else
-                {
-                    bool hasValidUVs = kvp.Value.Uvs.Count != 0;
-                    GLTFMaterial currentMat = materials.GetElement(material_key);
-
-                    int vertexCount = kvp.Value.Vertices.Count / 3;
-                    if (!hasValidUVs)
-                    {
-                        
-                        for (int i = 0; i < vertexCount; i++)
-                        {
-                            kvp.Value.Uvs.Add(new UV(0, 0));
-                        }
-                    }
-
-                    if (vertexCount != kvp.Value.Uvs.Count)
-                    {
-                        int difference = vertexCount - kvp.Value.Uvs.Count;
-                        for (int i = 0; i < difference; i++)
-                        {
-                            kvp.Value.Uvs.Add(new UV(0, 0));
-                        }
-                    }
-
-                    mat = currentMat;
-
-                }
+                GLTFMaterial mat = materials.GetElement(material_key);
 
                 GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
                     buffers,
@@ -450,7 +223,7 @@
 
                 binaryFileData.Add(elementBinary);
 
-                
+
                 GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
 
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
@@ -464,13 +237,13 @@
                 {
                     primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 }
-       
-                if (elementBinary.uvAccessorIndex != -1 && 
-                    preferences.materials == MaterialsEnum.textures && 
+
+                if (elementBinary.uvAccessorIndex != -1 &&
+                    preferences.materials == MaterialsEnum.textures &&
                     mat.EmbeddedTexturePath != null)
                 {
                     primitive.attributes.TEXCOORD_0 = elementBinary.uvAccessorIndex;
-                }          
+                }
 
                 primitive.indices = elementBinary.indexAccessorIndex;
 
@@ -483,10 +256,76 @@
                 }
 
                 meshes.CurrentItem.primitives.Add(primitive);
-
-                meshes.CurrentItem.name = element.Name;
+                meshes.CurrentItem.name = currentElement.Name;
             }
         }
+
+        /// <summary>
+        /// Runs every time, and immediately prior to, a mesh being processed (OnPolymesh). It
+        /// supplies the material for the mesh, and we use this to create a new material in our
+        /// material container, or switch the current material if it already exists.
+        /// </summary>
+        /// <param name="node">Material node.</param>
+        public void OnMaterial(MaterialNode node)
+        {
+            if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
+            {
+                if (node.MaterialId == ElementId.InvalidElementId)
+                {
+                    currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
+                }
+                else 
+                {
+                    currentMaterial = RevitMaterials.Export(node, ref materials, preferences, currentDocument);
+                }
+
+                materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
+            }
+        }
+
+        /// <summary>
+        /// Runs for every polymesh being processed. Typically this is a single face of an element's
+        /// mesh. Here we populate the data into our "_current" variables (geometry and vertices)
+        /// keyed on the element/material combination (this is important because within a single
+        /// element, materials can be changed and repeated in unknown order).
+        /// </summary>
+        /// <param name="polymesh">PolymeshTopology.</param>
+        public void OnPolymesh(PolymeshTopology polymesh)
+        {
+            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
+
+            var geomItem = currentGeometry.CurrentItem;
+            var vertItem = currentVertices.CurrentItem;
+
+            IList<XYZ> pts = polymesh.GetPoints();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                pts[i] = CurrentTransform.OfPoint(pts[i]);
+            }
+
+            foreach (PolymeshFacet facet in polymesh.GetFacets())
+            {
+                foreach (int index in facet.GetVertices())
+                {
+                    XYZ vertex = pts[index];
+                    int vertexIndex = vertItem.AddVertexAndFlatten(new PointIntObject(vertex), geomItem.Vertices);
+                    geomItem.Faces.Add(vertexIndex);
+
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
+                    {
+                        UV uv = currentFace?.Project(vertex)?.UVPoint ?? new UV(0, 0);
+                        UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
+                        geomItem.Uvs.Add(uvInMeters);
+                    }
+                }
+            }
+
+            if (preferences.normals)
+            {
+                GLTFExportUtils.AddNormals(CurrentTransform, polymesh, geomItem.Normals);
+            }
+        }
+
 
         /// <summary>
         /// This is called when family instances are encountered, immediately after OnElementBegin.
@@ -537,7 +376,7 @@
         {
             isLink = true;
 
-            Currentdocument = node.GetDocument();
+            currentDocument = node.GetDocument();
 
             transformStack.Push(CurrentTransform.Multiply(linkTransformation));
             linkOriginalTranformation = new Transform(CurrentTransform);
@@ -552,7 +391,7 @@
             // Note: This method is invoked even for instances that were skipped.
             transformStack.Pop();
 
-            Currentdocument = ExternalApplication.RevitCollectorService.GetDocument();
+            currentDocument = ExternalApplication.RevitCollectorService.GetDocument();
         }
 
         public RenderNodeAction Begin(FaceNode node)
@@ -560,14 +399,9 @@
             return RenderNodeAction.Proceed;
         }
 
-        public void OnFaceEnd(FaceNode node)
-        {
-            currentFace = null;
-        }
-
         public void OnRPC(RPCNode node)
         {
-            var meshes = GeometryUtils.GetMeshes(Currentdocument, element);
+            var meshes = GeometryUtils.GetMeshes(currentDocument, currentElement);
             if (!meshes.Any())
             {
                 return;
@@ -581,9 +415,11 @@
                     continue;
                 }
 
-                MaterialUtils.SetMaterial(Currentdocument, preferences, mesh, materials, true);
+                currentMaterial = MaterialUtils.GetGltfMeshMaterial(currentDocument, preferences, mesh, materials, true);
 
-                GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, materials);
+                materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, true);
+
+                GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
 
                 for (int i = 0; i < triangles; i++)
                 {
@@ -628,6 +464,10 @@
         {
             currentFace = node.GetFace();
             return RenderNodeAction.Proceed;
+        }
+        public void OnFaceEnd(FaceNode node)
+        {
+            currentFace = null;
         }
     }
 }
