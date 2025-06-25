@@ -1,19 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Visual;
+using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.Windows.MainWindow;
+using Revit_glTF_Exporter;
+using Common_glTF_Exporter.Materials;
+using Common_glTF_Exporter.Model;
+
 namespace Common_glTF_Exporter.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Windows.Forms;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.DB.Visual;
-    using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using Revit_glTF_Exporter;
-
     public static class RevitMaterials
     {
-        const string BLEND = "BLEND";
-        const string OPAQUE = "OPAQUE";
         const int ONEINTVALUE = 1;
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Common_glTF_Exporter.Export
 
                 // Set PBR values
                 GLTFPBR pbr = new GLTFPBR();
-                SetMaterialsProperties(node, opacity, ref pbr, ref gl_mat);
+                MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
 
                 // Instead of embedding the image now, just store the path for future export
                 if (material != null && preferences.materials == MaterialsEnum.textures)
@@ -92,24 +92,6 @@ namespace Common_glTF_Exporter.Export
                 }
 
             return gl_mat;
-        }
-
-        private static void SetMaterialsProperties(MaterialNode node, float opacity, ref GLTFPBR pbr, ref GLTFMaterial gl_mat)
-        {
-            pbr.baseColorFactor = new List<float>(4)
-            {
-                node.Color.Red / 255f,
-                node.Color.Green / 255f,
-                node.Color.Blue / 255f,
-                opacity
-            };
-
-            pbr.metallicFactor = 0f;
-            pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
-            gl_mat.pbrMetallicRoughness = pbr;
-
-            gl_mat.alphaMode = opacity != 1 ? BLEND : OPAQUE;
-            gl_mat.alphaCutoff = null;
         }
 
         /// <summary>
@@ -202,20 +184,5 @@ namespace Common_glTF_Exporter.Export
 
             return 0f;
         }
-    }
-
-
-
-
-    public class MaterialCacheDTO
-    {
-        public MaterialCacheDTO(string materialName, string uniqueId)
-        {
-            MaterialName = materialName;
-            UniqueId = uniqueId;
-        }
-
-        public string MaterialName { get; set; }
-        public string UniqueId { get; set; }
     }
 }
