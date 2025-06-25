@@ -13,6 +13,7 @@
     using Transform = Autodesk.Revit.DB.Transform;
     using Common_glTF_Exporter.EportUtils;
     using System.Windows.Media.Media3D;
+    using System.Windows.Controls;
 
     /// <summary>
     /// GLTF Export Content class.
@@ -308,14 +309,27 @@
                 foreach (int index in facet.GetVertices())
                 {
                     XYZ vertex = pts[index];
-                    int vertexIndex = vertItem.AddVertexAndFlatten(new PointIntObject(vertex), geomItem.Vertices);
+                    int vertexIndex = vertItem.AddVertexAndFlatten(
+                                         new PointIntObject(vertex), geomItem.Vertices);
                     geomItem.Faces.Add(vertexIndex);
 
-                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
+                    if (preferences.materials == MaterialsEnum.textures &&
+                        currentMaterial?.EmbeddedTexturePath != null)
                     {
-                        UV uv = currentFace?.Project(vertex)?.UVPoint ?? new UV(0, 0);
-                        UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
-                        geomItem.Uvs.Add(uvInMeters);
+                        UV uv = null;
+                        if (currentFace != null)
+                        {
+                            var proj = currentFace.Project(vertex);
+                            uv = proj?.UVPoint;
+                        }
+
+                        if (uv == null && currentFace is PlanarFace pf)
+                        {
+                            uv = GetPlanarUv(pf, vertex); 
+                        }
+                        if (uv == null) uv = new UV(0, 0);
+
+                        geomItem.Uvs.Add(uv);
                     }
                 }
             }
@@ -326,6 +340,19 @@
             }
         }
 
+        private static UV GetPlanarUv(PlanarFace face, XYZ vertex)
+        {
+            XYZ origin = face.Origin;
+            XYZ uDir = face.XVector.Normalize();
+            XYZ vDir = face.YVector.Normalize();
+
+            XYZ delta = vertex - origin;
+
+            double u = delta.DotProduct(uDir);
+            double v = delta.DotProduct(vDir);
+
+            return new UV(u, v);
+        }
 
         /// <summary>
         /// This is called when family instances are encountered, immediately after OnElementBegin.

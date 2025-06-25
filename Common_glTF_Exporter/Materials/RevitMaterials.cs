@@ -10,6 +10,7 @@ using Revit_glTF_Exporter;
 using Common_glTF_Exporter.Materials;
 using Common_glTF_Exporter.Model;
 using System.Xml.Linq;
+using System.Windows.Media.TextFormatting;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -168,7 +169,14 @@ namespace Common_glTF_Exporter.Export
 
             if (scale != null)
             {
-                return (float)scale.Value;
+                double scaledValue;
+                #if REVIT2019 || REVIT2020
+                    scaledValue = UnitUtils.Convert(scale.Value, scale.DisplayUnitType, DisplayUnitType.DUT_DECIMAL_FEET);
+                #else
+                    scaledValue = UnitUtils.Convert(scale.Value, scale.GetUnitTypeId(), UnitTypeId.Feet);
+                #endif
+
+                return (float)scaledValue;
             }
 
             return 1;
