@@ -9,6 +9,7 @@ using Common_glTF_Exporter.Windows.MainWindow;
 using Revit_glTF_Exporter;
 using Common_glTF_Exporter.Materials;
 using Common_glTF_Exporter.Model;
+using System.Xml.Linq;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -110,13 +111,15 @@ namespace Common_glTF_Exporter.Export
 
             Asset theAsset = appearanceElem.GetRenderingAsset();
 
-            // First try "opaque_albedo"
-            AssetProperty prop = theAsset.FindByName("opaque_albedo");
-            if (prop != null && prop.NumberOfConnectedProperties > 0)
+            foreach (var name in new[] { "opaque_albedo", "generic_diffuse" })
             {
-                Asset connectedAsset = prop.GetSingleConnectedAsset();
-                if (connectedAsset != null)
-                    return connectedAsset;
+                var prop = theAsset.FindByName(name);
+                if (prop?.NumberOfConnectedProperties > 0)
+                {
+                    var connected = prop.GetSingleConnectedAsset();
+                    if (connected != null)
+                        return connected;
+                }
             }
 
             // Fallback: search all properties for first connected asset
