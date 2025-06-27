@@ -1,20 +1,20 @@
-﻿namespace Common_glTF_Exporter.Core
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Autodesk.Revit.DB;
-    using Common_glTF_Exporter.Export;
-    using Common_glTF_Exporter.Model;
-    using Common_glTF_Exporter.Transform;
-    using Common_glTF_Exporter.Utils;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using Revit_glTF_Exporter;
-    using Transform = Autodesk.Revit.DB.Transform;
-    using Common_glTF_Exporter.EportUtils;
-    using System.Windows.Media.Media3D;
-    using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Export;
+using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Transform;
+using Common_glTF_Exporter.Utils;
+using Common_glTF_Exporter.Windows.MainWindow;
+using Revit_glTF_Exporter;
+using Common_glTF_Exporter.EportUtils;
+using System.Windows.Media.Media3D;
+using System.Windows.Controls;
+using Common_glTF_Exporter.UVs;
 
+namespace Common_glTF_Exporter.Core
+{
     /// <summary>
     /// GLTF Export Content class.
     /// </summary>
@@ -22,9 +22,9 @@
     {
         public static bool cancelation { get; set; } = false;
 
-        public Transform linkTransformation { get; private set; }
+        public Autodesk.Revit.DB.Transform linkTransformation { get; private set; }
 
-        public Transform linkOriginalTranformation { get; private set; }
+        public Autodesk.Revit.DB.Transform linkOriginalTranformation { get; private set; }
 
         public bool isLink { get; private set; }
 
@@ -36,7 +36,7 @@
         private Element currentElement;
         private Face currentFace;
         private GLTFMaterial currentMaterial;
-        private Stack<Transform> transformStack = new Stack<Transform>();
+        private Stack<Autodesk.Revit.DB.Transform> transformStack = new Stack<Autodesk.Revit.DB.Transform>();
 
         /// <summary>
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
@@ -67,7 +67,7 @@
         public List<GLTFAccessor> accessors { get; } = new List<GLTFAccessor>();
         public List<GLTFBinaryData> binaryFileData { get; } = new List<GLTFBinaryData>();
 
-        private Transform CurrentTransform
+        private Autodesk.Revit.DB.Transform CurrentTransform
         {
             get
             {
@@ -90,7 +90,7 @@
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
 
             cancelation = false;
-            transformStack.Push(Transform.Identity);
+            transformStack.Push(Autodesk.Revit.DB.Transform.Identity);
 
             // Creation Root Node
             rootNode = new GLTFNode();
@@ -313,24 +313,7 @@
                                          new PointIntObject(vertex), geomItem.Vertices);
                     geomItem.Faces.Add(vertexIndex);
 
-                    if (preferences.materials == MaterialsEnum.textures &&
-                        currentMaterial?.EmbeddedTexturePath != null)
-                    {
-                        UV uv = null;
-                        if (currentFace != null)
-                        {
-                            var proj = currentFace.Project(vertex);
-                            uv = proj?.UVPoint;
-                        }
-
-                        if (uv == null && currentFace is PlanarFace pf)
-                        {
-                            uv = GetPlanarUv(pf, vertex); 
-                        }
-                        if (uv == null) uv = new UV(0, 0);
-
-                        geomItem.Uvs.Add(uv);
-                    }
+                    VertexUvs.AddUvToVertex(vertex, geomItem, currentMaterial, preferences, currentFace);
                 }
             }
 
@@ -338,20 +321,6 @@
             {
                 GLTFExportUtils.AddNormals(CurrentTransform, polymesh, geomItem.Normals);
             }
-        }
-
-        private static UV GetPlanarUv(PlanarFace face, XYZ vertex)
-        {
-            XYZ origin = face.Origin;
-            XYZ uDir = face.XVector.Normalize();
-            XYZ vDir = face.YVector.Normalize();
-
-            XYZ delta = vertex - origin;
-
-            double u = delta.DotProduct(uDir);
-            double v = delta.DotProduct(vDir);
-
-            return new UV(u, v);
         }
 
         /// <summary>
@@ -406,7 +375,7 @@
             currentDocument = node.GetDocument();
 
             transformStack.Push(CurrentTransform.Multiply(linkTransformation));
-            linkOriginalTranformation = new Transform(CurrentTransform);
+            linkOriginalTranformation = new Autodesk.Revit.DB.Transform(CurrentTransform);
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
