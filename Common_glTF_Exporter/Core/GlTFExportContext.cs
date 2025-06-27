@@ -1,19 +1,20 @@
-﻿namespace Common_glTF_Exporter.Core
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Autodesk.Revit.DB;
-    using Common_glTF_Exporter.Export;
-    using Common_glTF_Exporter.Model;
-    using Common_glTF_Exporter.Transform;
-    using Common_glTF_Exporter.Utils;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using Revit_glTF_Exporter;
-    using Transform = Autodesk.Revit.DB.Transform;
-    using Common_glTF_Exporter.EportUtils;
-    using System.Windows.Media.Media3D;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Export;
+using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Transform;
+using Common_glTF_Exporter.Utils;
+using Common_glTF_Exporter.Windows.MainWindow;
+using Revit_glTF_Exporter;
+using Common_glTF_Exporter.EportUtils;
+using System.Windows.Media.Media3D;
+using System.Windows.Controls;
+using Common_glTF_Exporter.UVs;
 
+namespace Common_glTF_Exporter.Core
+{
     /// <summary>
     /// GLTF Export Content class.
     /// </summary>
@@ -21,21 +22,21 @@
     {
         public static bool cancelation { get; set; } = false;
 
-        public Transform linkTransformation { get; private set; }
+        public Autodesk.Revit.DB.Transform linkTransformation { get; private set; }
 
-        public Transform linkOriginalTranformation { get; private set; }
+        public Autodesk.Revit.DB.Transform linkOriginalTranformation { get; private set; }
 
         public bool isLink { get; private set; }
 
         private Preferences preferences;
 
         private Document currentDocument;
-        private View currentView;
+        private Autodesk.Revit.DB.View currentView;
         private GLTFNode currentNode;
         private Element currentElement;
         private Face currentFace;
         private GLTFMaterial currentMaterial;
-        private Stack<Transform> transformStack = new Stack<Transform>();
+        private Stack<Autodesk.Revit.DB.Transform> transformStack = new Stack<Autodesk.Revit.DB.Transform>();
 
         /// <summary>
         /// Stateful, uuid indexable list of intermediate geometries for the element currently being
@@ -66,7 +67,7 @@
         public List<GLTFAccessor> accessors { get; } = new List<GLTFAccessor>();
         public List<GLTFBinaryData> binaryFileData { get; } = new List<GLTFBinaryData>();
 
-        private Transform CurrentTransform
+        private Autodesk.Revit.DB.Transform CurrentTransform
         {
             get
             {
@@ -89,7 +90,7 @@
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
 
             cancelation = false;
-            transformStack.Push(Transform.Identity);
+            transformStack.Push(Autodesk.Revit.DB.Transform.Identity);
 
             // Creation Root Node
             rootNode = new GLTFNode();
@@ -308,15 +309,11 @@
                 foreach (int index in facet.GetVertices())
                 {
                     XYZ vertex = pts[index];
-                    int vertexIndex = vertItem.AddVertexAndFlatten(new PointIntObject(vertex), geomItem.Vertices);
+                    int vertexIndex = vertItem.AddVertexAndFlatten(
+                                         new PointIntObject(vertex), geomItem.Vertices);
                     geomItem.Faces.Add(vertexIndex);
 
-                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
-                    {
-                        UV uv = currentFace?.Project(vertex)?.UVPoint ?? new UV(0, 0);
-                        UV uvInMeters = new UV(uv.U * 12, uv.V * 12);
-                        geomItem.Uvs.Add(uvInMeters);
-                    }
+                    VertexUvs.AddUvToVertex(vertex, geomItem, currentMaterial, preferences, currentFace);
                 }
             }
 
@@ -325,7 +322,6 @@
                 GLTFExportUtils.AddNormals(CurrentTransform, polymesh, geomItem.Normals);
             }
         }
-
 
         /// <summary>
         /// This is called when family instances are encountered, immediately after OnElementBegin.
@@ -379,7 +375,7 @@
             currentDocument = node.GetDocument();
 
             transformStack.Push(CurrentTransform.Multiply(linkTransformation));
-            linkOriginalTranformation = new Transform(CurrentTransform);
+            linkOriginalTranformation = new Autodesk.Revit.DB.Transform(CurrentTransform);
 
             // We can either skip this instance or proceed with rendering it.
             return RenderNodeAction.Proceed;
