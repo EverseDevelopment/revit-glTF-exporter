@@ -31,7 +31,7 @@ namespace Common_glTF_Exporter.Core
         private Preferences preferences;
 
         private Document currentDocument;
-        private View currentView;
+        private Autodesk.Revit.DB.View currentView;
         private GLTFNode currentNode;
         private Element currentElement;
         private Face currentFace;

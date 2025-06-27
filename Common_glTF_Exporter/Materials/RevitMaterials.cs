@@ -14,6 +14,9 @@ namespace Common_glTF_Exporter.Export
     public static class RevitMaterials
     {
         const int ONEINTVALUE = 1;
+        const string REALWORLDSCALEX = "texture_RealWorldScaleX";
+        const string REALWORLDSCALEY = "texture_RealWorldScaleY";
+        const string GENERICDIFFUSEFADE = "generic_diffuse_image_fade";    
 
         /// <summary>
         /// Container for material names (Local cache to avoid Revit API I/O)
@@ -84,12 +87,12 @@ namespace Common_glTF_Exporter.Export
                     {
                         gl_mat.EmbeddedTexturePath = texturePath;
 
-                        float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, "texture_RealWorldScaleX");
-                        float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, "texture_RealWorldScaleY");
+                        float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, REALWORLDSCALEX);
+                        float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, REALWORLDSCALEY);
 
                         float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
 
-                    AssetPropertyDouble fadeProp = theAsset.FindByName("generic_diffuse_image_fade") as AssetPropertyDouble;
+                    AssetPropertyDouble fadeProp = theAsset.FindByName(GENERICDIFFUSEFADE) as AssetPropertyDouble;
 
                         if (fadeProp != null)
                         {

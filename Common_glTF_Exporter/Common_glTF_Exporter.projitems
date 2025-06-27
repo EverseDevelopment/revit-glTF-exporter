@@ -37,6 +37,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\GlbHeaderInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\GltfJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\MeshOpt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Materials\AssetProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Materials\BitmapsUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Links.cs" />
@@ -67,6 +69,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Theme.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UVs\CylindricalUv.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UVs\PlanarUv.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UVs\VertexUvs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\InternetConnection.cs" />

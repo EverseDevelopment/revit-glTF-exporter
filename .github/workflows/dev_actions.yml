@@ -4,59 +4,123 @@ on:
   push:
     branches: [ develop, tests/*, features/*, docs/*, bugs/* ]
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*' 
 
 jobs:
   build:
+    env:
+      FULL_VERSION: "1.0.0.0"
     runs-on: windows-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET Core 3.1
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.x
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
 
-    - name: Setup .NET Core 8.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET Core 8.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v1.1
+      - name: Setup MSBuild Path
+        uses: microsoft/setup-msbuild@v1.1
     
-    - name: Uninstall default WiX Toolset
-      run: |
-        choco uninstall wixtoolset
+      - name: Uninstall default WiX Toolset
+        run: |
+          choco uninstall wixtoolset
 
-    - name: Install specific version of WiX Toolset
-      run: |
-        choco install wixtoolset --version=3.11.2
+      - name: Install specific version of WiX Toolset
+        run: |
+          choco install wixtoolset --version=3.11.2
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.6
+      - name: Get certificate
+        run: |
+          $url = "${{ secrets.EVERSE_CERTIFICATE_S3_URL }}"
+          $outputFilePath = "$GITHUB_WORKSPACE/credentials.pfx"
+          $apiKey = "${{ secrets.EVERSE_AWS_S3_CERTIFICATE_KEY_ID }}"
+        
+          $headers = @{
+              "x-api-key" = $apiKey
+          }
 
-    - name: Restore NuGet Packages
-      run: nuget restore Revit_glTF_Exporter.sln
+          Invoke-RestMethod -Uri $url -Headers $headers -OutFile $outputFilePath
 
-    - name: Configuring Key
-      run: |
-        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="apikey" value="[^"]+"', "key=`"apikey`" value=`"${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+      - name: define certfificate key
+        run: |
+          echo "CERTIFICATE_KEY=${{ secrets.EVERSE_CERTIFICATE_KEY }}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh
 
-    - name: Configuring API URL
-      run: |
-        $apiUrl = "${{ secrets.EVERSE_GLTF_EXPORTER_APIURL }}"
-        (Get-Content Common_glTF_Exporter/Utils/Analytics.cs) -replace 'https://expoterAPI', $apiUrl | Out-File -encoding ASCII Common_glTF_Exporter/Utils/Analytics.cs
-      shell: pwsh
+      - name: define certfificate location
+        run: |
+          echo "CERTIFICATE_LOCATION=$GITHUB_WORKSPACE/credentials.pfx" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh
 
-    - name: Configuring AutoUpdate URL
-      run: |
-        $apiAutoUpdate = "${{ secrets.EVERSE_AUTOUPDATE_ADDINS_URL }}"
-        (Get-Content Common_glTF_Exporter/Version/LatestVersion.cs) -replace 'https://APIAutoUpdate', $apiAutoUpdate | Out-File -encoding ASCII Common_glTF_Exporter/Version/LatestVersion.cs
-      shell: pwsh
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.6
 
-    - name: Build and Publish App
-      run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+      - name: Restore NuGet Packages
+        run: nuget restore Revit_glTF_Exporter.sln
+    
+      - name: Setting new version to the App.config file
+        run: |
+          (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"$env:FULL_VERSION`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+    
+      - name: Setting new version to the AssemblyInfo 2019
+        run: |
+          (Get-Content Revit_glTF_Exporter_2019/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2019/Properties/AssemblyInfo.cs
+    
+      - name: Setting new version to the AssemblyInfo 2020
+        run: |
+          (Get-Content Revit_glTF_Exporter_2020/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2020/Properties/AssemblyInfo.cs
+
+      - name: Setting new version to the AssemblyInfo 2021
+        run: |
+          (Get-Content Revit_glTF_Exporter_2021/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2021/Properties/AssemblyInfo.cs
+
+      - name: Setting new version to the AssemblyInfo 2022
+        run: |
+          (Get-Content Revit_glTF_Exporter_2022/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2022/Properties/AssemblyInfo.cs
+
+      - name: Setting new version to the AssemblyInfo 2023
+        run: |
+          (Get-Content Revit_glTF_Exporter_2023/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2023/Properties/AssemblyInfo.cs
+
+      - name: Setting new version to the AssemblyInfo 2024
+        run: |
+          (Get-Content Revit_glTF_Exporter_2024/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2024/Properties/AssemblyInfo.cs
+
+      - name: Setting new version to the AssemblyInfo 2025
+        run: |
+          (Get-Content Revit_glTF_Exporter_2025/Revit_glTF_Exporter_2025.csproj) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2025/Revit_glTF_Exporter_2025.csproj
+
+      - name: Setting new version to the AssemblyInfo 2026
+        run: |
+          (Get-Content Revit_glTF_Exporter_2026/Revit_glTF_Exporter_2026.csproj) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2026/Revit_glTF_Exporter_2026.csproj
+
+      - name: Setting versions in PackageContents
+        run: |
+          (Get-Content Common_glTF_Exporter/PackageContents.xml) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Common_glTF_Exporter/PackageContents.xml
+
+      - name: Configuring Key
+        run: |
+          (Get-Content Common_glTF_Exporter/App.config) -replace 'key="apikey" value="[^"]+"', "key=`"apikey`" value=`"${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+
+      - name: Configuring API URL
+        run: |
+          $apiUrl = "${{ secrets.EVERSE_GLTF_EXPORTER_APIURL }}"
+          (Get-Content Common_glTF_Exporter/Utils/Analytics.cs) -replace 'https://expoterAPI', $apiUrl | Out-File -encoding ASCII Common_glTF_Exporter/Utils/Analytics.cs
+        shell: pwsh
+
+      - name: Configuring AutoUpdate URL
+        run: |
+          $apiAutoUpdate = "${{ secrets.EVERSE_AUTOUPDATE_ADDINS_URL }}"
+          (Get-Content Common_glTF_Exporter/Version/LatestVersion.cs) -replace 'https://APIAutoUpdate', $apiAutoUpdate | Out-File -encoding ASCII Common_glTF_Exporter/Version/LatestVersion.cs
+        shell: pwsh
+
+      - name: Build and Publish App
+        run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile

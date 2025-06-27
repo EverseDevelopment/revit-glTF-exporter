@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Visual;
 using Common_glTF_Exporter.Core;
-using Common_glTF_Exporter.Windows.MainWindow;
-using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.Materials
 {
