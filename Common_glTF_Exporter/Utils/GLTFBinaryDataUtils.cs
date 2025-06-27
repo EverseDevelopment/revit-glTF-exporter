@@ -1,13 +1,15 @@
-﻿namespace Common_glTF_Exporter.Utils
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Model;
-    using Revit_glTF_Exporter;
+﻿using System.Drawing.Imaging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.Model;
+using Revit_glTF_Exporter;
+using Common_glTF_Exporter.Materials;
 
+namespace Common_glTF_Exporter.Utils
+{
     public class GLTFBinaryDataUtils
     {
         const string SCALAR_STR = "SCALAR";
@@ -210,24 +212,26 @@
             if (material.pbrMetallicRoughness.baseColorTexture.index == -1)
             {
                 byte[] imageBytes = File.ReadAllBytes(material.EmbeddedTexturePath);
-                string mimeType = GetMimeType(material.EmbeddedTexturePath);
+                (string , ImageFormat) mimeType = BitmapsUtils.GetMimeType(material.EmbeddedTexturePath);
 
-                if (imageBytes != null)
+                byte[] blendedBytes = BitmapsUtils.BlendImageWithColor(imageBytes, material.Fadevalue, material.BaseColor, mimeType.Item2);
+
+                if (blendedBytes != null)
                 {
                     if (bufferData.byteData == null)
                     {
-                        bufferData.byteData = imageBytes;
+                        bufferData.byteData = blendedBytes;
                     }
                     else
                     {
-                        byte[] combined = new byte[bufferData.byteData.Length + imageBytes.Length];
+                        byte[] combined = new byte[bufferData.byteData.Length + blendedBytes.Length];
                         Buffer.BlockCopy(bufferData.byteData, 0, combined, 0, bufferData.byteData.Length);
-                        Buffer.BlockCopy(imageBytes, 0, combined, bufferData.byteData.Length, imageBytes.Length);
+                        Buffer.BlockCopy(blendedBytes, 0, combined, bufferData.byteData.Length, blendedBytes.Length);
                         bufferData.byteData = combined;
                     }
                 }
 
-                int currentLenght = imageBytes.Length;
+                int currentLenght = blendedBytes.Length;
                 int alignment = 4;
                 int padding = (alignment - (currentLenght % alignment)) % alignment;
 
@@ -247,7 +251,7 @@
                 var image = new GLTFImage
                 {
                     bufferView = bufferViewIndex,
-                    mimeType = mimeType
+                    mimeType = mimeType.Item1
                 };
 
                 images.Add(image);
@@ -265,30 +269,6 @@
             else
             {
                 return byteOffset;
-            }
-        }
-
-
-
-
-        private static string GetMimeType(string path)
-        {
-            string extension = System.IO.Path.GetExtension(path).ToLower();
-            switch (extension)
-            {
-                case ".jpg":
-                case ".jpeg":
-                    return "image/jpeg";
-                case ".png":
-                    return "image/png";
-                case ".bmp":
-                    return "image/bmp";
-                case ".gif":
-                    return "image/gif";
-                case ".webp":
-                    return "image/webp";
-                default:
-                    return "image/png"; // Default to PNG if unknown
             }
         }
     }

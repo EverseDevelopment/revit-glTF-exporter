@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Text;
     using Newtonsoft.Json;
     using Revit_glTF_Exporter;
@@ -29,6 +30,12 @@
 
         [JsonIgnore]
         public string EmbeddedTexturePath { get; set; } = null;
+        [JsonIgnore]
+        public double Fadevalue { get; set; } = 1;
+
+        [JsonIgnore]
+        public Autodesk.Revit.DB.Color BaseColor { get; set; }
+
         [JsonIgnore]
         public string UniqueId { get; set; } = null;
     }
