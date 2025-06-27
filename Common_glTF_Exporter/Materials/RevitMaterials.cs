@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Visual;
 using Common_glTF_Exporter.Core;
@@ -9,8 +7,7 @@ using Common_glTF_Exporter.Windows.MainWindow;
 using Revit_glTF_Exporter;
 using Common_glTF_Exporter.Materials;
 using Common_glTF_Exporter.Model;
-using System.Xml.Linq;
-using System.Windows.Media.TextFormatting;
+
 
 namespace Common_glTF_Exporter.Export
 {
@@ -65,18 +62,47 @@ namespace Common_glTF_Exporter.Export
                 if (material != null && preferences.materials == MaterialsEnum.textures)
                 {
 
-                    Asset connectedAsset = TryGetConnectedAsset(material, doc);
-                    string texturePath = TryGetTexturePath(connectedAsset);
+                    ElementId appearanceId = material.AppearanceAssetId;
+                    if (appearanceId == ElementId.InvalidElementId)
+                    {
+                        return gl_mat;
+                    }               
+
+                    var appearanceElem = doc.GetElement(appearanceId) as AppearanceAssetElement;
+                    if (appearanceElem == null)
+                    {
+                        return gl_mat;
+                    }
+
+                    Asset theAsset = appearanceElem.GetRenderingAsset();
+
+                    Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset);
+                    string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
 
 
                     if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
                     {
                         gl_mat.EmbeddedTexturePath = texturePath;
 
-                        float scaleX = GetScale(connectedAsset, "texture_RealWorldScaleX");
-                        float scaleY = GetScale(connectedAsset, "texture_RealWorldScaleY");
+                        float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, "texture_RealWorldScaleX");
+                        float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, "texture_RealWorldScaleY");
 
-                        float rotation = GetRotationRadians(connectedAsset);
+                        float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
+
+                    AssetPropertyDouble fadeProp = theAsset.FindByName("generic_diffuse_image_fade") as AssetPropertyDouble;
+
+                        if (fadeProp != null)
+                        {
+                            gl_mat.Fadevalue = fadeProp.Value;
+                            gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
+                            gl_mat.pbrMetallicRoughness.baseColorFactor = new List<float>(4)
+                                {
+                                    1,
+                                    1,
+                                    1,
+                                    opacity
+                                };
+                        }
 
                         gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
                         {
@@ -94,106 +120,6 @@ namespace Common_glTF_Exporter.Export
                 }
 
             return gl_mat;
-        }
-
-        /// <summary>
-        /// Extracts the texture path from the material’s AppearanceAsset, if present.
-        /// Tries "opaque_albedo" first, then iterates over all properties to find a connected asset.
-        /// </summary>
-        private static Asset TryGetConnectedAsset(Material material, Document doc)
-        {
-            ElementId appearanceId = material.AppearanceAssetId;
-            if (appearanceId == ElementId.InvalidElementId)
-                return null;
-
-            var appearanceElem = doc.GetElement(appearanceId) as AppearanceAssetElement;
-            if (appearanceElem == null)
-                return null;
-
-            Asset theAsset = appearanceElem.GetRenderingAsset();
-
-            foreach (var name in new[] { "opaque_albedo", "generic_diffuse" })
-            {
-                var prop = theAsset.FindByName(name);
-                if (prop?.NumberOfConnectedProperties > 0)
-                {
-                    var connected = prop.GetSingleConnectedAsset();
-                    if (connected != null)
-                        return connected;
-                }
-            }
-
-            // Fallback: search all properties for first connected asset
-            for (int i = 0; i < theAsset.Size; i++)
-            {
-                var ap = theAsset[i];
-                if (ap.NumberOfConnectedProperties == 1)
-                {
-                    var connectedAsset = ap.GetSingleConnectedAsset();
-                    if (connectedAsset != null)
-                        return connectedAsset;
-                }
-            }
-
-            return null;
-        }
-
-        private static string TryGetTexturePath(Asset connectedAsset)
-        {
-            if(connectedAsset != null)
-            {
-                var bitmapPathProp = connectedAsset.FindByName("unifiedbitmap_Bitmap") as AssetPropertyString;
-
-                if (bitmapPathProp != null && !string.IsNullOrEmpty(bitmapPathProp.Value))
-                {
-                    string texturePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
-
-                    if (!Path.IsPathRooted(texturePath))
-                    {
-                        string materialsPath = Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles),
-                            @"Autodesk Shared\Materials\Textures\");
-                        texturePath = Path.Combine(materialsPath, texturePath);
-                    }
-
-                    return texturePath;
-                }
-            }
-
-            return null;
-        }
-
-        private static float GetScale(Asset connectedAsset, string textureName)
-        {
-            AssetPropertyDistance scale = connectedAsset.FindByName(textureName) as AssetPropertyDistance;
-
-            if (scale != null)
-            {
-                double scaledValue;
-                #if REVIT2019 || REVIT2020
-                    scaledValue = UnitUtils.Convert(scale.Value, scale.DisplayUnitType, DisplayUnitType.DUT_DECIMAL_FEET);
-                #else
-                    scaledValue = UnitUtils.Convert(scale.Value, scale.GetUnitTypeId(), UnitTypeId.Feet);
-                #endif
-
-                return (float)scaledValue;
-            }
-
-            return 1;
-        }
-
-        private static float GetRotationRadians(Asset connectedAsset)
-        {
-            // In Revit, rotation is usually in degrees
-            AssetPropertyDouble rotation = connectedAsset.FindByName("texture_WAngle") as AssetPropertyDouble;
-
-            if (rotation != null)
-            {
-                // Convert degrees to radians for glTF
-                return (float)(rotation.Value * Math.PI / 180.0);
-            }
-
-            return 0f;
         }
     }
 }

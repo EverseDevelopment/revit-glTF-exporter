@@ -41,7 +41,7 @@ namespace Common_glTF_Exporter.Materials
             gl_mat.alphaCutoff = null;
         }
 
-        private static float SrgbToLinear(float srgb)
+        public static float SrgbToLinear(float srgb)
         {
             return srgb <= 0.04045f
                 ? srgb / 12.92f
