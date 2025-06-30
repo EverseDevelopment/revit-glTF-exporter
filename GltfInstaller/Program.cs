@@ -164,6 +164,7 @@ namespace GltfInstaller
                         for (int year = 2019; year <= 2026; year++)
                         {
                             string filePath = $"{basePath}\\{year}\\Leia_glTF_Exporter.dll";
+
                             bool overwrittable = WaitForFilesToBeOverwritable(filePath);
                             if (!overwrittable)
                             {
@@ -194,6 +195,11 @@ namespace GltfInstaller
 
         public static bool WaitForFilesToBeOverwritable(string filePath, int waitTimeMilliseconds = 1000, int maxAttempts = 15)
         {
+            if (!System.IO.File.Exists(filePath))
+            {
+                return true;
+            }
+
             int attempts = 0;
             while (IsFileInUse(filePath) && attempts < maxAttempts)
             {
