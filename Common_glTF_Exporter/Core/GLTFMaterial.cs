@@ -34,6 +34,9 @@
         public double Fadevalue { get; set; } = 1;
 
         [JsonIgnore]
+        public Autodesk.Revit.DB.Color TintColour { get; set; }
+
+        [JsonIgnore]
         public Autodesk.Revit.DB.Color BaseColor { get; set; }
 
         [JsonIgnore]

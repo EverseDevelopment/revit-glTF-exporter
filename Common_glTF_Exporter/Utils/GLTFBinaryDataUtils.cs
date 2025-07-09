@@ -214,7 +214,8 @@ namespace Common_glTF_Exporter.Utils
                 byte[] imageBytes = File.ReadAllBytes(material.EmbeddedTexturePath);
                 (string , ImageFormat) mimeType = BitmapsUtils.GetMimeType(material.EmbeddedTexturePath);
 
-                byte[] blendedBytes = BitmapsUtils.BlendImageWithColor(imageBytes, material.Fadevalue, material.BaseColor, mimeType.Item2);
+                byte[] blendedBytes = BitmapsUtils.BlendImageWithColor(imageBytes, material.Fadevalue, 
+                    material.BaseColor, mimeType.Item2, material.TintColour);
 
                 if (blendedBytes != null)
                 {

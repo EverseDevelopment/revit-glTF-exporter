@@ -11,6 +11,7 @@ using System.IO.Ports;
 using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
+using System;
 
 namespace Common_glTF_Exporter.Materials
 {
@@ -19,6 +20,8 @@ namespace Common_glTF_Exporter.Materials
         const string REALWORLDSCALEX = "texture_RealWorldScaleX";
         const string REALWORLDSCALEY = "texture_RealWorldScaleY";
         const string GENERICDIFFUSEFADE = "generic_diffuse_image_fade";
+        const string GENERICTINT = "common_Tint_color";
+        const string COMMONTINTTOGGLE = "common_Tint_toggle";
 
         public static GLTFMaterial SetMaterialTextures(Material material, GLTFMaterial gl_mat,
     Document doc, float opacity)
@@ -67,14 +70,42 @@ namespace Common_glTF_Exporter.Materials
                 gl_mat.Fadevalue = fadeProp.Value;
             }
 
+            bool tintOn = true;
+
+            AssetProperty tintEnabledProp = theAsset.FindByName(COMMONTINTTOGGLE);
+            if (tintEnabledProp is AssetPropertyBoolean apb)
+            {
+                tintOn = apb.Value;
+            }
+
+            if (tintOn)
+            {
+                AssetProperty tintProp = theAsset.FindByName(GENERICTINT);
+                if (tintProp is AssetPropertyDoubleArray4d tintArray4d)
+                {
+                    IList<double> rgba = tintArray4d.GetValueAsDoubles();
+
+                    byte r = (byte)(rgba[0] * 255.0);
+                    byte g = (byte)(rgba[1] * 255.0);
+                    byte b = (byte)(rgba[2] * 255.0);
+
+                    gl_mat.TintColour = new Autodesk.Revit.DB.Color(r, g, b);
+                }
+            }
+
+            if (fadeProp != null)
+            {
+                gl_mat.Fadevalue = fadeProp.Value;
+            }
+
             gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
             gl_mat.pbrMetallicRoughness.baseColorFactor = new List<float>(4)
-                                {
-                                    1,
-                                    1,
-                                    1,
-                                    opacity
-                                };
+            {
+                1,
+                1,
+                1,
+                opacity
+            };
 
             gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
             {
