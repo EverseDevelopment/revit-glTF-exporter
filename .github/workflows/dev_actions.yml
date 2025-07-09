@@ -72,7 +72,8 @@ jobs:
     
       - name: Configuring Key
         run: |
-          (Get-Content Common_glTF_Exporter/Utils/SettingsConfig.cs) -replace 'PlaceHolderApiKey', ${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }} | Out-File -encoding ASCII Common_glTF_Exporter/Utils/SettingsConfig.cs
+          $apiUrlKey = "${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}"
+          (Get-Content Common_glTF_Exporter/Utils/SettingsConfig.cs) -replace 'PlaceHolderApiKey', apiUrlKey | Out-File -encoding ASCII Common_glTF_Exporter/Utils/SettingsConfig.cs
     
       - name: Setting new version to the AssemblyInfo 2019
         run: |
