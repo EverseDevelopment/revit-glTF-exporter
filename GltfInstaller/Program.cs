@@ -8,6 +8,7 @@ using System.Management;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using WixSharp;
 using File = WixSharp.File;
 
@@ -19,7 +20,7 @@ namespace GltfInstaller
         static void Main()
         {
             var project = new ManagedProject($"Leia - glTF exporter {versionValue}",
-                              new Dir(@"%CommonAppDataFolder%\Autodesk\ApplicationPlugins",
+                              new Dir(@"%AppDataFolder%\Autodesk\ApplicationPlugins",
                                   new Dir(@"leia.bundle",
                                   new WixSharp.File(@"..\Common_glTF_Exporter\PackageContents.xml"),
                                       new Dir(@"Contents",
@@ -172,19 +173,18 @@ namespace GltfInstaller
                             process.WaitForExit();
                         }
 
-                        string basePath = Environment.ExpandEnvironmentVariables("%ProgramData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
-                        List<string> filePaths = new List<string>();
+                        ActionResult resultCheck;
 
-                        for (int year = 2019; year <= 2026; year++)
+                        resultCheck = CheckFilesAreOverwritable("%ProgramData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
+                        if (resultCheck == ActionResult.Failure)
                         {
-                            string filePath = $"{basePath}\\{year}\\Leia_glTF_Exporter.dll";
+                            return ActionResult.Failure;
+                        }
 
-                            bool overwrittable = WaitForFilesToBeOverwritable(filePath);
-                            if (!overwrittable)
-                            {
-                                MessageBox.Show($"The file Leia_glTF_Exporter.dll {year} is still in use", "Warning");
-                                return ActionResult.Failure;
-                            }
+                        resultCheck = CheckFilesAreOverwritable("%AppData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
+                        if (resultCheck == ActionResult.Failure)
+                        {
+                            return ActionResult.Failure;
                         }
                     }
                     else if (result == DialogResult.No)
@@ -204,6 +204,24 @@ namespace GltfInstaller
 
                 return ActionResult.Failure;
             }
+            return ActionResult.Success;
+        }
+
+        private static ActionResult CheckFilesAreOverwritable(string basePath)
+        {
+            basePath = Environment.ExpandEnvironmentVariables(basePath);
+
+            for (int year = 2019; year <= 2026; year++)
+            {
+                string filePath = System.IO.Path.Combine(basePath, year.ToString(), "Leia_glTF_Exporter.dll");
+
+                if (!WaitForFilesToBeOverwritable(filePath))
+                {
+                    MessageBox.Show($"The file Leia_glTF_Exporter.dll {year} is still in use", "Warning");
+                    return ActionResult.Failure;
+                }
+            }
+
             return ActionResult.Success;
         }
 
