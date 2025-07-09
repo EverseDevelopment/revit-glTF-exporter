@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Materials\AssetProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\BitmapsUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Links.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\LoadContext.cs" />

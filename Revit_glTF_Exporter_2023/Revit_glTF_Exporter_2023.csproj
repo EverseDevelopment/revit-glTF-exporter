@@ -94,15 +94,15 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
-    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
-    mkdir "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
-    copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\"
-    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\Images\"
-    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
-    copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
-    copy "$(ProjectDir)$(OutputPath)*.dll" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
-    copy "$(ProjectDir)$(OutputPath)*.config" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
-    copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(ALLUSERSPROFILE)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    mkdir "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    mkdir "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\Images\"
+    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
+    copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    copy "$(ProjectDir)$(OutputPath)*.dll" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    copy "$(ProjectDir)$(OutputPath)*.config" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
+    copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2023\"
 )
 If "%25CI%25"=="true" (
     "C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe" sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com "$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll"

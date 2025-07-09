@@ -7,7 +7,13 @@ namespace Common_glTF_Exporter.Materials
 {
     public static class AssetPropertiesUtils
     {
-        private static readonly string[] DIFFUSE_NAMES = { "opaque_albedo", "generic_diffuse" };
+        private static readonly string[] DIFFUSE_NAMES = { 
+            Autodesk.Revit.DB.Visual.AdvancedOpaque.OpaqueAlbedo, 
+            Autodesk.Revit.DB.Visual.Generic.GenericDiffuse,
+            Autodesk.Revit.DB.Visual.AdvancedWood.WoodCurlyDistortionMap,
+            Autodesk.Revit.DB.Visual.Hardwood.HardwoodColor,
+            Autodesk.Revit.DB.Visual.AdvancedMetal.SurfaceAlbedo
+        };
         private const string PATHPROPERTY = "unifiedbitmap_Bitmap";
         private const string AUTODESKPATHTEXTURES = @"Autodesk Shared\Materials\Textures\";
         private const string ROTATIONPROPERTY = "texture_WAngle";
