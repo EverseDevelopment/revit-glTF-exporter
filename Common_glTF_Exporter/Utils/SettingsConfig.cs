@@ -1,129 +1,132 @@
-﻿namespace Common_glTF_Exporter.Utils
-{
-    using Autodesk.Internal.InfoCenter;
-    using System.Configuration;
-    using System.IO;
-    using System.Reflection;
-    using Configuration = System.Configuration.Configuration;
-    using Autodesk.Revit.DB;
-    using System;
-    using System.Xml;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Xml;
 
+namespace Common_glTF_Exporter.Utils
+{
     public static class SettingsConfig
     {
-#if REVIT2025 || REVIT2026
-        
-        private static string programDataLocation = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-        private static string appSettingsFile = string.Concat(programDataLocation, "\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents\\2025\\Leia_glTF_Exporter.dll.config");
+        private static readonly string _configDir =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Leia");
+
+        private static readonly string _configFile =
+            Path.Combine(_configDir, "leia.config");
+
+        private static readonly string _currentVersion = "0.0.0";
+        private static readonly string _currentApiKey= "PlaceHolderApiKey";
+
+        private static readonly object _locker = new object();
+
+        static SettingsConfig()
+        {
+            // Ensure folder exists
+            if (!Directory.Exists(_configDir))
+                Directory.CreateDirectory(_configDir);
+
+            // Ensure file exists with defaults
+            if (!File.Exists(_configFile))
+                CreateDefaultConfig();
+        }
 
         public static string GetValue(string key)
         {
-            try
+            lock (_locker)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(appSettingsFile);
-
-                XmlNode node = doc.SelectSingleNode($"//appSettings/add[@key='{key}']");
-                if (node != null)
+                try
                 {
-                    return node.Attributes["value"].Value;
+                    Configuration config = OpenConfig();
+                    KeyValueConfigurationElement setting = config.AppSettings.Settings[key];
+                    return setting != null ? setting.Value : null;
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new KeyNotFoundException($"Key '{key}' not found in configuration file.");
+                    throw new InvalidOperationException(
+                        $"Error retrieving value for key '{key}'.", ex);
                 }
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception as needed
-                throw new InvalidOperationException($"Error retrieving value for key '{key}'", ex);
             }
         }
 
         public static void SetValue(string key, string value)
         {
-            try
+            lock (_locker)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(appSettingsFile);
-
-                XmlNode node = doc.SelectSingleNode($"//appSettings/add[@key='{key}']");
-                if (node != null)
+                try
                 {
-                    node.Attributes["value"].Value = value;
+                    Configuration config = OpenConfig();
+                    KeyValueConfigurationCollection settings = config.AppSettings.Settings;
+
+                    if (settings[key] == null)
+                        settings.Add(key, value);
+                    else
+                        settings[key].Value = value;
+
+                    config.Save(ConfigurationSaveMode.Modified);
+                    ConfigurationManager.RefreshSection("appSettings");
                 }
-                else
+                catch (Exception ex)
                 {
-                    XmlNode appSettingsNode = doc.SelectSingleNode("//appSettings");
-                    if (appSettingsNode == null)
-                    {
-                        appSettingsNode = doc.CreateElement("appSettings");
-                        doc.DocumentElement.AppendChild(appSettingsNode);
-                    }
-
-                    XmlElement addElement = doc.CreateElement("add");
-                    addElement.SetAttribute("key", key);
-                    addElement.SetAttribute("value", value);
-                    appSettingsNode.AppendChild(addElement);
+                    throw new InvalidOperationException(
+                        $"Error setting value for key '{key}'.", ex);
                 }
-
-                doc.Save(appSettingsFile);
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception as needed
-                throw new InvalidOperationException($"Error setting value for key '{key}'", ex);
             }
         }
-
-#else
-
-        private static readonly string BinaryLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private static string appSettingsName = string.Concat(Assembly.GetExecutingAssembly().GetName().Name, ".dll.config");
-        private static string appSettingsFile = System.IO.Path.Combine(BinaryLocation, appSettingsName);
-
-        public static string GetValue(string key)
+        private static Configuration OpenConfig()
         {
-            try
-            {
-                Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap { ExeConfigFilename = appSettingsFile }, ConfigurationUserLevel.None);
-                return configuration.AppSettings.Settings[key].Value;
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception as needed
-                throw new InvalidOperationException($"Error retrieving value for key '{key}'", ex);
-            }
+            var map = new ExeConfigurationFileMap { ExeConfigFilename = _configFile };
+            return ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
         }
 
-        public static void SetValue(string key, string value)
+        /// <summary>
+        /// Creates leia.config with the requested default keys/values.
+        /// </summary>
+        private static void CreateDefaultConfig()
         {
-            try
+            // Your requested defaults (removed the duplicated "runs" key to avoid errors).
+            var defaults = new Dictionary<string, string>
             {
-                Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap { ExeConfigFilename = appSettingsFile }, ConfigurationUserLevel.None);
-                configuration.AppSettings.Settings[key].Value = value;
-                configuration.Save(ConfigurationSaveMode.Modified, true);
-                ConfigurationManager.RefreshSection("appSettings");
-            }
-            catch (Exception ex)
+                { "materials",   "true"  },
+                { "format",      "gltf"  },
+                { "normals",     "false" },
+                { "levels",      "false" },
+                { "lights",      "false" },
+                { "grids",       "false" },
+                { "batchId",     "false" },
+                { "properties",  "false" },
+                { "relocateTo0", "false" },
+                { "flipAxis",    "true"  },
+                { "units",       "null"  },
+                { "compression", "none"  },
+                { "path",        Environment.GetFolderPath(Environment.SpecialFolder.Desktop) },
+                { "fileName",    "3dExport" },
+                { "runs",        "0" },
+                { "version",     _currentVersion },
+                { "user",        "user01" },
+                { "release",     "0" },
+                { "isRFA",       "false" },
+                { "apikey",      _currentApiKey }
+            };
+
+            var doc = new XmlDocument();
+            var decl = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+            doc.AppendChild(decl);
+
+            XmlElement configuration = doc.CreateElement("configuration");
+            doc.AppendChild(configuration);
+
+            XmlElement appSettings = doc.CreateElement("appSettings");
+            configuration.AppendChild(appSettings);
+
+            foreach (var kvp in defaults)
             {
-                // Log or handle the exception as needed
-                throw new InvalidOperationException($"Error setting value for key '{key}'", ex);
-            }
-        }
-#endif
-
-        private static string GetBinaryLocation()
-        {
-            string location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            if (string.IsNullOrEmpty(location))
-            {
-                UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-                location = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
+                XmlElement add = doc.CreateElement("add");
+                add.SetAttribute("key", kvp.Key);
+                add.SetAttribute("value", kvp.Value);
+                appSettings.AppendChild(add);
             }
 
-            return location;
+            doc.Save(_configFile);
         }
     }
 }
