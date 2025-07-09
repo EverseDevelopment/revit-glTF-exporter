@@ -98,7 +98,7 @@ namespace Common_glTF_Exporter.Utils
                 { "flipAxis",    "true"  },
                 { "units",       "null"  },
                 { "compression", "none"  },
-                { "path",        @"C:\Users\User\Desktop" },  // adjust if you need
+                { "path",        Environment.GetFolderPath(Environment.SpecialFolder.Desktop) },
                 { "fileName",    "3dExport" },
                 { "runs",        "0" },
                 { "version",     _currentVersion },
