@@ -8,14 +8,14 @@ namespace Common_glTF_Exporter.Utils
 {
     public static class SettingsConfig
     {
+        public static readonly string currentVersion = "0.0.0";
+        public static readonly string currentApiKey = "PlaceHolderApiKey";
+
         private static readonly string _configDir =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Leia");
 
         private static readonly string _configFile =
             Path.Combine(_configDir, "leia.config");
-
-        private static readonly string _currentVersion = "0.0.0";
-        private static readonly string _currentApiKey= "PlaceHolderApiKey";
 
         private static readonly object _locker = new object();
 
@@ -32,6 +32,9 @@ namespace Common_glTF_Exporter.Utils
 
         public static string GetValue(string key)
         {
+            if (!File.Exists(_configFile))
+                CreateDefaultConfig();
+
             lock (_locker)
             {
                 try
@@ -50,6 +53,9 @@ namespace Common_glTF_Exporter.Utils
 
         public static void SetValue(string key, string value)
         {
+            if (!File.Exists(_configFile))
+                CreateDefaultConfig();
+
             lock (_locker)
             {
                 try
@@ -101,11 +107,9 @@ namespace Common_glTF_Exporter.Utils
                 { "path",        Environment.GetFolderPath(Environment.SpecialFolder.Desktop) },
                 { "fileName",    "3dExport" },
                 { "runs",        "0" },
-                { "version",     _currentVersion },
                 { "user",        "user01" },
                 { "release",     "0" },
-                { "isRFA",       "false" },
-                { "apikey",      _currentApiKey }
+                { "isRFA",       "false" }
             };
 
             var doc = new XmlDocument();

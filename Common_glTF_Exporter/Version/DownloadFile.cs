@@ -17,11 +17,9 @@ namespace Common_glTF_Exporter.Version
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://vxfcsp1qu4.execute-api.us-east-1.amazonaws.com/Prod/LatestInstaller?bucketName=everse.assets&folderName=Installers");
 
-            string version = SettingsConfig.GetValue("version");
+            string version = SettingsConfig.currentVersion;
             string urlParameters = "?inputVersion=" + version +
                 "&&folderName=" + "e-verse/LeiaGltfExporter";
-
-
 
             HttpResponseMessage result = client.GetAsync(urlParameters, HttpCompletionOption.ResponseHeadersRead).Result;
             HttpContent content = result.Content;

@@ -21,7 +21,7 @@ namespace Common_glTF_Exporter.Utils
 
             string user = SettingsConfig.GetValue("user");
             string software = SettingsConfig.GetValue("release");
-            string version = SettingsConfig.GetValue("version");
+            string version = SettingsConfig.currentVersion;
 
             // Use string interpolation to incorporate variables into the JSON string
             string json = $@"{{
@@ -38,7 +38,7 @@ namespace Common_glTF_Exporter.Utils
             {
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                string apiKey = SettingsConfig.GetValue("apikey");
+                string apiKey = SettingsConfig.currentApiKey;
 
                 using (HttpClient client = new HttpClient())
                 {

@@ -16,7 +16,7 @@
     {
         public static void Update(UnitsViewModel unitsViewModel)
         {
-            string version = SettingsConfig.GetValue("version");
+            string version = SettingsConfig.currentVersion;
 
             unitsViewModel.Version = version;
         }
