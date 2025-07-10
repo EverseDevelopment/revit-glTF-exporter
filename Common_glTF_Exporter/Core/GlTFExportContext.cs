@@ -11,7 +11,6 @@ using Revit_glTF_Exporter;
 using Common_glTF_Exporter.EportUtils;
 using System.Windows.Media.Media3D;
 using System.Windows.Controls;
-using Common_glTF_Exporter.UVs;
 
 namespace Common_glTF_Exporter.Core
 {
