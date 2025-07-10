@@ -8,6 +8,7 @@ using System.Management;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using WixSharp;
 using File = WixSharp.File;
 
@@ -19,62 +20,78 @@ namespace GltfInstaller
         static void Main()
         {
             var project = new ManagedProject($"Leia - glTF exporter {versionValue}",
-                              new Dir(@"%CommonAppDataFolder%\Autodesk\ApplicationPlugins",
+                              new Dir(@"%AppDataFolder%\Autodesk\ApplicationPlugins",
                                   new Dir(@"leia.bundle",
                                   new WixSharp.File(@"..\Common_glTF_Exporter\PackageContents.xml"),
                                       new Dir(@"Contents",
                                        new Dir(@"2019",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\Leia_glTF_Exporter.dll.config", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\Leia_glTF_Exporter.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\MeshOpt.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll", new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\Leia_glTF_Exporter.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\DracoWrapper.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\MeshOpt.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new Files(@"..\Revit_glTF_Exporter_2019\bin\Release\*.png")),
                                         new Dir(@"2020",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\Leia_glTF_Exporter.dll.config", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\Leia_glTF_Exporter.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\MeshOpt.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll", new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\Leia_glTF_Exporter.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\DracoWrapper.dll",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\MeshOpt.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new Files(@"..\Revit_glTF_Exporter_2020\bin\Release\*.png")),
                                         new Dir(@"2021",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\Leia_glTF_Exporter.dll.config", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\Leia_glTF_Exporter.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\MeshOpt.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll", new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\Leia_glTF_Exporter.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\DracoWrapper.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\MeshOpt.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new Files(@"..\Revit_glTF_Exporter_2021\bin\Release\*.png")),
                                         new Dir(@"2022",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\Leia_glTF_Exporter.dll.config", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\Leia_glTF_Exporter.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\MeshOpt.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll", new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\Leia_glTF_Exporter.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\DracoWrapper.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\MeshOpt.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new Files(@"..\Revit_glTF_Exporter_2022\bin\Release\*.png")),
                                         new Dir(@"2023",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\Leia_glTF_Exporter.dll.config", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\Leia_glTF_Exporter.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\MeshOpt.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll", new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\Leia_glTF_Exporter.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\DracoWrapper.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\MeshOpt.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new Files(@"..\Revit_glTF_Exporter_2023\bin\Release\*.png")),
                                         new Dir(@"2024",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.dll.config", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\DracoWrapper.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\MeshOpt.dll", new FilePermission("Everyone", GenericPermission.All)),
-                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Newtonsoft.Json.dll", new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Leia_glTF_Exporter.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\DracoWrapper.dll",
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\MeshOpt.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
+                                            new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Newtonsoft.Json.dll", 
+                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new Files(@"..\Revit_glTF_Exporter_2024\bin\Release\*.png")),
                                         new Dir(@"2025",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\Leia_glTF_Exporter.dll.config",
-                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\Leia_glTF_Exporter.dll",
                                                 new FilePermission("Everyone", GenericPermission.All)),
                                             new File(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\DracoWrapper.dll",
@@ -88,8 +105,6 @@ namespace GltfInstaller
                                             new Files(@"..\Revit_glTF_Exporter_2025\bin\Release\net8.0-windows\*.png")),
                                         new Dir(@"2026",
                                             new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
-                                            new File(@"..\Revit_glTF_Exporter_2026\bin\Release\net8.0-windows\Leia_glTF_Exporter.dll.config",
-                                                new FilePermission("Everyone", GenericPermission.All)),
                                             new File(@"..\Revit_glTF_Exporter_2026\bin\Release\net8.0-windows\Leia_glTF_Exporter.dll",
                                                 new FilePermission("Everyone", GenericPermission.All)),
                                             new File(@"..\Revit_glTF_Exporter_2026\bin\Release\net8.0-windows\DracoWrapper.dll",
@@ -158,19 +173,18 @@ namespace GltfInstaller
                             process.WaitForExit();
                         }
 
-                        string basePath = Environment.ExpandEnvironmentVariables("%ProgramData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
-                        List<string> filePaths = new List<string>();
+                        ActionResult resultCheck;
 
-                        for (int year = 2019; year <= 2026; year++)
+                        resultCheck = CheckFilesAreOverwritable("%ProgramData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
+                        if (resultCheck == ActionResult.Failure)
                         {
-                            string filePath = $"{basePath}\\{year}\\Leia_glTF_Exporter.dll";
+                            return ActionResult.Failure;
+                        }
 
-                            bool overwrittable = WaitForFilesToBeOverwritable(filePath);
-                            if (!overwrittable)
-                            {
-                                MessageBox.Show($"The file Leia_glTF_Exporter.dll {year} is still in use", "Warning");
-                                return ActionResult.Failure;
-                            }
+                        resultCheck = CheckFilesAreOverwritable("%AppData%\\Autodesk\\ApplicationPlugins\\leia.bundle\\Contents");
+                        if (resultCheck == ActionResult.Failure)
+                        {
+                            return ActionResult.Failure;
                         }
                     }
                     else if (result == DialogResult.No)
@@ -190,6 +204,24 @@ namespace GltfInstaller
 
                 return ActionResult.Failure;
             }
+            return ActionResult.Success;
+        }
+
+        private static ActionResult CheckFilesAreOverwritable(string basePath)
+        {
+            basePath = Environment.ExpandEnvironmentVariables(basePath);
+
+            for (int year = 2019; year <= 2026; year++)
+            {
+                string filePath = System.IO.Path.Combine(basePath, year.ToString(), "Leia_glTF_Exporter.dll");
+
+                if (!WaitForFilesToBeOverwritable(filePath))
+                {
+                    MessageBox.Show($"The file Leia_glTF_Exporter.dll {year} is still in use", "Warning");
+                    return ActionResult.Failure;
+                }
+            }
+
             return ActionResult.Success;
         }
 

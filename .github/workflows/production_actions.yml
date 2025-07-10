@@ -91,10 +91,16 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore Revit_glTF_Exporter.sln
     
-    - name: Setting new version to the App.config file
+    - name: Setting new version to the config file
       run: |
-        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="version" value="[^"]+"', "key=`"version`" value=`"$env:FULL_VERSION`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
+        (Get-Content Common_glTF_Exporter/Utils/SettingsConfig.cs) -replace '0.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Common_glTF_Exporter/Utils/SettingsConfig.cs
     
+    - name: Configuring Key
+      run: |
+          $apiUrlKey = "${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}"
+          (Get-Content Common_glTF_Exporter/Utils/SettingsConfig.cs) -replace 'PlaceHolderApiKey', $apiUrlKey | Out-File -encoding ASCII Common_glTF_Exporter/Utils/SettingsConfig.cs
+      shell: pwsh
+
     - name: Setting new version to the AssemblyInfo 2019
       run: |
         (Get-Content Revit_glTF_Exporter_2019/Properties/AssemblyInfo.cs) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Revit_glTF_Exporter_2019/Properties/AssemblyInfo.cs
@@ -130,10 +136,6 @@ jobs:
     - name: Setting versions in PackageContents
       run: |
         (Get-Content Common_glTF_Exporter/PackageContents.xml) -replace '1.0.0', $env:FULL_VERSION | Out-File -encoding ASCII Common_glTF_Exporter/PackageContents.xml
-
-    - name: Configuring Key
-      run: |
-        (Get-Content Common_glTF_Exporter/App.config) -replace 'key="apikey" value="[^"]+"', "key=`"apikey`" value=`"${{ secrets.EVERSE_GLTF_EXPORTER_APIKEY }}`"" | Out-File -encoding ASCII Common_glTF_Exporter/App.config
 
     - name: Configuring API URL
       run: |

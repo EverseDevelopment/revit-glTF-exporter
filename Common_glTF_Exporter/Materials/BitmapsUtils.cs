@@ -30,31 +30,50 @@ namespace Common_glTF_Exporter.Materials
         }
 
         public static byte[] BlendImageWithColor(
-    byte[] imageBytes,
-    double fade,
-    Autodesk.Revit.DB.Color flatColor,
-    ImageFormat mimeType)
+            byte[] imageBytes,
+            double fade,
+            Autodesk.Revit.DB.Color flatColor,
+            ImageFormat mimeType,
+            Autodesk.Revit.DB.Color tintColor)
         {
-            if (fade >= 1.0)
-                return imageBytes;
+            bool noFlatBlend = fade >= 1.0 || flatColor == null;
+            if (noFlatBlend && tintColor == null)
+                return imageBytes; 
 
-            float fFade = Clamp((float)fade, 0f, 1f);
-            float fInv = 1f - fFade;
 
-            float lr = SrgbToLinear(flatColor.Red / 255f);
-            float lg = SrgbToLinear(flatColor.Green / 255f);
-            float lb = SrgbToLinear(flatColor.Blue / 255f);
+            float fFade = noFlatBlend ? 1f              
+                                      : Clamp((float)fade, 0f, 1f);
+            float fInv = 1f - fFade;                    // 0 if no blend
+
+            // face colour in linear space (0 if unused)
+            float lrFlat = 0f, lgFlat = 0f, lbFlat = 0f;
+            if (!noFlatBlend)
+            {
+                lrFlat = SrgbToLinear(flatColor.Red / 255f);
+                lgFlat = SrgbToLinear(flatColor.Green / 255f);
+                lbFlat = SrgbToLinear(flatColor.Blue / 255f);
+            }
+
+            // tint factors (1,1,1 ⇒ no change)
+            float lrTint = 1f, lgTint = 1f, lbTint = 1f;
+            if (tintColor != null)
+            {
+                lrTint = SrgbToLinear(tintColor.Red / 255f);
+                lgTint = SrgbToLinear(tintColor.Green / 255f);
+                lbTint = SrgbToLinear(tintColor.Blue / 255f);
+
+                lrTint = Math.Min(lrTint + 0.10f, 1.0f);
+                lgTint = Math.Min(lgTint + 0.10f, 1.0f);
+                lbTint = Math.Min(lbTint + 0.10f, 1.0f);
+            }
 
             byte[] resultBytes;
-
-            using (MemoryStream inputMs = new MemoryStream(imageBytes))
-            using (Bitmap bitmap = new Bitmap(inputMs))
+            using (var inputMs = new MemoryStream(imageBytes))
+            using (var bitmap = new Bitmap(inputMs))
             {
                 Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-                BitmapData data = bitmap.LockBits(
-                    rect,
-                    ImageLockMode.ReadWrite,
-                    PixelFormat.Format32bppArgb);
+                BitmapData data = bitmap.LockBits(rect, ImageLockMode.ReadWrite,
+                                                  PixelFormat.Format32bppArgb);
 
                 int byteCount = Math.Abs(data.Stride) * bitmap.Height;
                 byte[] pixels = new byte[byteCount];
@@ -62,36 +81,40 @@ namespace Common_glTF_Exporter.Materials
 
                 for (int i = 0; i < byteCount; i += 4)
                 {
-                    // bytes BGRA → float 0-1
+                    //BGRA → linear
                     float sb = pixels[i + 0] / 255f;
                     float sg = pixels[i + 1] / 255f;
                     float sr = pixels[i + 2] / 255f;
+                    float lb = SrgbToLinear(sb);
+                    float lg = SrgbToLinear(sg);
+                    float lr = SrgbToLinear(sr);
 
-                    // sRGB → lineal
-                    float lbSrc = SrgbToLinear(sb);
-                    float lgSrc = SrgbToLinear(sg);
-                    float lrSrc = SrgbToLinear(sr);
+                    // BLEND WITH FLAT COLOUR
+                    lb = lb * fFade + lbFlat * fInv;
+                    lg = lg * fFade + lgFlat * fInv;
+                    lr = lr * fFade + lrFlat * fInv;
 
-                    // lineal interpolation
-                    float lbMix = lbSrc * fFade + lb * fInv;
-                    float lgMix = lgSrc * fFade + lg * fInv;
-                    float lrMix = lrSrc * fFade + lr * fInv;
+                    //APPLY TINT
+                    lb *= lbTint;
+                    lg *= lgTint;
+                    lr *= lrTint;
 
-                    pixels[i + 0] = (byte)(Clamp(LinearToSrgb(lbMix), 0f, 1f) * 255f + 0.5f);
-                    pixels[i + 1] = (byte)(Clamp(LinearToSrgb(lgMix), 0f, 1f) * 255f + 0.5f);
-                    pixels[i + 2] = (byte)(Clamp(LinearToSrgb(lrMix), 0f, 1f) * 255f + 0.5f);
+                    //* linear → sRGB, write back
+                    pixels[i + 0] = (byte)(Clamp(LinearToSrgb(lb), 0f, 1f) * 255f + 0.5f);
+                    pixels[i + 1] = (byte)(Clamp(LinearToSrgb(lg), 0f, 1f) * 255f + 0.5f);
+                    pixels[i + 2] = (byte)(Clamp(LinearToSrgb(lr), 0f, 1f) * 255f + 0.5f);
+                    // alpha (pixels[i+3]) untouched
                 }
 
                 Marshal.Copy(pixels, 0, data.Scan0, byteCount);
                 bitmap.UnlockBits(data);
 
-                using (MemoryStream outputMs = new MemoryStream())
+                using (var outputMs = new MemoryStream())
                 {
                     bitmap.Save(outputMs, mimeType);
                     resultBytes = outputMs.ToArray();
                 }
             }
-
             return resultBytes;
         }
 

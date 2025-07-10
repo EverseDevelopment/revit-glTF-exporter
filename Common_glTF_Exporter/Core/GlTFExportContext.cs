@@ -11,7 +11,6 @@ using Revit_glTF_Exporter;
 using Common_glTF_Exporter.EportUtils;
 using System.Windows.Media.Media3D;
 using System.Windows.Controls;
-using Common_glTF_Exporter.UVs;
 
 namespace Common_glTF_Exporter.Core
 {
@@ -277,7 +276,7 @@ namespace Common_glTF_Exporter.Core
                 }
                 else 
                 {
-                    currentMaterial = RevitMaterials.Export(node, ref materials, preferences, currentDocument);
+                    currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
                 }
 
                 materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
@@ -298,6 +297,7 @@ namespace Common_glTF_Exporter.Core
             var geomItem = currentGeometry.CurrentItem;
             var vertItem = currentVertices.CurrentItem;
 
+            IList<UV> uvs = polymesh.GetUVs();
             IList<XYZ> pts = polymesh.GetPoints();
             for (int i = 0; i < pts.Count; i++)
             {
@@ -313,7 +313,11 @@ namespace Common_glTF_Exporter.Core
                                          new PointIntObject(vertex), geomItem.Vertices);
                     geomItem.Faces.Add(vertexIndex);
 
-                    VertexUvs.AddUvToVertex(vertex, geomItem, currentMaterial, preferences, currentFace);
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
+                    {
+                        UV uv = uvs[index];
+                        geomItem.Uvs.Add(uv);
+                    }
                 }
             }
 
