@@ -298,6 +298,7 @@ namespace Common_glTF_Exporter.Core
             var geomItem = currentGeometry.CurrentItem;
             var vertItem = currentVertices.CurrentItem;
 
+            IList<UV> uvs = polymesh.GetUVs();
             IList<XYZ> pts = polymesh.GetPoints();
             for (int i = 0; i < pts.Count; i++)
             {
@@ -313,7 +314,11 @@ namespace Common_glTF_Exporter.Core
                                          new PointIntObject(vertex), geomItem.Vertices);
                     geomItem.Faces.Add(vertexIndex);
 
-                    VertexUvs.AddUvToVertex(vertex, geomItem, currentMaterial, preferences, currentFace);
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
+                    {
+                        UV uv = uvs[index];
+                        geomItem.Uvs.Add(uv);
+                    }
                 }
             }
 
