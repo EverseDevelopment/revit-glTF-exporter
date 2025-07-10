@@ -93,11 +93,7 @@
     mkdir "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2022\"
     mkdir "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
     copy "$(SolutionDir)Common_glTF_Exporter\*.xml" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\"
-    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2022\Images\"
-    copy "$(ProjectDir)$(OutputPath)\Images\*" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\"
-    copy "$(ProjectDir)$(OutputPath)x64\*.dll" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2022\"
     copy "$(ProjectDir)$(OutputPath)*.dll" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2022\"
-    copy "$(ProjectDir)$(OutputPath)*.config" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2022\"
     copy "$(SolutionDir)Common_glTF_Exporter\*.addin" "$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2022\"
 )
 If "%25CI%25"=="true" (

@@ -61,9 +61,12 @@ namespace Common_glTF_Exporter.Materials
                 lrTint = SrgbToLinear(tintColor.Red / 255f);
                 lgTint = SrgbToLinear(tintColor.Green / 255f);
                 lbTint = SrgbToLinear(tintColor.Blue / 255f);
+
+                lrTint = Math.Min(lrTint + 0.10f, 1.0f);
+                lgTint = Math.Min(lgTint + 0.10f, 1.0f);
+                lbTint = Math.Min(lbTint + 0.10f, 1.0f);
             }
 
-            /* 3 ── PROCESS IMAGE ─────────────────────────────────────────── */
             byte[] resultBytes;
             using (var inputMs = new MemoryStream(imageBytes))
             using (var bitmap = new Bitmap(inputMs))
@@ -78,7 +81,7 @@ namespace Common_glTF_Exporter.Materials
 
                 for (int i = 0; i < byteCount; i += 4)
                 {
-                    /* -- BGRA → linear ------------------------------------------------ */
+                    //BGRA → linear
                     float sb = pixels[i + 0] / 255f;
                     float sg = pixels[i + 1] / 255f;
                     float sr = pixels[i + 2] / 255f;
@@ -86,17 +89,17 @@ namespace Common_glTF_Exporter.Materials
                     float lg = SrgbToLinear(sg);
                     float lr = SrgbToLinear(sr);
 
-                    /* -- BLEND WITH FLAT COLOUR (if any) ------------------------------ */
+                    // BLEND WITH FLAT COLOUR
                     lb = lb * fFade + lbFlat * fInv;
                     lg = lg * fFade + lgFlat * fInv;
                     lr = lr * fFade + lrFlat * fInv;
 
-                    /* -- APPLY TINT ---------------------------------------------------- */
+                    //APPLY TINT
                     lb *= lbTint;
                     lg *= lgTint;
                     lr *= lrTint;
 
-                    /* -- linear → sRGB, write back ------------------------------------ */
+                    //* linear → sRGB, write back
                     pixels[i + 0] = (byte)(Clamp(LinearToSrgb(lb), 0f, 1f) * 255f + 0.5f);
                     pixels[i + 1] = (byte)(Clamp(LinearToSrgb(lg), 0f, 1f) * 255f + 0.5f);
                     pixels[i + 2] = (byte)(Clamp(LinearToSrgb(lr), 0f, 1f) * 255f + 0.5f);

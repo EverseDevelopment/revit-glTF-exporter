@@ -28,45 +28,46 @@ namespace Common_glTF_Exporter.Export
         /// Export Revit materials.
         /// </summary>
         public static GLTFMaterial Export(MaterialNode node,
-            ref IndexedDictionary<GLTFMaterial> materials,
             Preferences preferences, Document doc)
         {
             GLTFMaterial gl_mat = new GLTFMaterial();
             float opacity = ONEINTVALUE - (float)node.Transparency;
 
-                Material material = null;
+            Material material = null;
 
-                if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
+            if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
+            {
+                material = doc.GetElement(node.MaterialId) as Material;
+
+                if (material == null)
                 {
-                    material = doc.GetElement(node.MaterialId) as Material;
-
-                    if (material == null)
-                    {
-                        return gl_mat;
-                    }
-
-                    gl_mat.name = material.Name;
-                    gl_mat.UniqueId = material.UniqueId;
-                    MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
-                }
-                else
-                {
-                    var elementData = MaterialNameContainer[node.MaterialId];
-                    gl_mat.name = elementData.MaterialName;
-                    gl_mat.UniqueId = elementData.UniqueId;
-                    material = doc.GetElement(node.MaterialId) as Material;
+                    return gl_mat;
                 }
 
-                GLTFPBR pbr = new GLTFPBR();
-                MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
+                gl_mat.name = material.Name;
+                gl_mat.UniqueId = material.UniqueId;
+                MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
+            }
+            else
+            {
+                var elementData = MaterialNameContainer[node.MaterialId];
+                gl_mat.name = elementData.MaterialName;
+                gl_mat.UniqueId = elementData.UniqueId;
+                material = doc.GetElement(node.MaterialId) as Material;
+            }
 
-                if (material != null && preferences.materials == MaterialsEnum.textures)
-                {
+            GLTFPBR pbr = new GLTFPBR();
+            MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
+
+            if (material != null && preferences.materials == MaterialsEnum.textures)
+            {
                 MaterialTextures.SetMaterialTextures(material, gl_mat, doc, opacity);
-                }
+            }
+
+            MaterialProperties.SetMaterialColour(node, opacity, ref pbr, ref gl_mat);
 
             return gl_mat;
         }
     }
- }
+}
 

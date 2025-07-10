@@ -59,14 +59,6 @@ namespace Common_glTF_Exporter.Materials
             gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
             gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
 
-            gl_mat.pbrMetallicRoughness.baseColorFactor = new List<float>(4)
-            {
-                1,
-                1,
-                1,
-                opacity
-            };
-
             gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
             {
                 index = -1,

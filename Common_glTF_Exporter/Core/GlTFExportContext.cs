@@ -276,7 +276,7 @@ namespace Common_glTF_Exporter.Core
                 }
                 else 
                 {
-                    currentMaterial = RevitMaterials.Export(node, ref materials, preferences, currentDocument);
+                    currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
                 }
 
                 materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
