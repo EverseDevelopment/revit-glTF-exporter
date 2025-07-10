@@ -16,7 +16,7 @@ namespace Revit_glTF_Exporter
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://APIAutoUpdate");
 
-            string version = SettingsConfig.GetValue("version");
+            string version = SettingsConfig.currentVersion;
             string urlParameters = "?inputVersion=" + version +
                 "&&folderName=" + "e-verse/LeiaGltfExporter";
 
