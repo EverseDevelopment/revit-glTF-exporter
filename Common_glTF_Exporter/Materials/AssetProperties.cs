@@ -1,17 +1,21 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Visual;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Common_glTF_Exporter.Materials
 {
     public static class AssetPropertiesUtils
     {
-        private static readonly string[] DIFFUSE_NAMES = { "opaque_albedo", "generic_diffuse" };
-        private const string PATHPROPERTY = "unifiedbitmap_Bitmap";
+        private static readonly string[] DIFFUSE_NAMES = { 
+            Autodesk.Revit.DB.Visual.AdvancedOpaque.OpaqueAlbedo, 
+            Autodesk.Revit.DB.Visual.Generic.GenericDiffuse,
+            Autodesk.Revit.DB.Visual.AdvancedWood.WoodCurlyDistortionMap,
+            Autodesk.Revit.DB.Visual.Hardwood.HardwoodColor,
+            Autodesk.Revit.DB.Visual.AdvancedMetal.SurfaceAlbedo          
+        };
         private const string AUTODESKPATHTEXTURES = @"Autodesk Shared\Materials\Textures\";
-        private const string ROTATIONPROPERTY = "texture_WAngle";
-        private const string DIFUSSEDEFINITION = "generic_diffuse";
 
         public static Asset GetDiffuseBitmap(Asset theAsset)
         {
@@ -33,7 +37,7 @@ namespace Common_glTF_Exporter.Materials
         {
             if (connectedAsset != null)
             {
-                var bitmapPathProp = connectedAsset.FindByName(PATHPROPERTY) as AssetPropertyString;
+                var bitmapPathProp = connectedAsset.FindByName(UnifiedBitmap.UnifiedbitmapBitmap) as AssetPropertyString;
 
                 if (bitmapPathProp != null && !string.IsNullOrEmpty(bitmapPathProp.Value))
                 {
@@ -59,7 +63,7 @@ namespace Common_glTF_Exporter.Materials
             Autodesk.Revit.DB.Color appearenceColor = Autodesk.Revit.DB.Color.InvalidColorValue;
 
             AssetPropertyDoubleArray4d colorProperty =
-                theAsset.FindByName(DIFUSSEDEFINITION) as AssetPropertyDoubleArray4d;
+                theAsset.FindByName(Generic.GenericDiffuse) as AssetPropertyDoubleArray4d;
 
             if (colorProperty != null)
             {
@@ -75,7 +79,8 @@ namespace Common_glTF_Exporter.Materials
 
         public static float GetRotationRadians(Asset connectedAsset)
         {
-            AssetPropertyDouble rotation = connectedAsset.FindByName(ROTATIONPROPERTY) as AssetPropertyDouble;
+            AssetPropertyDouble rotation = 
+                connectedAsset.FindByName(UnifiedBitmap.TextureWAngle) as AssetPropertyDouble;
 
             if (rotation != null)
             {
@@ -87,7 +92,8 @@ namespace Common_glTF_Exporter.Materials
 
         public static float GetScale(Asset connectedAsset, string textureName)
         {
-            AssetPropertyDistance scale = connectedAsset.FindByName(textureName) as AssetPropertyDistance;
+            AssetPropertyDistance scale = 
+                connectedAsset.FindByName(textureName) as AssetPropertyDistance;
 
             if (scale != null)
             {
@@ -99,6 +105,46 @@ namespace Common_glTF_Exporter.Materials
                 #endif
 
                 return (float)scaledValue;
+            }
+
+            return 1;
+        }
+
+        public static Autodesk.Revit.DB.Color GetTint(Asset asset)
+        {
+            bool tintOn = true;
+
+            AssetProperty tintEnabledProp = asset.FindByName(Generic.CommonTintToggle);
+            if (tintEnabledProp is AssetPropertyBoolean apb)
+            {
+                tintOn = apb.Value;
+            }
+
+            if (tintOn)
+            {
+                AssetProperty tintProp = asset.FindByName(Generic.CommonTintColor);
+                if (tintProp is AssetPropertyDoubleArray4d tintArray4d)
+                {
+                    IList<double> rgba = tintArray4d.GetValueAsDoubles();
+
+                    byte r = (byte)(rgba[0] * 255.0);
+                    byte g = (byte)(rgba[1] * 255.0);
+                    byte b = (byte)(rgba[2] * 255.0);
+
+                    return new Autodesk.Revit.DB.Color(r, g, b);
+                }
+            }
+
+            return null;
+        }
+
+        public static double GetFade(Asset asset)
+        {
+            AssetPropertyDouble fadeProp = asset.FindByName(Generic.GenericDiffuseImageFade) as AssetPropertyDouble;
+
+            if (fadeProp != null)
+            {
+                return fadeProp.Value;
             }
 
             return 1;
