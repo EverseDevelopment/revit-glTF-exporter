@@ -36,15 +36,12 @@ namespace Common_glTF_Exporter.Materials
             ImageFormat mimeType,
             Autodesk.Revit.DB.Color tintColor)
         {
-            /* 1 ── FAST EXIT ────────────────────────────────────────────────
-               No blend (fade == 1 or flatColor missing) AND no tint → return
-            */
             bool noFlatBlend = fade >= 1.0 || flatColor == null;
             if (noFlatBlend && tintColor == null)
-                return imageBytes;          // nothing to do
+                return imageBytes; 
 
-            /* 2 ── PRECOMPUTE FACTORS ────────────────────────────────────── */
-            float fFade = noFlatBlend ? 1f               // keep image as-is
+
+            float fFade = noFlatBlend ? 1f              
                                       : Clamp((float)fade, 0f, 1f);
             float fInv = 1f - fFade;                    // 0 if no blend
 
