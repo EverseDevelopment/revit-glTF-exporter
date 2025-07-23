@@ -37,7 +37,7 @@ namespace Common_glTF_Exporter.Materials
 
             Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset);
             string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
-
+            gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
 
             if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
             {
@@ -59,7 +59,6 @@ namespace Common_glTF_Exporter.Materials
             float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
 
             gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);
-            gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
             gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
 
             float[] gltfScale = new float[] { 1f / scaleX, 1f / scaleY };
