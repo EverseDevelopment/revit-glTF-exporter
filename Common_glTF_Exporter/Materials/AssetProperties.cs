@@ -3,6 +3,7 @@ using Autodesk.Revit.DB.Visual;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.Materials
 {
@@ -15,7 +16,7 @@ namespace Common_glTF_Exporter.Materials
             Autodesk.Revit.DB.Visual.Hardwood.HardwoodColor,
             Autodesk.Revit.DB.Visual.AdvancedMetal.SurfaceAlbedo          
         };
-        private const string AUTODESKPATHTEXTURES = @"Autodesk Shared\Materials\Textures\";
+
 
         public static Asset GetDiffuseBitmap(Asset theAsset)
         {
@@ -41,17 +42,25 @@ namespace Common_glTF_Exporter.Materials
 
                 if (bitmapPathProp != null && !string.IsNullOrEmpty(bitmapPathProp.Value))
                 {
-                    string texturePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
+                    string relativeOrAbsolutePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
 
-                    if (!Path.IsPathRooted(texturePath))
+                    // If already absolute and the file exists, return it directly
+                    if (Path.IsPathRooted(relativeOrAbsolutePath) && File.Exists(relativeOrAbsolutePath))
                     {
-                        string materialsPath = Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles),
-                            AUTODESKPATHTEXTURES);
-                        texturePath = Path.Combine(materialsPath, texturePath);
+                        return relativeOrAbsolutePath;
                     }
 
-                    return texturePath;
+                    // Otherwise, search each base path
+                    foreach (string basePath in MainWindow.TexturePaths)
+                    {
+                        string candidatePath = Path.Combine(basePath, relativeOrAbsolutePath);
+                        string fullPath = Path.GetFullPath(candidatePath);
+
+                        if (File.Exists(fullPath))
+                        {
+                            return fullPath;
+                        }
+                    }
                 }
             }
 
@@ -108,6 +117,27 @@ namespace Common_glTF_Exporter.Materials
             }
 
             return 1;
+        }
+
+        public static float GetOffset(Asset connectedAsset, string textureName)
+        {
+            AssetPropertyDistance offset =
+                connectedAsset.FindByName(textureName) as AssetPropertyDistance;
+
+            if (offset != null)
+            {
+                double offsetValue;
+
+                #if REVIT2019 || REVIT2020
+                offsetValue = UnitUtils.Convert(offset.Value, offset.DisplayUnitType, DisplayUnitType.DUT_DECIMAL_FEET);
+                #else
+                offsetValue = UnitUtils.Convert(offset.Value, offset.GetUnitTypeId(), UnitTypeId.Feet);
+                #endif
+
+                return (float)offsetValue;
+            }
+
+            return 0;
         }
 
         public static Autodesk.Revit.DB.Color GetTint(Asset asset)

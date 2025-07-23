@@ -19,7 +19,7 @@ namespace Common_glTF_Exporter.Materials
             gl_mat.alphaCutoff = null;
         }
 
-        public static void SetMaterialColour(MaterialNode node, 
+        public static void SetMaterialColour(MaterialNode node,
             float opacity, ref GLTFPBR pbr, ref GLTFMaterial gl_mat)
         {
             if (gl_mat.EmbeddedTexturePath == null)
@@ -28,32 +28,56 @@ namespace Common_glTF_Exporter.Materials
                 float sg = node.Color.Green / 255f;
                 float sb = node.Color.Blue / 255f;
 
-                // A linear conversion is needed to reflect the real colour
-                float lr = SrgbToLinear(sr);
-                float lg = SrgbToLinear(sg);
-                float lb = SrgbToLinear(sb);
-
-                pbr.baseColorFactor = new List<float>(4)
+                if (gl_mat.TintColour == null)
                 {
-                    lr,
-                    lg,
-                    lb,
-                    opacity
-                };
+                    // A linear conversion is needed to reflect the real colour
+                    float lr = SrgbToLinear(sr);
+                    float lg = SrgbToLinear(sg);
+                    float lb = SrgbToLinear(sb);
+
+                    pbr.baseColorFactor = new List<float>(4)
+            {
+                lr,
+                lg,
+                lb,
+                opacity
+            };
+                }
+                else
+                {
+                    // Apply tint by multiplying base color by tint color
+                    float tr = gl_mat.TintColour.Red / 255f;
+                    float tg = gl_mat.TintColour.Green / 255f;
+                    float tb = gl_mat.TintColour.Blue / 255f;
+
+                    // Convert to linear space after applying tint
+                    float lr = SrgbToLinear(sr * tr);
+                    float lg = SrgbToLinear(sg * tg);
+                    float lb = SrgbToLinear(sb * tb);
+
+                    pbr.baseColorFactor = new List<float>(4)
+            {
+                lr,
+                lg,
+                lb,
+                opacity
+            };
+                }
             }
             else
             {
                 gl_mat.pbrMetallicRoughness.baseColorFactor = new List<float>(4)
-                {
-                    1,
-                    1,
-                    1,
-                    opacity
-                };
+        {
+            1,
+            1,
+            1,
+            opacity
+        };
             }
 
             gl_mat.pbrMetallicRoughness = pbr;
         }
+
 
         public static float SrgbToLinear(float srgb)
         {
