@@ -110,6 +110,27 @@ namespace Common_glTF_Exporter.Materials
             return 1;
         }
 
+        public static float GetOffset(Asset connectedAsset, string textureName)
+        {
+            AssetPropertyDistance offset =
+                connectedAsset.FindByName(textureName) as AssetPropertyDistance;
+
+            if (offset != null)
+            {
+                double offsetValue;
+
+#if REVIT2019 || REVIT2020
+                offsetValue = UnitUtils.Convert(offset.Value, offset.DisplayUnitType, DisplayUnitType.DUT_DECIMAL_FEET);
+#else
+            offsetValue = UnitUtils.Convert(offset.Value, offset.GetUnitTypeId(), UnitTypeId.Feet);
+#endif
+
+                return (float)offsetValue;
+            }
+
+            return 0;
+        }
+
         public static Autodesk.Revit.DB.Color GetTint(Asset asset)
         {
             bool tintOn = true;

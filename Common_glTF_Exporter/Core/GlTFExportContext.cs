@@ -316,7 +316,8 @@ namespace Common_glTF_Exporter.Core
                     if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
                     {
                         UV uv = uvs[index];
-                        geomItem.Uvs.Add(uv);
+                        UV flippedUV = new UV(uv.U, 1.0 - uv.V);
+                        geomItem.Uvs.Add(flippedUV);
                     }
                 }
             }

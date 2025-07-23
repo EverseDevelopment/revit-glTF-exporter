@@ -54,10 +54,20 @@ namespace Common_glTF_Exporter.Materials
 
             float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleX);
             float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleY);
+            float offsetX = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetX);
+            float offsetY = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetY);
             float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
+
             gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);
             gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
             gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
+
+            float[] gltfScale = new float[] { 1f / scaleX, 1f / scaleY };
+            float[] gltfOffset = new float[]
+            {
+        offsetX / scaleX,
+        1f - offsetY / scaleY - gltfScale[1] // <- V offset flipped for glTF
+            };
 
             gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
             {
@@ -66,7 +76,8 @@ namespace Common_glTF_Exporter.Materials
                 {
                     TextureTransform = new GLTFTextureTransform
                     {
-                        scale = new float[] { 1f / scaleX, 1f / scaleY },
+                        offset = gltfOffset,
+                        scale = gltfScale,
                         rotation = rotation
                     }
                 }
