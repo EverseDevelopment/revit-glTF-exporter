@@ -12,11 +12,13 @@ using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
 using System;
+using Common_glTF_Exporter.Utils;
 
 namespace Common_glTF_Exporter.Materials
 {
     public static class MaterialTextures
     {
+        
         public static GLTFMaterial SetMaterialTextures(Material material, GLTFMaterial gl_mat,
     Document doc, float opacity)
         {
@@ -64,8 +66,8 @@ namespace Common_glTF_Exporter.Materials
             float[] gltfScale = new float[] { 1f / scaleX, 1f / scaleY };
             float[] gltfOffset = new float[]
             {
-        offsetX / scaleX,
-        1f - offsetY / scaleY - gltfScale[1] // <- V offset flipped for glTF
+                -(offsetX / scaleX),
+                offsetY / scaleY - gltfScale[1]
             };
 
             gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo

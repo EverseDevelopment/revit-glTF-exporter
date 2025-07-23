@@ -1,24 +1,25 @@
-﻿namespace Revit_glTF_Exporter
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using Autodesk.Internal.Windows;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
-    using Common_glTF_Exporter;
-    using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Utils;
-    using Common_glTF_Exporter.ViewModel;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using Theme = Common_glTF_Exporter.Utils.Theme;
-    using View = Autodesk.Revit.DB.View;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Autodesk.Internal.Windows;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Common_glTF_Exporter;
+using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.Utils;
+using Common_glTF_Exporter.ViewModel;
+using Common_glTF_Exporter.Windows.MainWindow;
+using Theme = Common_glTF_Exporter.Utils.Theme;
+using View = Autodesk.Revit.DB.View;
+using Common_glTF_Exporter.Materials;
 
+namespace Revit_glTF_Exporter
+{
     /// <summary>
     /// Interaction logic for Settings.xaml.
     /// </summary>
@@ -26,6 +27,7 @@
     public partial class MainWindow : Window
     {
         private Document doc;
+        public static List<string> TexturePaths { get; set; }
 
         public MainWindow(View view)
         {
@@ -44,7 +46,9 @@
 
             Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
 
-            Analytics.Send("Open", "Main Window").GetAwaiter();
+            TexturePaths = TextureLocation.GetPaths();
+
+            Analytics.Send("Open", "Main Window").GetAwaiter();        
         }
 
         public static MainWindow MainView { get; set; }
