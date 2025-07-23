@@ -128,11 +128,11 @@ namespace Common_glTF_Exporter.Materials
             {
                 double offsetValue;
 
-#if REVIT2019 || REVIT2020
+                #if REVIT2019 || REVIT2020
                 offsetValue = UnitUtils.Convert(offset.Value, offset.DisplayUnitType, DisplayUnitType.DUT_DECIMAL_FEET);
-#else
-            offsetValue = UnitUtils.Convert(offset.Value, offset.GetUnitTypeId(), UnitTypeId.Feet);
-#endif
+                #else
+                offsetValue = UnitUtils.Convert(offset.Value, offset.GetUnitTypeId(), UnitTypeId.Feet);
+                #endif
 
                 return (float)offsetValue;
             }

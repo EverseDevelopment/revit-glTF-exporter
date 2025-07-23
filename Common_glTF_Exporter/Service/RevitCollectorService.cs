@@ -25,7 +25,7 @@ namespace Common_glTF_Exporter.Service
             return uiApplication.ActiveUIDocument.Document;
         }
 
-        public Application GetApplication() 
+        public Autodesk.Revit.ApplicationServices.Application GetApplication() 
         {
             return uiApplication.Application;
         }
