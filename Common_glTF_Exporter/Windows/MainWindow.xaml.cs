@@ -113,7 +113,10 @@ namespace Revit_glTF_Exporter
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton == MouseButton.Left && e.ButtonState == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -128,7 +131,7 @@ namespace Revit_glTF_Exporter
 
         private void Leia_Link(object sender, RoutedEventArgs e)
         {
-            Hyperlink.Run("https://apps.autodesk.com/RVT/es/Detail/Index?id=492952120634946986&appLang=en&os=Win64");
+            Hyperlink.Run(Links.leiaWebsite);
         }
 
         private void TrueFalseToggles(object sender, RoutedEventArgs e)
