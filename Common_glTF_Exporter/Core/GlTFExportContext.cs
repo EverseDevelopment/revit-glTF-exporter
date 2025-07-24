@@ -11,6 +11,7 @@ using Revit_glTF_Exporter;
 using Common_glTF_Exporter.EportUtils;
 using System.Windows.Media.Media3D;
 using System.Windows.Controls;
+using System.IO.Ports;
 
 namespace Common_glTF_Exporter.Core
 {
@@ -86,6 +87,7 @@ namespace Common_glTF_Exporter.Core
         /// <returns>TRUE if starded.</returns>
         public bool Start()
         {
+            ExportLog.Write("Export Started");
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
 
             cancelation = false;
@@ -109,6 +111,9 @@ namespace Common_glTF_Exporter.Core
 
             currentGeometry = new IndexedDictionary<GeometryDataObject>();
             currentVertices = new IndexedDictionary<VertexLookupIntObject>();
+
+            currentMaterial = GLTFExportUtils.CreateDefaultGLTFMaterial(1, true);
+            materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
 
             return true;
         }
@@ -134,6 +139,7 @@ namespace Common_glTF_Exporter.Core
                     scenes, nodes, meshes, materials, accessors, textures, images);
                 Compression.Run(preferences, ProgressBarWindow.ViewModel);
             }
+            ExportLog.Write("Export Finished");
         }
 
         /// <summary>
@@ -268,13 +274,13 @@ namespace Common_glTF_Exporter.Core
         /// <param name="node">Material node.</param>
         public void OnMaterial(MaterialNode node)
         {
-            if (preferences.materials == MaterialsEnum.materials || preferences.materials ==  MaterialsEnum.textures)
+            if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
             {
                 if (node.MaterialId == ElementId.InvalidElementId)
                 {
                     currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
                 }
-                else 
+                else
                 {
                     currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
                 }
@@ -292,7 +298,8 @@ namespace Common_glTF_Exporter.Core
         /// <param name="polymesh">PolymeshTopology.</param>
         public void OnPolymesh(PolymeshTopology polymesh)
         {
-            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
+            GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, 
+                currentVertices, currentMaterial);
 
             var geomItem = currentGeometry.CurrentItem;
             var vertItem = currentVertices.CurrentItem;
@@ -375,6 +382,7 @@ namespace Common_glTF_Exporter.Core
 
         public RenderNodeAction OnLinkBegin(LinkNode node)
         {
+            ExportLog.Write($"On LinkBegin {node.NodeName}");
             isLink = true;
 
             currentDocument = node.GetDocument();
@@ -388,6 +396,7 @@ namespace Common_glTF_Exporter.Core
 
         public void OnLinkEnd(LinkNode node)
         {
+            ExportLog.Write($"On LinkEnd {node.NodeName}");
             isLink = false;
             // Note: This method is invoked even for instances that were skipped.
             transformStack.Pop();
@@ -416,9 +425,11 @@ namespace Common_glTF_Exporter.Core
                     continue;
                 }
 
-                currentMaterial = MaterialUtils.GetGltfMeshMaterial(currentDocument, preferences, mesh, materials, true);
-
-                materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, true);
+                if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
+                {
+                    currentMaterial = MaterialUtils.GetGltfMeshMaterial(currentDocument, preferences, mesh, materials, true);
+                    materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, true);
+                }
 
                 GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
 

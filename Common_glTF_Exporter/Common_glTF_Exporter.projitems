@@ -65,7 +65,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Analytics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DirectoryUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ExportLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Hyperlink.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\LogConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
