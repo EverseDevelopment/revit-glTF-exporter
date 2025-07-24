@@ -9,5 +9,6 @@ namespace Common_glTF_Exporter
     {
         public static string contactLink = "https://e-verse.com/contact/";
         public static string everseWebsite = "https://e-verse.com";
+        public static string leiaWebsite = "https://e-verse.com/leia-plugin/";
     }
 }
