@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Common_glTF_Exporter;
 
 namespace Revit_glTF_Exporter
 {
@@ -49,7 +50,7 @@ namespace Revit_glTF_Exporter
 
         private void Version_Link(object sender, RoutedEventArgs e)
         {
-            Hyperlink.Run("https://e-verse.notion.site/Leia-version-4-4-724-0c53931c9cc04ea3ae143af10bfbbc8a");
+            Hyperlink.Run(Links.notionLink);
         }
 
         private void UpdatesNotes_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -59,7 +60,10 @@ namespace Revit_glTF_Exporter
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton == MouseButton.Left && e.ButtonState == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
     }
 }

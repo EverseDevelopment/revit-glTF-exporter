@@ -10,5 +10,6 @@ namespace Common_glTF_Exporter
         public static string contactLink = "https://e-verse.com/contact/";
         public static string everseWebsite = "https://e-verse.com";
         public static string leiaWebsite = "https://e-verse.com/leia-plugin/";
+        public static string notionLink = "https://e-verse.notion.site/Leia-version-4-4-724-0c53931c9cc04ea3ae143af10bfbbc8a";
     }
 }

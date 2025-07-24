@@ -113,7 +113,10 @@ namespace Revit_glTF_Exporter
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton == MouseButton.Left && e.ButtonState == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
