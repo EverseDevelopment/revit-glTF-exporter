@@ -12,7 +12,7 @@ namespace Common_glTF_Exporter.Utils
             string flipAxis = SettingsConfig.GetValue("flipAxis");
             string normals = SettingsConfig.GetValue("normals");
             string relocateTo0 = SettingsConfig.GetValue("relocateTo0");
-            string materials = SettingsConfig.GetValue("Materials");
+            string materials = SettingsConfig.GetValue("materials");
             string units = SettingsConfig.GetValue("units");
             string batchId = SettingsConfig.GetValue("batchId");
             string levels = SettingsConfig.GetValue("levels");

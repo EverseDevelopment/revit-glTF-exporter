@@ -36,7 +36,6 @@ namespace Common_glTF_Exporter.Export
                 }
 
                 gl_mat.name = material.Name;
-                gl_mat.UniqueId = material.UniqueId;
                 gl_mat.UniqueId = node.MaterialId.ToString();
 
                 GLTFPBR pbr = new GLTFPBR();
