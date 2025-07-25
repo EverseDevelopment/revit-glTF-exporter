@@ -14,9 +14,7 @@ namespace Common_glTF_Exporter.Utils
             {
                 Directory.CreateDirectory(Links.configDir);
             }
-
-            string path = Path.Combine(Links.configDir, "leia_log.txt");
-            File.WriteAllText(path, $"[START] Export started at {DateTime.Now}\n");
+            File.WriteAllText(logFilePath, $"[START] Export started at {DateTime.Now}\n");
         }
 
         public static void EndLog()
@@ -37,7 +35,7 @@ namespace Common_glTF_Exporter.Utils
             }
         }
 
-        public void WriteException(Exception ex)
+        public static void WriteException(Exception ex)
         {
             try
             {

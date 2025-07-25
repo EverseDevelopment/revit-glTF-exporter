@@ -39,6 +39,7 @@
             catch (Exception ex)
             {
                 Analytics.Send("Error", ex.Message).GetAwaiter();
+                ExportLog.WriteException(ex);
                 MessageWindow.Show("Error", ex.Message);
                 return Result.Failed;
             }

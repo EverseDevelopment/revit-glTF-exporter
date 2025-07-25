@@ -20,11 +20,6 @@ namespace Common_glTF_Exporter.Export
         const int ONEINTVALUE = 1;
 
         /// <summary>
-        /// Container for material names (Local cache to avoid Revit API I/O)
-        /// </summary>
-        static Dictionary<ElementId, MaterialCacheDTO> MaterialNameContainer = new Dictionary<ElementId, MaterialCacheDTO>();
-
-        /// <summary>
         /// Export Revit materials.
         /// </summary>
         public static GLTFMaterial Export(MaterialNode node,
@@ -33,11 +28,7 @@ namespace Common_glTF_Exporter.Export
             GLTFMaterial gl_mat = new GLTFMaterial();
             float opacity = ONEINTVALUE - (float)node.Transparency;
 
-            Material material = null;
-
-            if (!MaterialNameContainer.TryGetValue(node.MaterialId, out var materialElement))
-            {
-                material = doc.GetElement(node.MaterialId) as Material;
+            Material material = doc.GetElement(node.MaterialId) as Material;
 
                 if (material == null)
                 {
@@ -46,25 +37,18 @@ namespace Common_glTF_Exporter.Export
 
                 gl_mat.name = material.Name;
                 gl_mat.UniqueId = material.UniqueId;
-                MaterialNameContainer.Add(node.MaterialId, new MaterialCacheDTO(material.Name, material.UniqueId));
-            }
-            else
-            {
-                var elementData = MaterialNameContainer[node.MaterialId];
-                gl_mat.name = elementData.MaterialName;
-                gl_mat.UniqueId = elementData.UniqueId;
-                material = doc.GetElement(node.MaterialId) as Material;
-            }
+                gl_mat.UniqueId = node.MaterialId.ToString();
 
-            GLTFPBR pbr = new GLTFPBR();
-            MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
+                GLTFPBR pbr = new GLTFPBR();
+                MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
 
-            if (material != null && preferences.materials == MaterialsEnum.textures)
-            {
-                MaterialTextures.SetMaterialTextures(material, gl_mat, doc, opacity);
-            }
+                if (material != null && preferences.materials == MaterialsEnum.textures)
+                {
+                    MaterialTextures.SetMaterialTextures(material, gl_mat, doc, opacity);
+                }
 
-            MaterialProperties.SetMaterialColour(node, opacity, ref pbr, ref gl_mat);
+                MaterialProperties.SetMaterialColour(node, opacity, ref pbr, ref gl_mat);
+
 
             return gl_mat;
         }

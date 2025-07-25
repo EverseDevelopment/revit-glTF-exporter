@@ -11,7 +11,6 @@ using Revit_glTF_Exporter;
 using Common_glTF_Exporter.EportUtils;
 using System.Windows.Media.Media3D;
 using System.Windows.Controls;
-using System.IO.Ports;
 
 namespace Common_glTF_Exporter.Core
 {
@@ -138,6 +137,11 @@ namespace Common_glTF_Exporter.Core
                 FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
                     scenes, nodes, meshes, materials, accessors, textures, images);
                 Compression.Run(preferences, ProgressBarWindow.ViewModel);
+            }
+
+            if (currentElement != null)
+            {
+                ExportLog.Write($"Last Element {currentElement.Id}");
             }
             ExportLog.Write("Export Finished");
         }
@@ -282,10 +286,17 @@ namespace Common_glTF_Exporter.Core
                 }
                 else
                 {
-                    currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
+                    string materialId = node.MaterialId.ToString();
+                    if (materials.Contains(materialId))
+                    {
+                        currentMaterial = materials.GetElement(materialId);
+                    }
+                    else
+                    {
+                        currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
+                    }
+                    materials.AddOrUpdateCurrentMaterial(materialId, currentMaterial, false);
                 }
-
-                materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
             }
         }
 

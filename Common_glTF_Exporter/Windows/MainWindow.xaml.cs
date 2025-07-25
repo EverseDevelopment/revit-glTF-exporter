@@ -91,7 +91,7 @@ namespace Revit_glTF_Exporter
             int incrementRun = numberRuns + 1;
             SettingsConfig.SetValue("runs", incrementRun.ToString());
 
-            ExportLog.Write($"{elementsInView.Count} elements will be esported");
+            ExportLog.Write($"{elementsInView.Count} elements will be exported");
             ProgressBarWindow progressBar =
                 ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
 

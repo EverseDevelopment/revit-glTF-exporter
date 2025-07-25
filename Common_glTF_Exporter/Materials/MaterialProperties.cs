@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
+using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Common_glTF_Exporter.Core;
 
@@ -24,60 +26,70 @@ namespace Common_glTF_Exporter.Materials
         {
             if (gl_mat.EmbeddedTexturePath == null)
             {
-                float sr = node.Color.Red / 255f;
-                float sg = node.Color.Green / 255f;
-                float sb = node.Color.Blue / 255f;
+                (float, float, float) baseColours;
 
-                if (gl_mat.TintColour == null)
+                if (gl_mat.BaseColor == null)
                 {
-                    // A linear conversion is needed to reflect the real colour
-                    float lr = SrgbToLinear(sr);
-                    float lg = SrgbToLinear(sg);
-                    float lb = SrgbToLinear(sb);
-
-                    pbr.baseColorFactor = new List<float>(4)
-            {
-                lr,
-                lg,
-                lb,
-                opacity
-            };
+                    baseColours = RgbToUnit(node.Color);
                 }
                 else
                 {
-                    // Apply tint by multiplying base color by tint color
-                    float tr = gl_mat.TintColour.Red / 255f;
-                    float tg = gl_mat.TintColour.Green / 255f;
-                    float tb = gl_mat.TintColour.Blue / 255f;
+                    baseColours = RgbToUnit(gl_mat.BaseColor);
+                }
 
-                    // Convert to linear space after applying tint
-                    float lr = SrgbToLinear(sr * tr);
-                    float lg = SrgbToLinear(sg * tg);
-                    float lb = SrgbToLinear(sb * tb);
+                if (gl_mat.TintColour == null)
+                {
+                    pbr.baseColorFactor = GetLinearColour(baseColours, opacity);
+                }
+                else
+                {
+                    (float, float, float) baseTintColour = RgbToUnit(gl_mat.TintColour);
+                    (float, float, float) blendColour = BlendColour(baseColours, baseTintColour);
 
-                    pbr.baseColorFactor = new List<float>(4)
-            {
-                lr,
-                lg,
-                lb,
-                opacity
-            };
+                    pbr.baseColorFactor = GetLinearColour(blendColour, opacity);
                 }
             }
             else
             {
-                gl_mat.pbrMetallicRoughness.baseColorFactor = new List<float>(4)
-        {
-            1,
-            1,
-            1,
-            opacity
-        };
+                gl_mat.pbrMetallicRoughness.baseColorFactor = GetDefaultColour(opacity);
             }
 
             gl_mat.pbrMetallicRoughness = pbr;
         }
 
+        public static List<float> GetDefaultColour(float opacity)
+        {
+            return new List<float>(4) { 1, 1, 1, opacity };
+        }
+
+        public static (float, float, float) BlendColour((float, float, float) colourA, 
+            (float, float, float) colourB)
+        {
+            float lr = colourA.Item1 * colourB.Item1;
+            float lg = colourA.Item2 * colourB.Item2;
+            float lb = colourA.Item3 * colourB.Item3;
+
+            return (lr, lg, lb);
+        }
+
+        public static List<float> GetLinearColour((float, float, float) baseColours, float opacity)
+        {
+            float lr = SrgbToLinear(baseColours.Item1);
+            float lg = SrgbToLinear(baseColours.Item2);
+            float lb = SrgbToLinear(baseColours.Item3);
+
+            return new List<float>(4){ lr, lg, lb, opacity};
+        }
+
+        public static (float, float, float) RgbToUnit(Color color)
+        {
+            float sr = color.Red / 255f;
+            float sg = color.Green / 255f;
+            float sb = color.Blue / 255f;
+
+            return (sr, sg, sb);
+
+        }
 
         public static float SrgbToLinear(float srgb)
         {

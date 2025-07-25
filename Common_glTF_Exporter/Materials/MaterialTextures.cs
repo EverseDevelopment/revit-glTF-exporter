@@ -13,6 +13,7 @@ using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
 using System;
 using Common_glTF_Exporter.Utils;
+using System.Diagnostics;
 
 namespace Common_glTF_Exporter.Materials
 {
@@ -36,14 +37,25 @@ namespace Common_glTF_Exporter.Materials
             }
 
             Asset theAsset = appearanceElem.GetRenderingAsset();
+            AssetPropertyString baseSchema = theAsset.FindByName("BaseSchema") as AssetPropertyString;
+            if (baseSchema == null)
+            {
+                return gl_mat;
+            }
 
-            Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset);
+            string schemaName = baseSchema.Value;
+            Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset, schemaName);
             string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
             gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
+
 
             if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
             {
                 SetTextureProperties(gl_mat, texturePath, connectedAsset, theAsset, opacity);
+            }
+            else
+            {
+                gl_mat.BaseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
             }
 
             return gl_mat;
@@ -60,8 +72,7 @@ namespace Common_glTF_Exporter.Materials
             float offsetY = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetY);
             float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
 
-            gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);
-            gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
+            gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);         
 
             float[] gltfScale = new float[] { 1f / scaleX, 1f / scaleY };
             float[] gltfOffset = new float[]
