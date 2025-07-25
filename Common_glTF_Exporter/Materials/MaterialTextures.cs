@@ -47,15 +47,11 @@ namespace Common_glTF_Exporter.Materials
             Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset, schemaName);
             string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
             gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
-
+            gl_mat.BaseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
 
             if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
             {
                 SetTextureProperties(gl_mat, texturePath, connectedAsset, theAsset, opacity);
-            }
-            else
-            {
-                gl_mat.BaseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
             }
 
             return gl_mat;
