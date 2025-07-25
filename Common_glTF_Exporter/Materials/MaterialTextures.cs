@@ -12,11 +12,14 @@ using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
 using System;
+using Common_glTF_Exporter.Utils;
+using System.Diagnostics;
 
 namespace Common_glTF_Exporter.Materials
 {
     public static class MaterialTextures
     {
+        
         public static GLTFMaterial SetMaterialTextures(Material material, GLTFMaterial gl_mat,
     Document doc, float opacity)
         {
@@ -34,14 +37,25 @@ namespace Common_glTF_Exporter.Materials
             }
 
             Asset theAsset = appearanceElem.GetRenderingAsset();
+            AssetPropertyString baseSchema = theAsset.FindByName("BaseSchema") as AssetPropertyString;
+            if (baseSchema == null)
+            {
+                return gl_mat;
+            }
 
-            Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset);
+            string schemaName = baseSchema.Value;
+            Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset, schemaName);
             string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
+            gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
 
 
             if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
             {
                 SetTextureProperties(gl_mat, texturePath, connectedAsset, theAsset, opacity);
+            }
+            else
+            {
+                gl_mat.BaseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
             }
 
             return gl_mat;
@@ -54,10 +68,18 @@ namespace Common_glTF_Exporter.Materials
 
             float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleX);
             float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleY);
+            float offsetX = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetX);
+            float offsetY = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetY);
             float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
-            gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);
-            gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
-            gl_mat.BaseColor = AssetPropertiesUtils.GetAppearenceColor(theAsset);
+
+            gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);         
+
+            float[] gltfScale = new float[] { 1f / scaleX, 1f / scaleY };
+            float[] gltfOffset = new float[]
+            {
+                -(offsetX / scaleX),
+                offsetY / scaleY - gltfScale[1]
+            };
 
             gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
             {
@@ -66,7 +88,8 @@ namespace Common_glTF_Exporter.Materials
                 {
                     TextureTransform = new GLTFTextureTransform
                     {
-                        scale = new float[] { 1f / scaleX, 1f / scaleY },
+                        offset = gltfOffset,
+                        scale = gltfScale,
                         rotation = rotation
                     }
                 }
