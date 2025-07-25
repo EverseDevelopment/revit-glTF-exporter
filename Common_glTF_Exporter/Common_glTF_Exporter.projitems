@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Materials\BitmapsUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTextures.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Materials\TextureLocation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Links.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\LoadContext.cs" />
@@ -64,10 +65,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Transform\ModelScale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Analytics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DirectoryUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ExportLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Hyperlink.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\LogConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MaterialUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GLTFBinaryDataUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\RevitIniReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Theme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Version\DownloadFile.cs" />

@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,11 @@ namespace Common_glTF_Exporter.Service
         public Document GetDocument()
         {
             return uiApplication.ActiveUIDocument.Document;
+        }
+
+        public Autodesk.Revit.ApplicationServices.Application GetApplication() 
+        {
+            return uiApplication.Application;
         }
     }
 }

@@ -1,24 +1,25 @@
-﻿namespace Revit_glTF_Exporter
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using Autodesk.Internal.Windows;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
-    using Common_glTF_Exporter;
-    using Common_glTF_Exporter.Core;
-    using Common_glTF_Exporter.Utils;
-    using Common_glTF_Exporter.ViewModel;
-    using Common_glTF_Exporter.Windows.MainWindow;
-    using Theme = Common_glTF_Exporter.Utils.Theme;
-    using View = Autodesk.Revit.DB.View;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Autodesk.Internal.Windows;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Common_glTF_Exporter;
+using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.Utils;
+using Common_glTF_Exporter.ViewModel;
+using Common_glTF_Exporter.Windows.MainWindow;
+using Theme = Common_glTF_Exporter.Utils.Theme;
+using View = Autodesk.Revit.DB.View;
+using Common_glTF_Exporter.Materials;
 
+namespace Revit_glTF_Exporter
+{
     /// <summary>
     /// Interaction logic for Settings.xaml.
     /// </summary>
@@ -26,6 +27,7 @@
     public partial class MainWindow : Window
     {
         private Document doc;
+        public static List<string> TexturePaths { get; set; }
 
         public MainWindow(View view)
         {
@@ -44,7 +46,11 @@
 
             Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
 
+            TexturePaths = TextureLocation.GetPaths();
+
             Analytics.Send("Open", "Main Window").GetAwaiter();
+            ExportLog.StartLog();
+            ExportLog.Write("Open Window");
         }
 
         public static MainWindow MainView { get; set; }
@@ -55,9 +61,10 @@
 
         private void OnExportView(object sender, RoutedEventArgs e)
         {
-            View3D exportView = this.View as View3D;
-
             string format = string.Concat(".", SettingsConfig.GetValue("format"));
+            LogConfiguration.SaveConfig();
+            View3D exportView = this.View as View3D;
+            
             string fileName = SettingsConfig.GetValue("fileName");
             bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
             if (dialogResult != true)
@@ -76,6 +83,7 @@
             if (!doc.IsFamilyDocument && !elementsInView.Any())
             {
                 MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
+                ExportLog.Write("There are no valid elements to export in this view");
                 return;
             }
 
@@ -83,6 +91,7 @@
             int incrementRun = numberRuns + 1;
             SettingsConfig.SetValue("runs", incrementRun.ToString());
 
+            ExportLog.Write($"{elementsInView.Count} elements will be exported");
             ProgressBarWindow progressBar =
                 ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
 
@@ -104,12 +113,16 @@
             ProgressBarWindow.ViewModel.ProgressBarValue = elementsInView.Count + 1;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
+            ExportLog.EndLog();
             ProgressBarWindow.ViewModel.Action = "Accept";
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton == MouseButton.Left && e.ButtonState == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -124,7 +137,7 @@
 
         private void Leia_Link(object sender, RoutedEventArgs e)
         {
-            Hyperlink.Run("https://apps.autodesk.com/RVT/es/Detail/Index?id=492952120634946986&appLang=en&os=Win64");
+            Hyperlink.Run(Links.leiaWebsite);
         }
 
         private void TrueFalseToggles(object sender, RoutedEventArgs e)
