@@ -81,7 +81,7 @@ namespace Common_glTF_Exporter.Materials
             return new List<float>(4){ lr, lg, lb, opacity};
         }
 
-        public static (float, float, float) RgbToUnit(Color color)
+        public static (float, float, float) RgbToUnit(Autodesk.Revit.DB.Color color)
         {
             float sr = color.Red / 255f;
             float sg = color.Green / 255f;
