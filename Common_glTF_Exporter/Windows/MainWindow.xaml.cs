@@ -48,7 +48,9 @@ namespace Revit_glTF_Exporter
 
             TexturePaths = TextureLocation.GetPaths();
 
-            Analytics.Send("Open", "Main Window").GetAwaiter();        
+            Analytics.Send("Open", "Main Window").GetAwaiter();
+            ExportLog.StartLog();
+            ExportLog.Write("Open Window");
         }
 
         public static MainWindow MainView { get; set; }
@@ -59,9 +61,10 @@ namespace Revit_glTF_Exporter
 
         private void OnExportView(object sender, RoutedEventArgs e)
         {
-            View3D exportView = this.View as View3D;
-
             string format = string.Concat(".", SettingsConfig.GetValue("format"));
+            LogConfiguration.SaveConfig();
+            View3D exportView = this.View as View3D;
+            
             string fileName = SettingsConfig.GetValue("fileName");
             bool dialogResult = FilesHelper.AskToSave(ref fileName, string.Empty, format);
             if (dialogResult != true)
@@ -80,6 +83,7 @@ namespace Revit_glTF_Exporter
             if (!doc.IsFamilyDocument && !elementsInView.Any())
             {
                 MessageWindow.Show("No Valid Elements", "There are no valid elements to export in this view");
+                ExportLog.Write("There are no valid elements to export in this view");
                 return;
             }
 
@@ -87,6 +91,7 @@ namespace Revit_glTF_Exporter
             int incrementRun = numberRuns + 1;
             SettingsConfig.SetValue("runs", incrementRun.ToString());
 
+            ExportLog.Write($"{elementsInView.Count} elements will be exported");
             ProgressBarWindow progressBar =
                 ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
 
@@ -108,6 +113,7 @@ namespace Revit_glTF_Exporter
             ProgressBarWindow.ViewModel.ProgressBarValue = elementsInView.Count + 1;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 100;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
+            ExportLog.EndLog();
             ProgressBarWindow.ViewModel.Action = "Accept";
         }
 

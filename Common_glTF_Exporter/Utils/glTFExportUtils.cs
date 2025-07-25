@@ -65,6 +65,7 @@
                 IndexedDictionary<VertexLookupIntObject> vertexIntObj,
                 GLTFMaterial material)
             {
+
                 // Add new "_current" entries if vertex_key is unique
                 string vertex_key = string.Concat(element.UniqueId, UNDERSCORE, material.UniqueId);
                 geomDataObj.AddOrUpdateCurrent(vertex_key, new GeometryDataObject());

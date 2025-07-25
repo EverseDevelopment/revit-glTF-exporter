@@ -9,26 +9,70 @@ namespace Common_glTF_Exporter.Materials
 {
     public static class AssetPropertiesUtils
     {
-        private static readonly string[] DIFFUSE_NAMES = { 
-            Autodesk.Revit.DB.Visual.AdvancedOpaque.OpaqueAlbedo, 
-            Autodesk.Revit.DB.Visual.Generic.GenericDiffuse,
-            Autodesk.Revit.DB.Visual.AdvancedWood.WoodCurlyDistortionMap,
-            Autodesk.Revit.DB.Visual.Hardwood.HardwoodColor,
-            Autodesk.Revit.DB.Visual.AdvancedMetal.SurfaceAlbedo          
+        private static readonly Dictionary<string, string> DiffusePropertyMap = new Dictionary<string, string>
+        {
+            { "ConcreteSchema", Autodesk.Revit.DB.Visual.Concrete.ConcreteBmMap },
+            { "PrismGenericSchema", Autodesk.Revit.DB.Visual.Generic.GenericDiffuse },
+            { "GenericSchema", Autodesk.Revit.DB.Visual.Generic.GenericDiffuse },
+            { "PrismMetalSchema", Autodesk.Revit.DB.Visual.AdvancedMetal.SurfaceAlbedo },
+            { "PrismWoodSchema", Autodesk.Revit.DB.Visual.AdvancedWood.WoodCurlyDistortionMap },
+            { "HardwoodSchema", Autodesk.Revit.DB.Visual.Hardwood.HardwoodColor },
+            { "PrismMasonryCMUSchema", Autodesk.Revit.DB.Visual.MasonryCMU.MasonryCMUPatternMap },
+            { "PrismOpaqueSchema", Autodesk.Revit.DB.Visual.AdvancedOpaque.OpaqueAlbedo }
         };
 
-
-        public static Asset GetDiffuseBitmap(Asset theAsset)
+        public static Asset GetDiffuseBitmap(Asset theAsset, string baseSchema)
         {
-            foreach (var name in DIFFUSE_NAMES)
+            if (theAsset == null || string.IsNullOrEmpty(baseSchema))
+                return null;
+
+            if (!DiffusePropertyMap.TryGetValue(baseSchema, out string diffusePropertyName))
+                return null;
+
+            var prop = theAsset.FindByName(diffusePropertyName);
+            if (prop?.NumberOfConnectedProperties > 0)
             {
-                var prop = theAsset.FindByName(name);
-                if (prop?.NumberOfConnectedProperties > 0)
-                {
-                    var connected = prop.GetSingleConnectedAsset();
-                    if (connected != null)
-                        return connected;
-                }
+                return prop.GetSingleConnectedAsset();
+            }
+
+            return null;
+        }
+
+        private static readonly Dictionary<string, string> ColorPropertyMap = new Dictionary<string, string>
+        {
+            { "PrismGenericSchema", Generic.GenericDiffuse },
+            { "ConcreteSchema", Concrete.ConcreteColor },
+            { "WallPaintSchema", WallPaint.WallpaintColor },
+            { "PlasticVinylSchema", PlasticVinyl.PlasticvinylColor },
+            { "MetallicPaintSchema", MetallicPaint.MetallicpaintBaseColor },
+            { "CeramicSchema", Ceramic.CeramicColor },
+            { "MetalSchema", Metal.MetalColor },
+            { "PrismMetalSchema", AdvancedMetal.MetalF0 },
+            { "PrismOpaqueSchema", AdvancedOpaque.OpaqueAlbedo },
+            { "PrismLayeredSchema", AdvancedLayered.LayeredDiffuse },
+            { "GenericSchema", Generic.GenericDiffuse },     
+            { "AdvancedMetalSchema", AdvancedMetal.SurfaceAlbedo }
+        };
+
+        public static Autodesk.Revit.DB.Color GetAppearanceColor(Asset theAsset, string baseSchema)
+        {
+            if (theAsset == null || string.IsNullOrEmpty(baseSchema))
+                return null;
+
+            if (!ColorPropertyMap.TryGetValue(baseSchema, out string colorPropertyName))
+                return null;
+
+            var colorProperty = theAsset.FindByName(colorPropertyName) as AssetPropertyDoubleArray4d;
+
+            if (colorProperty != null)
+            {
+                IList<double> colorValues = colorProperty.GetValueAsDoubles();
+
+                return new Autodesk.Revit.DB.Color(
+                    (byte)(colorValues[0] * 255.0),
+                    (byte)(colorValues[1] * 255.0),
+                    (byte)(colorValues[2] * 255.0)
+                );
             }
 
             return null;
@@ -65,25 +109,6 @@ namespace Common_glTF_Exporter.Materials
             }
 
             return null;
-        }
-
-        public static Autodesk.Revit.DB.Color GetAppearenceColor(Asset theAsset)
-        {
-            Autodesk.Revit.DB.Color appearenceColor = Autodesk.Revit.DB.Color.InvalidColorValue;
-
-            AssetPropertyDoubleArray4d colorProperty =
-                theAsset.FindByName(Generic.GenericDiffuse) as AssetPropertyDoubleArray4d;
-
-            if (colorProperty != null)
-            {
-                var colour = colorProperty.GetValueAsDoubles();
-                appearenceColor = new Autodesk.Revit.DB.Color(
-                    (byte)(colour[0] * 255.0),
-                    (byte)(colour[1] * 255.0),
-                    (byte)(colour[2] * 255.0));
-            }
-
-            return appearenceColor;
         }
 
         public static float GetRotationRadians(Asset connectedAsset)

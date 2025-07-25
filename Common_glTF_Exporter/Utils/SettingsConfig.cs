@@ -11,19 +11,16 @@ namespace Common_glTF_Exporter.Utils
         public static readonly string currentVersion = "0.0.0";
         public static readonly string currentApiKey = "PlaceHolderApiKey";
 
-        private static readonly string _configDir =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Leia");
-
         private static readonly string _configFile =
-            Path.Combine(_configDir, "leia.config");
+            Path.Combine(Links.configDir, "leia.config");
 
         private static readonly object _locker = new object();
 
         static SettingsConfig()
         {
             // Ensure folder exists
-            if (!Directory.Exists(_configDir))
-                Directory.CreateDirectory(_configDir);
+            if (!Directory.Exists(Links.configDir))
+                Directory.CreateDirectory(Links.configDir);
 
             // Ensure file exists with defaults
             if (!File.Exists(_configFile))
