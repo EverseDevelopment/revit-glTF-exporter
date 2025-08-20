@@ -1,16 +1,17 @@
 ﻿namespace Revit_glTF_Exporter
 {
-    using System;
-    using System.IO;
-    using System.Windows.Media.Imaging;
+    using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Autodesk.Windows;
-    using Autodesk.Revit.DB;
-    using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
-    using System.Linq;
-    using System.Windows.Media;
-    using System.Windows;
+    using Common_glTF_Exporter;
     using Common_glTF_Exporter.Service;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 
     /// <summary>
     /// External Application.
@@ -20,7 +21,6 @@
         public static RevitCollectorService RevitCollectorService;
         private static readonly string RIBBONTAB = "e-verse";
         private static readonly string RIBBONPANEL = "Export glTF";
-        private static readonly string LEIAURL = @"https://e-verse.com/leia-gltf-exporter/";
         private static string pushButtonName = "Leia";
         private static string pushButtonText = "Leia";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
@@ -86,7 +86,7 @@
             Autodesk.Windows.RibbonPanel panel =
                        tab.Panels.FirstOrDefault(panelLeia => panelLeia.Source.Id.Contains(RIBBONPANEL));
 
-            ContextualHelp contexHelp = new ContextualHelp(ContextualHelpType.Url, LEIAURL);
+            ContextualHelp contexHelp = new ContextualHelp(ContextualHelpType.Url, Links.leiaWebsite);
             if (panel == null)
             {
                 RibbonPanel leiaPanel = application.CreateRibbonPanel(RIBBONTAB, RIBBONPANEL);
