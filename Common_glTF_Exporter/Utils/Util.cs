@@ -20,13 +20,17 @@ namespace Revit_glTF_Exporter
         /// </returns>
         public static bool CanBeLockOrHidden(Element element, View view, bool rfaFile)
         {
-            if (!rfaFile && element.Category.CanAddSubcategory)
-            {
-                return true;
-            }
             if (element.CanBeHidden(view))
             {
                 return true;
+            }
+
+            if (!rfaFile)
+            {
+                if (element.Category.CanAddSubcategory || element.Category.AllowsBoundParameters)
+                {
+                    return true;
+                }
             }
 
             return false;

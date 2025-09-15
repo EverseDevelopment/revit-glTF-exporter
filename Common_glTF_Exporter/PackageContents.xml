@@ -12,7 +12,7 @@
 
     <CompanyDetails Name="Leia" />
 
-    <RuntimeRequirements OS="Win32|Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2020" />
+    <RuntimeRequirements OS="Win32|Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2026" />
 
     <Components Description="2020 parts">
         <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2020" />
