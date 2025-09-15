@@ -12,7 +12,7 @@
 
     <CompanyDetails Name="Leia" />
 
-    <RuntimeRequirements OS="Win32|Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2020" />
+    <RuntimeRequirements OS="Win32|Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2026" />
 
     <Components Description="2020 parts">
         <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2020" />
@@ -43,4 +43,10 @@
 		<RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2025" SeriesMax="R2025" />
 		<ComponentEntry AppName="Leia_glTF_Exporter" Version="1.0.0" ModuleName="./Contents/2025/Leia_glTF_Exporter.addin" AppDescription="Leia glTF Exporter Add-in" />
 	</Components>
+
+	<Components Description="2026 parts">
+		<RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2026" SeriesMax="R2026" />
+		<ComponentEntry AppName="Leia_glTF_Exporter" Version="1.0.0" ModuleName="./Contents/2026/Leia_glTF_Exporter.addin" AppDescription="Leia glTF Exporter Add-in" />
+	</Components>
+	
 </ApplicationPackage>
