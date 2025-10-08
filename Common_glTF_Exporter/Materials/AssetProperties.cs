@@ -30,7 +30,11 @@ namespace Common_glTF_Exporter.Materials
                 return null;
 
             var prop = theAsset.FindByName(diffusePropertyName);
-            if (prop?.NumberOfConnectedProperties > 0)
+
+            if (prop == null) 
+                return null;
+
+            if (prop.NumberOfConnectedProperties == 1)
             {
                 return prop.GetSingleConnectedAsset();
             }
