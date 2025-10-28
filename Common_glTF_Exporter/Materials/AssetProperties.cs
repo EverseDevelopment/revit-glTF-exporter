@@ -17,7 +17,8 @@ namespace Common_glTF_Exporter.Materials
             { "PrismMetalSchema", Autodesk.Revit.DB.Visual.AdvancedMetal.SurfaceAlbedo },
             { "PrismWoodSchema", Autodesk.Revit.DB.Visual.AdvancedWood.WoodCurlyDistortionMap },
             { "HardwoodSchema", Autodesk.Revit.DB.Visual.Hardwood.HardwoodColor },
-            { "PrismMasonryCMUSchema", Autodesk.Revit.DB.Visual.MasonryCMU.MasonryCMUPatternMap },
+            { "PrismMasonryCMUSchema", Autodesk.Revit.DB.Visual.MasonryCMU.MasonryCMUColor },
+            { "MasonryCMUSchema", Autodesk.Revit.DB.Visual.MasonryCMU.MasonryCMUColor },
             { "PrismOpaqueSchema", Autodesk.Revit.DB.Visual.AdvancedOpaque.OpaqueAlbedo }
         };
 
