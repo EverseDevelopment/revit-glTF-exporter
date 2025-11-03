@@ -35,6 +35,7 @@ namespace Common_glTF_Exporter.Utils
             ExportLog.Write($"compression: {compression}");
             ExportLog.Write($"release: {release}");
             ExportLog.Write($"runs: {runs}");
+            ExportLog.Write($"LeiaVersion: {SettingsConfig.currentVersion}");
         }
 
     }

@@ -39,8 +39,9 @@
             catch (Exception ex)
             {
                 Analytics.Send("Error", ex.Message).GetAwaiter();
+                ExportLog.Write($"Last Element Processed {SettingsConfig.lastElement}");
                 ExportLog.WriteException(ex);
-                MessageWindow.Show("Error", ex.Message);
+                ErrorWindow.Show(ex.Message);
                 return Result.Failed;
             }
         }
