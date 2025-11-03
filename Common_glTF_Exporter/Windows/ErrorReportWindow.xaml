@@ -1,0 +1,112 @@
+﻿<Window x:Class="Revit_glTF_Exporter.ErrorReportWindow" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Revit_glTF_Exporter"
+             mc:Ignorable="d" 
+             WindowStartupLocation="CenterScreen"
+             Title="Exporting process in progress..." 
+             Height="335"
+             Width="357"
+             ResizeMode="NoResize"
+             Topmost="True"
+             ShowInTaskbar="True"
+             Style="{DynamicResource CustomWindowStyle}">
+
+
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="Transparent" 
+            BorderThickness="1,1,1,1" 
+            CornerRadius="8,8,8,8"
+            MouseDown="Border_MouseDown" Margin="15,5,13,15">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" Direction="0"></DropShadowEffect>
+        </Border.Effect>
+
+        <Grid
+              Background="Transparent" Margin="20">
+
+            <Button Style="{DynamicResource MainTitleButtonStyle}"
+                    Background="Transparent" 
+                    BorderBrush="Transparent" 
+                    Click="Leia_Link" 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="0,0,0,0" Height="44" Width="149"  >
+            </Button>
+
+            <Button  
+                   Style="{DynamicResource TabCloseButtonStyle}"
+                   Name="CloseButton"  
+                   Click="CancelProcess_Click" 
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Top"/>
+
+            <StackPanel Orientation="Vertical" Margin="0,49,0,0">
+                <Line Stroke="{DynamicResource MainGray}"
+                  X2="1000"
+                  Opacity="0.5"
+                  StrokeThickness="4"
+                  VerticalAlignment="Top"
+                  Margin="-9,0,-9,10" RenderTransformOrigin="0.5,0.5" Height="2">
+                    <Line.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Line.RenderTransform>
+                </Line>
+                
+                <TextBlock TextWrapping="Wrap" 
+                           Text="Email" 
+                           TextAlignment="Left"
+                           Foreground="{DynamicResource MainGray}" 
+                           HorizontalAlignment="Left" 
+                           Height="18" 
+                           VerticalAlignment="Top" 
+                           RenderTransformOrigin="0.16,0.487"/>
+
+                <TextBox  x:Name="email_textBox" 
+                          Style="{DynamicResource MainTextBox}" 
+                          TextWrapping="Wrap" 
+                          Width="287"
+                          HorizontalAlignment="Center"
+                          Margin="0,5,0,20"/>
+
+                <TextBlock TextWrapping="Wrap" 
+                           Text="Error Description" 
+                           TextAlignment="Left"
+                           Foreground="{DynamicResource MainGray}" 
+                           Height="18" />
+
+                <TextBox x:Name="description_textBox" 
+                         Style="{DynamicResource MainTextBox}" 
+                         TextWrapping="Wrap" 
+                         VerticalAlignment="Top" 
+                         Width="287"
+                         Height="50"
+                         Margin="0,5,0,20"/>
+
+            </StackPanel>
+
+            <Button Content="Report" 
+                    Style="{DynamicResource MainButtonStyle}"
+                    Width="129"
+                    Click="Report_Click" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"/>
+        </Grid>
+    </Border>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+</Window>

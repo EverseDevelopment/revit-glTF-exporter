@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,6 +16,7 @@ namespace Common_glTF_Exporter.Utils
             Path.Combine(Links.configDir, "leia.config");
 
         private static readonly object _locker = new object();
+        public static int lastElement = 0;
 
         static SettingsConfig()
         {
@@ -128,6 +130,37 @@ namespace Common_glTF_Exporter.Utils
             }
 
             doc.Save(_configFile);
+        }
+
+        public static void UpdatedLastElement(ElementId elementId)
+        {
+            try
+            {
+                if (elementId == null)
+                {
+                    lastElement = -1;
+                    return;
+                }
+
+                if (elementId == ElementId.InvalidElementId)
+                {
+                    lastElement = -1;
+                    return;
+                }
+
+                 #if REVIT2024 || REVIT2025 || REVIT2026
+
+                long longValue = (long)elementId.Value;
+                lastElement = Convert.ToInt32(elementId.Value);
+
+                #else
+                lastElement = elementId.IntegerValue;
+                #endif
+            }
+            catch (OverflowException ex)
+            {
+                lastElement = -1;
+            }
         }
     }
 }

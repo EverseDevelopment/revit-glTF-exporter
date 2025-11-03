@@ -6,7 +6,8 @@ namespace Common_glTF_Exporter.Utils
 {
     public class ExportLog
     {
-        private static readonly string logFilePath = Path.Combine(Links.configDir, "leia_log.txt");
+        public static readonly string FileLogName = "leia_log.txt";
+        public static readonly string logFilePath = Path.Combine(Links.configDir, FileLogName);
 
         public static void StartLog()
         {
