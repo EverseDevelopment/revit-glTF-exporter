@@ -178,6 +178,7 @@ namespace Common_glTF_Exporter.Core
             currentGeometry.Reset();
             currentVertices.Reset();
 
+            SettingsConfig.UpdatedLastElement(elementId);
             return RenderNodeAction.Proceed;
         }
 
@@ -221,11 +222,11 @@ namespace Common_glTF_Exporter.Core
                     bufferViews,
                     kvp.Value,
                     kvp.Key,
-                    #if REVIT2024 || REVIT2025 || REVIT2026
+#if REVIT2024 || REVIT2025 || REVIT2026
                     elementId.Value,
-                    #else
+#else
                     elementId.IntegerValue,
-                    #endif
+#endif
                     preferences,
                     mat,
                     images,
