@@ -39,17 +39,26 @@ namespace Common_glTF_Exporter.Utils
 
                     foreach (var p in paths)
                     {
-                        string trimmedPath = p.Trim();
+                        string cleanedPath = p.Trim().Trim('"');
 
-                        // If already rooted, normalize it
-                        if (Path.IsPathRooted(trimmedPath))
+                        // Replace | with ; or split further if needed
+                        cleanedPath = cleanedPath.Replace('|', ';');
+
+                        foreach (var subPath in cleanedPath.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                         {
-                            absolutePaths.Add(Path.GetFullPath(trimmedPath));
-                        }
-                        else
-                        {
-                            // Combine with user profile to resolve relative path
-                            string fullPath = Path.GetFullPath(Path.Combine(userProfile, trimmedPath));
+                            string trimmedPath = subPath.Trim().Trim('"');
+
+                            if (Path.GetInvalidPathChars().Any(c => trimmedPath.Contains(c)))
+                            {
+                                // Skip or log invalid path
+                                Console.WriteLine($"Skipping invalid path: {trimmedPath}");
+                                continue;
+                            }
+
+                            string fullPath = Path.IsPathRooted(trimmedPath)
+                                ? Path.GetFullPath(trimmedPath)
+                                : Path.GetFullPath(Path.Combine(userProfile, trimmedPath));
+
                             absolutePaths.Add(fullPath);
                         }
                     }
