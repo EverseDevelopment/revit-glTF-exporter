@@ -205,9 +205,12 @@
                         {
                             var newNormal = transform.OfVector(normal).Normalize();
 
-                            normals.Add(newNormal.X);
-                            normals.Add(newNormal.Y);
-                            normals.Add(newNormal.Z);
+                            for (int j = 0; j < 3; j++)
+                            {
+                                normals.Add(newNormal.X);
+                                normals.Add(newNormal.Y);
+                                normals.Add(newNormal.Z);
+                            }
                         }
 
                         break;
