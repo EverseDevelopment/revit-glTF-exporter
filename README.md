@@ -34,6 +34,11 @@ If you're interested in contributing to glTF exporter, just submit a [pull reque
 ## Installation
 Looking to get the revit-glTF-exporter add-in?  Check out [Autodesk app store](https://apps.autodesk.com/RVT/es/Detail/Index?id=492952120634946986&appLang=en&os=Win64).
 
+## Sponsors ##
+Thanks to all the sponsors that have helped us improve Leia. If you want to be one let us know!
+
+[<img src="https://s3.us-east-1.amazonaws.com/everse.assets/GithubReadme/Visiofy.png">](https://www.visiofy.com/)
+
 ## About us ##
 
 We are an international mix of AEC professionals, product designers, and software developers. We work together to transform construction requirements into accurate and partnership-driven technological solutions.
