@@ -280,23 +280,14 @@ namespace Common_glTF_Exporter.Core
         public void OnMaterial(MaterialNode node)
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
-            {
+            {        
                 if (node.MaterialId == ElementId.InvalidElementId)
                 {
                     currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
                 }
                 else
                 {
-                    string materialId = node.MaterialId.ToString();
-                    if (materials.Contains(materialId))
-                    {
-                        currentMaterial = materials.GetElement(materialId);
-                    }
-                    else
-                    {
-                        currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
-                    }
-                    materials.AddOrUpdateCurrentMaterial(materialId, currentMaterial, false);
+                    currentMaterial = RevitMaterials.ProcessMaterial(node, preferences, currentDocument, materials);
                 }
             }
         }
