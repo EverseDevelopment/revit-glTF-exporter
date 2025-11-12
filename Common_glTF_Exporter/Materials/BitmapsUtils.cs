@@ -30,6 +30,28 @@ namespace Common_glTF_Exporter.Materials
             }
         }
 
+        /// <summary>
+        /// Removes non-default gamma or ICC profile metadata from a PNG/JPG file
+        /// by re-encoding it to a clean sRGB version in memory.
+        /// </summary>
+        /// <param name="path">Path to the source image</param>
+        /// <returns>Byte array of the cleaned image (PNG)</returns>
+        public static byte[] CleanGamma(string path, ImageFormat imageFormat)
+        {
+            using (var original = new Bitmap(path))
+            using (var ms = new MemoryStream())
+            {
+                // Convert to standard sRGB (System.Drawing assumes sRGB by default)
+                using (var converted = new Bitmap(original.Width, original.Height, PixelFormat.Format24bppRgb))
+                using (var g = Graphics.FromImage(converted))
+                {
+                    g.DrawImage(original, 0, 0, original.Width, original.Height);
+                    converted.Save(ms, imageFormat);
+                }
+                return ms.ToArray();
+            }
+        }
+
         public static byte[] BlendImageWithColor(
             byte[] imageBytes,
             double fade,

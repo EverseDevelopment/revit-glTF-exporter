@@ -211,9 +211,9 @@ namespace Common_glTF_Exporter.Utils
 
             if (material.pbrMetallicRoughness.baseColorTexture.index == -1)
             {
-                byte[] imageBytes = File.ReadAllBytes(material.EmbeddedTexturePath);
-                (string , ImageFormat) mimeType = BitmapsUtils.GetMimeType(material.EmbeddedTexturePath);
-
+                (string, ImageFormat) mimeType = BitmapsUtils.GetMimeType(material.EmbeddedTexturePath);
+                byte[] imageBytes = BitmapsUtils.CleanGamma(material.EmbeddedTexturePath, mimeType.Item2);
+               
                 byte[] blendedBytes = BitmapsUtils.BlendImageWithColor(imageBytes, material.Fadevalue, 
                     material.BaseColor, mimeType.Item2, material.TintColour);
 
