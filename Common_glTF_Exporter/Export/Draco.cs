@@ -11,9 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Common_glTF_Exporter.Export
 {
-    // ------------------------------------------------------------
-    // Util GLB simple para .NET Framework (sin tuples)
-    // ------------------------------------------------------------
+
     internal sealed class GlbData
     {
         public string Json;
@@ -25,10 +23,6 @@ namespace Common_glTF_Exporter.Export
         }
     }
 
-    // ------------------------------------------------------------
-    // Patcher: copia EXTRAS del original → temp, mergea extensiones
-    // y EMBEBE imágenes en .gltf (y .glb si hiciera falta), borrando archivos externos.
-    // ------------------------------------------------------------
     internal static class GltfExtrasPatcher
     {
         public static void PatchExtras(string originalPath, string tempPath)
@@ -47,22 +41,15 @@ namespace Common_glTF_Exporter.Export
             }
         }
 
-        // --------- .gltf (JSON externo) ----------
         private static void PatchExtrasGltf(string originalGltf, string tempGltf)
         {
             JObject src = JObject.Parse(File.ReadAllText(originalGltf));
             JObject dst = JObject.Parse(File.ReadAllText(tempGltf));
 
-            // 1) copiar EXTRAS + extensiones desconocidas en NODES
             PatchArrayByIndex(src, dst, "nodes", PatchNodeLike);
 
-            // (Opcional) si querés también en meshes/primitives:
-            // PatchMeshesAndPrimitives(src, dst);
-
-            // 2) mergear extensionsUsed / extensionsRequired
             MergeExtensionsUsedAndRequired(src, dst);
 
-            // 3) EMBEBER imágenes en el .bin del .gltf (usar SIEMPRE el bin TEMP) y BORRAR archivos externos
             string baseDir = Path.GetDirectoryName(tempGltf);
             string tempBinFileName = Path.GetFileName(tempGltf).Replace(".gltf", ".bin"); // ej: MyModelTemp.bin
 
@@ -78,7 +65,6 @@ namespace Common_glTF_Exporter.Export
             File.WriteAllText(tempGltf, dst.ToString(Formatting.None));
         }
 
-        // --------- .glb (JSON embebido) ----------
         private static void PatchExtrasGlb(string originalGlb, string tempGlb)
         {
             GlbData srcGlb = ReadGlb(originalGlb);
@@ -87,61 +73,23 @@ namespace Common_glTF_Exporter.Export
             JObject src = JObject.Parse(srcGlb.Json);
             JObject dst = JObject.Parse(dstGlb.Json);
 
-            // 1) copiar EXTRAS + extensiones desconocidas en NODES
             PatchArrayByIndex(src, dst, "nodes", PatchNodeLike);
 
-            // (Opcional) meshes/primitives:
-            // PatchMeshesAndPrimitives(src, dst);
 
-            // 2) mergear extensionsUsed/Required
             MergeExtensionsUsedAndRequired(src, dst);
 
-            // 3) EMBEBER imágenes en el BIN del GLB si por algún motivo vinieran por uri
             byte[] glbBin = dstGlb.Bin;
             string baseDir = Path.GetDirectoryName(tempGlb);
             InlineExternalImagesIntoBin_JObject(dst, baseDir, null, ref glbBin, true, true);
 
             string newJson = dst.ToString(Formatting.None);
-            WriteGlb(tempGlb, newJson, glbBin); // re-escribe GLB con JSON parcheado
+            WriteGlb(tempGlb, newJson, glbBin); 
         }
 
-        // ---------- LÓGICA DE PARCHE ----------
         private static void PatchNodeLike(JObject srcNode, JObject dstNode)
         {
             CopyExtras(srcNode, dstNode);
             CopyUnknownExtensions(srcNode, dstNode, new[] { "KHR_draco_mesh_compression" });
-        }
-
-        private static void PatchMeshesAndPrimitives(JObject src, JObject dst)
-        {
-            JArray srcMeshes = src["meshes"] as JArray;
-            JArray dstMeshes = dst["meshes"] as JArray;
-            if (srcMeshes == null || dstMeshes == null) return;
-
-            int count = Math.Min(srcMeshes.Count, dstMeshes.Count);
-            for (int i = 0; i < count; i++)
-            {
-                JObject s = (JObject)srcMeshes[i];
-                JObject d = (JObject)dstMeshes[i];
-
-                CopyExtras(s, d);
-                CopyUnknownExtensions(s, d, new[] { "KHR_draco_mesh_compression" });
-
-                JArray sPrims = s["primitives"] as JArray;
-                JArray dPrims = d["primitives"] as JArray;
-                if (sPrims == null || dPrims == null) continue;
-
-                int pc = Math.Min(sPrims.Count, dPrims.Count);
-                for (int j = 0; j < pc; j++)
-                {
-                    JObject sp = (JObject)sPrims[j];
-                    JObject dp = (JObject)dPrims[j];
-
-                    // NO tocar KHR_draco_mesh_compression del temp
-                    CopyExtras(sp, dp);
-                    CopyUnknownExtensions(sp, dp, new[] { "KHR_draco_mesh_compression" });
-                }
-            }
         }
 
         private static void PatchArrayByIndex(JObject src, JObject dst, string name, Action<JObject, JObject> patchItem)
@@ -159,7 +107,6 @@ namespace Common_glTF_Exporter.Export
         {
             if (src["extras"] != null)
                 dst["extras"] = src["extras"].DeepClone();
-            // si src no tiene extras, no tocamos los del dst
         }
 
         private static void CopyUnknownExtensions(JObject src, JObject dst, IEnumerable<string> keepKnown)
@@ -174,7 +121,6 @@ namespace Common_glTF_Exporter.Export
 
             foreach (JProperty prop in sExt.Properties())
             {
-                // no sobreescribir Draco si ya está en el destino
                 if (known.Contains(prop.Name) && dExt[prop.Name] != null) continue;
 
                 dExt[prop.Name] = prop.Value.DeepClone();
@@ -186,7 +132,6 @@ namespace Common_glTF_Exporter.Export
 
         private static void MergeExtensionsUsedAndRequired(JObject src, JObject dst)
         {
-            // merge extensionsUsed
             JArray srcUsed = src["extensionsUsed"] as JArray;
             if (srcUsed != null && srcUsed.Count > 0)
             {
@@ -203,7 +148,6 @@ namespace Common_glTF_Exporter.Export
                 }
             }
 
-            // merge extensionsRequired (opcional pero recomendable)
             JArray srcReq = src["extensionsRequired"] as JArray;
             if (srcReq != null && srcReq.Count > 0)
             {
@@ -232,9 +176,6 @@ namespace Common_glTF_Exporter.Export
             arr.Add(ext);
         }
 
-        // ====== INLINE DE IMÁGENES EN BIN / GLB ======
-        // desiredBinFileName: nombre del BIN *TEMP* para .gltf (ej. "MyModelTemp.bin").
-        // removeExternalImageFiles: si true, borra los .png/.jpg que se incrustaron.
         private static void InlineExternalImagesIntoBin_JObject(
             JObject model,
             string baseDir,
@@ -254,7 +195,6 @@ namespace Common_glTF_Exporter.Export
 
             if (!isGlb)
             {
-                // Fuerza a usar SIEMPRE el bin TEMP (que luego renombrás)
                 if (string.IsNullOrEmpty(desiredBinFileName)) desiredBinFileName = "sceneTemp.bin";
                 buf0["uri"] = desiredBinFileName;
 
@@ -353,7 +293,6 @@ namespace Common_glTF_Exporter.Export
             return outArr;
         }
 
-        // ------------- GLB IO mínimo: JSON chunk + BIN chunk -------------
         private static GlbData ReadGlb(string path)
         {
             using (FileStream fs = File.OpenRead(path))
@@ -432,10 +371,6 @@ namespace Common_glTF_Exporter.Export
             return outArr;
         }
     }
-
-    // ------------------------------------------------------------
-    // Tu compresor Draco con llamada al patch antes del cleanup
-    // ------------------------------------------------------------
     public static class Draco
     {
         public static void Compress(Preferences preferences)
@@ -460,7 +395,6 @@ namespace Common_glTF_Exporter.Export
             }
 
 #if REVIT2025 || REVIT2026
-            // En .NET Framework se compila el #else; este bloque queda para tus builds nuevos
             var loadContext = new NonCollectibleAssemblyLoadContext();
             string programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string assemblyPath = Path.Combine(programDataPath, "Autodesk", "ApplicationPlugins", "leia.bundle", "Contents", "2025", "DracoWrapper.dll");
@@ -496,10 +430,8 @@ namespace Common_glTF_Exporter.Export
             encoder.EncodeSceneToFile(scene, fileToCompressTemp);
 #endif
 
-            // --- Parchea EXTRAS de NODES + mergea extensiones + EMBEBE imágenes (y borra las externas) ---
             GltfExtrasPatcher.PatchExtras(fileToCompress, fileToCompressTemp);
 
-            // --- Cleanup / rename final ---
             foreach (var x in files)
             {
                 try { if (File.Exists(x)) File.Delete(x); } catch { /* ignore */ }
@@ -508,15 +440,15 @@ namespace Common_glTF_Exporter.Export
 
             if (preferences.format == FormatEnum.gltf)
             {
-                string binTemp = fileToCompressTemp.Replace(".gltf", ".bin");       // ej: MyModelTemp.bin
-                string binFinal = fileToCompressTemp.Replace("Temp.gltf", ".bin");  // ej: MyModel.bin
+                string binTemp = fileToCompressTemp.Replace(".gltf", ".bin");   
+                string binFinal = fileToCompressTemp.Replace("Temp.gltf", ".bin");  
 
                 if (File.Exists(binTemp))
                 {
                     File_MoveOverwrite(binTemp, binFinal);
                 }
 
-                // Corrige nombre del .bin referenciado en el JSON final (Temp → final)
+
                 if (File.Exists(fileToCompress))
                 {
                     string text = File.ReadAllText(fileToCompress);
@@ -531,7 +463,7 @@ namespace Common_glTF_Exporter.Export
             }
         }
 
-        // Helper .NET Framework: mover reemplazando si existe
+
         private static void File_MoveOverwrite(string src, string dst)
         {
             if (File.Exists(dst))
