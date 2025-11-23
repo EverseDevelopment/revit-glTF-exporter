@@ -2,19 +2,21 @@
 {
     using Autodesk.Revit.DB;
     using Common_glTF_Exporter.Core;
+    using Common_glTF_Exporter.Model;
     using Common_glTF_Exporter.Windows.MainWindow;
+    using glTF.Manipulator.Schema;
     using Revit_glTF_Exporter;
     using System.Collections.Generic;
 
     public class MaterialUtils
     {
-        public static Material GetMeshMaterial(Document doc, Mesh mesh)
+        public static Autodesk.Revit.DB.Material GetMeshMaterial(Document doc, Autodesk.Revit.DB.Mesh mesh)
         {
             ElementId materialId = mesh.MaterialElementId;
 
             if (materialId != null)
             {
-                return doc.GetElement(materialId) as Material;
+                return doc.GetElement(materialId) as Autodesk.Revit.DB.Material;
             }
             else
             {
@@ -22,11 +24,11 @@
             }
         }
 
-        public static GLTFMaterial GetGltfMeshMaterial(Document doc, Preferences preferences, Mesh mesh, IndexedDictionary<GLTFMaterial> materials, bool doubleSided)
+        public static BaseMaterial GetGltfMeshMaterial(Document doc, Preferences preferences, Autodesk.Revit.DB.Mesh mesh, IndexedDictionary<BaseMaterial> materials, bool doubleSided)
         {
-            GLTFMaterial gl_mat = new GLTFMaterial();
+            BaseMaterial gl_mat = new BaseMaterial();
 
-            Material material = GetMeshMaterial(doc, mesh);
+            Autodesk.Revit.DB.Material material = GetMeshMaterial(doc, mesh);
 
             if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
             {
@@ -39,12 +41,10 @@
                     gl_mat.doubleSided = doubleSided;
                     float opacity = 1 - (float)material.Transparency;
                     gl_mat.name = material.Name;
-                    GLTFPBR pbr = new GLTFPBR();
-                    pbr.baseColorFactor = new List<float>(4) { material.Color.Red / 255f, material.Color.Green / 255f, material.Color.Blue / 255f, opacity };
-                    pbr.metallicFactor = 0f;
-                    pbr.roughnessFactor = 1f;
-                    gl_mat.pbrMetallicRoughness = pbr;
-                    gl_mat.UniqueId = material.UniqueId;
+
+                    gl_mat.baseColorFactor = new List<float>(4) { material.Color.Red / 255f, material.Color.Green / 255f, material.Color.Blue / 255f, opacity };
+                    gl_mat.metallicFactor = 0f;
+                    gl_mat.roughnessFactor = 1f;
                 }           
             }
 

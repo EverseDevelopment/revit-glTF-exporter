@@ -9,20 +9,8 @@
     <Import_RootNamespace>Common_glTF_Exporter</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFImage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFPBR.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFExtras.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFAccessor.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBufferView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBuffer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMaterial.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMeshPrimitive.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMesh.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFNode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFScene.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFTextureInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\ProcessGeometry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EportUtils\ElementValidations.cs" />
@@ -42,6 +30,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\TextureLocation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseImage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseMaterial.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Links.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\LoadContext.cs" />
@@ -54,7 +47,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />

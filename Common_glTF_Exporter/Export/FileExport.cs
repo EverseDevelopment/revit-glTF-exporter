@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.Schema;
+using Revit_glTF_Exporter;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Core;
-using Common_glTF_Exporter.Windows.MainWindow;
-using Newtonsoft.Json;
-using Revit_glTF_Exporter;
+using Buffer = glTF.Manipulator.Schema.Buffer;
+using Material = glTF.Manipulator.Schema.Material;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -18,21 +19,22 @@ namespace Common_glTF_Exporter.Export
 
         public static void Run(
             Preferences preferences,
-            List<GLTFBufferView> bufferViews,
-            List<GLTFBuffer> buffers,
-            List<GLTFBinaryData> binaryFileData, List<GLTFScene> scenes,
-            IndexedDictionary<GLTFNode> nodes,
-            IndexedDictionary<GLTFMesh> meshes,
-            IndexedDictionary<GLTFMaterial> materials,
-            List<GLTFAccessor> accessors,
-            List<GLTFTexture> textures,
-            List<GLTFImage> images)
+            List<BufferView> bufferViews,
+            List<Buffer> buffers,
+            GLTFBinaryData binaryFileData, 
+            List<Scene> scenes,
+            IndexedDictionary<Node> nodes,
+            IndexedDictionary<glTF.Manipulator.Schema.Mesh> meshes,
+            IndexedDictionary<BaseMaterial> materials,
+            List<Accessor> accessors,
+            List<BaseTexture> textures,
+            List<BaseImage> images)
         {
             if (preferences.format == FormatEnum.gltf)
             {
                 BufferConfig.Run(bufferViews, buffers, preferences);
                 string fileDirectory = string.Concat(preferences.path, BIN);
-                BinFile.Create(fileDirectory, binaryFileData, preferences);
+                BinFile.Create(fileDirectory, binaryFileData);
 
                 string gltfJson = GltfJson.Get(scenes, nodes.List, meshes.List, materials.List, buffers,
                 bufferViews, accessors, textures, images, preferences);

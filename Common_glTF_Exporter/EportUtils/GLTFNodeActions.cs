@@ -1,45 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autodesk.Revit.DB;
-using Revit_glTF_Exporter;
-using Common_glTF_Exporter.Core;
+﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.Schema;
+using Revit_glTF_Exporter;
 
 namespace Common_glTF_Exporter.EportUtils
 {
     public static class GLTFNodeActions
     {
-        public static GLTFNode CreateGLTFNodeFromElement(Element currentElement, Preferences preferences)
+        public static BaseNode CreateGLTFNodeFromElement(Element currentElement, Preferences preferences)
         {
-            // create a new node for the element
-            GLTFNode newNode = new GLTFNode();
-            newNode.name = Util.ElementDescription(currentElement);
-
-            if (preferences.properties)
+            var node = new BaseNode
             {
-                // get the extras for this element
-                GLTFExtras extras = new GLTFExtras
-                {
-                    uniqueId = currentElement.UniqueId,
-                    parameters = Util.GetElementParameters(currentElement, true)
-                };
+                description = Util.ElementDescription(currentElement),
+                uuid = currentElement.UniqueId,
+                name = currentElement.Name
+            };
 
-                if (currentElement.Category != null)
-                {
-                    extras.elementCategory = currentElement.Category.Name;
-                }
+            if (!preferences.properties)
+                return node;
 
-#if REVIT2024 || REVIT2025 || REVIT2026
-                extras.elementId = currentElement.Id.Value;
-#else
-                extras.elementId = currentElement.Id.IntegerValue;
-#endif
+            var parameters = Util.GetElementParameters(currentElement, true);
+            parameters["UniqueId"] = currentElement.UniqueId;
 
-                newNode.extras = extras;
-            }
+            if (currentElement.Category != null)
+                parameters["Category"] = currentElement.Category.Name;
 
-            return newNode;
+            node.extras = new Extras
+            {
+                parameters = parameters
+            };
+
+            return node;
         }
     }
 }

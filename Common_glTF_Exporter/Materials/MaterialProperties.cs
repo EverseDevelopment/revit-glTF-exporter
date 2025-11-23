@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.Model;
+using glTF.Manipulator.Schema;
 
 namespace Common_glTF_Exporter.Materials
 {
@@ -11,51 +14,42 @@ namespace Common_glTF_Exporter.Materials
     {
         private const string BLEND = "BLEND";
         private const string OPAQUE = "OPAQUE";
-        public static void SetProperties(MaterialNode node, float opacity, ref GLTFPBR pbr, ref GLTFMaterial gl_mat)
+        public static void SetProperties(MaterialNode node, float opacity, ref BaseMaterial material)
         {
-            pbr.metallicFactor = 0f;
-            pbr.roughnessFactor = opacity != 1 ? 0.5f : 1f;
-            gl_mat.pbrMetallicRoughness = pbr;
-
-            gl_mat.alphaMode = opacity != 1 ? BLEND : OPAQUE;
-            gl_mat.alphaCutoff = null;
+            material.metallicFactor = 0f;
+            material.roughnessFactor = opacity != 1 ? 0.5f : 1f;
+            material.alphaMode = opacity != 1 ? BLEND : OPAQUE;
+            material.alphaCutoff = null;
         }
 
-        public static void SetMaterialColour(MaterialNode node,
-            float opacity, ref GLTFPBR pbr, ref GLTFMaterial gl_mat)
+        public static List<float> SetMaterialColour(MaterialNode node,
+            float opacity, Color baseColor, Color tintColor)
         {
-            if (gl_mat.EmbeddedTexturePath == null)
-            {
+
                 (float, float, float) baseColours;
 
-                if (gl_mat.BaseColor == null)
+                if (baseColor == null)
                 {
                     baseColours = RgbToUnit(node.Color);
                 }
                 else
                 {
-                    baseColours = RgbToUnit(gl_mat.BaseColor);
+                    baseColours = RgbToUnit(baseColor);
                 }
 
-                if (gl_mat.TintColour == null)
+                if (tintColor == null)
                 {
-                    pbr.baseColorFactor = GetLinearColour(baseColours, opacity);
+                   return GetLinearColour(baseColours, opacity);
                 }
                 else
                 {
-                    (float, float, float) baseTintColour = RgbToUnit(gl_mat.TintColour);
+                    (float, float, float) baseTintColour = RgbToUnit(tintColor);
                     (float, float, float) blendColour = BlendColour(baseColours, baseTintColour);
 
-                    pbr.baseColorFactor = GetLinearColour(blendColour, opacity);
+                    return GetLinearColour(blendColour, opacity);
                 }
-            }
-            else
-            {
-                gl_mat.pbrMetallicRoughness.baseColorFactor = GetDefaultColour(opacity);
-            }
-
-            gl_mat.pbrMetallicRoughness = pbr;
         }
+
 
         public static List<float> GetDefaultColour(float opacity)
         {
