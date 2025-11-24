@@ -24,7 +24,7 @@ namespace Common_glTF_Exporter.Materials
         }
 
         public static List<float> SetMaterialColour(MaterialNode node,
-            float opacity, Color baseColor, Color tintColor)
+            float opacity, Autodesk.Revit.DB.Color baseColor, Autodesk.Revit.DB.Color tintColor)
         {
 
                 (float, float, float) baseColours;

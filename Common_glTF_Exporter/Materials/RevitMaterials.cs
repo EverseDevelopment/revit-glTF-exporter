@@ -67,7 +67,7 @@ namespace Common_glTF_Exporter.Export
                 material.name = revitMaterial.Name;
                 MaterialProperties.SetProperties(node, opacity, ref material);
 
-                (Color, Color) baseNTintColour = (null, null);
+                (Autodesk.Revit.DB.Color, Autodesk.Revit.DB.Color) baseNTintColour = (null, null);
 
                 if (revitMaterial != null && preferences.materials == MaterialsEnum.textures)
                 {

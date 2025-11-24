@@ -17,7 +17,7 @@ namespace Common_glTF_Exporter.Materials
     public static class MaterialTextures
     {
         
-        public static (Color, Color) SetMaterialTextures(Material revitMaterial, BaseMaterial material,
+        public static (Autodesk.Revit.DB.Color, Autodesk.Revit.DB.Color) SetMaterialTextures(Material revitMaterial, BaseMaterial material,
            Document doc, float opacity, List<Texture> textures, List<glTFImage> images)
         {
 
@@ -43,8 +43,8 @@ namespace Common_glTF_Exporter.Materials
             string schemaName = baseSchema.Value;
             Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset, schemaName);
             string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
-            Color tintColour = AssetPropertiesUtils.GetTint(theAsset);
-            Color baseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
+            Autodesk.Revit.DB.Color tintColour = AssetPropertiesUtils.GetTint(theAsset);
+            Autodesk.Revit.DB.Color baseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
             double Fadevalue = AssetPropertiesUtils.GetFade(theAsset);
 
             if (!string.IsNullOrEmpty(texturePath))
@@ -88,7 +88,7 @@ namespace Common_glTF_Exporter.Materials
             return texture;
         }
 
-        private static int createOrGetBaseImage(Color TintColour, Color BaseColor, double Fadevalue, string texturePath, List<glTFImage> images)
+        private static int createOrGetBaseImage(Autodesk.Revit.DB.Color TintColour, Autodesk.Revit.DB.Color BaseColor, double Fadevalue, string texturePath, List<glTFImage> images)
         {
 
             bool checkIfImageExists = images.Any(x => x.uuid == texturePath);
