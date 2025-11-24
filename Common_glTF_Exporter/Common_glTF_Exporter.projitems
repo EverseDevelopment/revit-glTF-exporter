@@ -11,10 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Core\ProcessGeometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTexture.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EportUtils\ElementValidations.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EportUtils\GLTFNodeActions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Draco.cs" />
@@ -30,11 +28,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTextures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Materials\TextureLocation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseImage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseMaterial.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseNode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\BaseTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GlbComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Links.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\LoadContext.cs" />
@@ -48,7 +41,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\RevitCollectorService.cs" />

@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
 
 namespace Common_glTF_Exporter.Export
 {

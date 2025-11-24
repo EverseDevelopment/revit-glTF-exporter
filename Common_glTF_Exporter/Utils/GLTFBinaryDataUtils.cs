@@ -1,24 +1,15 @@
-﻿using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Core;
-using Common_glTF_Exporter.Materials;
+﻿using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
-using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
 using Revit_glTF_Exporter;
-using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 
 namespace Common_glTF_Exporter.Utils
 {
     public class GLTFBinaryDataUtils
     {
-        const string SCALAR_STR = "SCALAR";
-        const string FACE_STR = "FACE";
-        const string BATCH_ID_STR = "BATCH_ID";
-
         public static int ExportFaces(
             GeometryDataObject geomData,
             GLTFBinaryData bufferData,
@@ -219,19 +210,15 @@ namespace Common_glTF_Exporter.Utils
             if (vertexCount == 0)
                 return -1;
 
-            // Crear arreglo de batchId repetido por vértice
             float idValue = (float)elementId;
             float[] batchIds = Enumerable.Repeat(idValue, vertexCount).ToArray();
 
-            // min/max para SCALAR
             var min = new List<float> { idValue };
             var max = new List<float> { idValue };
 
-            // Append batchIds al buffer global
             int byteOffset = bufferData.AppendFloatArray(batchIds);
             int byteLength = batchIds.Length * sizeof(float);
 
-            // Crear bufferView
             BufferView view = new BufferView(
                 buffer: 0,
                 byteOffset: byteOffset,
@@ -243,7 +230,6 @@ namespace Common_glTF_Exporter.Utils
             bufferViews.Add(view);
             int viewIdx = bufferViews.Count - 1;
 
-            // Crear accessor
             Accessor accessor = new Accessor(
                 bufferView: viewIdx,
                 byteOffset: 0,
@@ -258,7 +244,6 @@ namespace Common_glTF_Exporter.Utils
             accessors.Add(accessor);
             int accessorIdx = accessors.Count - 1;
 
-            // Guardar resultado en Primitive
             primitive.attributes._BATCHID = accessorIdx;
 
             return accessorIdx;
@@ -279,7 +264,6 @@ namespace Common_glTF_Exporter.Utils
             if (uvCount == 0)
                 return -1;
 
-            // Convert (U,V) to float[]
             float[] uvFloats = new float[uvCount * 2];
             int ptr = 0;
 
@@ -295,12 +279,10 @@ namespace Common_glTF_Exporter.Utils
             var max = new List<float> { uvMinMax[1], uvMinMax[3] };
             var min = new List<float> { uvMinMax[0], uvMinMax[2] };
 
-            // Append raw bytes to global buffer
             int byteOffset = bufferData.AppendFloatArray(uvFloats);
 
             int byteLength = uvFloats.Length * sizeof(float);
 
-            // Create bufferView
             BufferView uvBufferView = new BufferView(
                 buffer: 0,
                 byteOffset: byteOffset,
@@ -312,7 +294,6 @@ namespace Common_glTF_Exporter.Utils
             bufferViews.Add(uvBufferView);
             int viewIdx = bufferViews.Count - 1;
 
-            // Create accessor
             Accessor accessor = new Accessor(
                 bufferView: viewIdx,
                 byteOffset: 0,
@@ -327,14 +308,13 @@ namespace Common_glTF_Exporter.Utils
             accessors.Add(accessor);
             int accessorIdx = accessors.Count - 1;
 
-            // Apply to primitive
             primitive.attributes.TEXCOORD_0 = accessorIdx;
 
             return accessorIdx;
         }
 
         public static void ExportImageBuffer(
-            List<BaseImage> images,
+            List<glTFImage> images,
             List<BufferView> bufferViews,
             GLTFBinaryData bufferData)
         {
@@ -344,25 +324,23 @@ namespace Common_glTF_Exporter.Utils
                 if (imgBytes == null || imgBytes.Length == 0)
                     continue;
 
-                int byteOffset = bufferData.Append(imgBytes);
-                int byteLength = bufferData.byteData.Length - byteOffset;
+                int byteOffset = bufferData.GetCurrentByteOffset();
+                int byteLength = bufferData.Append(imgBytes);
 
                 BufferView imgView = new BufferView(
-                    buffer: 0,   
+                    buffer: 0,
                     byteOffset: byteOffset,
                     byteLength: byteLength,
-                    Targets.NONE,     
+                    Targets.NONE,
                     name: ""
                 );
 
                 bufferViews.Add(imgView);
                 int viewIdx = bufferViews.Count - 1;
 
-
                 baseImage.bufferView = viewIdx;
                 baseImage.uri = null;
             }
         }
-
     }
 }

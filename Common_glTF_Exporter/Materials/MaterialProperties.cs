@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
+using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
 
 namespace Common_glTF_Exporter.Materials

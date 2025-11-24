@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Autodesk.Revit.DB.Visual;
-using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
-using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -15,16 +10,32 @@ namespace Common_glTF_Exporter.Export
         {
             GlbBin glbBin = new GlbBin();
 
-            // Bin chunk data = full binary buffer
-            glbBin.ChunkData = globalBuffer.byteData ?? new byte[0];
+            // Usar MemoryStream → ToArray()
+            glbBin.ChunkData = globalBuffer.ToArray();
+
+            // Length del chunk BIN
             glbBin.Length = BitConverter.GetBytes((uint)glbBin.ChunkData.Length);
 
-            // Build final chunk: [byteLength][CHUNK_TYPE][binary data]
-            byte[] result = new byte[0]
-                .Concat(glbBin.Length)
-                .Concat(glbBin.ChunkType())
-                .Concat(glbBin.ChunkData)
-                .ToArray();
+            // 📌 Construcción del chunk final:
+            // [byteLength][CHUNK_TYPE][binary data]
+            byte[] result = new byte[
+                  glbBin.Length.Length
+                + glbBin.ChunkType().Length
+                + glbBin.ChunkData.Length];
+
+            int offset = 0;
+
+            // Copiar chunk length
+            Buffer.BlockCopy(glbBin.Length, 0, result, offset, glbBin.Length.Length);
+            offset += glbBin.Length.Length;
+
+            // Copiar chunk type
+            byte[] type = glbBin.ChunkType();
+            Buffer.BlockCopy(type, 0, result, offset, type.Length);
+            offset += type.Length;
+
+            // Copiar datos binarios
+            Buffer.BlockCopy(glbBin.ChunkData, 0, result, offset, glbBin.ChunkData.Length);
 
             return result;
         }

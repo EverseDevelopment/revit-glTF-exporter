@@ -31,11 +31,12 @@
         {
             mainWin = mainWindow;
             var progressBar = new ProgressBarWindow();
-            ProgressBarWindow.ViewModel.ProgressBarGraphicValue = maxValue * 0.07;
+            double maxValueDuplicated = maxValue;
+            ProgressBarWindow.ViewModel.ProgressBarGraphicValue = maxValueDuplicated * 0.07;
             ProgressBarWindow.ViewModel.ProgressBarValue = currentValue;
             ProgressBarWindow.ViewModel.Message = message;
             ProgressBarWindow.ViewModel.Action = "Cancel";
-            ProgressBarWindow.ViewModel.ProgressBarMax = maxValue;
+            ProgressBarWindow.ViewModel.ProgressBarMax = maxValueDuplicated;
             ProgressBarWindow.ViewModel.ProgressBarPercentage = 0;
             progressBar.Show();
             ProgressBarWindow.MainView.Topmost = true;

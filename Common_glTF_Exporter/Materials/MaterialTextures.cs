@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB.Visual;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
+using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
 using Revit_glTF_Exporter;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Common_glTF_Exporter.Materials
     {
         
         public static (Color, Color) SetMaterialTextures(Material revitMaterial, BaseMaterial material,
-           Document doc, float opacity, List<BaseTexture> textures, List<BaseImage> images)
+           Document doc, float opacity, List<Texture> textures, List<glTFImage> images)
         {
 
             ElementId appearanceId = revitMaterial.AppearanceAssetId;
@@ -50,7 +51,7 @@ namespace Common_glTF_Exporter.Materials
             {
                 int indexImage = createOrGetBaseImage(tintColour, baseColor, Fadevalue, texturePath, images);
 
-                BaseTexture baseTexture = createTexture(material, texturePath, connectedAsset, theAsset, opacity, indexImage);
+                Texture baseTexture = createTexture(material, texturePath, connectedAsset, theAsset, opacity, indexImage);
                 textures.Add(baseTexture);
 
                 material.hasTexture = true;
@@ -60,11 +61,11 @@ namespace Common_glTF_Exporter.Materials
             return (baseColor, tintColour);
         }
 
-        private static BaseTexture createTexture(BaseMaterial material, string texturePath, Asset connectedAsset,
+        private static Texture createTexture(BaseMaterial material, string texturePath, Asset connectedAsset,
            Asset theAsset, float opacity, int imageIndex)
         {
 
-            BaseTexture texture = new BaseTexture();
+            Texture texture = new Texture();
 
             float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleX);
             float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleY);
@@ -82,12 +83,12 @@ namespace Common_glTF_Exporter.Materials
             material.offset = gltfOffset;
             material.rotation = rotation;
             material.scale = gltfScale;
-            texture.imageIndex = imageIndex;
+            texture.source = imageIndex;
 
             return texture;
         }
 
-        private static int createOrGetBaseImage(Color TintColour, Color BaseColor, double Fadevalue, string texturePath, List<BaseImage> images)
+        private static int createOrGetBaseImage(Color TintColour, Color BaseColor, double Fadevalue, string texturePath, List<glTFImage> images)
         {
 
             bool checkIfImageExists = images.Any(x => x.uuid == texturePath);
@@ -100,7 +101,7 @@ namespace Common_glTF_Exporter.Materials
             }
             else
             {
-                BaseImage Image = new BaseImage();
+                glTFImage Image = new glTFImage();
                 Image.uuid = texturePath;
                 (string, ImageFormat) mimeType = BitmapsUtils.GetMimeType(texturePath);
                 Image.mimeType = mimeType.Item1;

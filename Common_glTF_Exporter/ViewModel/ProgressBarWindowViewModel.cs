@@ -60,9 +60,17 @@
                 }
 
                 this.progressBarValue = value;
-                ProgressBarPercentage = (value / ProgressBarMax) * 100;
-                if (ProgressBarPercentage > 100)
+
+                double percentageProgress = (value / ProgressBarMax) * 100;
+                if (percentageProgress > 99)
+                {
                     ProgressBarPercentage = 100;
+                }
+                else
+                {
+                    ProgressBarPercentage = (value / ProgressBarMax) * 100;
+                }
+
                 this.OnPropertyChanged();
             }
         }

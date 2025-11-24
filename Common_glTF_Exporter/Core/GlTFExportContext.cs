@@ -5,6 +5,7 @@ using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Transform;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
 using Revit_glTF_Exporter;
 using System.Collections.Generic;
@@ -54,8 +55,8 @@ namespace Common_glTF_Exporter.Core
         public IndexedDictionary<Node> nodes = new IndexedDictionary<Node>();
 
         public IndexedDictionary<BaseMaterial> materials = new IndexedDictionary<BaseMaterial>();
-        public List<BaseTexture> textures { get; } = new List<BaseTexture>();
-        public List<BaseImage> images { get; } = new List<BaseImage>();
+        public List<Texture> textures { get; } = new List<Texture>();
+        public List<glTFImage> images { get; } = new List<glTFImage>();
         public List<Scene> scenes { get; } = new List<Scene>();
         public IndexedDictionary<glTF.Manipulator.Schema.Mesh> meshes { get; } = new IndexedDictionary<glTF.Manipulator.Schema.Mesh>();
         public List<Buffer> buffers { get; } = new List<Buffer>();
@@ -63,7 +64,7 @@ namespace Common_glTF_Exporter.Core
         public List<Accessor> accessors { get; } = new List<Accessor>();
         public List<GLTFBinaryData> binaryFileData { get; } = new List<GLTFBinaryData>();
 
-        public BaseObject baseObject;
+        GLTFBinaryData globalBuffer = new GLTFBinaryData();
 
         private Autodesk.Revit.DB.Transform CurrentTransform
         {
@@ -88,9 +89,6 @@ namespace Common_glTF_Exporter.Core
             ExportLog.Write("Export Started");
             preferences = Common_glTF_Exporter.Windows.MainWindow.Settings.GetInfo();
 
-            baseObject = new BaseObject();
-            baseObject.nodes = new List<BaseNode>();
-
             cancelation = false;
             transformStack.Push(Autodesk.Revit.DB.Transform.Identity);
 
@@ -109,10 +107,6 @@ namespace Common_glTF_Exporter.Core
             Scene defaultScene = new Scene();
             defaultScene.nodes.Add(0);
             scenes.Add(defaultScene);
-
-            baseObject.textures = textures;
-            baseObject.images = images;
-            baseObject.materials = materials.List;
 
             currentGeometry = new IndexedDictionary<GeometryDataObject>();
             currentVertices = new IndexedDictionary<VertexLookupIntObject>();
@@ -133,16 +127,8 @@ namespace Common_glTF_Exporter.Core
                 return;
             }
 
-            Buffer buffer = new Buffer();
+           Buffer buffer = new Buffer();
             buffer.uri = string.Concat(preferences.fileName, ".bin");
-
-            GLTFBinaryData globalBuffer = new GLTFBinaryData();
-
-            foreach (BaseNode node in baseObject.nodes)
-            {
-                ProcessGeometry.ProcessNode(node, nodes, rootNode, meshes, preferences, 
-                    globalBuffer, bufferViews, accessors, materials);
-            }
 
             if (preferences.materials == MaterialsEnum.textures)
             {
@@ -159,6 +145,8 @@ namespace Common_glTF_Exporter.Core
 
             if (bufferViews.Count != 0)
             {
+                ProgressBarWindow.ViewModel.Message = "Saving to File";
+
                 FileExport.Run(preferences, bufferViews, buffers, globalBuffer,
                     scenes, nodes, meshes, materials, accessors, textures, images);
                 Compression.Run(preferences, ProgressBarWindow.ViewModel);
@@ -221,19 +209,11 @@ namespace Common_glTF_Exporter.Core
                 return;
             }
 
-            BaseNode baseNode = GLTFNodeActions.CreateGLTFNodeFromElement(currentElement, preferences);
+            ProcessGeometry.ProcessNode(nodes, rootNode, meshes, preferences,
+                globalBuffer, bufferViews, accessors, materials, currentGeometry, currentElement);
 
-            long elmId;
-
-            #if REVIT2024 || REVIT2025 || REVIT2026
-            elmId = elementId.Value;
-            #else
-            elmId = elementId.IntegerValue;
-            #endif
-
-            baseNode.id = elmId;
-            baseNode.objects = currentGeometry.Clone(g => g.Clone());
-            baseObject.nodes.Add(baseNode);
+            currentGeometry.Reset();
+            currentVertices.Reset();
         }
 
         /// <summary>

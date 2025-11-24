@@ -2,6 +2,7 @@
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
 using Revit_glTF_Exporter;
 using System.Collections.Generic;
@@ -27,8 +28,8 @@ namespace Common_glTF_Exporter.Export
             IndexedDictionary<glTF.Manipulator.Schema.Mesh> meshes,
             IndexedDictionary<BaseMaterial> materials,
             List<Accessor> accessors,
-            List<BaseTexture> textures,
-            List<BaseImage> images)
+            List<Texture> textures,
+            List<glTFImage> images)
         {
             if (preferences.format == FormatEnum.gltf)
             {

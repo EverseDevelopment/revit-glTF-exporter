@@ -3,6 +3,7 @@ using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,8 @@ namespace Common_glTF_Exporter.Export
             List<Buffer> buffers,
             List<BufferView> bufferViews,
             List<Accessor> accessors,
-            List<BaseTexture> textures,
-            List<BaseImage> images,
+            List<Texture> textures,
+            List<glTFImage> images,
             Preferences preferences)
         {
 
@@ -56,12 +57,12 @@ namespace Common_glTF_Exporter.Export
             {
                 if (textures.Any())
                 {
-                    model.textures = transformTextures(textures);
+                    model.textures = textures;
                 }
 
                 if (images.Any())
                 {
-                    model.images = transformImages(images);
+                    model.images = cleanImages(images);
                 }
             }
 
@@ -82,29 +83,21 @@ namespace Common_glTF_Exporter.Export
             return serializedModel;
         }
 
-        public static List<Image> transformImages(List<BaseImage> baseImages)
-        { 
-            List<Image> images = new List<Image>();
-            foreach (BaseImage baseImg in baseImages)
-            { 
-                Image img = new Image();
-                img.bufferView = baseImg.bufferView;
-                img.mimeType = baseImg.mimeType;
-                images.Add(img);
-            }
-            return images;
-        }
-
-        public static List<Texture> transformTextures(List<BaseTexture> baseTextures)
+        public static List<glTFImage> cleanImages(List<glTFImage> images)
         {
-            List<Texture> textures = new List<Texture>();
-            foreach (BaseTexture baseTxt in baseTextures)
+            List<glTFImage> resultImages = new List<glTFImage> ();
+            foreach (glTFImage img in images)
             {
-                Texture txt = new Texture();
-                txt.source = baseTxt.imageIndex;
-                textures.Add(txt);
+                glTFImage newImg = new glTFImage
+                {
+                    bufferView = img.bufferView,
+                    mimeType = img.mimeType
+                };
+
+                resultImages.Add(newImg);
             }
-            return textures;
+
+            return resultImages;
         }
 
         public static List<glTF.Manipulator.Schema.Material> transformMaterials(List<BaseMaterial> baseMaterials)
@@ -129,7 +122,6 @@ namespace Common_glTF_Exporter.Export
                         TextureInfo baseColorTexture = new TextureInfo();
                         baseColorTexture.index = baseMat.textureIndex;
 
-                        
                         KHR_texture_transform kHR_Texture_Transform = new KHR_texture_transform();
                         kHR_Texture_Transform.rotation = baseMat.rotation;
                         kHR_Texture_Transform.scale = baseMat.scale;

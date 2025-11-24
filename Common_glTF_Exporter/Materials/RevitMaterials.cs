@@ -13,6 +13,7 @@ using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
 using Common_glTF_Exporter.Utils;
 using glTF.Manipulator.Schema;
+using glTF.Manipulator.GenericSchema;
 
 
 namespace Common_glTF_Exporter.Export
@@ -23,7 +24,7 @@ namespace Common_glTF_Exporter.Export
 
         public static BaseMaterial ProcessMaterial(MaterialNode node,
                 Preferences preferences, Document doc, IndexedDictionary<BaseMaterial> materials,
-                List<BaseTexture> textures, List<BaseImage> images)
+                List<Texture> textures, List<glTFImage> images)
         {
             BaseMaterial material = new BaseMaterial();
             string materialId = node.MaterialId.ToString();
@@ -57,8 +58,8 @@ namespace Common_glTF_Exporter.Export
         /// </summary>
         public static BaseMaterial Export(MaterialNode node,
             Preferences preferences, Document doc, 
-            Material revitMaterial, List<BaseTexture> textures,
-            List<BaseImage> images, BaseMaterial material)
+            Material revitMaterial, List<Texture> textures,
+            List<glTFImage> images, BaseMaterial material)
         {
 
                 float opacity = ONEINTVALUE - (float)node.Transparency;
