@@ -40,7 +40,7 @@ namespace Common_glTF_Exporter.Export
 
                 if (revitMaterial == null)
                 {
-                    material = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
+                    material = GLTFExportUtils.GetGLTFMaterial(materials);
                 }
                 else
                 {

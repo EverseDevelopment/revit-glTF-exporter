@@ -15,19 +15,11 @@
         {
             const int DEF_COLOR = 250;
             const string DEF_MATERIAL_NAME = "default"; 
-            const string DEF_UNIQUEL_ID = "8a3c94b3-d9e2-4e57-9189-f9bb6a9a54a4";
+            public const string DEF_UNIQUEL_ID = "8a3c94b3-d9e2-4e57-9189-f9bb6a9a54a4";
 
-            public static BaseMaterial GetGLTFMaterial(IndexedDictionary<BaseMaterial> Materials, double opacity, bool doubleSided)
+            public static BaseMaterial GetGLTFMaterial(IndexedDictionary<BaseMaterial> Materials)
             {
-
-                if (Materials.Dict.ContainsKey(DEF_UNIQUEL_ID))
-                {
-                    return Materials.GetElement(DEF_UNIQUEL_ID);
-                }
-                else
-                {
-                    return (CreateDefaultGLTFMaterial((int)opacity, doubleSided));
-                }
+                return Materials.GetElement(DEF_UNIQUEL_ID);
             }
 
             public static BaseMaterial CreateDefaultGLTFMaterial(int materialOpacity, bool doubleSided)

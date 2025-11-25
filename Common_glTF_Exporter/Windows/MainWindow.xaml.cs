@@ -91,9 +91,10 @@ namespace Revit_glTF_Exporter
             int incrementRun = numberRuns + 1;
             SettingsConfig.SetValue("runs", incrementRun.ToString());
 
-            ExportLog.Write($"{elementsInView.Count} elements will be exported");
+            int elemInView = elementsInView.Count;
+            ExportLog.Write($"{elemInView} elements will be exported");      
             ProgressBarWindow progressBar =
-                ProgressBarWindow.Create(elementsInView.Count + 1, 0, "Converting elements...", this);
+                ProgressBarWindow.Create(elemInView + 1, 0, "Converting elements...", this);
 
             // Use our custom implementation of IExportContext as the exporter context.
             GLTFExportContext ctx = new GLTFExportContext(doc);
@@ -111,7 +112,7 @@ namespace Revit_glTF_Exporter
             Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();
             Thread.Sleep(500);
 
-            ProgressBarWindow.ViewModel.ProgressBarValue = 100;
+            ProgressBarWindow.ViewModel.ProgressBarValue = elemInView;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ExportLog.EndLog();
             ProgressBarWindow.ViewModel.Action = "Accept";

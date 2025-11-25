@@ -35,7 +35,7 @@
             {
                 if (material == null)
                 {
-                    gl_mat = GLTFExportUtils.GetGLTFMaterial(materials, 1, doubleSided);
+                    gl_mat = GLTFExportUtils.GetGLTFMaterial(materials);
                 }
                 else 
                 {

@@ -577,7 +577,7 @@ namespace Common_glTF_Exporter.Export
             if (preferences.format == FormatEnum.gltf)
             {
                 string binTemp = fileToCompressTemp.Replace(".gltf", ".bin");
-                string binFinal = fileToCompressTemp.Replace("Temp.gltf", ".bin");
+                string binFinal = preferences.path + ".bin";
 
                 if (File.Exists(binTemp))
                 {

@@ -112,7 +112,9 @@ namespace Common_glTF_Exporter.Core
             currentVertices = new IndexedDictionary<VertexLookupIntObject>();
 
             currentMaterial = GLTFExportUtils.CreateDefaultGLTFMaterial(1, true);
+
             materials.AddOrUpdateCurrentMaterial(currentMaterial.uuid, currentMaterial, false);
+
 
             return true;
         }
@@ -228,7 +230,7 @@ namespace Common_glTF_Exporter.Core
             {        
                 if (node.MaterialId == ElementId.InvalidElementId)
                 {
-                    currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
+                    currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials);
                 }
                 else
                 {
