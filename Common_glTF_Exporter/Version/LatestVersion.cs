@@ -1,9 +1,8 @@
-﻿using Autodesk.Revit.UI;
-using Common_glTF_Exporter.Model;
+﻿using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Utils;
-using Revit_glTF_Exporter;
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 
@@ -29,7 +28,12 @@ namespace Revit_glTF_Exporter
                     HttpContent content = result.Content;
                     string myContent = await content.ReadAsStringAsync();
 
-                    Payload payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Payload>(myContent);
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    Payload payload = JsonSerializer.Deserialize<Payload>(myContent, options);
 
                     if (!payload.Update)
                     {

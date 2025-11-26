@@ -1,74 +1,77 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Visual;
 using Common_glTF_Exporter.Core;
-using Common_glTF_Exporter.Windows.MainWindow;
-using Revit_glTF_Exporter;
-using Common_glTF_Exporter.Materials;
 using Common_glTF_Exporter.Model;
-using System.IO.Ports;
-using System.Windows.Controls;
-using System.Windows.Media.Media3D;
+using glTF.Manipulator.GenericSchema;
+using glTF.Manipulator.Schema;
+using Revit_glTF_Exporter;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Windows.Interop;
 using Material = Autodesk.Revit.DB.Material;
-using System;
-using Common_glTF_Exporter.Utils;
-using System.Diagnostics;
 
 namespace Common_glTF_Exporter.Materials
 {
     public static class MaterialTextures
     {
         
-        public static GLTFMaterial SetMaterialTextures(Material material, GLTFMaterial gl_mat,
-    Document doc, float opacity)
+        public static (Autodesk.Revit.DB.Color, Autodesk.Revit.DB.Color) SetMaterialTextures(Material revitMaterial, BaseMaterial material,
+           Document doc, float opacity, List<Texture> textures, List<glTFImage> images)
         {
 
-            ElementId appearanceId = material.AppearanceAssetId;
+            ElementId appearanceId = revitMaterial.AppearanceAssetId;
             if (appearanceId == ElementId.InvalidElementId)
             {
-                return gl_mat;
+                return (null,null);
             }
 
             var appearanceElem = doc.GetElement(appearanceId) as AppearanceAssetElement;
             if (appearanceElem == null)
             {
-                return gl_mat;
+                return (null, null);
             }
 
             Asset theAsset = appearanceElem.GetRenderingAsset();
             AssetPropertyString baseSchema = theAsset.FindByName("BaseSchema") as AssetPropertyString;
             if (baseSchema == null)
             {
-                return gl_mat;
+                return (null, null);
             }
 
             string schemaName = baseSchema.Value;
             Asset connectedAsset = AssetPropertiesUtils.GetDiffuseBitmap(theAsset, schemaName);
             string texturePath = AssetPropertiesUtils.GetTexturePath(connectedAsset);
-            gl_mat.TintColour = AssetPropertiesUtils.GetTint(theAsset);
-            gl_mat.BaseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
+            Autodesk.Revit.DB.Color tintColour = AssetPropertiesUtils.GetTint(theAsset);
+            Autodesk.Revit.DB.Color baseColor = AssetPropertiesUtils.GetAppearanceColor(theAsset, schemaName);
+            double Fadevalue = AssetPropertiesUtils.GetFade(theAsset);
 
-            if (!string.IsNullOrEmpty(texturePath) && File.Exists(texturePath))
+            if (!string.IsNullOrEmpty(texturePath))
             {
-                SetTextureProperties(gl_mat, texturePath, connectedAsset, theAsset, opacity);
+                int indexImage = createOrGetBaseImage(tintColour, baseColor, Fadevalue, texturePath, images);
+
+                Texture baseTexture = createTexture(material, texturePath, connectedAsset, theAsset, opacity, indexImage);
+                textures.Add(baseTexture);
+
+                material.hasTexture = true;
+                material.textureIndex = textures.Count - 1;
             }
 
-            return gl_mat;
+            return (baseColor, tintColour);
         }
 
-        private static void SetTextureProperties(GLTFMaterial gl_mat, string texturePath, Asset connectedAsset,
-           Asset theAsset, float opacity)
+        private static Texture createTexture(BaseMaterial material, string texturePath, Asset connectedAsset,
+           Asset theAsset, float opacity, int imageIndex)
         {
-            gl_mat.EmbeddedTexturePath = texturePath;
+
+            Texture texture = new Texture();
 
             float scaleX = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleX);
             float scaleY = AssetPropertiesUtils.GetScale(connectedAsset, UnifiedBitmap.TextureRealWorldScaleY);
             float offsetX = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetX);
             float offsetY = AssetPropertiesUtils.GetOffset(connectedAsset, UnifiedBitmap.TextureRealWorldOffsetY);
             float rotation = AssetPropertiesUtils.GetRotationRadians(connectedAsset);
-
-            gl_mat.Fadevalue = AssetPropertiesUtils.GetFade(theAsset);         
 
             float[] gltfScale = new float[] { 1f / scaleX, 1f / scaleY };
             float[] gltfOffset = new float[]
@@ -77,19 +80,40 @@ namespace Common_glTF_Exporter.Materials
                 offsetY / scaleY - gltfScale[1]
             };
 
-            gl_mat.pbrMetallicRoughness.baseColorTexture = new GLTFTextureInfo
+            material.offset = gltfOffset;
+            material.rotation = rotation;
+            material.scale = gltfScale;
+            texture.source = imageIndex;
+
+            return texture;
+        }
+
+        private static int createOrGetBaseImage(Autodesk.Revit.DB.Color TintColour, Autodesk.Revit.DB.Color BaseColor, double Fadevalue, string texturePath, List<glTFImage> images)
+        {
+
+            bool checkIfImageExists = images.Any(x => x.uuid == texturePath);
+
+            if (checkIfImageExists)
             {
-                index = -1,
-                extensions = new GLTFTextureExtensions
-                {
-                    TextureTransform = new GLTFTextureTransform
-                    {
-                        offset = gltfOffset,
-                        scale = gltfScale,
-                        rotation = rotation
-                    }
-                }
-            };
+                int index = images.FindIndex(x => x.uuid == texturePath);
+
+                return index;
+            }
+            else
+            {
+                glTFImage Image = new glTFImage();
+                Image.uuid = texturePath;
+                (string, ImageFormat) mimeType = BitmapsUtils.GetMimeType(texturePath);
+                Image.mimeType = mimeType.Item1;
+                byte[] imageBytes = BitmapsUtils.CleanGamma(texturePath, mimeType.Item2);
+                byte[] blendedBytes = BitmapsUtils.BlendImageWithColor(imageBytes, Fadevalue,
+                    BaseColor, mimeType.Item2, TintColour);
+                Image.imageData = blendedBytes;
+                images.Add(Image);
+                int index = images.Count - 1;
+
+                return index;
+            }
         }
     }
 }

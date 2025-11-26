@@ -11,6 +11,9 @@ using System.IO.Ports;
 using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
+using Common_glTF_Exporter.Utils;
+using glTF.Manipulator.Schema;
+using glTF.Manipulator.GenericSchema;
 
 
 namespace Common_glTF_Exporter.Export
@@ -19,37 +22,69 @@ namespace Common_glTF_Exporter.Export
     {
         const int ONEINTVALUE = 1;
 
+        public static BaseMaterial ProcessMaterial(MaterialNode node,
+                Preferences preferences, Document doc, IndexedDictionary<BaseMaterial> materials,
+                List<Texture> textures, List<glTFImage> images)
+        {
+            BaseMaterial material = new BaseMaterial();
+            string materialId = node.MaterialId.ToString();
+            material.uuid = materialId;
+
+            if (materials.Contains(materialId))
+            {
+                material = materials.GetElement(materialId);
+            }
+            else
+            {
+                Autodesk.Revit.DB.Material revitMaterial = doc.GetElement(node.MaterialId) as Autodesk.Revit.DB.Material;
+
+                if (revitMaterial == null)
+                {
+                    material = GLTFExportUtils.GetGLTFMaterial(materials);
+                }
+                else
+                {
+                    material = RevitMaterials.Export(node, preferences, doc, revitMaterial, textures, images, material);
+                }
+            }
+            materials.AddOrUpdateCurrentMaterial(material.uuid, material, false);
+
+            return material;
+        }
+
+
         /// <summary>
         /// Export Revit materials.
         /// </summary>
-        public static GLTFMaterial Export(MaterialNode node,
-            Preferences preferences, Document doc)
+        public static BaseMaterial Export(MaterialNode node,
+            Preferences preferences, Document doc, 
+            Material revitMaterial, List<Texture> textures,
+            List<glTFImage> images, BaseMaterial material)
         {
-            GLTFMaterial gl_mat = new GLTFMaterial();
-            float opacity = ONEINTVALUE - (float)node.Transparency;
 
-            Material material = doc.GetElement(node.MaterialId) as Material;
+                float opacity = ONEINTVALUE - (float)node.Transparency;
 
-                if (material == null)
+                material.name = revitMaterial.Name;
+                MaterialProperties.SetProperties(node, opacity, ref material);
+
+                (Autodesk.Revit.DB.Color, Autodesk.Revit.DB.Color) baseNTintColour = (null, null);
+
+                if (revitMaterial != null && preferences.materials == MaterialsEnum.textures)
                 {
-                    return gl_mat;
+                    baseNTintColour = MaterialTextures.SetMaterialTextures(revitMaterial, material, doc, opacity, textures, images);
+                    material.baseColorFactor = MaterialProperties.GetDefaultColour(opacity);
                 }
 
-                gl_mat.name = material.Name;
-                gl_mat.UniqueId = node.MaterialId.ToString();
-
-                GLTFPBR pbr = new GLTFPBR();
-                MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
-
-                if (material != null && preferences.materials == MaterialsEnum.textures)
+                if (material.hasTexture)
                 {
-                    MaterialTextures.SetMaterialTextures(material, gl_mat, doc, opacity);
+                    material.baseColorFactor = MaterialProperties.GetDefaultColour(opacity);
+                }
+                else
+                {
+                    material.baseColorFactor = MaterialProperties.SetMaterialColour(node, opacity, baseNTintColour.Item1, baseNTintColour.Item2);
                 }
 
-                MaterialProperties.SetMaterialColour(node, opacity, ref pbr, ref gl_mat);
-
-
-            return gl_mat;
+            return material;
         }
     }
 }
