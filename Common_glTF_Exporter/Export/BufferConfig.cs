@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Common_glTF_Exporter.Core;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.Schema;
+using Buffer = glTF.Manipulator.Schema.Buffer;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -10,7 +11,7 @@ namespace Common_glTF_Exporter.Export
     {
         const string BIN = ".bin";
 
-        public static void Run(List<GLTFBufferView> bufferViews, List<GLTFBuffer> buffers,
+        public static void Run(List<BufferView> bufferViews, List<Buffer> buffers,
             Preferences preferences)
         {
             int bytePosition = 0;
@@ -32,7 +33,7 @@ namespace Common_glTF_Exporter.Export
                 }
             }
 
-            GLTFBuffer buffer = new GLTFBuffer();
+            Buffer buffer = new Buffer();
 
             if (preferences.format == FormatEnum.gltf)
             {

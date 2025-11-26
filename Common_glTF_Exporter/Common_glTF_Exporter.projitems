@@ -9,24 +9,10 @@
     <Import_RootNamespace>Common_glTF_Exporter</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFImage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFPBR.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFExtras.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFAccessor.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBufferView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBuffer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMaterial.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMeshPrimitive.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFMesh.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFNode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFScene.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFTextureInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFVersion.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTFBinaryData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\ProcessGeometry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Materials\MaterialTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\IndexedDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EportUtils\ElementValidations.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EportUtils\GLTFNodeActions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BinFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\BufferConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Export\Draco.cs" />
@@ -54,9 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Export\ZIP.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\GLTF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GlTFExportContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\GeometryDataObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PointIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\VertexLookupIntObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\RevitCollectorService.cs" />

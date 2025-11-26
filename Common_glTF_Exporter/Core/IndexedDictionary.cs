@@ -101,9 +101,9 @@
 
             this.CurrentKey = uuid;
 
-            if (elem is GLTFMaterial)
+            if (elem is glTF.Manipulator.Schema.Material)
             {
-                var mat = this.GetElement(uuid) as GLTFMaterial;
+                var mat = this.GetElement(uuid) as glTF.Manipulator.Schema.Material;
                 mat.doubleSided = doubleSided;
             }
 
@@ -158,6 +158,24 @@
             this.List.Clear();
             this.Dict.Clear();
             this.CurrentKey = string.Empty;
+        }
+
+        public IndexedDictionary<T> Clone(Func<T, T> cloneFunc)
+        {
+            var newDict = new IndexedDictionary<T>();
+
+            foreach (var kv in this.dict)
+            {
+                string key = kv.Key;
+                int index = kv.Value;
+                T original = this.List[index];
+
+                T cloneItem = cloneFunc(original);
+
+                newDict.AddOrUpdateCurrent(key, cloneItem);
+            }
+
+            return newDict;
         }
     }
 }

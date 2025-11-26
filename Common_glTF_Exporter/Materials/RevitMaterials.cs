@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using Material = Autodesk.Revit.DB.Material;
 using Common_glTF_Exporter.Utils;
+using glTF.Manipulator.Schema;
+using glTF.Manipulator.GenericSchema;
 
 
 namespace Common_glTF_Exporter.Export
@@ -20,61 +22,69 @@ namespace Common_glTF_Exporter.Export
     {
         const int ONEINTVALUE = 1;
 
-        public static GLTFMaterial ProcessMaterial(MaterialNode node,
-                Preferences preferences, Document doc, IndexedDictionary<GLTFMaterial> materials)
+        public static BaseMaterial ProcessMaterial(MaterialNode node,
+                Preferences preferences, Document doc, IndexedDictionary<BaseMaterial> materials,
+                List<Texture> textures, List<glTFImage> images)
         {
-            GLTFMaterial gl_mat;
-
+            BaseMaterial material = new BaseMaterial();
             string materialId = node.MaterialId.ToString();
+            material.uuid = materialId;
+
             if (materials.Contains(materialId))
             {
-                gl_mat = materials.GetElement(materialId);
+                material = materials.GetElement(materialId);
             }
             else
             {
-                Autodesk.Revit.DB.Material material = doc.GetElement(node.MaterialId) as Autodesk.Revit.DB.Material;
+                Autodesk.Revit.DB.Material revitMaterial = doc.GetElement(node.MaterialId) as Autodesk.Revit.DB.Material;
 
-                if (material == null)
+                if (revitMaterial == null)
                 {
-                    gl_mat = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
-                    materialId = gl_mat.UniqueId;
+                    material = GLTFExportUtils.GetGLTFMaterial(materials);
                 }
                 else
                 {
-                    gl_mat = RevitMaterials.Export(node, preferences, doc, material);
+                    material = RevitMaterials.Export(node, preferences, doc, revitMaterial, textures, images, material);
                 }
             }
-            materials.AddOrUpdateCurrentMaterial(materialId, gl_mat, false);
+            materials.AddOrUpdateCurrentMaterial(material.uuid, material, false);
 
-            return gl_mat;
+            return material;
         }
 
 
         /// <summary>
         /// Export Revit materials.
         /// </summary>
-        public static GLTFMaterial Export(MaterialNode node,
-            Preferences preferences, Document doc, Material material)
+        public static BaseMaterial Export(MaterialNode node,
+            Preferences preferences, Document doc, 
+            Material revitMaterial, List<Texture> textures,
+            List<glTFImage> images, BaseMaterial material)
         {
 
-                GLTFMaterial gl_mat = new GLTFMaterial();
                 float opacity = ONEINTVALUE - (float)node.Transparency;
 
-                gl_mat.name = material.Name;
-                gl_mat.UniqueId = node.MaterialId.ToString();
+                material.name = revitMaterial.Name;
+                MaterialProperties.SetProperties(node, opacity, ref material);
 
-                GLTFPBR pbr = new GLTFPBR();
-                MaterialProperties.SetProperties(node, opacity, ref pbr, ref gl_mat);
+                (Autodesk.Revit.DB.Color, Autodesk.Revit.DB.Color) baseNTintColour = (null, null);
 
-                if (material != null && preferences.materials == MaterialsEnum.textures)
+                if (revitMaterial != null && preferences.materials == MaterialsEnum.textures)
                 {
-                    MaterialTextures.SetMaterialTextures(material, gl_mat, doc, opacity);
+                    baseNTintColour = MaterialTextures.SetMaterialTextures(revitMaterial, material, doc, opacity, textures, images);
+                    material.baseColorFactor = MaterialProperties.GetDefaultColour(opacity);
                 }
 
-                MaterialProperties.SetMaterialColour(node, opacity, ref pbr, ref gl_mat);
+                if (material.hasTexture)
+                {
+                    material.baseColorFactor = MaterialProperties.GetDefaultColour(opacity);
+                }
+                else
+                {
+                    material.baseColorFactor = MaterialProperties.SetMaterialColour(node, opacity, baseNTintColour.Item1, baseNTintColour.Item2);
+                }
 
-
-            return gl_mat;
+            return material;
         }
     }
 }
