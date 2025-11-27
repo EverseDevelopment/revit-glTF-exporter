@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.EportUtils;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Transform;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.GenericSchema;
+using glTF.Manipulator.Schema;
+using glTF.Manipulator.Utils;
 using Revit_glTF_Exporter;
-using Common_glTF_Exporter.EportUtils;
-using System.Windows.Media.Media3D;
-using System.Windows.Controls;
+using System.Collections.Generic;
+using System.Linq;
+using Buffer = glTF.Manipulator.Schema.Buffer;
 
 namespace Common_glTF_Exporter.Core
 {
@@ -31,10 +32,8 @@ namespace Common_glTF_Exporter.Core
 
         private Document currentDocument;
         private Autodesk.Revit.DB.View currentView;
-        private GLTFNode currentNode;
         private Element currentElement;
-        private Face currentFace;
-        private GLTFMaterial currentMaterial;
+        private BaseMaterial currentMaterial;
         private Stack<Autodesk.Revit.DB.Transform> transformStack = new Stack<Autodesk.Revit.DB.Transform>();
 
         /// <summary>
@@ -52,19 +51,21 @@ namespace Common_glTF_Exporter.Core
         /// <summary>
         /// Reference to the rootNode to add children.
         /// </summary>
-        private GLTFNode rootNode;
+        private Node rootNode;
 
-        public IndexedDictionary<GLTFNode> nodes = new IndexedDictionary<GLTFNode>();
+        public IndexedDictionary<Node> nodes = new IndexedDictionary<Node>();
 
-        public IndexedDictionary<GLTFMaterial> materials = new IndexedDictionary<GLTFMaterial>();
-        public List<GLTFTexture> textures { get; } = new List<GLTFTexture>();
-        public List<GLTFImage> images { get; } = new List<GLTFImage>();
-        public List<GLTFScene> scenes { get; } = new List<GLTFScene>();
-        public IndexedDictionary<GLTFMesh> meshes { get; } = new IndexedDictionary<GLTFMesh>();
-        public List<GLTFBuffer> buffers { get; } = new List<GLTFBuffer>();
-        public List<GLTFBufferView> bufferViews { get; } = new List<GLTFBufferView>();
-        public List<GLTFAccessor> accessors { get; } = new List<GLTFAccessor>();
+        public IndexedDictionary<BaseMaterial> materials = new IndexedDictionary<BaseMaterial>();
+        public List<Texture> textures { get; } = new List<Texture>();
+        public List<glTFImage> images { get; } = new List<glTFImage>();
+        public List<Scene> scenes { get; } = new List<Scene>();
+        public IndexedDictionary<glTF.Manipulator.Schema.Mesh> meshes { get; } = new IndexedDictionary<glTF.Manipulator.Schema.Mesh>();
+        public List<Buffer> buffers { get; } = new List<Buffer>();
+        public List<BufferView> bufferViews { get; } = new List<BufferView>();
+        public List<Accessor> accessors { get; } = new List<Accessor>();
         public List<GLTFBinaryData> binaryFileData { get; } = new List<GLTFBinaryData>();
+
+        GLTFBinaryData globalBuffer = new GLTFBinaryData();
 
         private Autodesk.Revit.DB.Transform CurrentTransform
         {
@@ -93,7 +94,7 @@ namespace Common_glTF_Exporter.Core
             transformStack.Push(Autodesk.Revit.DB.Transform.Identity);
 
             // Creation Root Node
-            rootNode = new GLTFNode();
+            rootNode = new Node();
             rootNode.name = "rootNode";
             rootNode.rotation = ModelRotation.Get(preferences.flipAxis);
             rootNode.scale = ModelScale.Get(preferences);
@@ -104,7 +105,7 @@ namespace Common_glTF_Exporter.Core
             nodes.AddOrUpdateCurrent("rootNode", rootNode);
 
             // Creation default scene
-            GLTFScene defaultScene = new GLTFScene();
+            Scene defaultScene = new Scene();
             defaultScene.nodes.Add(0);
             scenes.Add(defaultScene);
 
@@ -112,7 +113,9 @@ namespace Common_glTF_Exporter.Core
             currentVertices = new IndexedDictionary<VertexLookupIntObject>();
 
             currentMaterial = GLTFExportUtils.CreateDefaultGLTFMaterial(1, true);
-            materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, false);
+
+            materials.AddOrUpdateCurrentMaterial(currentMaterial.uuid, currentMaterial, false);
+
 
             return true;
         }
@@ -127,14 +130,27 @@ namespace Common_glTF_Exporter.Core
                 return;
             }
 
+           Buffer buffer = new Buffer();
+            buffer.uri = string.Concat(preferences.fileName, ".bin");
+
+            if (preferences.materials == MaterialsEnum.textures)
+            {
+                GLTFBinaryDataUtils.ExportImageBuffer(images, bufferViews, globalBuffer);
+            }
+
             if (preferences.grids)
             {
                 RevitGrids.Export(currentDocument, ref nodes, ref rootNode, preferences);
             }
 
+            buffer.byteLength = globalBuffer.GetCurrentByteOffset();
+            buffers.Add(buffer);
+
             if (bufferViews.Count != 0)
             {
-                FileExport.Run(preferences, bufferViews, buffers, binaryFileData,
+                ProgressBarWindow.ViewModel.Message = "Saving to File";
+
+                FileExport.Run(preferences, bufferViews, buffers, globalBuffer,
                     scenes, nodes, meshes, materials, accessors, textures, images);
                 Compression.Run(preferences, ProgressBarWindow.ViewModel);
             }
@@ -174,15 +190,12 @@ namespace Common_glTF_Exporter.Core
                 }
             }
 
-            currentNode = GLTFNodeActions.CreateGLTFNodeFromElement(currentElement, preferences);
             currentGeometry.Reset();
             currentVertices.Reset();
 
             SettingsConfig.UpdatedLastElement(elementId);
             return RenderNodeAction.Proceed;
         }
-
-        const char UNDERSCORE = '_';
 
         /// <summary>
         /// Runs at the end of an element being processed, after all other calls for that element.
@@ -199,76 +212,11 @@ namespace Common_glTF_Exporter.Core
                 return;
             }
 
-            nodes.AddOrUpdateCurrent(currentElement.UniqueId, currentNode);
-            rootNode.children.Add(nodes.CurrentIndex);
+            ProcessGeometry.ProcessNode(nodes, rootNode, meshes, preferences,
+                globalBuffer, bufferViews, accessors, materials, currentGeometry, currentElement);
 
-            GLTFMesh newMesh = new GLTFMesh
-            {
-                name = currentElement.Name,
-                primitives = new List<GLTFMeshPrimitive>()
-            };
-            meshes.AddOrUpdateCurrent(currentElement.UniqueId, newMesh);
-            nodes.CurrentItem.mesh = meshes.CurrentIndex;
-
-            // Convert _currentGeometry objects into glTFMeshPrimitives
-            foreach (KeyValuePair<string, GeometryDataObject> kvp in currentGeometry.Dict)
-            {
-                string material_key = kvp.Key.Split(UNDERSCORE)[1];
-                GLTFMaterial mat = materials.GetElement(material_key);
-
-                GLTFBinaryData elementBinary = GLTFExportUtils.AddGeometryMeta(
-                    buffers,
-                    accessors,
-                    bufferViews,
-                    kvp.Value,
-                    kvp.Key,
-#if REVIT2024 || REVIT2025 || REVIT2026
-                    elementId.Value,
-#else
-                    elementId.IntegerValue,
-#endif
-                    preferences,
-                    mat,
-                    images,
-                    textures);
-
-                binaryFileData.Add(elementBinary);
-
-
-                GLTFMeshPrimitive primitive = new GLTFMeshPrimitive();
-
-                primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
-
-                if (preferences.normals)
-                {
-                    primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
-                }
-
-                if (preferences.batchId)
-                {
-                    primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
-                }
-
-                if (elementBinary.uvAccessorIndex != -1 &&
-                    preferences.materials == MaterialsEnum.textures &&
-                    mat.EmbeddedTexturePath != null)
-                {
-                    primitive.attributes.TEXCOORD_0 = elementBinary.uvAccessorIndex;
-                }
-
-                primitive.indices = elementBinary.indexAccessorIndex;
-
-                if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
-                {
-                    if (materials.Contains(material_key))
-                    {
-                        primitive.material = materials.GetIndexFromUUID(material_key);
-                    }
-                }
-
-                meshes.CurrentItem.primitives.Add(primitive);
-                meshes.CurrentItem.name = currentElement.Name;
-            }
+            currentGeometry.Reset();
+            currentVertices.Reset();
         }
 
         /// <summary>
@@ -280,23 +228,14 @@ namespace Common_glTF_Exporter.Core
         public void OnMaterial(MaterialNode node)
         {
             if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
-            {
+            {        
                 if (node.MaterialId == ElementId.InvalidElementId)
                 {
-                    currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials, node.Transparency, false);
+                    currentMaterial = GLTFExportUtils.GetGLTFMaterial(materials);
                 }
                 else
                 {
-                    string materialId = node.MaterialId.ToString();
-                    if (materials.Contains(materialId))
-                    {
-                        currentMaterial = materials.GetElement(materialId);
-                    }
-                    else
-                    {
-                        currentMaterial = RevitMaterials.Export(node, preferences, currentDocument);
-                    }
-                    materials.AddOrUpdateCurrentMaterial(materialId, currentMaterial, false);
+                    currentMaterial = RevitMaterials.ProcessMaterial(node, preferences, currentDocument, materials, textures, images);
                 }
             }
         }
@@ -332,10 +271,14 @@ namespace Common_glTF_Exporter.Core
                                          new PointIntObject(vertex), geomItem.Vertices);
                     geomItem.Faces.Add(vertexIndex);
 
-                    if (preferences.materials == MaterialsEnum.textures && currentMaterial?.EmbeddedTexturePath != null)
+                    if (preferences.materials == MaterialsEnum.textures && currentMaterial.hasTexture)
                     {
                         UV uv = uvs[index];
-                        UV flippedUV = new UV(uv.U, 1.0 - uv.V);
+                        GltfUV flippedUV = new GltfUV
+                        {
+                            U = (float)uv.U,
+                            V = (float)(1.0 - uv.V)
+                        };
                         geomItem.Uvs.Add(flippedUV);
                     }
                 }
@@ -440,7 +383,7 @@ namespace Common_glTF_Exporter.Core
                 if (preferences.materials == MaterialsEnum.materials || preferences.materials == MaterialsEnum.textures)
                 {
                     currentMaterial = MaterialUtils.GetGltfMeshMaterial(currentDocument, preferences, mesh, materials, true);
-                    materials.AddOrUpdateCurrentMaterial(currentMaterial.UniqueId, currentMaterial, true);
+                    materials.AddOrUpdateCurrentMaterial(currentMaterial.name, currentMaterial, true);
                 }
 
                 GLTFExportUtils.AddOrUpdateCurrentItem(currentElement, currentGeometry, currentVertices, currentMaterial);
@@ -486,12 +429,10 @@ namespace Common_glTF_Exporter.Core
 
         public RenderNodeAction OnFaceBegin(FaceNode node)
         {
-            currentFace = node.GetFace();
             return RenderNodeAction.Proceed;
         }
         public void OnFaceEnd(FaceNode node)
         {
-            currentFace = null;
         }
     }
 }

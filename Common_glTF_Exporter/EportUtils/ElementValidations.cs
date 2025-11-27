@@ -1,24 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
+using Common_glTF_Exporter.Core;
+using Common_glTF_Exporter.EportUtils;
 using Common_glTF_Exporter.Export;
 using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Transform;
 using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
+using glTF.Manipulator.Schema;
+using glTF.Manipulator.Utils;
 using Revit_glTF_Exporter;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Transform = Autodesk.Revit.DB.Transform;
-using Common_glTF_Exporter.EportUtils;
-using Common_glTF_Exporter.Core;
 
 namespace Common_glTF_Exporter.EportUtils
 {
     public static class ElementValidations
     {
         public static bool ShouldSkipElement(Element currentElement, Autodesk.Revit.DB.View currentView,
-            Document currentDocument, Preferences preferences, IndexedDictionary<GLTFNode> nodes)
+            Document currentDocument, Preferences preferences, IndexedDictionary<Node> nodes)
         {
             if (currentElement == null)
             {
