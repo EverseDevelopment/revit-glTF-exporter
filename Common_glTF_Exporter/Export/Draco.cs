@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Common_glTF_Exporter.Model;
+using Common_glTF_Exporter.Windows.MainWindow;
+using dracowrapper;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using Common_glTF_Exporter.Model;
-using Common_glTF_Exporter.Windows.MainWindow;
-using dracowrapper;
 
 namespace Common_glTF_Exporter.Export
 {
@@ -24,13 +24,10 @@ namespace Common_glTF_Exporter.Export
 
     internal static class GltfExtrasPatcher
     {
-
-        private static JsonNode DeepClone(JsonNode node)
+        private static JToken DeepClone(JToken token)
         {
-            if (node == null) return null;
-
-            string json = node.ToJsonString(new JsonSerializerOptions { WriteIndented = false });
-            return JsonNode.Parse(json);
+            if (token == null) return null;
+            return token.DeepClone();
         }
 
         public static void PatchExtras(string originalPath, string tempPath)
@@ -38,7 +35,7 @@ namespace Common_glTF_Exporter.Export
             if (string.IsNullOrEmpty(originalPath) || string.IsNullOrEmpty(tempPath))
                 throw new ArgumentNullException();
 
-            string ext = (Path.GetExtension(originalPath) ?? string.Empty).ToLowerInvariant();
+            string ext = (Path.GetExtension(originalPath) ?? "").ToLowerInvariant();
             if (ext == ".gltf")
             {
                 PatchExtrasGltf(originalPath, tempPath);
@@ -51,18 +48,18 @@ namespace Common_glTF_Exporter.Export
 
         private static void PatchExtrasGltf(string originalGltf, string tempGltf)
         {
-            JsonObject src = JsonNode.Parse(File.ReadAllText(originalGltf)).AsObject();
-            JsonObject dst = JsonNode.Parse(File.ReadAllText(tempGltf)).AsObject();
+            JObject src = JObject.Parse(File.ReadAllText(originalGltf));
+            JObject dst = JObject.Parse(File.ReadAllText(tempGltf));
 
             PatchArrayByIndex(src, dst, "nodes", PatchNodeLike);
 
             MergeExtensionsUsedAndRequired(src, dst);
 
             string baseDir = Path.GetDirectoryName(tempGltf);
-            string tempBinFileName = Path.GetFileName(tempGltf).Replace(".gltf", ".bin"); 
+            string tempBinFileName = Path.GetFileName(tempGltf).Replace(".gltf", ".bin");
 
             byte[] binBytes = null;
-            InlineExternalImagesIntoBin_JObject(dst, baseDir, tempBinFileName, ref binBytes, false, true);
+            InlineExternalImagesIntoBin(dst, baseDir, tempBinFileName, ref binBytes, false, true);
 
             if (binBytes != null)
             {
@@ -70,7 +67,7 @@ namespace Common_glTF_Exporter.Export
                 File.WriteAllBytes(binPath, binBytes);
             }
 
-            string jsonOut = dst.ToJsonString(new JsonSerializerOptions { WriteIndented = false });
+            string jsonOut = dst.ToString(Formatting.None);
             File.WriteAllText(tempGltf, jsonOut);
         }
 
@@ -79,8 +76,8 @@ namespace Common_glTF_Exporter.Export
             GlbData srcGlb = ReadGlb(originalGlb);
             GlbData dstGlb = ReadGlb(tempGlb);
 
-            JsonObject src = JsonNode.Parse(srcGlb.Json).AsObject();
-            JsonObject dst = JsonNode.Parse(dstGlb.Json).AsObject();
+            JObject src = JObject.Parse(srcGlb.Json);
+            JObject dst = JObject.Parse(dstGlb.Json);
 
             PatchArrayByIndex(src, dst, "nodes", PatchNodeLike);
 
@@ -88,73 +85,59 @@ namespace Common_glTF_Exporter.Export
 
             byte[] glbBin = dstGlb.Bin;
             string baseDir = Path.GetDirectoryName(tempGlb);
-            InlineExternalImagesIntoBin_JObject(dst, baseDir, null, ref glbBin, true, true);
+            InlineExternalImagesIntoBin(dst, baseDir, null, ref glbBin, true, true);
 
-            string newJson = dst.ToJsonString(new JsonSerializerOptions { WriteIndented = false });
+            string newJson = dst.ToString(Formatting.None);
             WriteGlb(tempGlb, newJson, glbBin);
         }
 
-        private static void PatchNodeLike(JsonObject srcNode, JsonObject dstNode)
+        private static void PatchNodeLike(JObject srcNode, JObject dstNode)
         {
             CopyExtras(srcNode, dstNode);
             CopyUnknownExtensions(srcNode, dstNode, new[] { "KHR_draco_mesh_compression" });
         }
 
-        private static void PatchArrayByIndex(JsonObject src, JsonObject dst, string name, Action<JsonObject, JsonObject> patchItem)
+        private static void PatchArrayByIndex(JObject src, JObject dst, string name, Action<JObject, JObject> patchItem)
         {
-            JsonNode saNode = src[name];
-            JsonNode daNode = dst[name];
-
-            JsonArray sa = saNode as JsonArray;
-            JsonArray da = daNode as JsonArray;
+            JArray sa = src[name] as JArray;
+            JArray da = dst[name] as JArray;
 
             if (sa == null || da == null) return;
 
             int count = Math.Min(sa.Count, da.Count);
             for (int i = 0; i < count; i++)
             {
-                JsonObject sItem = sa[i] as JsonObject;
-                JsonObject dItem = da[i] as JsonObject;
+                JObject sItem = sa[i] as JObject;
+                JObject dItem = da[i] as JObject;
                 if (sItem == null || dItem == null) continue;
 
                 patchItem(sItem, dItem);
             }
         }
 
-        private static void CopyExtras(JsonObject src, JsonObject dst)
+        private static void CopyExtras(JObject src, JObject dst)
         {
-            JsonNode extras;
-            if (src.TryGetPropertyValue("extras", out extras) && extras != null)
+            JToken extras = src["extras"];
+            if (extras != null)
             {
                 dst["extras"] = DeepClone(extras);
             }
         }
 
-        private static void CopyUnknownExtensions(JsonObject src, JsonObject dst, IEnumerable<string> keepKnown)
+        private static void CopyUnknownExtensions(JObject src, JObject dst, IEnumerable<string> keepKnown)
         {
-            JsonNode sExtNode;
-            if (!src.TryGetPropertyValue("extensions", out sExtNode)) return;
-
-            JsonObject sExt = sExtNode as JsonObject;
+            JObject sExt = src["extensions"] as JObject;
             if (sExt == null) return;
 
-            JsonNode dExtNode;
-            JsonObject dExt = null;
-            if (dst.TryGetPropertyValue("extensions", out dExtNode) && dExtNode is JsonObject)
-            {
-                dExt = (JsonObject)dExtNode;
-            }
-            else
-            {
-                dExt = new JsonObject();
-            }
+            JObject dExt = dst["extensions"] as JObject;
+            if (dExt == null) dExt = new JObject();
 
-            HashSet<string> known = new HashSet<string>(keepKnown ?? new string[0], StringComparer.Ordinal);
+            HashSet<string> known = new HashSet<string>(keepKnown, StringComparer.Ordinal);
 
-            foreach (KeyValuePair<string, JsonNode> kvp in sExt)
+            foreach (var kvp in sExt)
             {
                 string name = kvp.Key;
-                JsonNode value = kvp.Value;
+                JToken value = kvp.Value;
                 if (value == null) continue;
 
                 if (known.Contains(name) && dExt.ContainsKey(name)) continue;
@@ -166,176 +149,128 @@ namespace Common_glTF_Exporter.Export
                 dst["extensions"] = dExt;
         }
 
-        private static void MergeExtensionsUsedAndRequired(JsonObject src, JsonObject dst)
+        private static void MergeExtensionsUsedAndRequired(JObject src, JObject dst)
         {
-            JsonArray srcUsed = null;
-            JsonNode srcUsedNode;
-            if (src.TryGetPropertyValue("extensionsUsed", out srcUsedNode))
-                srcUsed = srcUsedNode as JsonArray;
-
-            if (srcUsed != null && srcUsed.Count > 0)
-            {
-                JsonArray dstUsed = null;
-                JsonNode dstUsedNode;
-                if (dst.TryGetPropertyValue("extensionsUsed", out dstUsedNode) && dstUsedNode is JsonArray)
-                {
-                    dstUsed = (JsonArray)dstUsedNode;
-                }
-                else
-                {
-                    dstUsed = new JsonArray();
-                    dst["extensionsUsed"] = dstUsed;
-                }
-
-                HashSet<string> set = new HashSet<string>(StringComparer.Ordinal);
-                foreach (JsonNode t in dstUsed)
-                {
-                    if (t == null) continue;
-                    set.Add(t.GetValue<string>());
-                }
-
-                foreach (JsonNode t in srcUsed)
-                {
-                    if (t == null) continue;
-                    string name = t.GetValue<string>();
-                    if (!set.Contains(name))
-                    {
-                        dstUsed.Add(name);
-                        set.Add(name);
-                    }
-                }
-            }
-
-            JsonArray srcReq = null;
-            JsonNode srcReqNode;
-            if (src.TryGetPropertyValue("extensionsRequired", out srcReqNode))
-                srcReq = srcReqNode as JsonArray;
-
-            if (srcReq != null && srcReq.Count > 0)
-            {
-                JsonArray dstReq = null;
-                JsonNode dstReqNode;
-                if (dst.TryGetPropertyValue("extensionsRequired", out dstReqNode) && dstReqNode is JsonArray)
-                {
-                    dstReq = (JsonArray)dstReqNode;
-                }
-                else
-                {
-                    dstReq = new JsonArray();
-                    dst["extensionsRequired"] = dstReq;
-                }
-
-                HashSet<string> setR = new HashSet<string>(StringComparer.Ordinal);
-                foreach (JsonNode t in dstReq)
-                {
-                    if (t == null) continue;
-                    setR.Add(t.GetValue<string>());
-                }
-
-                foreach (JsonNode t in srcReq)
-                {
-                    if (t == null) continue;
-                    string name = t.GetValue<string>();
-                    if (!setR.Contains(name))
-                    {
-                        dstReq.Add(name);
-                        setR.Add(name);
-                    }
-                }
-            }
+            MergeTokenArray(src, dst, "extensionsUsed");
+            MergeTokenArray(src, dst, "extensionsRequired");
 
             EnsureExtInArray(dst, "extensionsUsed", "KHR_draco_mesh_compression");
         }
 
-        private static void EnsureExtInArray(JsonObject dst, string arrayName, string ext)
+        private static void MergeTokenArray(JObject src, JObject dst, string prop)
         {
-            JsonArray arr = null;
-            JsonNode arrNode;
+            JArray srcArr = src[prop] as JArray;
 
-            if (dst.TryGetPropertyValue(arrayName, out arrNode) && arrNode is JsonArray)
+            if (srcArr == null || srcArr.Count == 0)
+                return;
+
+            JArray dstArr = dst[prop] as JArray;
+            if (dstArr == null)
             {
-                arr = (JsonArray)arrNode;
+                dstArr = new JArray();
+                dst[prop] = dstArr;
             }
-            else
+
+            HashSet<string> existing = new HashSet<string>(StringComparer.Ordinal);
+            foreach (JToken t in dstArr)
             {
-                arr = new JsonArray();
+                if (t == null) continue;
+                existing.Add((string)t);
+            }
+
+            foreach (JToken t in srcArr)
+            {
+                if (t == null) continue;
+                string name = (string)t;
+                if (!existing.Contains(name))
+                {
+                    dstArr.Add(name);
+                    existing.Add(name);
+                }
+            }
+        }
+
+        private static void EnsureExtInArray(JObject dst, string arrayName, string ext)
+        {
+            JArray arr = dst[arrayName] as JArray;
+            if (arr == null)
+            {
+                arr = new JArray();
                 dst[arrayName] = arr;
             }
 
-            foreach (JsonNode t in arr)
+            foreach (JToken t in arr)
             {
                 if (t == null) continue;
-                if (string.Equals(t.GetValue<string>(), ext, StringComparison.Ordinal))
+                if (string.Equals((string)t, ext, StringComparison.Ordinal))
                     return;
             }
 
             arr.Add(ext);
         }
 
-        private static void InlineExternalImagesIntoBin_JObject(
-            JsonObject model,
+        private static void InlineExternalImagesIntoBin(
+            JObject model,
             string baseDir,
             string desiredBinFileName,
             ref byte[] binBytes,
             bool isGlb,
             bool removeExternalImageFiles)
         {
-            // buffers
-            JsonArray buffers = model["buffers"] as JsonArray;
+            JArray buffers = model["buffers"] as JArray;
             if (buffers == null)
             {
-                buffers = new JsonArray();
+                buffers = new JArray();
                 model["buffers"] = buffers;
             }
             if (buffers.Count == 0)
             {
-                JsonObject bufObj = new JsonObject();
+                JObject bufObj = new JObject();
                 bufObj["byteLength"] = 0;
                 buffers.Add(bufObj);
             }
 
-            // bufferViews
-            JsonArray bufferViews = model["bufferViews"] as JsonArray;
+            JArray bufferViews = model["bufferViews"] as JArray;
             if (bufferViews == null)
             {
-                bufferViews = new JsonArray();
+                bufferViews = new JArray();
                 model["bufferViews"] = bufferViews;
             }
 
-            JsonObject buf0 = buffers[0] as JsonObject;
-            if (buf0 == null)
-            {
-                buf0 = new JsonObject();
-                buffers[0] = buf0;
-            }
+            JObject buf0 = buffers[0] as JObject;
 
             if (!isGlb)
             {
-                if (string.IsNullOrEmpty(desiredBinFileName)) desiredBinFileName = "sceneTemp.bin";
+                if (string.IsNullOrEmpty(desiredBinFileName))
+                    desiredBinFileName = "sceneTemp.bin";
+
                 buf0["uri"] = desiredBinFileName;
 
                 string desiredBinPath = Path.Combine(baseDir, desiredBinFileName);
                 if ((binBytes == null || binBytes.Length == 0) && File.Exists(desiredBinPath))
+                {
                     binBytes = File.ReadAllBytes(desiredBinPath);
+                }
             }
 
-            int appendOffset = binBytes != null ? binBytes.Length : 0;
-            JsonArray images = model["images"] as JsonArray;
+            int appendOffset = (binBytes != null) ? binBytes.Length : 0;
+
+            JArray images = model["images"] as JArray;
             HashSet<string> consumedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            if (images != null && images.Count > 0)
+            if (images != null)
             {
                 for (int i = 0; i < images.Count; i++)
                 {
-                    JsonObject img = images[i] as JsonObject;
+                    JObject img = images[i] as JObject;
                     if (img == null) continue;
 
                     if (img["bufferView"] != null) continue;
 
-                    JsonNode uriNode = img["uri"];
-                    string uri = uriNode != null ? uriNode.GetValue<string>() : null;
+                    JToken uriNode = img["uri"];
+                    string uri = (uriNode != null) ? (string)uriNode : null;
                     if (string.IsNullOrEmpty(uri)) continue;
-                    if (uri.StartsWith("data:", StringComparison.OrdinalIgnoreCase)) continue; 
+                    if (uri.StartsWith("data:", StringComparison.OrdinalIgnoreCase)) continue;
 
                     string imgPath = Path.Combine(baseDir, uri);
                     if (!File.Exists(imgPath)) continue;
@@ -349,7 +284,7 @@ namespace Common_glTF_Exporter.Export
                     appendOffset = binBytes.Length;
 
                     int bvIndex = bufferViews.Count;
-                    JsonObject bv = new JsonObject();
+                    JObject bv = new JObject();
                     bv["buffer"] = 0;
                     bv["byteOffset"] = thisOffset;
                     bv["byteLength"] = thisLength;
@@ -357,6 +292,7 @@ namespace Common_glTF_Exporter.Export
 
                     img.Remove("uri");
                     img["bufferView"] = bvIndex;
+
                     if (!string.IsNullOrEmpty(mime))
                         img["mimeType"] = mime;
 
@@ -369,22 +305,22 @@ namespace Common_glTF_Exporter.Export
 
             if (removeExternalImageFiles && consumedFiles.Count > 0)
             {
-                foreach (string path in consumedFiles)
+                foreach (string p in consumedFiles)
                 {
                     try
                     {
-                        if (File.Exists(path)) File.Delete(path);
+                        if (File.Exists(p)) File.Delete(p);
                     }
-                    catch
-                    {
-                    }
+                    catch { }
                 }
             }
         }
 
         private static string MimeFromExtension(string ext)
         {
-            ext = (ext ?? string.Empty).ToLowerInvariant();
+            if (ext == null) ext = "";
+            ext = ext.ToLowerInvariant();
+
             if (ext == ".png") return "image/png";
             if (ext == ".jpg" || ext == ".jpeg") return "image/jpeg";
             if (ext == ".ktx2") return "image/ktx2";
@@ -394,15 +330,14 @@ namespace Common_glTF_Exporter.Export
         private static byte[] AppendBytes(byte[] bin, byte[] add, bool padTo4, byte padByte)
         {
             if (bin == null) bin = new byte[0];
+            if (add == null) add = new byte[0];
+
             int oldLen = bin.Length;
-            int addLen = (add != null ? add.Length : 0);
-            int newLen = oldLen + addLen;
+            int newLen = oldLen + add.Length;
 
             byte[] outArr = new byte[newLen];
-            if (oldLen > 0)
-                Buffer.BlockCopy(bin, 0, outArr, 0, oldLen);
-            if (add != null && add.Length > 0)
-                Buffer.BlockCopy(add, 0, outArr, oldLen, add.Length);
+            Buffer.BlockCopy(bin, 0, outArr, 0, oldLen);
+            Buffer.BlockCopy(add, 0, outArr, oldLen, add.Length);
 
             if (padTo4)
             {
@@ -426,22 +361,20 @@ namespace Common_glTF_Exporter.Export
             using (FileStream fs = File.OpenRead(path))
             using (BinaryReader br = new BinaryReader(fs))
             {
-                uint magic = br.ReadUInt32();   // 'glTF'
-                uint version = br.ReadUInt32(); // 2
+                uint magic = br.ReadUInt32();
+                uint version = br.ReadUInt32();
                 uint length = br.ReadUInt32();
 
-                // chunk 0: JSON
                 uint chunkLen0 = br.ReadUInt32();
-                uint chunkType0 = br.ReadUInt32();  // 'JSON'
+                uint chunkType0 = br.ReadUInt32();
                 byte[] jsonBytes = br.ReadBytes((int)chunkLen0);
                 string json = System.Text.Encoding.UTF8.GetString(jsonBytes);
 
-                // chunk 1 (opcional): BIN
                 byte[] bin = new byte[0];
                 if (fs.Position + 8 <= fs.Length)
                 {
                     uint chunkLen1 = br.ReadUInt32();
-                    uint chunkType1 = br.ReadUInt32(); // 'BIN\0'
+                    uint chunkType1 = br.ReadUInt32();
                     bin = br.ReadBytes((int)chunkLen1);
                 }
 
@@ -454,33 +387,31 @@ namespace Common_glTF_Exporter.Export
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(json);
             jsonBytes = PadTo4(jsonBytes, 0x20);
 
-            byte[] binBytes = (bin ?? new byte[0]);
+            byte[] binBytes = bin ?? new byte[0];
             binBytes = PadTo4(binBytes, 0x00);
 
             using (FileStream fs = File.Create(path))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
-                uint magic = 0x46546C67;   // 'glTF'
+                uint magic = 0x46546C67; // 'glTF'
                 uint version = 2;
-                uint length = 12 // header
-                               + 8 + (uint)jsonBytes.Length
-                               + (binBytes.Length > 0 ? (8 + (uint)binBytes.Length) : 0);
 
-                // header
+                uint length = 12 +
+                             8 + (uint)jsonBytes.Length +
+                             (binBytes.Length > 0 ? (8 + (uint)binBytes.Length) : 0);
+
                 bw.Write(magic);
                 bw.Write(version);
                 bw.Write(length);
 
-                // chunk 0: JSON
                 bw.Write((uint)jsonBytes.Length);
-                bw.Write(0x4E4F534A); // 'JSON'
+                bw.Write(0x4E4F534A);
                 bw.Write(jsonBytes);
 
-                // chunk 1: BIN (si hay)
                 if (binBytes.Length > 0)
                 {
                     bw.Write((uint)binBytes.Length);
-                    bw.Write(0x004E4942); // 'BIN\0'
+                    bw.Write(0x004E4942);
                     bw.Write(binBytes);
                 }
             }
@@ -496,9 +427,17 @@ namespace Common_glTF_Exporter.Export
             Buffer.BlockCopy(data, 0, outArr, 0, data.Length);
             for (int i = 0; i < pad; i++)
                 outArr[data.Length + i] = padByte;
+
             return outArr;
         }
     }
+
+
+    //
+    // --------------------------------------------------------------------------------------
+    // DRACO COMPRESSION (unchanged)
+    // --------------------------------------------------------------------------------------
+    //
 
     public static class Draco
     {
@@ -532,29 +471,32 @@ namespace Common_glTF_Exporter.Export
             var gltfDecoderType = mixedModeAssembly.GetType("dracowrapper.GltfDecoder");
             var gltfDecoderInstance = Activator.CreateInstance(gltfDecoderType);
 
-            var decodeFromFileToSceneMethod = gltfDecoderType.GetMethod("DecodeFromFileToScene");
-            var res = decodeFromFileToSceneMethod.Invoke(gltfDecoderInstance, new object[] { fileToCompress });
+            var decodeMethod = gltfDecoderType.GetMethod("DecodeFromFileToScene");
+            var res = decodeMethod.Invoke(gltfDecoderInstance, new object[] { fileToCompress });
             var resType = res.GetType();
             var valueMethod = resType.GetMethod("Value");
             var scene = valueMethod.Invoke(res, null);
 
-            var dracoCompressionOptionsType = mixedModeAssembly.GetType("dracowrapper.DracoCompressionOptions");
-            var dracoCompressionOptionsInstance = Activator.CreateInstance(dracoCompressionOptionsType);
+            var optionsType = mixedModeAssembly.GetType("dracowrapper.DracoCompressionOptions");
+            var optionsInstance = Activator.CreateInstance(optionsType);
 
             var sceneUtilsType = mixedModeAssembly.GetType("dracowrapper.SceneUtils");
-            var setDracoCompressionOptionsMethod = sceneUtilsType.GetMethod("SetDracoCompressionOptions");
-            setDracoCompressionOptionsMethod.Invoke(null, new object[] { dracoCompressionOptionsInstance, scene });
+            var setMethod = sceneUtilsType.GetMethod("SetDracoCompressionOptions");
+            setMethod.Invoke(null, new object[] { optionsInstance, scene });
 
-            var gltfEncoderType = mixedModeAssembly.GetType("dracowrapper.GltfEncoder");
-            var gltfEncoderInstance = Activator.CreateInstance(gltfEncoderType);
-            var encodeSceneToFileMethod = gltfEncoderType.GetMethod("EncodeSceneToFile");
-            encodeSceneToFileMethod.Invoke(gltfEncoderInstance, new object[] { scene, fileToCompressTemp });
+            var encoderType = mixedModeAssembly.GetType("dracowrapper.GltfEncoder");
+            var encoderInstance = Activator.CreateInstance(encoderType);
+            var encodeMethod = encoderType.GetMethod("EncodeSceneToFile");
+            encodeMethod.Invoke(encoderInstance, new object[] { scene, fileToCompressTemp });
+
 #else
             var decoder = new GltfDecoder();
             var res = decoder.DecodeFromFileToScene(fileToCompress);
             var scene = res.Value();
+
             DracoCompressionOptions options = new DracoCompressionOptions();
             SceneUtils.SetDracoCompressionOptions(options, scene);
+
             var encoder = new GltfEncoder();
             encoder.EncodeSceneToFile(scene, fileToCompressTemp);
 #endif
@@ -569,9 +511,9 @@ namespace Common_glTF_Exporter.Export
                 }
                 catch
                 {
-                    // ignore
                 }
             }
+
             File_MoveOverwrite(fileToCompressTemp, fileToCompress);
 
             if (preferences.format == FormatEnum.gltf)
@@ -603,7 +545,7 @@ namespace Common_glTF_Exporter.Export
             if (File.Exists(dst))
             {
                 try { File.Delete(dst); }
-                catch { /* ignore */ }
+                catch { }
             }
             File.Move(src, dst);
         }

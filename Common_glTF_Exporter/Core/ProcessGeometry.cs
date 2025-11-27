@@ -4,6 +4,7 @@ using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
 using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
+using glTF.Manipulator.Utils;
 using Revit_glTF_Exporter;
 using System;
 using System.Collections.Generic;

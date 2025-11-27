@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Common_glTF_Exporter.Windows.MainWindow;
 using glTF.Manipulator.Schema;
+using glTF.Manipulator.Utils;
 using Revit_glTF_Exporter;
 using System.Collections.Generic;
 using System.Globalization;

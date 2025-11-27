@@ -1,10 +1,9 @@
 ﻿using Common_glTF_Exporter.Model;
 using Common_glTF_Exporter.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
-
 
 namespace Revit_glTF_Exporter
 {
@@ -19,21 +18,17 @@ namespace Revit_glTF_Exporter
             string urlParameters = "?inputVersion=" + version +
                 "&&folderName=" + "e-verse/LeiaGltfExporter";
 
-            try {
+            try
+            {
                 HttpResponseMessage result = client.GetAsync(urlParameters, HttpCompletionOption.ResponseHeadersRead).Result;
 
                 if (result.IsSuccessStatusCode)
                 {
-
                     HttpContent content = result.Content;
                     string myContent = await content.ReadAsStringAsync();
 
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    };
-
-                    Payload payload = JsonSerializer.Deserialize<Payload>(myContent, options);
+                    // Newtonsoft.Json deserialization
+                    Payload payload = JsonConvert.DeserializeObject<Payload>(myContent);
 
                     if (!payload.Update)
                     {

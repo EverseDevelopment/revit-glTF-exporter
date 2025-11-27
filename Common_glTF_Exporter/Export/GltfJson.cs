@@ -1,14 +1,10 @@
-﻿using Autodesk.Revit.DB;
-using Common_glTF_Exporter.Core;
-using Common_glTF_Exporter.Model;
-using Common_glTF_Exporter.Utils;
+﻿using Common_glTF_Exporter.Utils;
 using Common_glTF_Exporter.Windows.MainWindow;
 using glTF.Manipulator.GenericSchema;
 using glTF.Manipulator.Schema;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Buffer = glTF.Manipulator.Schema.Buffer;
 
 namespace Common_glTF_Exporter.Export
@@ -70,22 +66,22 @@ namespace Common_glTF_Exporter.Export
             model.bufferViews = bufferViews;
             model.accessors = accessors;
 
-            var options = new JsonSerializerOptions
+            // ---------------------------
+            // NEWTONSOFT JSON SETTINGS
+            // ---------------------------
+            var settings = new JsonSerializerSettings
             {
-
-                PropertyNamingPolicy = null,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                WriteIndented = false
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Newtonsoft.Json.Formatting.None
             };
 
-            string serializedModel = System.Text.Json.JsonSerializer.Serialize(model, options);
-
+            string serializedModel = JsonConvert.SerializeObject(model, settings);
             return serializedModel;
         }
 
         public static List<glTFImage> cleanImages(List<glTFImage> images)
         {
-            List<glTFImage> resultImages = new List<glTFImage> ();
+            List<glTFImage> resultImages = new List<glTFImage>();
             foreach (glTFImage img in images)
             {
                 glTFImage newImg = new glTFImage
@@ -103,6 +99,7 @@ namespace Common_glTF_Exporter.Export
         public static List<glTF.Manipulator.Schema.Material> transformMaterials(List<BaseMaterial> baseMaterials)
         {
             List<glTF.Manipulator.Schema.Material> materials = new List<glTF.Manipulator.Schema.Material>();
+
             foreach (BaseMaterial baseMat in baseMaterials)
             {
                 glTF.Manipulator.Schema.Material mat = new glTF.Manipulator.Schema.Material();
@@ -111,33 +108,33 @@ namespace Common_glTF_Exporter.Export
                 mat.name = baseMat.name;
                 mat.doubleSided = baseMat.doubleSided;
 
+                PBR pbrMetallicRoughness = new PBR();
+                pbrMetallicRoughness.metallicFactor = baseMat.metallicFactor;
+                pbrMetallicRoughness.baseColorFactor = baseMat.baseColorFactor;
+                pbrMetallicRoughness.roughnessFactor = baseMat.roughnessFactor;
 
-                    PBR pbrMetallicRoughness = new PBR();
-                    pbrMetallicRoughness.metallicFactor = baseMat.metallicFactor;
-                    pbrMetallicRoughness.baseColorFactor = baseMat.baseColorFactor;
-                    pbrMetallicRoughness.roughnessFactor = baseMat.roughnessFactor;
-                    
-                    if (baseMat.hasTexture)
-                    {
-                        TextureInfo baseColorTexture = new TextureInfo();
-                        baseColorTexture.index = baseMat.textureIndex;
+                if (baseMat.hasTexture)
+                {
+                    TextureInfo baseColorTexture = new TextureInfo();
+                    baseColorTexture.index = baseMat.textureIndex;
 
-                        KHR_texture_transform kHR_Texture_Transform = new KHR_texture_transform();
-                        kHR_Texture_Transform.rotation = baseMat.rotation;
-                        kHR_Texture_Transform.scale = baseMat.scale;
-                        kHR_Texture_Transform.offset = baseMat.offset;
+                    KHR_texture_transform kHR_Texture_Transform = new KHR_texture_transform();
+                    kHR_Texture_Transform.rotation = baseMat.rotation;
+                    kHR_Texture_Transform.scale = baseMat.scale;
+                    kHR_Texture_Transform.offset = baseMat.offset;
 
-                        TextureExtensions extensions = new TextureExtensions();
-                        extensions.KHR_texture_transform = kHR_Texture_Transform;
-                        
-                        baseColorTexture.extensions = extensions;
-                        pbrMetallicRoughness.baseColorTexture = baseColorTexture;
-                    }
+                    TextureExtensions extensions = new TextureExtensions();
+                    extensions.KHR_texture_transform = kHR_Texture_Transform;
 
-                    mat.pbrMetallicRoughness = pbrMetallicRoughness;
+                    baseColorTexture.extensions = extensions;
+                    pbrMetallicRoughness.baseColorTexture = baseColorTexture;
+                }
+
+                mat.pbrMetallicRoughness = pbrMetallicRoughness;
 
                 materials.Add(mat);
             }
+
             return materials;
         }
     }

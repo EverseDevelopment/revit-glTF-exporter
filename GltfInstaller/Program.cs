@@ -34,6 +34,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2019\bin\Release\MeshOpt.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2019\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2019\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2020",
@@ -45,6 +47,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2020\bin\Release\MeshOpt.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2020\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2020\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2021",
@@ -56,6 +60,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2021\bin\Release\MeshOpt.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2021\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2021\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2022",
@@ -67,6 +73,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2022\bin\Release\MeshOpt.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2022\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2022\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2023",
@@ -78,6 +86,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2023\bin\Release\MeshOpt.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2023\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2023\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2024",
@@ -89,6 +99,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2024\bin\Release\MeshOpt.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2024\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2024\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2025",
@@ -102,6 +114,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2025\bin\Release\glTF.Manipulator.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2025\bin\Release\Leia_glTF_Exporter.deps.json",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2025\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             ),
                             new Dir(@"2026",
@@ -115,6 +129,8 @@ namespace GltfInstaller
                                 new File(@"..\Revit_glTF_Exporter_2026\bin\Release\glTF.Manipulator.dll",
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2026\bin\Release\Leia_glTF_Exporter.deps.json",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2026\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
                             )
                         )

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Common_glTF_Exporter.Core;
-using Common_glTF_Exporter.Windows.MainWindow;
+﻿using System.IO;
 using glTF.Manipulator.GenericSchema;
 
 public static class BinFile

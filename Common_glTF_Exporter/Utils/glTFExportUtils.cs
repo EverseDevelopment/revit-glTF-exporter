@@ -9,6 +9,7 @@
     using Common_glTF_Exporter.Windows.MainWindow;
     using glTF.Manipulator.GenericSchema;
     using glTF.Manipulator.Schema;
+    using glTF.Manipulator.Utils;
     using Revit_glTF_Exporter;
     using Buffer = glTF.Manipulator.Schema.Buffer;
     public class GLTFExportUtils

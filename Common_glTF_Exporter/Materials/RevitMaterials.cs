@@ -14,6 +14,7 @@ using Material = Autodesk.Revit.DB.Material;
 using Common_glTF_Exporter.Utils;
 using glTF.Manipulator.Schema;
 using glTF.Manipulator.GenericSchema;
+using glTF.Manipulator.Utils;
 
 
 namespace Common_glTF_Exporter.Export
