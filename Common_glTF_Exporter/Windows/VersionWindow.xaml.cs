@@ -30,17 +30,35 @@ namespace Revit_glTF_Exporter
         {
             this.Hide();
 
-            string tempPath = Path.GetTempPath();
-            string tempFolder = System.IO.Path.Combine(tempPath, "LeiaInstaller");
-            string versionFolder = System.IO.Path.Combine(tempFolder, _fileVersion);
-            DirectoryUtils.CreateDirectoryIfNotExists(versionFolder);
-            DirectoryUtils.DeleteFilesInDirectoyy(versionFolder);
+            string versionFolder = VersionFolder();
             await DownloadFile.FromServer(versionFolder, _installerName);
 
             string fileLocation = System.IO.Path.Combine(versionFolder, _installerName);;
             RunLocalFile.Action(fileLocation);
 
             Close();
+        }
+
+
+        private async void Button_UpdateOnExit(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            string versionFolder = VersionFolder();
+            await DownloadFile.FromServer(versionFolder, _installerName);
+
+            string fileLocation = System.IO.Path.Combine(versionFolder, _installerName);
+            ExternalApplication.InstallerRoute = fileLocation;
+            Close();
+        }
+
+        private static string VersionFolder()
+        {
+            string tempPath = Path.GetTempPath();
+            string tempFolder = System.IO.Path.Combine(tempPath, "LeiaInstaller");
+            string versionFolder = System.IO.Path.Combine(tempFolder, _fileVersion);
+            DirectoryUtils.CreateDirectoryIfNotExists(versionFolder);
+            DirectoryUtils.DeleteFilesInDirectoyy(versionFolder);
+            return versionFolder;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

@@ -5,6 +5,7 @@
     using Autodesk.Windows;
     using Common_glTF_Exporter;
     using Common_glTF_Exporter.Service;
+    using Common_glTF_Exporter.Version;
     using System;
     using System.IO;
     using System.Linq;
@@ -25,6 +26,7 @@
         private static string pushButtonText = "Leia";
         private static string addInPath = typeof(ExternalApplication).Assembly.Location;
         private static string buttonIconsFolder = Path.GetDirectoryName(addInPath) + "\\Images\\";
+        public static string InstallerRoute;
 
         internal Document Document { get; set; }
         public static UIApplication UiApp { get; private set; }
@@ -57,6 +59,10 @@
         /// <returns>Result.</returns>
         public Result OnShutdown(UIControlledApplication application)
         {
+            if (!string.IsNullOrEmpty(InstallerRoute))
+            {
+                RunLocalFile.Action(InstallerRoute);
+            }
             return Result.Succeeded;
         }
 

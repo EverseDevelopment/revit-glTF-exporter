@@ -111,12 +111,31 @@
                 </Button.Template>
             </Button>
 
-            <Button Content="Update" 
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom">
+
+                <Button Content="Update on Exit" 
+                Margin="10,0,10,13" 
+                Click="Button_UpdateOnExit" 
+                Height="30"
+                Width="100"
+                Background="Transparent"
+                Foreground="{DynamicResource WindowButtonColor}"
+                Style="{DynamicResource MainButtonStyle}"
+                VerticalAlignment="Bottom"/>
+
+                <Button Content="Update Now" 
                 Margin="10,0,10,13" 
                 Click="Button_ClickAsync" 
+                Width="100"
                 Height="30" 
                 Style="{DynamicResource MainButtonStyle}"
                 VerticalAlignment="Bottom"/>
+                
+            </StackPanel>
+            
+
         </Grid>
     </Border>
 
