@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE;REVIT2023</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>e-verse.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE;DEBUG;REVIT2023</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>e-verse.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
