@@ -23,8 +23,7 @@
     <DefineConstants>DEBUG;TRACE;REVIT2020</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\Revit_glTF_Exporter_2023\e-verse.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\Debug\</IntermediateOutputPath>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -33,8 +32,7 @@
     <DefineConstants>DEBUG;TRACE;REVIT2020</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\Release\</IntermediateOutputPath>
-    <CodeAnalysisRuleSet>..\Revit_glTF_Exporter_2023\e-verse.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'REVIT2019|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -44,8 +42,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\..\..\Downloads\e-verse.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\REVIT2019\</IntermediateOutputPath>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'REVIT2020|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -55,8 +52,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\..\..\Downloads\e-verse.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\REVIT2020\</IntermediateOutputPath>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'REVIT2021|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -66,12 +62,10 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\..\..\Downloads\e-verse.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\REVIT2021\</IntermediateOutputPath>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'REVIT2022|AnyCPU' ">
     <OutputPath>bin\REVIT20222\</OutputPath>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\REVIT2022\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'REVIT2023|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -81,8 +75,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\..\..\Downloads\e-verse.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\User\AppData\Local\Temp\vs8854.tmp\REVIT2023\</IntermediateOutputPath>
+    <CodeAnalysisRuleSet>..\e-verse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
