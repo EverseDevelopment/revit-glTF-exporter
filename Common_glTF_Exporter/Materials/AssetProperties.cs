@@ -83,6 +83,27 @@ namespace Common_glTF_Exporter.Materials
             return null;
         }
 
+        /// <summary>
+        /// Returns false for strings that cannot be valid file-system paths:
+        /// file URIs (file:\\\...), http/https URLs, or paths containing
+        /// a colon beyond the drive-letter position (index 1).
+        /// </summary>
+        private static bool IsValidFileSystemPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            // Reject URI schemes: file:\, http:, https:, etc.
+            if (path.IndexOf(':') > 1)
+                return false;
+
+            // Reject any characters that are illegal in Windows paths
+            if (path.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+                return false;
+
+            return true;
+        }
+
         public static string GetTexturePath(Asset connectedAsset)
         {
             if (connectedAsset != null)
@@ -92,6 +113,9 @@ namespace Common_glTF_Exporter.Materials
                 if (bitmapPathProp != null && !string.IsNullOrEmpty(bitmapPathProp.Value))
                 {
                     string relativeOrAbsolutePath = bitmapPathProp.Value.Split('|')[0].Replace("/", "\\");
+
+                    if (!IsValidFileSystemPath(relativeOrAbsolutePath))
+                        return null;
 
                     // If already absolute and the file exists, return it directly
                     if (Path.IsPathRooted(relativeOrAbsolutePath) && File.Exists(relativeOrAbsolutePath))
