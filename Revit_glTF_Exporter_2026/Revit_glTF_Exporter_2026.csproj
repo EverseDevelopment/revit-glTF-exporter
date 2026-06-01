@@ -90,6 +90,11 @@
 	</ItemGroup>
 	<Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="mkdir &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2026\&quot;" IgnoreExitCode="true" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="mkdir &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\&quot;" IgnoreExitCode="true" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(SolutionDir)Common_glTF_Exporter\*.xml&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\&quot;" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(ProjectDir)$(OutputPath)*.dll&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2026\&quot;" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(SolutionDir)Common_glTF_Exporter\*.addin&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2026\&quot;" />
 	  <Exec Command="If &quot;%25CI%25&quot;==&quot;true&quot; (&#xD;&#xA;    &quot;C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe&quot; sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com &quot;$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll&quot;&#xD;&#xA;)" />
 	</Target>
 </Project>
