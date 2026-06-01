@@ -148,7 +148,7 @@ namespace Common_glTF_Exporter.Utils
                     return;
                 }
 
-                 #if REVIT2024 || REVIT2025 || REVIT2026
+                 #if REVIT2024 || REVIT2025 || REVIT2026 || REVIT2027
 
                 long longValue = (long)elementId.Value;
                 lastElement = Convert.ToInt32(elementId.Value);

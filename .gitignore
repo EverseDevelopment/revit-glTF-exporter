@@ -270,3 +270,6 @@ GltfInstaller/glTFExporter.exe
 GltfInstaller/wix/GltfInstaller.g.wxs
 *.exe
 *.msi
+
+GltfInstaller/*.wxs
+GltfInstaller/*.wixobj

@@ -46,7 +46,7 @@ namespace Common_glTF_Exporter.EportUtils
             if (currentElement == null)
                 return true;
 
-            #if REVIT2026
+            #if REVIT2026 || REVIT2027
             if (currentElement.Id.Value != elemId.Value)
                 return true;
             #else

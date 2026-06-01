@@ -31,7 +31,7 @@ namespace Common_glTF_Exporter.Export
                 files.Add(fileToCompress);
             }
 
-#if REVIT2025 || REVIT2026
+#if REVIT2025 || REVIT2026 || REVIT2027
 
             var loadContext = new NonCollectibleAssemblyLoadContext();
 
