@@ -94,7 +94,7 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.6
 
     - name: Restore NuGet Packages
-      run: nuget restore Revit_glTF_Exporter.sln
+      run: dotnet restore Revit_glTF_Exporter.sln
     
     - name: Setting new version to the config file
       run: |
