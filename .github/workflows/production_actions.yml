@@ -90,11 +90,19 @@ jobs:
         echo "CERTIFICATE_LOCATION=$GITHUB_WORKSPACE/credentials.pfx" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
 
+    - name: Set MSBuildSDKsPath
+      run: |
+        $sdkPath = (Get-Command dotnet).Source | Split-Path
+        $sdkVersion = dotnet --version
+        $sdksPath = Join-Path $sdkPath "sdk\$sdkVersion\Sdks"
+        echo "MSBuildSDKsPath=$sdksPath" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      shell: pwsh
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.6
 
     - name: Restore NuGet Packages
-      run: dotnet restore Revit_glTF_Exporter.sln
+      run: nuget restore Revit_glTF_Exporter.sln
     
     - name: Setting new version to the config file
       run: |
@@ -170,6 +178,8 @@ jobs:
 
     - name: Build and Publish App
       run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+      env:
+        MSBuildSDKsPath: ${{ env.MSBuildSDKsPath }}
 
     - name: Sign MSIs
       run: |
