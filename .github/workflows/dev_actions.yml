@@ -27,6 +27,11 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Setup .NET 10.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
       - name: Setup MSBuild Path
         uses: microsoft/setup-msbuild@v1.1
     
@@ -58,6 +63,14 @@ jobs:
       - name: define certfificate location
         run: |
           echo "CERTIFICATE_LOCATION=$GITHUB_WORKSPACE/credentials.pfx" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh
+
+      - name: Set MSBuildSDKsPath
+        run: |
+          $sdkPath = (Get-Command dotnet).Source | Split-Path
+          $sdkVersion = dotnet --version
+          $sdksPath = Join-Path $sdkPath "sdk\$sdkVersion\Sdks"
+          echo "MSBuildSDKsPath=$sdksPath" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh
 
       - name: Setup NuGet
@@ -130,3 +143,5 @@ jobs:
 
       - name: Build and Publish App
         run: msbuild Revit_glTF_Exporter.sln /t:Clean,Build /p:platform="Any CPU" /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+        env:
+          MSBuildSDKsPath: ${{ env.MSBuildSDKsPath }}
