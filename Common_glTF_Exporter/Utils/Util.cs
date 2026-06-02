@@ -198,7 +198,7 @@ namespace Revit_glTF_Exporter
             }
 
             ElementDescriptionStrBuilder.Append(LessSignStr);
-            #if REVIT2026
+            #if REVIT2026 || REVIT2027
             ElementDescriptionStrBuilder.Append(e.Id.Value);
             #else
             ElementDescriptionStrBuilder.Append(e.Id.IntegerValue);
