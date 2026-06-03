@@ -112,7 +112,7 @@ namespace Revit_glTF_Exporter
             Analytics.Send("exported", SettingsConfig.GetValue("format")).GetAwaiter();
             Thread.Sleep(500);
 
-            ProgressBarWindow.ViewModel.ProgressBarValue = elemInView;
+            ProgressBarWindow.ViewModel.ProgressBarValue = elemInView + 1;
             ProgressBarWindow.ViewModel.Message = "Export completed!";
             ExportLog.EndLog();
             ProgressBarWindow.ViewModel.Action = "Accept";

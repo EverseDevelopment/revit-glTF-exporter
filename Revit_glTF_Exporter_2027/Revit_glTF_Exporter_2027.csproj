@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net10.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<UseWPF>true</UseWPF>
 		<Nullable>enable</Nullable>
@@ -16,19 +16,19 @@
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	</PropertyGroup>
 	<PropertyGroup>
-  		<AssemblyTitle>Revit_glTF_Exporter_2025</AssemblyTitle>
-  		<AssemblyDescription></AssemblyDescription>
-  		<AssemblyCompany>e-verse</AssemblyCompany>
-  		<AssemblyProduct>Revit_glTF_Exporter_2025</AssemblyProduct>
-  		<AssemblyVersion>1.0.0</AssemblyVersion>
-  		<FileVersion>1.0.0</FileVersion>
+		<AssemblyTitle>Revit_glTF_Exporter_2027</AssemblyTitle>
+		<AssemblyDescription></AssemblyDescription>
+		<AssemblyCompany>e-verse</AssemblyCompany>
+		<AssemblyProduct>Revit_glTF_Exporter_2027</AssemblyProduct>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>1.0.0</FileVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
 		<Optimize>false</Optimize>
 		<OutputPath>bin\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2027</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -37,7 +37,7 @@
 	  <DebugType>portable</DebugType>
 	  <Optimize>false</Optimize>
 	  <OutputPath>bin\Debug\</OutputPath>
-	  <DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+	  <DefineConstants>TRACE;DEBUG;REVIT2027</DefineConstants>
 	  <ErrorReport>prompt</ErrorReport>
 	  <WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -46,7 +46,7 @@
 		<DebugType>portable</DebugType>
 		<Optimize>false</Optimize>
 		<OutputPath>bin\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2027</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -54,7 +54,7 @@
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
 		<OutputPath>bin\Release\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2027</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -62,7 +62,7 @@
 	  <DebugType>none</DebugType>
 	  <Optimize>true</Optimize>
 	  <OutputPath>bin\Release\</OutputPath>
-	  <DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+	  <DefineConstants>TRACE;DEBUG;REVIT2027</DefineConstants>
 	  <ErrorReport>prompt</ErrorReport>
 	  <WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -70,7 +70,7 @@
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
 		<OutputPath>bin\Release\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;REVIT2025</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;REVIT2027</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
@@ -81,20 +81,22 @@
 		<PackageReference Include="Draco_transcoder" Version="3.3.4" />
 		<PackageReference Include="MeshOptimizer_glTFPack" Version="1.1.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2025.0.0" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2027.0.2" />
+		<PackageReference Include="System.Drawing.Common" Version="10.0.8" />
 		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
 	</ItemGroup>
+
 	<ItemGroup>
 	  <Folder Include="Resources\" />
 	</ItemGroup>
 	<Import Project="..\Common_glTF_Exporter\Common_glTF_Exporter.projitems" Label="Shared" />
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Condition="'$(Configuration)'=='Debug'" Command="mkdir &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2025\&quot;" IgnoreExitCode="true" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="mkdir &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2027\&quot;" IgnoreExitCode="true" />
 	  <Exec Condition="'$(Configuration)'=='Debug'" Command="mkdir &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\Resources\&quot;" IgnoreExitCode="true" />
 	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(SolutionDir)Common_glTF_Exporter\*.xml&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\&quot;" />
-	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(ProjectDir)$(OutputPath)*.dll&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2025\&quot;" />
-	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(SolutionDir)Common_glTF_Exporter\*.addin&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2025\&quot;" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(ProjectDir)$(OutputPath)*.dll&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2027\&quot;" />
+	  <Exec Condition="'$(Configuration)'=='Debug'" Command="copy &quot;$(SolutionDir)Common_glTF_Exporter\*.addin&quot; &quot;$(APPDATA)\Autodesk\ApplicationPlugins\leia.bundle\Contents\2027\&quot;" />
 	  <Exec Command="If &quot;%25CI%25&quot;==&quot;true&quot; (&#xD;&#xA;    &quot;C:\Users\runneradmin\.nuget\packages\signtool\10.0.17763.132\tools\signtool.exe&quot; sign /f $(CERTIFICATE_LOCATION) /p $(CERTIFICATE_KEY) /t http://timestamp.digicert.com &quot;$(ProjectDir)$(OutputPath)Leia_glTF_Exporter.dll&quot;&#xD;&#xA;)" />
 	</Target>
+
 </Project>

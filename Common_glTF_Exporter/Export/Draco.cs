@@ -462,7 +462,7 @@ namespace Common_glTF_Exporter.Export
                 files.Add(fileToCompress);
             }
 
-#if REVIT2025 || REVIT2026
+#if REVIT2025 || REVIT2026 || REVIT2027
             var loadContext = new NonCollectibleAssemblyLoadContext();
             string programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string assemblyPath = Path.Combine(programDataPath, "Autodesk", "ApplicationPlugins", "leia.bundle", "Contents", "2025", "DracoWrapper.dll");

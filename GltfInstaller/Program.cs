@@ -132,6 +132,21 @@ namespace GltfInstaller
                                     new FilePermission("Everyone", GenericPermission.All)),
                                 new File(@"..\Revit_glTF_Exporter_2026\bin\Release\Newtonsoft.Json.dll",
                                     new FilePermission("Everyone", GenericPermission.All))
+                            ),
+                            new Dir(@"2027",
+                                new File(@"..\Common_glTF_Exporter\Leia_glTF_Exporter.addin"),
+                                new File(@"..\Revit_glTF_Exporter_2027\bin\Release\Leia_glTF_Exporter.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2027\bin\Release\DracoWrapper.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2027\bin\Release\MeshOpt.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2027\bin\Release\glTF.Manipulator.dll",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2027\bin\Release\Leia_glTF_Exporter.deps.json",
+                                    new FilePermission("Everyone", GenericPermission.All)),
+                                new File(@"..\Revit_glTF_Exporter_2027\bin\Release\Newtonsoft.Json.dll",
+                                    new FilePermission("Everyone", GenericPermission.All))
                             )
                         )
                     )
@@ -231,7 +246,7 @@ namespace GltfInstaller
         {
             basePath = Environment.ExpandEnvironmentVariables(basePath);
 
-            for (int year = 2019; year <= 2026; year++)
+            for (int year = 2019; year <= 2027; year++)
             {
                 string filePath = System.IO.Path.Combine(basePath, year.ToString(), "Leia_glTF_Exporter.dll");
 
