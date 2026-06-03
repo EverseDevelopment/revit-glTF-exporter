@@ -43,7 +43,7 @@ namespace Common_glTF_Exporter.Core
 
             long elmId;
 
-            #if REVIT2024 || REVIT2025 || REVIT2026
+            #if REVIT2024 || REVIT2025 || REVIT2026 || REVIT2027
             elmId = currentElement.Id.Value;
             #else
             elmId = currentElement.Id.IntegerValue;
